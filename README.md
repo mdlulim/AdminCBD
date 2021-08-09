@@ -1,6 +1,6 @@
-# Property Management System
+# Property Store Dashboard
 
-This project is a uProp Admin built in React.js. It uses React-Router for navigation and React-Bootstrap for layout.
+This project is a Property Store Dashboard built in React.js. It uses React-Router for navigation and React-Bootstrap for layout.
 
 
 ## Getting Started
