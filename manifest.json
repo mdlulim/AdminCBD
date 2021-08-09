@@ -1,0 +1,17 @@
+{
+    "short_name": "mondo-cms",
+    "name": "Mondo CMS",
+    "icons": [{
+        "src": "/favicons/131x13.png",
+        "type": "image/png",
+        "sizes": "131x13"
+    },
+    {
+        "src": "/favicons/131x13.png",
+        "type": "image/png",
+        "sizes": "131x13"
+    }],
+    "start_url": "/?utm_source=dams",
+    "display": "standalone",
+    "theme_color": "#16a3fe"
+}
