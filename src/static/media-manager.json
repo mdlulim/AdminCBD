@@ -1,0 +1,6 @@
+{
+    "folders": {
+        "default": [ "banners", "deals", "devices", "emails", "articles" ],
+        "deals": [ "deals" ]
+    }
+}

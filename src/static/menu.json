@@ -1,0 +1,37 @@
+[
+    {
+        "id": "overview",
+        "title": "Overview",
+        "link": "/overview",
+        "icon": "i-Bar-Chart",
+        "childitems": []
+    },
+    {
+        "id": "properties",
+        "title": "Properties",
+        "link": "/properties",
+        "icon": "i-Building",
+        "childitems": []
+    },
+    {
+        "id": "leads",
+        "title": "Leads",
+        "link": "/leads",
+        "icon": "i-Add-User",
+        "childitems": []
+    },
+    {
+        "id": "agents",
+        "title": "Agents",
+        "link": "/agents",
+        "icon": "i-Business-ManWoman",
+        "childitems": []
+    },
+    {
+        "id": "settings",
+        "title": "Settings",
+        "link": "/settings",
+        "icon": "i-Gears-2",
+        "childitems": []
+    }
+]

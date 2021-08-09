@@ -1,0 +1,89 @@
+{
+    "deals": {
+        "fields": [
+            { "value": "dealsheet_no", "label": "Dealsheet No." },
+            { "value": "device", "label": "Device" },
+            { "value": "package", "label": "Package" },
+            { "value": "description", "label": "Description" },
+            { "value": "contract_period", "label": "Contract Period" },
+            { "value": "valid_from", "label": "Valid From" },
+            { "value": "valid_to", "label": "Valid To" },
+            { "value": "price", "label": "Price" },
+            { "value": "review_status", "label": "Status" }
+        ],
+        "operators": [
+            { "value": "iLike", "label": "Contains" },
+            { "value": "eq", "label": "Equals" },
+            { "value": "gt", "label": "Greater Than" },
+            { "value": "gte", "label": "Greater Than Or Equal To" },
+            { "value": "lt", "label": "Less Than" },
+            { "value": "lte", "label": "Less Than Or Equal To" },
+            { "value": "ne", "label": "Does Not Equal" },
+            { "value": "ex", "label": "Exists" },
+            { "value": "nx", "label": "Does Not Exist" }
+        ]
+    },
+    "dealPacks": {
+        "fields": [
+            { "value": "name", "label": "Pack Name" },
+            { "value": "status", "label": "Status" }
+        ],
+        "operators": [
+            { "value": "iLike", "label": "Contains" },
+            { "value": "eq", "label": "Equals" },
+            { "value": "ne", "label": "Does Not Equal" }
+        ]
+    },
+    "devices": {
+        "fields": [
+            { "value": "name", "label": "Device Name" },
+            { "value": "manufacturer", "label": "Manufacturer" },
+            { "value": "model", "label": "Model" },
+            { "value": "device_id", "label": "Product Code" },
+            { "value": "review_status", "label": "Status" }
+        ],
+        "operators": [
+            { "value": "iLike", "label": "Contains" },
+            { "value": "eq", "label": "Equals" },
+            { "value": "ne", "label": "Does Not Equal" }
+        ]
+    },
+    "operators": [
+        { "value": "iLike", "label": "Contains" },
+        { "value": "eq", "label": "Equals" },
+        { "value": "gt", "label": "Greater Than" },
+        { "value": "gte", "label": "Greater Than Or Equal To" },
+        { "value": "lt", "label": "Less Than" },
+        { "value": "lte", "label": "Less Than Or Equal To" },
+        { "value": "ne", "label": "Does Not Equal" },
+        { "value": "ex", "label": "Exists" },
+        { "value": "nx", "label": "Does Not Exist" }
+    ],
+    "packages": {
+        "fields": [
+            { "value": "package_name", "label": "Package Name" },
+            { "value": "package_code", "label": "Package Code" },
+            { "value": "review_status", "label": "Status" }
+        ],
+        "operators": [
+            { "value": "iLike", "label": "Contains" },
+            { "value": "eq", "label": "Equals" },
+            { "value": "ne", "label": "Does Not Equal" }
+        ]
+    },
+    "newsArticles": {
+        "fields": [
+            { "value": "title", "label": "Title" },
+            { "value": "author", "label": "Author" },
+            { "value": "published", "label": "Published Date" },
+            { "value": "updated", "label": "Updated Date" },
+            { "value": "category", "label": "Category" },
+            { "value": "status", "label": "Status" }
+        ],
+        "operators": [
+            { "value": "iLike", "label": "Contains" },
+            { "value": "eq", "label": "Equals" },
+            { "value": "ne", "label": "Does Not Equal" }
+        ]
+    }
+}

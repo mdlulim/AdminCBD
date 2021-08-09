@@ -1,0 +1,67 @@
+{
+    "deals": {
+        "actions": [
+            { "value": "review_status", "label": "Status", "isDatePicker": false },
+            { "value": "valid_to", "label": "Expiry Date", "isDatePicker": true }
+        ],
+        "values": {
+            "review_status": [
+                { "value": "approved", "label": "Approved" },
+                { "value": "review", "label": "Review" },
+                { "value": "archived", "label": "Archived" }
+            ]
+        }
+    },
+    "dealPacks": {
+        "actions": [
+            { "value": "review_status", "label": "Status" }
+        ],
+        "values": {
+            "review_status": [
+                { "value": "approved", "label": "Approved" },
+                { "value": "review", "label": "Review" },
+                { "value": "archived", "label": "Archived" }
+            ]
+        }
+    },
+    "devices": {
+        "actions": [
+            { "value": "review_status", "label": "Status" }
+        ],
+        "values": {
+            "review_status": [
+                { "value": "approved", "label": "Approved" },
+                { "value": "review", "label": "Review" },
+                { "value": "archived", "label": "Archived" }
+            ]
+        }
+    },
+    "packages": {
+        "actions": [
+            { "value": "review_status", "label": "Status" }
+        ],
+        "values": {
+            "review_status": [
+                { "value": "approved", "label": "Approved" },
+                { "value": "review", "label": "Review" },
+                { "value": "archived", "label": "Archived" }
+            ]
+        }
+    },
+    "newsArticles": {
+        "actions": [
+            { "value": "author", "label": "Author", "isMulti": false },
+            { "value": "category", "label": "Category", "isMulti": true },
+            { "value": "status", "label": "Status", "isMulti": false }
+        ],
+        "values": {
+            "author": [],
+            "category": [],
+            "status": [
+                { "value": "archived", "label": "Archived" },
+                { "value": "published", "label": "Published" },
+                { "value": "review", "label": "Review" }
+            ]
+        }
+    }
+}

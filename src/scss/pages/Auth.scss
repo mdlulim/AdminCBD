@@ -1,0 +1,19 @@
+.auth-page-wrapper {
+    .sign-wrapper {
+        width: 350px;
+    }
+}
+
+.content-auth-alt {
+    min-height: calc(100vh -  106px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-logo {
+    img {
+        width: 180px;
+        height: auto;
+    }
+}
