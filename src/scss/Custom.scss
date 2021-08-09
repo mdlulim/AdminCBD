@@ -1,0 +1,44 @@
+.layout-sidebar-large {
+    .sidebar-left {
+        .navigation-left {
+            .nav-item {
+                &.active {
+                    .triangle {
+                        border-color: transparent transparent $primary transparent;
+                    }
+                    .nav-item-hold {
+                        color: $primary;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.card-icon-bg-primary [class^="i-"] {
+    color: rgba($color: $primary, $alpha: .28);
+}
+
+.text-primary {
+    color: $primary !important;
+}
+
+.btn-primary,
+.btn-outline-primary {
+    background-color: $primary;
+    border-color: $primary;
+
+    &:hover,
+    &:focus {
+        background-color: $primary;
+        border-color: $primary;
+        box-shadow: 0 8px 25px -8px $primary;
+    }
+}
+
+.form-control {
+    &:focus {
+        border-color: rgba($color: $primary, $alpha: .4);
+        box-shadow: 0 0 0 0.2rem rgba($color: $primary, $alpha: .25);
+    }
+}
