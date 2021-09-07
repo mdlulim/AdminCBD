@@ -80,6 +80,21 @@ a { color: $primary; }
     }
 }
 
+.sw-theme-dots > ul.step-anchor > li > a:before {
+    color: $primary !important;
+}
+.sw-theme-dots > ul.step-anchor > li.active > a:after {
+    background-color: $primary !important;
+    left: 44%;
+}
+
+.accordion {
+    .btn {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
 .layout-sidebar-compact {
     .sidebar-left {
         .navigation-left {

@@ -15,13 +15,17 @@ const Image = () => {
     );
 };
 
-const Actions = () => {
+const Actions = props => {
+    const { propertyId } = props;
     return (
+        <HashLinkContainer to={`/properties/view/${propertyId}`}>
         <button
+            type="button"
             className="btn btn-outline-secondary mt-3 mb-3 m-sm-0 btn-sm btn-rounded"
         >
             View details
         </button>
+        </HashLinkContainer>
     );
 };
 
@@ -63,7 +67,7 @@ const columns = [{
 }, {
     name: 'Action',
     sortable: false,
-    cell: () => <Actions />
+    cell: row => <Actions {...row} />
 }];
 
 const properties = [{
