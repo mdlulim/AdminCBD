@@ -12,11 +12,11 @@ export default function MessagingChat(props) {
                             <i className="icon-regular i-Right ml-0 mr-3" />
                         </a>
                     </div>
-                    <div className="app-inro-circle ng-tns-c8-2 ng-star-inserted">
-                        <div className="border rounded-circle big-bubble ng-trigger ng-trigger-animate">
+                    <div className="app-inro-circle">
+                        <div className="border rounded-circle big-bubble">
                             <i className="i-Speach-Bubbles" />
                         </div>
-                        <p className="text-16 ng-trigger ng-trigger-animate">
+                        <p className="text-16">
                             Select a contact and start chat.
                         </p>
                     </div>

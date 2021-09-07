@@ -1,7 +1,96 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Layout } from 'containers';
+import { Card, Col, Row } from 'reactstrap';
 import { HashLinkContainer, Properties } from 'components';
+import { Layout } from 'containers';
+
+const Image = () => {
+    return (
+        <img
+            alt=""
+            height="32px"
+            style={{ borderRadius: 4 }}
+            width="32px"
+            src="/images/property.jpeg"
+        />
+    );
+};
+
+const Actions = () => {
+    return (
+        <button
+            className="btn btn-outline-secondary mt-3 mb-3 m-sm-0 btn-sm btn-rounded"
+        >
+            View details
+        </button>
+    );
+};
+
+// table headings definition
+const columns = [{
+    name: 'Thumb',
+    sortable: false,
+    width: '80px',
+    cell: () => <Image />
+}, {
+    name: 'Description',
+    selector: 'description',
+    sortable: true,
+    wrap: true,
+}, {
+    name: 'Listing #',
+    selector: 'propertyId',
+    sortable: true,
+}, {
+    name: 'Address',
+    selector: 'address',
+    sortable: true,
+}, {
+    name: 'Price',
+    selector: 'price',
+    sortable: true,
+}, {
+    name: 'Views',
+    selector: 'views',
+    sortable: true,
+}, {
+    name: 'Property Type',
+    selector: 'propertyType',
+    sortable: true,
+}, {
+    name: 'Mandate Type',
+    selector: 'mandateType',
+    sortable: true,
+}, {
+    name: 'Action',
+    sortable: false,
+    cell: () => <Actions />
+}];
+
+const properties = [{
+    propertyId: '109977042',
+    description: '2 Bedroom Apartment',
+    address: 'Unit 14, ABC Av. Durban 4001',
+    price: 'R2 750 000',
+    propertyType: 'Apartment',
+    views: 323,
+    mandateType: 'Rent'
+}, {
+    propertyId: '109977042',
+    description: '2 Bedroom Apartment',
+    address: 'Unit 14, ABC Av. Durban 4001',
+    price: 'R2 750 000',
+    propertyType: 'Apartment',
+    views: 323,
+    mandateType: 'Rent'
+}, {
+    propertyId: '109977042',
+    description: '2 Bedroom Apartment',
+    address: 'Unit 14, ABC Av. Durban 4001',
+    price: 'R2 750 000',
+    propertyType: 'Apartment',
+    views: 323,
+    mandateType: 'Rent'
+}];
 
 export default function PropertiesOverview(props) {
     const breadcrumb = { heading: 'Manage Properties' };
@@ -54,7 +143,7 @@ export default function PropertiesOverview(props) {
                         onClick={() => setView('list')}
                         className={`btn btn-sm btn-rounded btn-outline-secondary btn-svg ${view === 'list' ? 'active' : ''}`}
                     >
-                        &nbsp;&nbsp;List view&nbsp;&nbsp;
+                        &nbsp;&nbsp;Table view&nbsp;&nbsp;
                     </button>
                 </Col>
             </Row>
@@ -77,6 +166,13 @@ export default function PropertiesOverview(props) {
                         setDropdownActive={setItemDropdownActive}
                     />
                 </>}
+                {view === 'list' &&
+                <Card className="o-hidden mb-4">
+                    <Properties.Table
+                        data={properties}
+                        columns={columns}
+                    />
+                </Card>}
             </div>
         </Layout>
     );

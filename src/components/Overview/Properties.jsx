@@ -1,37 +1,33 @@
 import React from 'react';
 import { Card, CardBody } from 'reactstrap';
-import { HashLinkContainer } from 'components';
-import DataTable from 'react-data-table-component';
+import { FeatherIcon, HashLinkContainer, Properties } from 'components';
 
-// styles
-const customStyles = {
-    rows: {
-        style: {
-            minHeight: '72px', // override the row height
-        }
-    },
-    headCells: {
-        style: {
-            paddingLeft: '8px', // override the cell padding for head cells
-            paddingRight: '8px',
-        },
-    },
-    cells: {
-        style: {
-            paddingLeft: '8px', // override the cell padding for data cells
-            paddingRight: '8px',
-        },
-    },
+const Image = () => {
+    return (
+        <img
+            alt=""
+            height="32px"
+            style={{ borderRadius: 4 }}
+            width="32px"
+            src="/images/property.jpeg"
+        />
+    );
 };
-
 
 // table headings definition
 const columns = [{
     name: 'Thumb',
     sortable: false,
+    width: '80px',
+    cell: () => <Image />
 }, {
-    name: 'Property ID',
-    selector: 'id',
+    name: 'Description',
+    selector: 'description',
+    sortable: true,
+    wrap: true,
+}, {
+    name: 'Listing #',
+    selector: 'propertyId',
     sortable: true,
 }, {
     name: 'Address',
@@ -56,15 +52,32 @@ const columns = [{
 }];
 
 const properties = [{
-    id: '12211',
-    address: 'dsfsdfs',
-    price: 5000,
-    propertyType: 'House',
+    propertyId: '109977042',
+    description: '2 Bedroom Apartment',
+    address: 'Unit 14, ABC Av. Durban 4001',
+    price: 'R2 750 000',
+    propertyType: 'Apartment',
+    views: 323,
+    mandateType: 'Rent'
+}, {
+    propertyId: '109977042',
+    description: '2 Bedroom Apartment',
+    address: 'Unit 14, ABC Av. Durban 4001',
+    price: 'R2 750 000',
+    propertyType: 'Apartment',
+    views: 323,
+    mandateType: 'Rent'
+}, {
+    propertyId: '109977042',
+    description: '2 Bedroom Apartment',
+    address: 'Unit 14, ABC Av. Durban 4001',
+    price: 'R2 750 000',
+    propertyType: 'Apartment',
     views: 323,
     mandateType: 'Rent'
 }];
 
-export default function Properties() {
+export default function OverviewProperties() {
     return (
         <Card className="o-hidden mb-4">
             <CardBody className="p-0">
@@ -80,17 +93,17 @@ export default function Properties() {
                     </div>
                 </div>
             </CardBody>
-            <DataTable
+            <Properties.Table
                 data={properties}
                 columns={columns}
-                customStyles={customStyles}
-                noHeader
-                selectableRowsHighlight
-                highlightOnHover
-                pagination
-            // progressPending={resultsLoading}
-            // paginationRowsPerPageOptions={perpageOptions}
             />
+            <CardBody className="text-center border-top">
+                <HashLinkContainer to="/properties">
+                    <a className="card-link font-weight-bold" href="/properties">
+                        More Properties...
+                    </a>
+                </HashLinkContainer>
+            </CardBody>
         </Card>
     );
 }

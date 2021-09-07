@@ -12,14 +12,15 @@ const customStyles = {
     },
     headCells: {
         style: {
-            paddingLeft: '8px', // override the cell padding for head cells
-            paddingRight: '8px',
+            color: 'rgba(0,0,0,.54)',
+            paddingLeft: '18px', // override the cell padding for head cells
+            paddingRight: '18px',
         },
     },
     cells: {
         style: {
-            paddingLeft: '8px', // override the cell padding for data cells
-            paddingRight: '8px',
+            paddingLeft: '18px', // override the cell padding for data cells
+            paddingRight: '18px',
         },
     },
 };
@@ -81,6 +82,13 @@ export default function Contacts() {
                 highlightOnHover
                 pagination
             />
+            <CardBody className="text-center border-top">
+                <HashLinkContainer to="/contacts">
+                    <a className="card-link font-weight-bold" href="/contacts">
+                        More Contacts...
+                    </a>
+                </HashLinkContainer>
+            </CardBody>
         </Card>
     );
 }
