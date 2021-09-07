@@ -4,13 +4,38 @@ import { Breadcrumb } from 'components';
 
 const Layout = props => {
     const { header, footer, sidenav, breadcrumb, showOverlay } = props;
-    const [sidebarLeftOpen, setSidebarLeftOpen] = useState(true);
+    const [wrapperClass, setWrapperClass] = useState('sidenav-collapsed');
+    const [sidebarClass, setSidebarClass] = useState('open');
+
+    const toggleSidebarClass = () => {
+        if (sidebarClass !== 'open') {
+            setSidebarClass('open');
+            return setWrapperClass('sidenav-collapsed');
+        }
+        setSidebarClass('');
+        return setWrapperClass('');
+    };
+
+    const toggleSidebarSecondaryClass = () => {
+        if (wrapperClass === 'sidenav-collapsed') {
+            return setWrapperClass('sidenav-open');
+        }
+        return setWrapperClass('sidenav-collapsed');
+    };
+
     return (
-        <div className="app-admin-wrap layout-sidebar-large">
+        <div
+            className={`app-admin-wrap layout-sidebar-compact clearfix sidebar-gradient-black-gray ${wrapperClass}`}
+        >
             {showOverlay && <div className="overlay" />}
-            <Header {...header} sidebarLeftOpen={sidebarLeftOpen} setSidebarLeftOpen={setSidebarLeftOpen} />
-            <SideNav {...props} sidebarLeftOpen={sidebarLeftOpen} />
-            <div className={`main-content-wrap ${sidebarLeftOpen ? 'sidenav-open' : ''} d-flex flex-column`}>
+            <SideNav
+                {...props}
+                sidebarClass={sidebarClass}
+                wrapperClass={wrapperClass}
+                toggleSidebarSecondaryClass={toggleSidebarSecondaryClass}
+            />
+            <div className="main-content-wrap d-flex flex-column ps">
+                <Header {...header} toggleSidebarClass={toggleSidebarClass} />
                 <div className="main-content">
                     {breadcrumb && <Breadcrumb {...breadcrumb} />}
                     {props.children}

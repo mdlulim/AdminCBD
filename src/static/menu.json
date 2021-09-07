@@ -2,6 +2,7 @@
     {
         "id": "overview",
         "title": "Overview",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
         "link": "/overview",
         "icon": "i-Bar-Chart",
         "childitems": []
@@ -9,13 +10,25 @@
     {
         "id": "properties",
         "title": "Properties",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
         "link": "/properties",
         "icon": "i-Building",
-        "childitems": []
+        "childitems": [{
+            "id": "properties",
+            "title": "Manage Properties",
+            "link": "",
+            "icon": "i-Building"
+        }, {
+            "id": "statistics",
+            "title": "Property Statistics",
+            "link": "/statistics",
+            "icon": "i-Bar-Chart-2"
+        }]
     },
     {
         "id": "leads",
         "title": "Leads",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
         "link": "/leads",
         "icon": "i-Add-User",
         "childitems": []
@@ -23,15 +36,68 @@
     {
         "id": "agents",
         "title": "Agents",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
         "link": "/agents",
         "icon": "i-Business-ManWoman",
+        "childitems": [{
+            "id": "agents",
+            "title": "Manage Agents",
+            "link": "",
+            "icon": "i-MaleFemale"
+        }, {
+            "id": "teams",
+            "title": "Manage Teams",
+            "link": "/teams",
+            "icon": "i-Split-Horizontal-2-Window"
+        }]
+    },
+    {
+        "id": "messaging",
+        "title": "Messaging",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "link": "/messaging",
+        "icon": "i-Speach-Bubble-3",
+        "childitems": [{
+            "id": "inbox",
+            "title": "Inbox",
+            "link": "/inbox",
+            "icon": "i-Email"
+        }, {
+            "id": "chat",
+            "title": "Chat",
+            "link": "/chat",
+            "icon": "i-Speach-Bubble-3"
+        }]
+    },
+    {
+        "id": "reports",
+        "title": "Reports",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "link": "/reports",
+        "icon": "i-File-Chart",
         "childitems": []
     },
     {
-        "id": "settings",
-        "title": "Settings",
-        "link": "/settings",
+        "id": "admin",
+        "title": "Admin",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "link": "/admin",
         "icon": "i-Gears-2",
-        "childitems": []
+        "childitems": [{
+            "id": "users",
+            "title": "Manage Users",
+            "link": "/users",
+            "icon": "i-MaleFemale"
+        }, {
+            "id": "roles",
+            "title": "Manage Roles",
+            "link": "/roles",
+            "icon": "i-Split-Horizontal-2-Window"
+        }, {
+            "id": "agency",
+            "title": "Manage Agency",
+            "link": "/agency",
+            "icon": "i-Gear"
+        }]
     }
 ]

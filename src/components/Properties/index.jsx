@@ -1,5 +1,5 @@
-import Item from './Item';
+import CardItem from './CardItem';
 
 export default {
-    Item,
+    CardItem,
 }

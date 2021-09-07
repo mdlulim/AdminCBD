@@ -6,6 +6,7 @@ import { HashLinkContainer, Properties } from 'components';
 export default function PropertiesOverview(props) {
     const breadcrumb = { heading: 'Manage Properties' };
     const [itemDropdownActive, setItemDropdownActive] = useState(null);
+    const [view, setView] = useState('card');
     return (
         <Layout {...props} breadcrumb={breadcrumb}>
             <Row className="mb-4">
@@ -23,8 +24,8 @@ export default function PropertiesOverview(props) {
                     </div>
                 </Col>
                 <Col xs={12} lg={4} sm={12} className="d-flex align-items-center">
-                    <div className="defect-search-bar">
-                        <input type="text" placeholder="Search" />
+                    <div className="search-bar">
+                        <input placeholder="Search" type="text" />
                         <i className="search-icon text-muted i-Magnifi-Glass1" />
                     </div>
                 </Col>
@@ -39,22 +40,43 @@ export default function PropertiesOverview(props) {
                     </div>
                 </Col>
             </Row>
+            <Row className="mb-4">
+                <Col xs={6}>
+                    <button
+                        type="button"
+                        onClick={() => setView('card')}
+                        className={`btn btn-sm btn-rounded btn-outline-secondary btn-svg mr-2 ${view === 'card' ? 'active' : ''}`}
+                    >
+                        &nbsp;&nbsp;Card view&nbsp;&nbsp;
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setView('list')}
+                        className={`btn btn-sm btn-rounded btn-outline-secondary btn-svg ${view === 'list' ? 'active' : ''}`}
+                    >
+                        &nbsp;&nbsp;List view&nbsp;&nbsp;
+                    </button>
+                </Col>
+            </Row>
             <div className="search-results list-horizontal">
-                <Properties.Item
-                    {...{ id: '1' }}
-                    dropdownActive={itemDropdownActive}
-                    setDropdownActive={setItemDropdownActive}
-                />
-                <Properties.Item
-                    {...{ id: '2' }}
-                    dropdownActive={itemDropdownActive}
-                    setDropdownActive={setItemDropdownActive}
-                />
-                <Properties.Item
-                    {...{ id: '3' }}
-                    dropdownActive={itemDropdownActive}
-                    setDropdownActive={setItemDropdownActive}
-                />
+                {view === 'card' &&
+                <>
+                    <Properties.CardItem
+                        {...{ id: '1' }}
+                        dropdownActive={itemDropdownActive}
+                        setDropdownActive={setItemDropdownActive}
+                    />
+                    <Properties.CardItem
+                        {...{ id: '2' }}
+                        dropdownActive={itemDropdownActive}
+                        setDropdownActive={setItemDropdownActive}
+                    />
+                    <Properties.CardItem
+                        {...{ id: '3' }}
+                        dropdownActive={itemDropdownActive}
+                        setDropdownActive={setItemDropdownActive}
+                    />
+                </>}
             </div>
         </Layout>
     );

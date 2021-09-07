@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Layout } from 'containers';
+import { Overview } from 'components';
 
-export default function Overview(props) {
+export default function OverviewPage(props) {
     const breadcrumb = { heading: "Overview" };
     return (
         <Layout {...props} breadcrumb={breadcrumb}>
@@ -51,6 +52,15 @@ export default function Overview(props) {
                         </CardBody>
                     </Card>
                 </Col>
+
+                <Col md={12}>
+                    <Overview.Properties />
+                </Col>
+
+                <Col md={12}>
+                    <Overview.Contacts />
+                </Col>
+
             </Row>
         </Layout>
     );

@@ -17,7 +17,7 @@ const ForgotPassword = props => {
                                 <div className="form-group">
                                     <label htmlFor="email">Email address</label>
                                     <input
-                                        className="form-control form-control-rounded"
+                                        className="form-control form-control-rounded form-control-lg"
                                         type="email"
                                         id="email"
                                     />

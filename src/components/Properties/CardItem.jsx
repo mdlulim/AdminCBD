@@ -1,30 +1,37 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 
-export default function Item(props) {
+export default function CardItem(props) {
     return (
         <div className="list-item pending col-md-12 p-0 mb-4">
             <Card>
                 <Row>
                     <Col xs={12} md={2}>
-                        <CardBody>
-                            <p className="mb-0"><strong>ABC Properties</strong></p>
-                            <span>41730032</span>
-                        </CardBody>
+                        <div className="list-thumb h-100">
+                            <img
+                                alt="Image"
+                                className="h-100"
+                                src="/images/property.jpeg"
+                                style={{
+                                    borderTopLeftRadius: 10,
+                                    borderBottomLeftRadius: 10,
+                                }}
+                            />
+                        </div>
                     </Col>
                     <Col xs={12} md={10}>
                         <CardBody>
                             <Row>
                                 <Col sm={3}>
                                     <CardBody>
-                                        <p className="mb-0"><strong>Listing #</strong></p>
-                                        <span>109977042</span>
+                                        <p className="mb-0"><strong>Title</strong></p>
+                                        <span>2 Bedroom Apartment</span>
                                     </CardBody>
                                 </Col>
                                 <Col sm={3}>
                                     <CardBody>
-                                        <p className="mb-0"><strong>Owner</strong></p>
-                                        <span>John Doe</span>
+                                        <p className="mb-0"><strong>Listing #</strong></p>
+                                        <span>109977042</span>
                                     </CardBody>
                                 </Col>
                                 <Col sm={3}>
@@ -64,8 +71,8 @@ export default function Item(props) {
                                 </Col>
                                 <Col sm={3}>
                                     <CardBody>
-                                        <p className="mb-0"><strong>Branch Name</strong></p>
-                                        <span>Africa Properties</span>
+                                        <p className="mb-0"><strong>Owner</strong></p>
+                                        <span>John Doe</span>
                                     </CardBody>
                                 </Col>
                                 <Col sm={3}>

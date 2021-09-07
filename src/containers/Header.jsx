@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { HashLinkContainer } from 'components';
 
-const Header = (props) => {
-    const { setSidebarLeftOpen, sidebarLeftOpen } = props;
+export default function Header(props) {
+    const { toggleSidebarClass } = props;
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [showAlerts, setShowAlerts] = useState(false);
 
@@ -22,7 +23,7 @@ const Header = (props) => {
             </div>
 			<div 
                 className="menu-toggle"
-                onClick={() => setSidebarLeftOpen(!sidebarLeftOpen)}
+                onClick={() => toggleSidebarClass()}
             >
                 <div></div>
                 <div></div>
@@ -32,10 +33,17 @@ const Header = (props) => {
 			<div className="header-part-right">
                 <i className="i-Full-Screen header-icon d-none d-sm-inline-block" data-fullscreen />
                 <div className="dropdown">
-                    <i className="i-Safe-Box text-muted header-icon" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                    <i
+                        role="button"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        className="i-Safe-Box text-muted header-icon"
+                        id="dropdownMenuButton"
+                        data-toggle="dropdown"
+                    />
                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <div className="menu-icon-grid">
-                            <a href="/"><i className="i-Shop-4"></i> Home</a>
+                            <a href="/"><i className="i-Shop-4" /> Home</a>
                         </div>
                     </div>
                 </div>
@@ -50,7 +58,7 @@ const Header = (props) => {
                         onClick={() => toggleShowAlert()}
                     >
                         <span className="badge badge-primary">3</span>
-                        <i className="i-Bell text-muted header-icon"></i>
+                        <i className="i-Bell text-muted header-icon" />
                     </div>
                     <div
                         className={`dropdown-menu dropdown-menu-right notification-dropdown rtl-ps-none ${showAlerts ? 'show' : ''}`}
@@ -60,7 +68,7 @@ const Header = (props) => {
                     >
                         <div className="dropdown-item d-flex">
                             <div className="notification-icon">
-                                <i className="i-Speach-Bubble-6 text-primary mr-1"></i>
+                                <i className="i-Speach-Bubble-6 text-primary mr-1" />
                             </div>
                             <div className="notification-details flex-grow-1">
                                 <p className="m-0 d-flex align-items-center">
@@ -74,7 +82,7 @@ const Header = (props) => {
                         </div>
                         <div className="dropdown-item d-flex">
                             <div className="notification-icon">
-                                <i className="i-Receipt-3 text-success mr-1"></i>
+                                <i className="i-Receipt-3 text-success mr-1" />
                             </div>
                             <div className="notification-details flex-grow-1">
                                 <p className="m-0 d-flex align-items-center">
@@ -88,7 +96,7 @@ const Header = (props) => {
                         </div>
                         <div className="dropdown-item d-flex">
                             <div className="notification-icon">
-                                <i className="i-Empty-Box text-danger mr-1"></i>
+                                <i className="i-Empty-Box text-danger mr-1" />
                             </div>
                             <div className="notification-details flex-grow-1">
                                 <p className="m-0 d-flex align-items-center">
@@ -102,7 +110,7 @@ const Header = (props) => {
                         </div>
                         <div className="dropdown-item d-flex">
                             <div className="notification-icon">
-                                <i className="i-Data-Power text-success mr-1"></i>
+                                <i className="i-Data-Power text-success mr-1" />
                             </div>
                             <div className="notification-details flex-grow-1">
                                 <p className="m-0 d-flex align-items-center">
@@ -139,16 +147,17 @@ const Header = (props) => {
                             }}
                         >
                             <div className="dropdown-header">
-                                <i className="i-Lock-User mr-1"></i> John Doe
+                                <i className="i-Lock-User mr-1" /> John Doe
                             </div>
-                            <a className="dropdown-item">Account settings</a>
-                            <a className="dropdown-item" href="/login">Sign out</a>
+                            <HashLinkContainer to="/profile">
+                                <a className="dropdown-item">My Profile</a>
+                            </HashLinkContainer>
+                            <a className="dropdown-item">Account Settings</a>
+                            <a className="dropdown-item" href="/login">Sign Out</a>
                         </div>
                     </div>
                 </div>
             </div>
 		</div>
 	);
-};
-
-export default Header;
+}

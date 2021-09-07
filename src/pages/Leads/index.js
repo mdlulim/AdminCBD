@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Layout } from 'containers';
-import { HashLinkContainer, Leads } from 'components';
+import { HashLinkContainer } from 'components';
 
 export default function LeadsOverview(props) {
     const breadcrumb = { heading: 'Manage Leads' };
-    const [itemDropdownActive, setItemDropdownActive] = useState(null);
     return (
         <Layout {...props} breadcrumb={breadcrumb}>
             <Row className="mb-4">
@@ -13,10 +12,15 @@ export default function LeadsOverview(props) {
                     <div className="input-group mb-3">
                         <div className="input-group-prepend">
                             <label className="input-group-text" htmlFor="filter">Filter</label>
-                            <select className="custom-select col-sm-12" id="filter">
+                            <select
+                                id="filter"
+                                defaultValue="Incoming"
+                                className="custom-select col-sm-12"
+                            >
                                 <option value="All">All</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
+                                <option value="Incoming">Incoming</option>
+                                <option value="Processed">Processed</option>
+                                <option value="Ignored">Ignored</option>
                             </select>
                         </div>
                     </div>
@@ -51,6 +55,7 @@ export default function LeadsOverview(props) {
                                             <th scope="col">Name</th>
                                             <th scope="col">Contact Number</th>
                                             <th scope="col">Email Address</th>
+                                            <th scope="col"># Leads</th>
                                             <th scope="col">Mandate Type</th>
                                             <th scope="col">Actions</th>
                                         </tr>
@@ -59,7 +64,7 @@ export default function LeadsOverview(props) {
                                         <tr>
                                             <th scope="row">
                                                 <label className="checkbox checkbox-outline-info">
-                                                    <input type="checkbox" checked /><span className="checkmark"></span>
+                                                    <input type="checkbox" defaultChecked /><span className="checkmark"></span>
                                                 </label>
                                             </th>
                                             <td>
@@ -73,6 +78,7 @@ export default function LeadsOverview(props) {
                                             <td>
                                                 john@abcproperties.co.za
                                             </td>
+                                            <td>1</td>
                                             <td><span className="badge badge-pill badge-outline-danger p-2 m-1">Sale</span></td>
                                             <td>
                                                 <button className="btn bg-white _r_btn border-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -85,7 +91,7 @@ export default function LeadsOverview(props) {
                                         <tr>
                                             <th scope="row">
                                                 <label className="checkbox checkbox-outline-info">
-                                                    <input type="checkbox" checked /><span className="checkmark"></span>
+                                                    <input type="checkbox" defaultChecked /><span className="checkmark"></span>
                                                 </label>
                                             </th>
                                             <td>
@@ -99,6 +105,7 @@ export default function LeadsOverview(props) {
                                             <td>
                                                 xolom@justprop.co.za
                                             </td>
+                                            <td>3</td>
                                             <td><span className="badge badge-pill badge-outline-primary p-2 m-1">Rent</span></td>
                                             <td>
                                                 <button className="btn bg-white _r_btn border-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

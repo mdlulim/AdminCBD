@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { HashLinkContainer } from 'components';
+import { HashLinkContainer } from 'components';
 
 const Breadcrumb = props => {
     const { heading, items } = props;
@@ -9,10 +9,18 @@ const Breadcrumb = props => {
             <div className="breadcrumb">
                 <h1 className="mr-2">{heading}</h1>
                 {(heading !== 'Overview') &&
-                <ul>
-                    <li><a href="/overview">Overview</a></li>
-                    {items && items.map(item => <li key={item.title}>{item.title}</li>)}
-                </ul>}
+                    <ul>
+                        <li>
+                            <HashLinkContainer to="/overview">
+                                <a href="/overview">Overview</a>
+                            </HashLinkContainer>
+                        </li>
+                        {items && items.map(item => (
+                            <li key={item.title}>
+                                {item.title}
+                            </li>
+                        ))}
+                    </ul>}
             </div>
             <div className="separator-breadcrumb border-top" />
         </>

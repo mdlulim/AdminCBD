@@ -1,17 +1,12 @@
-.layout-sidebar-large {
-    .sidebar-left {
-        .navigation-left {
-            .nav-item {
-                &.active {
-                    .triangle {
-                        border-color: transparent transparent $primary transparent;
-                    }
-                    .nav-item-hold {
-                        color: $primary;
-                    }
-                }
-            }
-        }
+.btn-secondary {
+    color: #fff;
+    background-color: #404040;
+    border-color: #52495a;
+
+    &:hover,
+    &:focus {
+        color: #fff;
+        background-color: #404040;
     }
 }
 
@@ -35,10 +30,113 @@
         box-shadow: 0 8px 25px -8px $primary;
     }
 }
+.btn.btn-outline-primary.btn-svg,
+.btn.btn-outline-primary.btn-svg {
+    color: $primary;
+    background-color: white;
+    border-color: $primary;
+}
+.btn.btn-outline-primary.btn-svg.active,
+.btn.btn-outline-primary.btn-svg:hover {
+    background: $primary;
+    border-color: $primary;
+}
+.btn.btn-outline-secondary.btn-svg,
+.btn.btn-outline-secondary.btn-svg {
+    color: $secondary;
+    background-color: white;
+    border-color: $secondary;
+}
+.btn.btn-outline-secondary.btn-svg.active,
+.btn.btn-outline-secondary.btn-svg:hover {
+    color: white;
+    background: $secondary;
+    border-color: $secondary;
+}
+
+.input-group {
+    .custom-select {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}
 
 .form-control {
     &:focus {
         border-color: rgba($color: $primary, $alpha: .4);
         box-shadow: 0 0 0 0.2rem rgba($color: $primary, $alpha: .25);
+    }
+}
+
+.badge-primary {
+    background-color: $primary;
+}
+
+.layout-sidebar-compact {
+    .sidebar-left {
+        .navigation-left {
+            .nav-item {
+                transition: all 300ms ease;
+                &:hover {
+                    color: #fff;
+                    border-left: 2px solid #fff;
+                    transition: all 300ms ease;
+                }
+
+                &.active {
+                    border-left-color: $primary;
+                    color: $primary;
+                }
+            }
+        }
+    }
+
+    &.sidenav-collapsed {
+        .main-content-wrap {
+            width: calc(100% - 76px);
+        }
+    }
+
+    .sidebar-left-secondary {
+        z-index: 100;
+        header {
+            .logo {
+                padding: 0;
+                img {
+                    width: 100%;
+                    height: auto;
+                }
+            }
+        }
+    }
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    background: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    position: relative;
+    width: 230px;
+    height: 40px;
+
+    input {
+        background: 0 0;
+        border: 0;
+        color: #212121;
+        font-size: .8rem;
+        line-height: 2;
+        height: 100%;
+        outline: initial!important;
+        padding: .5rem 1rem;
+        width: calc(100% - 32px);
+
+        .search-icon {
+            font-size: 18px;
+            width: 24px;
+            display: inline-block;
+        }
     }
 }

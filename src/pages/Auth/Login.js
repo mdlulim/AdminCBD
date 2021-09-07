@@ -15,17 +15,17 @@ const Login = props => {
                             <h1 className="mb-3 text-18">Sign In</h1>
                             <form>
                                 <div className="form-group">
-                                    <label htmlFor="email">Email address</label>
+                                    <label htmlFor="username">Username</label>
                                     <input
-                                        className="form-control form-control-rounded"
-                                        type="email"
-                                        id="email"
+                                        type="text"
+                                        id="username"
+                                        className="form-control form-control-rounded form-control-lg"
                                     />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="password">Password</label>
                                     <input
-                                        className="form-control form-control-rounded"
+                                        className="form-control form-control-rounded form-control-lg"
                                         type="password"
                                         id="password"
                                     />

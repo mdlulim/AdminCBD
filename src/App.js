@@ -24,7 +24,10 @@ import Overview from 'pages/Overview';
 import Leads from 'pages/Leads';
 import Properties from 'pages/Properties';
 import AddProperty from 'pages/Properties/Add';
+import MessagingChat from 'pages/Messaging/Chat';
+import MessagingInbox from 'pages/Messaging/Inbox';
 import Profile from 'pages/Profile';
+import Reports from 'pages/Reports';
 import Users from 'pages/Users';
 
 const App = () => {
@@ -51,6 +54,9 @@ const App = () => {
 					<Route exact path="/properties/add" component={(props) => <AddProperty config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/properties" component={(props) => <Properties config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/profile" component={(props) => <Profile config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/messaging/chat" component={(props) => <MessagingChat config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/messaging/inbox" component={(props) => <MessagingInbox config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/reports" component={(props) => <Reports config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
 					{/* <PrivateRoute exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} /> */}
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
