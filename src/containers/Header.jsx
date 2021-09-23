@@ -19,7 +19,7 @@ export default function Header(props) {
 	return (
 		<div className="main-header">
 			<div className="logo">
-                <img src="images/logo.png" alt="Property Store" />
+                <img src="images/logo.png" alt="CBI" />
             </div>
 			<div 
                 className="menu-toggle"

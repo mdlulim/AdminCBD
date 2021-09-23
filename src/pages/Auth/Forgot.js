@@ -9,9 +9,9 @@ const ForgotPassword = props => {
                 <Row>
                     <Col xs={12}>
                         <div className="p-4">
-                            <div className="auth-logo text-center mb-4">
+                            {/* <div className="auth-logo text-center mb-4">
                                 <img src={require("images/logo.png")} alt="Forgot Password" />
-                            </div>
+                            </div> */}
                             <h1 className="mb-3 text-18">Forgot Password</h1>
                             <form>
                                 <div className="form-group">

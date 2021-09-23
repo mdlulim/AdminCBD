@@ -1,7 +1,7 @@
-import Contacts from './Contacts';
-import Properties from './Properties';
+import Transactions from './Transactions';
+import Users from './Users';
 
 export default {
-    Contacts,
-    Properties,
+    Transactions,
+    Users,
 }

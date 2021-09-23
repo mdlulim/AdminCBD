@@ -87,11 +87,35 @@ a { color: $primary; }
     background-color: $primary !important;
     left: 44%;
 }
+.sw-theme-dots > ul.step-anchor > li.done > a:after {
+    background-color: $secondary !important;
+}
 
 .accordion {
     .btn {
         padding-left: 0;
         padding-right: 0;
+    }
+
+    .card {
+        .card-header {
+            h5,
+            .btn-link {
+                font-weight: bold;
+            }
+        }
+
+        &.active,
+        &.done {
+            .card-header {
+                background-color: $secondary;
+
+                h5,
+                .btn-link {
+                    color: white;
+                }
+            }
+        }
     }
 }
 
@@ -162,4 +186,131 @@ a { color: $primary; }
             display: inline-block;
         }
     }
+}
+
+// ngx-pagination
+.ngx-pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0;
+}
+
+.ngx-pagination {
+    margin-left: 0;
+    margin-bottom: 1rem;
+
+    &::before,
+    &::after {
+        content: ' ';
+        display: table;
+    }
+
+    li {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        margin-right: 0.0625rem;
+        border-radius: 0;
+        display: inline-block;
+    }
+
+    .pagination-next,
+    .pagination-previous {
+        border-radius: 10px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        a {
+            color: #47404f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            span {
+                line-height: 100%;
+            }
+        }
+    }
+
+    a,
+    button {
+        cursor: pointer;
+        color: #0a0a0a;
+        display: block;
+        padding: 0.1875rem 0.625rem;
+        border-radius: 0;
+    }
+
+    .small-screen {
+        display: none;
+    }
+
+    .show-for-sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+    }
+
+    .pagination-next a::after,
+    .pagination-next.disabled::after,
+    .pagination-previous a::before,
+    .pagination-previous.disabled::before {
+        font-family: iconsmind;
+        speak: none;
+        font-style: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        font-size: 32px;
+        font-weight: 300;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .pagination-previous a::before,
+    .pagination-previous.disabled::before {
+        content: "\f077";
+        display: inline-block;
+        margin-right: 0.5rem;
+    }
+
+    .current {
+        padding: 0.1875rem 0.625rem;
+        background: #2199e8;
+        color: #fefefe;
+        cursor: default;
+    }
+}
+
+.ngx-pagination li:not(.pagination-previous):not(.pagination-next):not(.small-screen) {
+    border: none;
+    background: 0 0;
+    border-radius: 50%!important;
+    margin: 0 4px!important;
+    text-align: center;
+    height: 36px;
+    width: 36px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ngx-pagination li:not(.pagination-previous):not(.pagination-next):not(.small-screen).current {
+    border: 1px solid $primary;
+    background: $primary;
+    color: #fff;
+}
+
+.ngx-pagination li:not(.pagination-previous):not(.pagination-next):not(.small-screen) span {
+    line-height: 100%;
+}
+
+.ngx-pagination li:not(.pagination-previous):not(.pagination-next):not(.small-screen) a span {
+    line-height: 100%;
 }

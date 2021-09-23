@@ -95,7 +95,7 @@ const SideNav = props => {
         <div className="side-content-wrap">
             <div className={`sidebar-left rtl-ps-none ps ps--active-y ${sidebarClass}`}>
                 <div className="logo">
-                    <img src="/images/logo_color.png" alt="Property Store" />
+                    <img src="/images/logo_color.png" alt="CBI" />
                 </div>
                 <ul className="navigation-left">
                     {menu.map(item => (

@@ -2,10 +2,10 @@ var stage = process.env.REACT_APP_ENV || 'dev';
 
 export default {
     stage,
-    appName: process.env.APP_NAME || 'JRA Admin',
+    appName: process.env.APP_NAME || 'CBI Admin',
     auth: {
         cookie: {
-            name: '__jraAdminUserSession',
+            name: '__cbiAdminUserSession',
             expires: 1, // days
         }
     },

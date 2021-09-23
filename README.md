@@ -1,6 +1,6 @@
-# Property Store Dashboard
+# CBI Admin Application
 
-This project is a Property Store Dashboard built in React.js. It uses React-Router for navigation and React-Bootstrap for layout.
+This project is a CBI Admin Application built in React.js. It uses React-Router for navigation and React-Bootstrap for layout.
 
 
 ## Getting Started

@@ -8,46 +8,41 @@
         "childitems": []
     },
     {
-        "id": "properties",
-        "title": "Properties",
+        "id": "transactions",
+        "title": "Transactions",
         "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "link": "/properties",
+        "link": "/transactions",
         "icon": "i-Building",
-        "childitems": [{
-            "id": "properties",
-            "title": "Manage Properties",
-            "link": "",
-            "icon": "i-Building"
-        }, {
-            "id": "statistics",
-            "title": "Property Statistics",
-            "link": "/statistics",
-            "icon": "i-Bar-Chart-2"
-        }]
+        "childitems": []
     },
     {
-        "id": "leads",
-        "title": "Leads",
+        "id": "visitors",
+        "title": "Visitors",
         "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "link": "/leads",
+        "link": "/visitors",
         "icon": "i-Add-User",
         "childitems": []
     },
     {
-        "id": "agents",
-        "title": "Agents",
+        "id": "users",
+        "title": "Users",
         "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "link": "/agents",
+        "link": "/users",
         "icon": "i-Business-ManWoman",
         "childitems": [{
-            "id": "agents",
-            "title": "Manage Agents",
+            "id": "users",
+            "title": "Manage Users",
             "link": "",
             "icon": "i-MaleFemale"
         }, {
             "id": "teams",
             "title": "Manage Teams",
             "link": "/teams",
+            "icon": "i-Split-Horizontal-2-Window"
+        }, {
+            "id": "roles",
+            "title": "Manage Roles",
+            "link": "/roles",
             "icon": "i-Split-Horizontal-2-Window"
         }]
     },
@@ -78,26 +73,16 @@
         "childitems": []
     },
     {
-        "id": "admin",
-        "title": "Admin",
+        "id": "configurations",
+        "title": "Configurations",
         "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "link": "/admin",
+        "link": "/configurations",
         "icon": "i-Gears-2",
         "childitems": [{
             "id": "users",
-            "title": "Manage Users",
-            "link": "/users",
-            "icon": "i-MaleFemale"
-        }, {
-            "id": "roles",
-            "title": "Manage Roles",
-            "link": "/roles",
-            "icon": "i-Split-Horizontal-2-Window"
-        }, {
-            "id": "agency",
-            "title": "Manage Agency",
-            "link": "/agency",
-            "icon": "i-Gear"
+            "title": "Manage Configurations",
+            "link": "/configurations",
+            "icon": "i-Gears-2"
         }]
     }
 ]
