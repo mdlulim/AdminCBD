@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
-import { FeatherIcon } from 'components';
+import { FeatherIcon } from 'components/Members/node_modules/pages/Members/node_modules/components';
 
 const AlertModal = props => {
     const {

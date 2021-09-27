@@ -8,10 +8,10 @@ export default function OverviewPage(props) {
     return (
         <Layout {...props} breadcrumb={breadcrumb}>
             <Row>
-                <Col lg={3} md={6} sm={6}>
+                <Col lg={4} md={6} sm={6}>
                     <Card className="card-icon-bg card-icon-bg-primary o-hidden mb-4">
                         <CardBody className="card-body text-center">
-                            <i className="i-Building" />
+                            <i className="i-Money" />
                             <div className="content">
                                 <p className="text-muted mt-2 mb-0">Transactions</p>
                                 <p className="text-primary text-24 line-height-1 mb-2">29</p>
@@ -19,35 +19,24 @@ export default function OverviewPage(props) {
                         </CardBody>
                     </Card>
                 </Col>
-                <Col lg={3} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Add-User" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">Users</p>
-                                <p className="text-primary text-24 line-height-1 mb-2">7</p>
-                            </div>
-                        </CardBody>
-                    </Card>
-                </Col>
-                <Col lg={3} md={6} sm={6}>
+                <Col lg={4} md={6} sm={6}>
                     <Card className="card-icon-bg card-icon-bg-primary o-hidden mb-4">
                         <CardBody className="card-body text-center">
                             <i className="i-Business-ManWoman" />
                             <div className="content">
-                                <p className="text-muted mt-2 mb-0">Visitors</p>
-                                <p className="text-primary text-24 line-height-1 mb-2">54</p>
+                                <p className="text-muted mt-2 mb-0">Members</p>
+                                <p className="text-primary text-24 line-height-1 mb-2">48</p>
                             </div>
                         </CardBody>
                     </Card>
                 </Col>
-                <Col lg={3} md={6} sm={6}>
+                <Col lg={4} md={6} sm={6}>
                     <Card className="card-icon-bg card-icon-bg-primary o-hidden mb-4">
                         <CardBody className="card-body text-center">
-                            <i className="i-Check" />
+                            <i className="i-Shopping-Bag" />
                             <div className="content">
-                                <p className="text-muted mt-2 mb-0">Payments</p>
-                                <p className="text-primary text-24 line-height-1 mb-2">2</p>
+                                <p className="text-muted mt-2 mb-0">Products</p>
+                                <p className="text-primary text-24 line-height-1 mb-2">54</p>
                             </div>
                         </CardBody>
                     </Card>

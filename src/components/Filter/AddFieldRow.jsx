@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
-import { Form } from 'components';
+import { Form } from 'components/Members/node_modules/pages/Members/node_modules/components';
 
 import filter from '../../static/filter.json';
 

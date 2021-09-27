@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
-import { FeatherIcon, Form } from 'components';
+import { FeatherIcon, Form } from 'components/Members/node_modules/pages/Members/node_modules/components';
 
 import FieldRows from './FieldRows';
 

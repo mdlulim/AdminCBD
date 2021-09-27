@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import Select from 'react-select';
 import { Col, Row } from 'reactstrap';
-import { Form } from 'components';
+import { Form } from 'components/Members/node_modules/pages/Members/node_modules/components';
 import 'react-datepicker/dist/react-datepicker.css';
 
 /**

@@ -23,6 +23,8 @@ import MessagingChat from 'pages/Messaging/Chat';
 import MessagingInbox from 'pages/Messaging/Inbox';
 import Reports from 'pages/Reports';
 import Users from 'pages/Users';
+import Customers from 'pages/Members';
+import CustomerDetails from 'pages/Members';
 
 const App = () => {
 	const settings = config;
@@ -45,7 +47,9 @@ const App = () => {
 					<Route exact path="/messaging/chat" component={(props) => <MessagingChat config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/messaging/inbox" component={(props) => <MessagingInbox config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/reports" component={(props) => <Reports config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/users/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/customers/customers" component={(props) => <Customers config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/customers/customers/${id}" component={(props) => <CustomerDetails config={settings} {...props} setMenu={setMenu} />} />
 					{/* <PrivateRoute exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} /> */}
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
 				</Switch>

@@ -54,7 +54,7 @@ const SecondaryNav = item => {
             <>
                 <header>
                     <div className="logo">
-                        <img alt="" src="/images/logo_2.png" />
+                        <img alt="" src="/images/logo.png" />
                     </div>
                     <h6>{title}</h6>
                     <p>{description}</p>
@@ -95,7 +95,7 @@ const SideNav = props => {
         <div className="side-content-wrap">
             <div className={`sidebar-left rtl-ps-none ps ps--active-y ${sidebarClass}`}>
                 <div className="logo">
-                    <img src="/images/logo_color.png" alt="CBI" />
+                    <img src="/assets/img/logo.png" alt="CBI" />
                 </div>
                 <ul className="navigation-left">
                     {menu.map(item => (
