@@ -59,7 +59,7 @@ export default function OverviewTransactions() {
                     </div>
                 </div>
             </CardBody>
-            <Transactions.Table
+            <Transactions.Transactions
                 data={transactions}
                 columns={columns}
             />

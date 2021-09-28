@@ -8,31 +8,15 @@
         "childitems": []
     },
     {
-        "id": "transactions",
-        "title": "Transactions",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "link": "/transactions",
-        "icon": "i-Building",
-        "childitems": []
-    },
-    {
-        "id": "visitors",
-        "title": "Visitors",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "link": "/visitors",
-        "icon": "i-Add-User",
-        "childitems": []
-    },
-    {
-        "id": "customers",
-        "title": "Customers",
-        "description": "manage your customers",
-        "link": "/customers",
+        "id": "members",
+        "title": "CBI Members",
+        "description": "manage your CBI Members",
+        "link": "/members",
         "icon": "i-Business-ManWoman",
         "childitems": [{
-            "id": "customers",
-            "title": "Manage Customers",
-            "link": "/customers",
+            "id": "members",
+            "title": "Manage CBI Members",
+            "link": "/members",
             "icon": "i-MaleFemale"
         }, {
             "id": "teams",
@@ -45,48 +29,14 @@
             "link": "/roles",
             "icon": "i-Split-Horizontal-2-Window"
         }]
-    },{
-        "id": "transuctions",
-        "title": "Transuctions",
-        "description": "Manage  Transuctions",
-        "link": "/transuctions",
+    },
+    {
+        "id": "transactions",
+        "title": "Transactions",
+        "description": "Manage Transactions",
+        "link": "/transactions",
         "icon": "i-Money",
-        "childitems": [{
-            "id": "transuctions",
-            "title": "All",
-            "link": "/transuctions",
-            "icon": "i-MaleFemale"
-        }, {
-            "id": "pending",
-            "title": "Pending",
-            "link": "/teams",
-            "icon": "i-Split-Horizontal-2-Window"
-        }, {
-            "id": "failed",
-            "title": "Failed",
-            "link": "/failed",
-            "icon": "i-Split-Horizontal-2-Window"
-        }, {
-            "id": "deposits",
-            "title": "Deposits",
-            "link": "/deposits",
-            "icon": "i-Split-Horizontal-2-Window"
-        }, {
-            "id": "transfers",
-            "title": "Transfers",
-            "link": "/transfers",
-            "icon": "i-Split-Horizontal-2-Window"
-        }, {
-            "id": "completed",
-            "title": "Completed",
-            "link": "/roles",
-            "icon": "i-Split-Horizontal-2-Window"
-        },{
-            "id": "withdrawals",
-            "title": "Withdrawals",
-            "link": "/withdrawals",
-            "icon": "i-Split-Horizontal-2-Window"
-        }]
+        "childitems": []
     },
     {
         "id": "messaging",

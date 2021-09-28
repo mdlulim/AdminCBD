@@ -4,7 +4,7 @@ import { Layout } from 'containers';
 import { Members } from 'components';
 
 const MembersList = props => {
-	const breadcrumb = { heading: "Members" };
+	const breadcrumb = { heading: "CBI Members" };
 	return (
 		<Layout {...props} breadcrumb={breadcrumb}>
 			<Row>

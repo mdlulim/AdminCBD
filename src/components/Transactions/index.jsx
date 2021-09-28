@@ -1,5 +1,5 @@
-import Table from './Table';
+import Transactions from './Transactions';
 
 export default {
-    Table,
+    Transactions,
 }

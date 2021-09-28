@@ -50,10 +50,10 @@ const Status = ({ status }) => {
     if (status === 'Pending') {
       badge = 'warning';
     }
-    if (status === 'Active') {
+    if (status === 'Completed') {
       badge = 'success';
     }
-    if (status === 'Blocked') {
+    if (status === 'Rejected') {
         badge = 'danger';
       }
     return (
@@ -68,36 +68,57 @@ export default function Customers(props) {
 
     useMemo(() => {
         const customersList = [{
-            customerId: '109977041',
+            transactionId: '109977041',
+            type:'Withdrawals',
+            amount: 3000,
+            fee: 150,
+            total_amount: 3150,
+            balance: 300000,
+            currency: {code: 'ZAR'},
+            user:{
             full_names: 'Mduduzi Mdluli',
             username: 'JSmith',
             email: 'example1@demo.com',
-            id_number: '9103025869089',
+            id_number: '8503025869089',
             country: 'South Africa',
-            level: 'General',
+            level: 'General',},
             created: 'just now',
-            status: 'Active',
+            status: 'Completed',
         }, {
-            customerId: '109977042',
+            transactionId: '109977042',
+            type:'Deposit',
+            amount: 3000,
+            fee: 150,
+            total_amount: 3150,
+            balance: 300000,
+            currency: {code: 'ZAR'},
+            user:{
             full_names: 'Msizi Mpanza',
             username: 'MsiziM',
             email: 'example2@demo.com',
             id_number: '9103025869084',
             country: 'Namibia',
-            level: 'Wealth Creator',
+            level: 'Wealth Creator',},
             created: '2 mins ago',
             status: 'Pending',
         }, {
-            customerId: '109977043',
+            transactionId: '109977043',
+            type:'Transfer',
+            amount: 5000,
+            fee: 150,
+            total_amount: 5150,
+            balance: 450000,
+            currency: {code: 'ZAR'},
+            user:{
             full_names: 'Amanda Zungu',
             last_name: 'ZunguAmanda',
             username: 'McCallJ',
-            id_number: '9103025869085',
+            id_number: '9803025869085',
             email: 'example3@demo.com',
             country: 'South Africa',
-            level: 'General',
+            level: 'General',},
             created: '5 mins ago',
-            status: 'Blocked',
+            status: 'Rejected',
         }];
      setCustomers(customersList);
      setFilteredCustomers(customersList);
@@ -115,19 +136,34 @@ const columns = [{
     selector: 'full_names',
     sortable: true,
     wrap: true,
+    cell: row => <div><div>{row.user.full_names}</div>
+    <div className="small text-muted">
+      <span>{row.user.id_number}</span>
+    </div></div>
 },{
-    name: 'Id Number',
-    selector: 'id_number',
+    name: 'Transaction Type',
+    selector: 'type',
     sortable: true,
 },{
-    name: 'Username',
-    selector: 'username',
+    name: 'Amount',
+    selector: 'amount',
     sortable: true,
+    cell: row => <div>{row.currency.code} {row.amount}</div>
 },
 {
-    name: 'Email Address',
-    selector: 'email',
+    name: 'Fee',
+    selector: 'fee',
     sortable: true,
+    cell: row => <div>{row.currency.code} {row.fee}</div>
+},{
+    name: 'Total Amount',
+    selector: 'total_amount',
+    sortable: true,
+    cell: row => <div>{row.currency.code} {row.total_amount}</div>
+},{
+    name: 'Balance',
+    selector: 'balance',
+cell: row => <div>{row.currency.code} {row.balance}</div>
 },{
     name: 'Date Created',
     selector: 'created',
@@ -141,36 +177,11 @@ const columns = [{
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-    <spam style={iconPadding}><a
-      href={`/customers/customers/${row.customerId}`}
-      className="btn btn-lg btn-primary btn-sm"
-      onClick={e => {
-        e.preventDefault();
-        history.push(`customers/profile/${row.customerId}`);
-      }}
-    >
-        <Eye width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}>
-      <a
-      href={`#`}
-      className="btn btn-lg btn-info btn-sm"
-      onClick={e => {
-        e.preventDefault();
-        onSubmitChangeStatus(row);
-      }}
-    ><Edit width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-lg btn-danger btn-sm"
-      onClick={e => {
-        e.preventDefault();
-        onSubmitDeleteMember(row);
-      }}
-    >
-      <UserMinus width={16} height={16}/>
-    </a></spam>
+        <select class="form-control" id="sel1">
+            <option>Update Status</option>
+            <option>Completed</option>
+            <option>Rejected</option>
+        </select>
   </div>
 }];
 
@@ -208,10 +219,10 @@ const onSubmitChangeStatus= data => {
 
   const onSearchFilter = filterText => {
     const filteredItems = customers.filter(item => (
-      (item && item.full_names && item.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.id_number && item.id_number.toLowerCase().includes(filterText.toLowerCase()))
+      (item && item.user.full_names && item.user.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredCustomers(filteredItems);
   }
@@ -249,7 +260,6 @@ const onSubmitChangeStatus= data => {
                     </a>
                 </HashLinkContainer>
             </CardBody>
-          
         </Card>
     );
 }
