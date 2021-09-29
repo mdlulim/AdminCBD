@@ -7,7 +7,6 @@ export default function MessagingInbox(props) {
         <Layout {...props}>
             <div className="inbox-main-sidebar-container sidebar-container">
                 <div className="inbox-main-content sidebar-content">
-                    
                 </div>
                 <div className="inbox-main-sidebar sidebar">
                     <div className="pt-3 pr-3 pb-3">

@@ -4,6 +4,7 @@ import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
+import Confirm from './ModalChangeStatus';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -62,6 +63,7 @@ const Status = ({ status }) => {
   };
 
 export default function Customers(props) {
+    const { show, setShow } = props;
     const [customers, setCustomers] = useState([]);
     const [filteredCustomers, setFilteredCustomers] = useState([]);
     const history = useHistory();
@@ -166,6 +168,7 @@ const columns = [{
       className="btn btn-lg btn-danger btn-sm"
       onClick={e => {
         e.preventDefault();
+    
         onSubmitDeleteMember(row);
       }}
     >
@@ -181,16 +184,9 @@ const handleDeleteMember = async data => {
 }
 
 const onSubmitChangeStatus= data => {
-    return confirmAlert({
-      title: 'Change Customer Status',
-      message: 'Are you sure you want to resend password for ' + data.full_names + '?',
-      buttons: [{
-        label: 'Yes',
-        onClick: () => handleChangePassword(data),
-      }, {
-        label: 'Cancel',
-      }]
-    });
+  // setShow(true)
+  console.log(data);
+    return <Confirm show={true} setShow={setShow} />;
   };
 
   const onSubmitDeleteMember= data => {
@@ -221,13 +217,13 @@ const onSubmitChangeStatus= data => {
         <Card className="o-hidden mb-4">
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Customers</span>
+                    <span>CBI Members</span>
                     <span className="flex-grow-1" />
                     <input
                     style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-rounded form-control-lg`}
+                        className={`form-control form-control-rounded form-control-m`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />

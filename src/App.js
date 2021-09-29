@@ -22,7 +22,9 @@ import Overview from 'pages/Overview';
 import MessagingChat from 'pages/Messaging/Chat';
 import MessagingInbox from 'pages/Messaging/Inbox';
 import Reports from 'pages/Reports';
-import Users from 'pages/Users';
+import Users from 'pages/Configurations';
+import UserRoles from './pages/Configurations/UserRoles';
+import Configurations from './pages/Configurations/Configurations';
 import Members from 'pages/Members';
 import MemberDetails from 'pages/Members';
 import Transactions from 'pages/Transactions';
@@ -48,7 +50,9 @@ const App = () => {
 					<Route exact path="/messaging/chat" component={(props) => <MessagingChat config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/messaging/inbox" component={(props) => <MessagingInbox config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/reports" component={(props) => <Reports config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/users/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/configurations/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/configurations/roles" component={(props) => <UserRoles config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/configurations/configurations" component={(props) => <Configurations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/members/${id}" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />

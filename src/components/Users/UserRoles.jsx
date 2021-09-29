@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody } from 'reactstrap';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
-import { Eye,  Edit, UserMinus} from 'react-feather';
+import { Trash, Edit, UserMinus} from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import Confirm from './ModalChangeUserStatus';
 // styles
@@ -46,79 +46,53 @@ const Status = ({ status }) => {
     );
   };
 
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
-
-export default function Users(props) {
+export default function UsersRoles(props) {
     const { show, setShow } = props;
-    const [users, setUsers] = useState([]);
-    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [roles, setRoles] = useState([]);
+    const [filteredRoles, setFilteredRoles] = useState([]);
     const history = useHistory();
 
 
     useMemo(() => {
-        const usersList = [{
-            userId: '109977041',
-            full_names: 'Mduduzi Mdluli',
-            username: 'JSmith',
-            email: 'example1@demo.com',
-            country: 'South Africa',
-            level: 'General',
+        const rolesList = [{
+            roleID: '109977041',
+            name: 'SUPER',
+            description: 'SUPER Admin has all the access',
             created: 'just now',
             status: 'Active',
         }, {
-            userId: '109977042',
-            full_names: 'Msizi Mpanza',
-            username: 'MsiziM',
-            email: 'example2@demo.com',
-            country: 'Namibia',
-            level: 'Wealth Creator',
+            roleID: '109977042',
+            name: 'Platform Administrator',
+            description: 'Platform Administrator',
             created: '2 mins ago',
             status: 'Active',
         }, {
-            userId: '109977043',
-            full_names: 'Amanda Zungu',
-            last_name: 'ZunguAmanda',
-            username: 'McCallJ',
-            email: 'example3@demo.com',
-            country: 'South Africa',
-            level: 'General',
+            roleID: '109977043',
+            name: 'Training Administrator',
+            description: 'SUPER Admin has all the access',
             created: '5 mins ago',
             status: 'Blocked',
-        }];
-     setUsers(usersList);
-     setFilteredUsers(usersList);
+        }, {
+          roleID: '109977055',
+          name: 'EcoSystem Administrator',
+          description: 'EcoSystem Administrator',
+          created: '5 mins ago',
+          status: 'Blocked',
+      }];
+     setRoles(rolesList);
+     setFilteredRoles(rolesList);
 
 
       }, []);
     // table headings definition
-const columns = [{
-    name: '',
-    sortable: false,
-    width: '80px',
-    cell: () => <Image />
-}, {
-    name: 'Full Names',
-    selector: 'full_names',
+const columns = [ {
+    name: 'Name',
+    selector: 'name',
     sortable: true,
     wrap: true,
 },{
-    name: 'Username',
-    selector: 'username',
-    sortable: true,
-},
-{
-    name: 'Email Address',
-    selector: 'email',
+    name: 'Description',
+    selector: 'description',
     sortable: true,
 },{
     name: 'Date Created',
@@ -152,7 +126,7 @@ const columns = [{
         onSubmitDeleteUser(row);
       }}
     >
-      <UserMinus width={16} height={16}/>
+      <Trash width={16} height={16}/>
     </a></spam>
   </div>
 }];
@@ -174,12 +148,11 @@ const onSubmitChangeStatus= data => {
   };
 
   const onSearchFilter = filterText => {
-    const filteredItems = users.filter(item => (
-      (item && item.full_names && item.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase()))
+    const filteredItems = roles.filter(item => (
+      (item && item.name && item.name.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.description && item.description.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredUsers(filteredItems);
+    setFilteredRoles(filteredItems);
   }
 
 
@@ -187,7 +160,7 @@ const onSubmitChangeStatus= data => {
         <Card className="o-hidden mb-4">
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Admin Users</span>
+                    <span>User Roles Users</span>
                     <span className="flex-grow-1" /><input
                         style={inputWith}
                         type="text"
@@ -199,14 +172,14 @@ const onSubmitChangeStatus= data => {
                     <div>
                         <HashLinkContainer to="/users/add">
                             <button className="btn btn-secondary" type="button">
-                                Add User
+                                Add Role
                             </button>
                         </HashLinkContainer>
                     </div>
                 </div>
             </CardBody>
             <DataTable
-                data={filteredUsers}
+                data={filteredRoles}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader
@@ -214,13 +187,6 @@ const onSubmitChangeStatus= data => {
                 highlightOnHover
                 pagination
             />
-            <CardBody className="text-center border-top">
-                <HashLinkContainer to="/users">
-                    <a className="card-link font-weight-bold" href="/users">
-                        More Users...
-                    </a>
-                </HashLinkContainer>
-            </CardBody>
         </Card>
     );
 }

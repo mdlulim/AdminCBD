@@ -18,16 +18,6 @@
             "title": "Manage CBI Members",
             "link": "/members",
             "icon": "i-MaleFemale"
-        }, {
-            "id": "teams",
-            "title": "Manage Teams",
-            "link": "/teams",
-            "icon": "i-Split-Horizontal-2-Window"
-        }, {
-            "id": "roles",
-            "title": "Manage Roles",
-            "link": "/roles",
-            "icon": "i-Split-Horizontal-2-Window"
         }]
     },
     {
@@ -72,9 +62,19 @@
         "icon": "i-Gears-2",
         "childitems": [{
             "id": "users",
-            "title": "Manage Users",
+            "title": "Manage Admin Users",
             "link": "/users",
-            "icon": "i-Gears-2"
-        }]
+            "icon": "i-Business-ManWoman"
+        },{
+        "id": "roles",
+        "title": "Manage User Roles",
+        "link": "/roles",
+        "icon": "i-Gear"
+    },{
+        "id": "configurations",
+        "title": "Configurations",
+        "link": "/configurations",
+        "icon": "i-Gears-2"
+    }]
     }
 ]

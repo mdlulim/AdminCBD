@@ -29,8 +29,13 @@ const customStyles = {
 const iconPadding ={
     paddingRight: '3px',
 }
+
+const selectPadding ={
+    paddingRight: '10px',
+}
+
 const inputWith={
-  width: '30%'
+  width: '20%'
 }
 
 const Image = () => {
@@ -177,7 +182,7 @@ cell: row => <div>{row.currency.code} {row.balance}</div>
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-        <select class="form-control" id="sel1">
+        <select class="form-control form-control-sm">
             <option>Update Status</option>
             <option>Completed</option>
             <option>Rejected</option>
@@ -232,13 +237,24 @@ const onSubmitChangeStatus= data => {
         <Card className="o-hidden mb-4">
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Customers</span>
+                    <span>Transactions</span>
                     <span className="flex-grow-1" />
+                    <div style={selectPadding}>
+                            <select class="form-control form-control-rounded form-control-m">
+                                <option>All Transactions</option>
+                                <option>Pending</option>
+                                <option>Failed</option>
+                                <option>Transfers</option>
+                                <option>Deposits</option>
+                                <option>Withdrawals</option>
+                                <option>Completed</option>
+                            </select>
+                    </div>
                     <input
                     style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-rounded form-control-lg`}
+                        className={`form-control form-control-rounded form-control-m`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
