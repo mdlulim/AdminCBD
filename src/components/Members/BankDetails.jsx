@@ -34,106 +34,83 @@ const inputWith={
   width: '30%'
 }
 
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
-
 const Status = ({ status }) => {
     let badge = 'primary';
+    let myStatus ='Defualt'
     if (status === 'Pending') {
       badge = 'warning';
+      myStatus ='Not Defualt';
     }
     if (status === 'Active') {
       badge = 'success';
+      myStatus ='Defualt';
     }
-    if (status === 'Blocked') {
-        badge = 'danger';
-      }
+
     return (
-      <span className={`badge badge-${badge}`}>{status}</span>
+      <span className={`badge badge-${badge}`}>{myStatus}</span>
     );
   };
 
-export default function Customers(props) {
+export default function Referals(props) {
   const [show, setShow] = useState(false);
-    const [customers, setCustomers] = useState([]);
-    const [filteredCustomers, setFilteredCustomers] = useState([]);
+    const [bankingDetails, setBankingDetails] = useState([]);
+    const [filteredBankingDetails, setFilteredBankingDetails] = useState([]);
     const history = useHistory();
 
     useMemo(() => {
-        const customersList = [{
-            customerId: '109977041',
-            full_names: 'Mduduzi Mdluli',
-            username: 'JSmith',
-            email: 'example1@demo.com',
-            id_number: '9103025869089',
-            country: 'South Africa',
-            level: 'General',
-            created: 'just now',
+        const bankingDetailsList = [{
+            bankingDetailId: '109977041',
+            account_holder: 'Mduduzi Mdluli',
+            bank_name: 'Standard Bank',
+            account_type: 'Current',
+            account_no: '10787098554',
+            branch_code: '50987',
             status: 'Active',
         }, {
-            customerId: '109977042',
-            full_names: 'Msizi Mpanza',
-            username: 'MsiziM',
-            email: 'example2@demo.com',
-            id_number: '9103025869084',
-            country: 'Namibia',
-            level: 'Wealth Creator',
-            created: '2 mins ago',
+            bankingDetailId: '109977042',
+            account_holder: 'Mduduzi Mdluli',
+            bank_name: 'ABSA',
+            account_type: 'Savings',
+            account_no: '20787098587',
+            branch_code: '40987',
             status: 'Pending',
         }, {
-            customerId: '109977043',
-            full_names: 'Amanda Zungu',
-            last_name: 'ZunguAmanda',
-            username: 'McCallJ',
-            id_number: '9103025869085',
-            email: 'example3@demo.com',
-            country: 'South Africa',
-            level: 'General',
-            created: '5 mins ago',
-            status: 'Blocked',
+          bankingDetailId: '109977054',
+          account_holder: 'Mduduzi Mdluli',
+          bank_name: 'FNB',
+          account_type: 'Savings',
+          account_no: '20787099898',
+          branch_code: '30980',
+          status: 'Pending',
         }];
-     setCustomers(customersList);
-     setFilteredCustomers(customersList);
+     setBankingDetails(bankingDetailsList);
+     setFilteredBankingDetails(bankingDetailsList);
 
 
       }, []);
     // table headings definition
 const columns = [{
-    name: '',
-    sortable: false,
-    width: '80px',
-    cell: () => <Image />
-}, {
-    name: 'Full Names',
-    selector: 'full_names',
+    name: 'Account Holder',
+    selector: 'account_holder',
     sortable: true,
     wrap: true,
 },{
-    name: 'Id Number',
-    selector: 'id_number',
-    sortable: true,
-},{
-    name: 'Username',
-    selector: 'username',
+    name: 'Bank Name',
+    selector: 'bank_name',
     sortable: true,
 },
 {
-    name: 'Email Address',
-    selector: 'email',
+    name: 'Account Type',
+    selector: 'account_type',
     sortable: true,
 },{
-    name: 'Date Created',
-    selector: 'created',
+    name: 'Account No',
+    selector: 'account_no',
     sortable: true,
+}, {
+  name: 'Branch Code',
+  selector: 'branch_code',
+  sortable: true,
 }, {
     name: 'Status',
     selector: 'status',
@@ -144,31 +121,10 @@ const columns = [{
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}><a
-      href={`members/${row.customerId}`}
+      href={`members/${row.bankingDetailId}`}
       className="btn btn-lg btn-primary btn-sm"
     >
         <Eye width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}>
-      <a
-      href={`#`}
-      className="btn btn-lg btn-info btn-sm"
-      onClick={e => {
-        e.preventDefault();
-        onSubmitChangeStatus(row);
-      }}
-    ><Edit width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-lg btn-danger btn-sm"
-      onClick={e => {
-        e.preventDefault();
-    
-        onSubmitDeleteMember(row);
-      }}
-    >
-      <UserMinus width={16} height={16}/>
     </a></spam>
   </div>
 }];
@@ -199,13 +155,13 @@ const onSubmitChangeStatus= data => {
   };
 
   const onSearchFilter = filterText => {
-    const filteredItems = customers.filter(item => (
-      (item && item.full_names && item.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.id_number && item.id_number.toLowerCase().includes(filterText.toLowerCase()))
+    const filteredItems = bankingDetails.filter(item => (
+      (item && item.bank_name && item.bank_name.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.account_type && item.account_type.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.account_no && item.account_no.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.branch_code && item.branch_code.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredCustomers(filteredItems);
+    setFilteredBankingDetails(filteredItems);
   }
 
 
@@ -214,20 +170,20 @@ const onSubmitChangeStatus= data => {
           <Confirm show={show} setShow={setShow} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>CBI Members</span>
+                    <span className="text-primary">Banking Details</span>
                     <span className="flex-grow-1" />
                     <input
                     style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-rounded form-control-m`}
+                        className={`form-control form-control-rounded form-control-sm`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
                 </div>
             </CardBody>
             <DataTable
-                data={filteredCustomers}
+                data={filteredBankingDetails}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader
@@ -236,8 +192,8 @@ const onSubmitChangeStatus= data => {
                 pagination
             />
             <CardBody className="text-center border-top">
-                <HashLinkContainer to="/customers">
-                    <a className="card-link font-weight-bold" href="/customers">
+                <HashLinkContainer to="/bankingDetails">
+                    <a className="card-link font-weight-bold" href="/bankingDetails">
                         More Users...
                     </a>
                 </HashLinkContainer>

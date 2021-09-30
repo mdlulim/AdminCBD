@@ -4,7 +4,6 @@ import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
-import Confirm from './ModalChangeStatus';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -30,8 +29,13 @@ const customStyles = {
 const iconPadding ={
     paddingRight: '3px',
 }
+
+const selectPadding ={
+    paddingRight: '10px',
+}
+
 const inputWith={
-  width: '30%'
+  width: '20%'
 }
 
 const Image = () => {
@@ -51,10 +55,10 @@ const Status = ({ status }) => {
     if (status === 'Pending') {
       badge = 'warning';
     }
-    if (status === 'Active') {
+    if (status === 'Completed') {
       badge = 'success';
     }
-    if (status === 'Blocked') {
+    if (status === 'Rejected') {
         badge = 'danger';
       }
     return (
@@ -62,44 +66,64 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Customers(props) {
-  const [show, setShow] = useState(false);
+export default function TransactionsByMember(props) {
     const [customers, setCustomers] = useState([]);
     const [filteredCustomers, setFilteredCustomers] = useState([]);
     const history = useHistory();
 
     useMemo(() => {
         const customersList = [{
-            customerId: '109977041',
+            transactionId: '109977041',
+            type:'Withdrawals',
+            amount: 3000,
+            fee: 150,
+            total_amount: 3150,
+            balance: 300000,
+            currency: {code: 'ZAR'},
+            user:{
             full_names: 'Mduduzi Mdluli',
             username: 'JSmith',
             email: 'example1@demo.com',
-            id_number: '9103025869089',
+            id_number: '8503025869089',
             country: 'South Africa',
-            level: 'General',
+            level: 'General',},
             created: 'just now',
-            status: 'Active',
+            status: 'Completed',
         }, {
-            customerId: '109977042',
+            transactionId: '109977042',
+            type:'Deposit',
+            amount: 3000,
+            fee: 150,
+            total_amount: 3150,
+            balance: 300000,
+            currency: {code: 'ZAR'},
+            user:{
             full_names: 'Msizi Mpanza',
             username: 'MsiziM',
             email: 'example2@demo.com',
             id_number: '9103025869084',
             country: 'Namibia',
-            level: 'Wealth Creator',
+            level: 'Wealth Creator',},
             created: '2 mins ago',
             status: 'Pending',
         }, {
-            customerId: '109977043',
+            transactionId: '109977043',
+            type:'Transfer',
+            amount: 5000,
+            fee: 150,
+            total_amount: 5150,
+            balance: 450000,
+            currency: {code: 'ZAR'},
+            user:{
             full_names: 'Amanda Zungu',
             last_name: 'ZunguAmanda',
             username: 'McCallJ',
-            id_number: '9103025869085',
+            id_number: '9803025869085',
             email: 'example3@demo.com',
             country: 'South Africa',
-            level: 'General',
+            level: 'General',},
             created: '5 mins ago',
-            status: 'Blocked',
+            status: 'Rejected',
         }];
      setCustomers(customersList);
      setFilteredCustomers(customersList);
@@ -108,30 +132,31 @@ export default function Customers(props) {
       }, []);
     // table headings definition
 const columns = [{
-    name: '',
-    sortable: false,
-    width: '80px',
-    cell: () => <Image />
-}, {
-    name: 'Full Names',
-    selector: 'full_names',
-    sortable: true,
-    wrap: true,
-},{
-    name: 'Id Number',
-    selector: 'id_number',
+    name: 'Type',
+    selector: 'type',
     sortable: true,
 },{
-    name: 'Username',
-    selector: 'username',
+    name: 'Amount',
+    selector: 'amount',
     sortable: true,
+    cell: row => <div>{row.currency.code} {row.amount}</div>
 },
 {
-    name: 'Email Address',
-    selector: 'email',
+    name: 'Fee',
+    selector: 'fee',
     sortable: true,
+    cell: row => <div>{row.currency.code} {row.fee}</div>
 },{
-    name: 'Date Created',
+    name: 'Total Amount',
+    selector: 'total_amount',
+    sortable: true,
+    cell: row => <div>{row.currency.code} {row.total_amount}</div>
+},{
+    name: 'Balance',
+    selector: 'balance',
+cell: row => <div>{row.currency.code} {row.balance}</div>
+},{
+    name: 'Created',
     selector: 'created',
     sortable: true,
 }, {
@@ -143,33 +168,11 @@ const columns = [{
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-    <spam style={iconPadding}><a
-      href={`members/${row.customerId}`}
-      className="btn btn-lg btn-primary btn-sm"
-    >
-        <Eye width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}>
-      <a
-      href={`#`}
-      className="btn btn-lg btn-info btn-sm"
-      onClick={e => {
-        e.preventDefault();
-        onSubmitChangeStatus(row);
-      }}
-    ><Edit width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-lg btn-danger btn-sm"
-      onClick={e => {
-        e.preventDefault();
-    
-        onSubmitDeleteMember(row);
-      }}
-    >
-      <UserMinus width={16} height={16}/>
-    </a></spam>
+        <select class="form-control form-control-sm">
+            <option>Update Status</option>
+            <option>Completed</option>
+            <option>Rejected</option>
+        </select>
   </div>
 }];
 
@@ -180,9 +183,16 @@ const handleDeleteMember = async data => {
 }
 
 const onSubmitChangeStatus= data => {
-  setShow(true)
-  console.log(data);
-    //return <Confirm show={show} setShow={setShow} />;
+    return confirmAlert({
+      title: 'Change Customer Status',
+      message: 'Are you sure you want to resend password for ' + data.full_names + '?',
+      buttons: [{
+        label: 'Yes',
+        onClick: () => handleChangePassword(data),
+      }, {
+        label: 'Cancel',
+      }]
+    });
   };
 
   const onSubmitDeleteMember= data => {
@@ -200,10 +210,10 @@ const onSubmitChangeStatus= data => {
 
   const onSearchFilter = filterText => {
     const filteredItems = customers.filter(item => (
-      (item && item.full_names && item.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.id_number && item.id_number.toLowerCase().includes(filterText.toLowerCase()))
+      (item && item.user.full_names && item.user.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredCustomers(filteredItems);
   }
@@ -211,16 +221,26 @@ const onSubmitChangeStatus= data => {
 
     return (
         <Card className="o-hidden mb-4">
-          <Confirm show={show} setShow={setShow} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>CBI Members</span>
+                    <span className="text-primary">Transactions</span>
                     <span className="flex-grow-1" />
+                    <div style={selectPadding}>
+                            <select class="form-control form-control-rounded form-control-sm">
+                                <option>All Transactions</option>
+                                <option>Pending</option>
+                                <option>Failed</option>
+                                <option>Transfers</option>
+                                <option>Deposits</option>
+                                <option>Withdrawals</option>
+                                <option>Completed</option>
+                            </select>
+                    </div>
                     <input
                     style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-rounded form-control-m`}
+                        className={`form-control form-control-rounded form-control-sm`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
@@ -242,7 +262,6 @@ const onSubmitChangeStatus= data => {
                     </a>
                 </HashLinkContainer>
             </CardBody>
-          
         </Card>
     );
 }

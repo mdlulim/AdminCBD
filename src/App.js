@@ -26,7 +26,7 @@ import Users from 'pages/Configurations';
 import UserRoles from './pages/Configurations/UserRoles';
 import Configurations from './pages/Configurations/Configurations';
 import Members from 'pages/Members';
-import MemberDetails from 'pages/Members';
+import MemberDetails from 'pages/Members/MemberDetails';
 import Transactions from 'pages/Transactions';
 
 const App = () => {
@@ -55,7 +55,7 @@ const App = () => {
 					<Route exact path="/configurations/configurations" component={(props) => <Configurations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/members/members/${id}" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />
 					{/* <PrivateRoute exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} /> */}
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
 				</Switch>

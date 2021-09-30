@@ -62,7 +62,7 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Customers(props) {
+export default function Referals(props) {
   const [show, setShow] = useState(false);
     const [customers, setCustomers] = useState([]);
     const [filteredCustomers, setFilteredCustomers] = useState([]);
@@ -118,10 +118,6 @@ const columns = [{
     sortable: true,
     wrap: true,
 },{
-    name: 'Id Number',
-    selector: 'id_number',
-    sortable: true,
-},{
     name: 'Username',
     selector: 'username',
     sortable: true,
@@ -148,27 +144,6 @@ const columns = [{
       className="btn btn-lg btn-primary btn-sm"
     >
         <Eye width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}>
-      <a
-      href={`#`}
-      className="btn btn-lg btn-info btn-sm"
-      onClick={e => {
-        e.preventDefault();
-        onSubmitChangeStatus(row);
-      }}
-    ><Edit width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-lg btn-danger btn-sm"
-      onClick={e => {
-        e.preventDefault();
-    
-        onSubmitDeleteMember(row);
-      }}
-    >
-      <UserMinus width={16} height={16}/>
     </a></spam>
   </div>
 }];
@@ -214,13 +189,13 @@ const onSubmitChangeStatus= data => {
           <Confirm show={show} setShow={setShow} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>CBI Members</span>
+                    <span className="text-primary">Referals</span>
                     <span className="flex-grow-1" />
                     <input
                     style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-rounded form-control-m`}
+                        className={`form-control form-control-rounded form-control-sm`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
