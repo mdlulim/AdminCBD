@@ -4,7 +4,7 @@ import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
-import Confirm from './ModalChangeStatus';
+import ModalChangeStatus from './ModalChangeStatus';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -211,7 +211,7 @@ const onSubmitChangeStatus= data => {
 
     return (
         <Card className="o-hidden mb-4">
-          <Confirm show={show} setShow={setShow} />
+          <ModalChangeStatus show={show} setShow={setShow} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>CBI Members</span>

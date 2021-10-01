@@ -18,8 +18,8 @@ const ModalChangeStatus = props => {
                         <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                     </Col>}
                     <Col xs={showIcon ? 10 : 12}>
-                        <h3>{title}</h3>
-                        <div className="mg-b-15">{body}</div>
+                        <h3>Update CBI Member Status</h3>
+                        <div className="mg-b-15">Test</div>
                         <button
                             className="btn btn-primary"
                             onClick={confirmButton.onClick}
