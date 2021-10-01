@@ -1,53 +1,59 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
-import Select from 'react-select';
 
-const ModalChangeStatus = props => {
-    const { show, setShow, member} = props;
-    const [statuses, setStatuses] = useState([]);
-    const [selectedStatus, setSelectedStatus] = useState('');
-    const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
+const AlertModal = props => {
+    const {
+        title,
+        member,
+        show,
+        type,
+        setShow,
+        callback,
+        processing,
+        confirmButtonDisabled, confirmButton,
+        closeButtonText,
+    } = props;
 
-    useMemo(() => {
-        //setSelectedStatus({ value: member.status,  label: member.status });
-    }, []);
+    let icon = 'alert-triangle';
+    let iconClass = type;
 
-    const statusOptions = [
-        { value: 'Active',  label: 'Active' },
-        { value: 'Pending', label: 'Pending' },
-        { value: 'Blocked', label: 'Blocked' }
-      ];
-    const handleClose = () => setShow(false);
+    if (type === 'error') {
+        icon = 'slash';
+        iconClass = 'danger';
+    }
+    if (type === 'success') {
+        icon = 'check';
+    }
+
+    const handleClose = () => {
+        setShow(false);
+        if (callback) callback();
+    };
+
     return (
-        <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
+        <Modal show={show} onHide={handleClose} centered className="confirm-modal">
             <Modal.Body>
                 <Row>
-                    {showIcon &&
-                    <Col xs={2} className="text-right mg-t-10 text-warning">
-                        <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
-                    </Col>}
-                    <Col xs={showIcon ? 10 : 12}>
-                        <h3>Update CBI Member Status</h3>
-                        <hr />
-                        <form>
-                                <div className="form-group">
+                    <Col xs={2} className={`text-right mg-t-10 text-${iconClass}`}>
+                        <FeatherIcon icon={icon} width="48" height="48" classes="mg-t-0" />
+                    </Col>
+                    <Col xs={10}>
+                        <h3 className="text-primary">Delete Member</h3>
+                        <div className="form-group">
                                     <label htmlFor="fullname">Full Names</label>
-                                    {member ? 
                                     <input
                                         type="text"
                                         id="fullname"
                                         className="form-control form-control-rounded form-control-m"
                                         value={member.first_name+' '+member.last_name}
                                         disabled
-                                    /> 
-                                    : ''}
+                                    />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="firstname">Id Number</label>
-                                    {member ? 
                                     <input
                                         type="text"
                                         id="firstname"
@@ -55,11 +61,9 @@ const ModalChangeStatus = props => {
                                         value={member.id_number}
                                         disabled
                                     />
-                                    : ''}
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="email">Email Address</label>
-                                    {member ? 
                                     <input
                                         type="text"
                                         id="email"
@@ -67,21 +71,9 @@ const ModalChangeStatus = props => {
                                         value={member.email}
                                         disabled
                                     />
-                                    : ''}
                                 </div>
-                                <div>
-                                <label htmlFor="email">Select Status</label>
-                                <Select
-                                    id="status"
-                                    name="status"
-                                    options={statusOptions}
-                                    onChange={item => setSelectedStatus(item)}
-                                    className={`basic-multi-select form-control-rounded form-control-m`}
-                                    classNamePrefix="select"
-                                    />
-                                </div>
-                                <hr />
-                                <Row>
+                        <h5 className="text-danger">Are you sure you want to delete this member?</h5>
+                        <Row>
                         <Col md={6}>
                         <button
                                         className="btn btn-dark btn-rounded"
@@ -93,15 +85,15 @@ const ModalChangeStatus = props => {
                             </Col>
                             <Col md={6} >
                             <button
-                                        className="btn btn-success btn-rounded float-right"
-                                        onClick={confirmButton.onClick}
+                                        className="btn btn-danger btn-rounded float-right"
+                                        onClick={''}
                                         disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Update'}
                                 </button>
                             </Col>
                             </Row>
-                            </form>
+                    
                     </Col>
                 </Row>
             </Modal.Body>
@@ -109,31 +101,24 @@ const ModalChangeStatus = props => {
     );
 };
 
-ModalChangeStatus.propTypes = {
+AlertModal.propTypes = {
     show: PropTypes.bool.isRequired,
     setShow: PropTypes.func.isRequired,
     title: PropTypes.string,
     body: PropTypes.any,
-    processing: PropTypes.bool,
-    confirmButtonDisabled: PropTypes.bool,
+    type: PropTypes.string,
+    callback: PropTypes.func,
     confirmButton: PropTypes.shape({}),
     cancelButton: PropTypes.shape({}),
-    showIcon: PropTypes.bool,
-    size: PropTypes.string,
+    closeButtonText: PropTypes.string,
 };
 
-ModalChangeStatus.defaultProps = {
-    title: 'Confirm',
+AlertModal.defaultProps = {
+    title: 'Alert',
     body: <p />,
-    processing: false,
-    confirmButtonDisabled: false,
-    cancelButton: { text: 'No' },
-    showIcon: false,
-    size: 'md',
-    confirmButton: {
-        text: 'Yes',
-        onClick: e => e.preventDefault(),
-    },
+    type: 'warning',
+    callback: null,
+    closeButtonText: 'OK',
 };
 
-export default ModalChangeStatus;
+export default AlertModal;

@@ -5,6 +5,7 @@ import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
+import DeleteAlert from './DeleteAlert';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -62,16 +63,19 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Customers(props) {
+export default function Members(props) {
   const [show, setShow] = useState(false);
-    const [customers, setCustomers] = useState([]);
-    const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [showDelete, setShowDelete] = useState(false);
+    const [members, setMembers] = useState([]);
+    const [filteredMembers, setFilteredMembers] = useState([]);
+    const [selectedMember, setSelectedMember] = useState({});
     const history = useHistory();
 
     useMemo(() => {
-        const customersList = [{
-            customerId: '109977041',
-            full_names: 'Mduduzi Mdluli',
+        const membersList = [{
+            memberId: '109977041',
+            first_name: 'Mduduzi',
+            last_name: 'Mdluli',
             username: 'JSmith',
             email: 'example1@demo.com',
             id_number: '9103025869089',
@@ -80,8 +84,9 @@ export default function Customers(props) {
             created: 'just now',
             status: 'Active',
         }, {
-            customerId: '109977042',
-            full_names: 'Msizi Mpanza',
+            memberId: '109977042',
+            first_name: 'Msizi',
+            last_name: 'Mpanza',
             username: 'MsiziM',
             email: 'example2@demo.com',
             id_number: '9103025869084',
@@ -90,8 +95,9 @@ export default function Customers(props) {
             created: '2 mins ago',
             status: 'Pending',
         }, {
-            customerId: '109977043',
-            full_names: 'Amanda Zungu',
+            memberId: '109977043',
+            first_name: 'Zungu',
+            last_name: 'Zungu',
             last_name: 'ZunguAmanda',
             username: 'McCallJ',
             id_number: '9103025869085',
@@ -101,8 +107,8 @@ export default function Customers(props) {
             created: '5 mins ago',
             status: 'Blocked',
         }];
-     setCustomers(customersList);
-     setFilteredCustomers(customersList);
+     setMembers(membersList);
+     setFilteredMembers(membersList);
 
 
       }, []);
@@ -114,9 +120,10 @@ const columns = [{
     cell: () => <Image />
 }, {
     name: 'Full Names',
-    selector: 'full_names',
+    selector: 'first_name',
     sortable: true,
     wrap: true,
+cell: row => <div>{row.first_name} {row.last_name}</div>
 },{
     name: 'Id Number',
     selector: 'id_number',
@@ -144,7 +151,7 @@ const columns = [{
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}><a
-      href={`members/${row.customerId}`}
+      href={`members/${row.memberId}`}
       className="btn btn-lg btn-primary btn-sm"
     >
         <Eye width={16} height={16}/>
@@ -180,38 +187,33 @@ const handleDeleteMember = async data => {
 }
 
 const onSubmitChangeStatus= data => {
-  setShow(true)
+  setSelectedMember(data);
+  setShow(true);
   console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 
   const onSubmitDeleteMember= data => {
-    return confirmAlert({
-      title: 'Delete Member',
-      message: 'Are you sure you want to delete ' + data.full_names + '?',
-      buttons: [{
-        label: 'Yes',
-        onClick: () => handleDeleteMember(data),
-      }, {
-        label: 'Cancel',
-      }]
-    });
+    setSelectedMember(data);
+    setShowDelete(true);
   };
 
   const onSearchFilter = filterText => {
-    const filteredItems = customers.filter(item => (
-      (item && item.full_names && item.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
+    const filteredItems = members.filter(item => (
+      (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.last_name && item.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.id_number && item.id_number.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredCustomers(filteredItems);
+    setFilteredMembers(filteredItems);
   }
 
 
     return (
         <Card className="o-hidden mb-4">
-          <ModalChangeStatus show={show} setShow={setShow} />
+          <ModalChangeStatus show={show} setShow={setShow} member={selectedMember} />
+          <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedMember} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>CBI Members</span>
@@ -227,7 +229,7 @@ const onSubmitChangeStatus= data => {
                 </div>
             </CardBody>
             <DataTable
-                data={filteredCustomers}
+                data={filteredMembers}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader
@@ -236,8 +238,8 @@ const onSubmitChangeStatus= data => {
                 pagination
             />
             <CardBody className="text-center border-top">
-                <HashLinkContainer to="/customers">
-                    <a className="card-link font-weight-bold" href="/customers">
+                <HashLinkContainer to="/members">
+                    <a className="card-link font-weight-bold" href="/members">
                         More Users...
                     </a>
                 </HashLinkContainer>

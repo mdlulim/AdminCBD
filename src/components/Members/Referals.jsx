@@ -71,7 +71,8 @@ export default function Referals(props) {
     useMemo(() => {
         const customersList = [{
             customerId: '109977041',
-            full_names: 'Mduduzi Mdluli',
+            first_name: 'Mduduzi',
+            last_name: 'Mdluli',
             username: 'JSmith',
             email: 'example1@demo.com',
             id_number: '9103025869089',
@@ -81,7 +82,8 @@ export default function Referals(props) {
             status: 'Active',
         }, {
             customerId: '109977042',
-            full_names: 'Msizi Mpanza',
+            first_name: 'Msizi',
+            last_name: 'Mpanza',
             username: 'MsiziM',
             email: 'example2@demo.com',
             id_number: '9103025869084',
@@ -91,7 +93,8 @@ export default function Referals(props) {
             status: 'Pending',
         }, {
             customerId: '109977043',
-            full_names: 'Amanda Zungu',
+            first_name: 'Ayanda',
+            last_name: 'Zungu',
             last_name: 'ZunguAmanda',
             username: 'McCallJ',
             id_number: '9103025869085',
@@ -113,10 +116,11 @@ const columns = [{
     width: '80px',
     cell: () => <Image />
 }, {
-    name: 'Full Names',
-    selector: 'full_names',
-    sortable: true,
-    wrap: true,
+  name: 'Full Names',
+  selector: 'first_name',
+  sortable: true,
+  wrap: true,
+cell: row => <div>{row.first_name} {row.last_name}</div>
 },{
     name: 'Username',
     selector: 'username',
@@ -175,7 +179,8 @@ const onSubmitChangeStatus= data => {
 
   const onSearchFilter = filterText => {
     const filteredItems = customers.filter(item => (
-      (item && item.full_names && item.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.last_name && item.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.id_number && item.id_number.toLowerCase().includes(filterText.toLowerCase()))

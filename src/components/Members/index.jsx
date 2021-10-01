@@ -3,7 +3,7 @@ import Referals from './Referals';
 import BankDetails from './BankDetails';
 import MemberDetails from './MemberDetails';
 import ModalChangeStatus from './ModalChangeStatus';
-import Alert from './Alert';
+import DeleteAlert from './DeleteAlert';
 
 
 export default {
@@ -11,6 +11,6 @@ export default {
     MemberDetails,
     Referals,
     BankDetails,
-    Alert,
+    DeleteAlert,
     ModalChangeStatus
 }
