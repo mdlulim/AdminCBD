@@ -8,12 +8,12 @@ const UsersList = props => {
 	return (
 		<Layout {...props} breadcrumb={breadcrumb}>
 			<Row className="mt-4">
-				<Col lg={8} xl={8}>
+				<Col lg={12} xl={8}>
 				<Col md={12}>
                     <Users.Users />
                 </Col>
 				</Col>
-				<Col lg={4} xl={4} className="mb-4">
+				{/* <Col lg={4} xl={4} className="mb-4">
 					<Card>
 						<CardBody>
 							<div className="ul-widget__head">
@@ -101,7 +101,7 @@ const UsersList = props => {
 							</div>
 						</CardBody>
 					</Card>
-				</Col>
+				</Col> */}
 			</Row>
 		</Layout>
 	);

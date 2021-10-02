@@ -30,30 +30,39 @@ const ModalChangeStatus = props => {
                         <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                     </Col>}
                     <Col xs={showIcon ? 10 : 12}>
-                        <h3 className="text-success"> Update CBI Member Status</h3>
+                        <h3 className="text-info"> Update Admin User</h3>
                         <hr />
                         <form>
                                 <div className="form-group">
-                                    <label htmlFor="fullname">Full Names</label>
+                                    <label htmlFor="first_name">First Name</label>
                                     {member ? 
                                     <input
                                         type="text"
-                                        id="fullname"
+                                        id="first_name"
                                         className="form-control form-control-m"
-                                        value={member.first_name+' '+member.last_name}
-                                        disabled
+                                        value={member.first_name}
                                     /> 
                                     : ''}
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="firstname">Id Number</label>
+                                    <label htmlFor="last_name">Last Name</label>
                                     {member ? 
                                     <input
                                         type="text"
-                                        id="firstname"
+                                        id="last_name"
                                         className="form-control form-control-m"
-                                        value={member.id_number}
-                                        disabled
+                                        value={member.last_name}
+                                    /> 
+                                    : ''}
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="username">Username</label>
+                                    {member ? 
+                                    <input
+                                        type="text"
+                                        id="username"
+                                        className="form-control form-control-m"
+                                        value={member.username}
                                     />
                                     : ''}
                                 </div>
@@ -65,7 +74,6 @@ const ModalChangeStatus = props => {
                                         id="email"
                                         className="form-control form-control-m"
                                         value={member.email}
-                                        disabled
                                     />
                                     : ''}
                                 </div>
@@ -93,7 +101,7 @@ const ModalChangeStatus = props => {
                             </Col>
                             <Col md={6} >
                             <button
-                                        className="btn btn-success float-right"
+                                        className="btn btn-info float-right"
                                         onClick={confirmButton.onClick}
                                         disabled={confirmButtonDisabled || processing}
                                     >

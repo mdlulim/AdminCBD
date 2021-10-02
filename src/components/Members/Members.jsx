@@ -32,7 +32,7 @@ const iconPadding ={
     paddingRight: '3px',
 }
 const inputWith={
-  width: '30%'
+  width: '20%'
 }
 
 const Image = () => {
@@ -120,14 +120,13 @@ const columns = [{
     cell: () => <Image />
 }, {
     name: 'Full Names',
-    selector: 'first_name',
+    selector: 'full_names',
     sortable: true,
     wrap: true,
-cell: row => <div>{row.first_name} {row.last_name}</div>
-},{
-    name: 'Id Number',
-    selector: 'id_number',
-    sortable: true,
+cell: row => <div><div>{row.first_name} {row.last_name}</div>
+<div className="small text-muted">
+  <span>{row.id_number}</span>
+</div></div>
 },{
     name: 'Username',
     selector: 'username',
@@ -222,7 +221,7 @@ const onSubmitChangeStatus= data => {
                     style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-rounded form-control-m`}
+                        className={`form-control form-control-m`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />

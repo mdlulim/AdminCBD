@@ -6,7 +6,7 @@ import { FeatherIcon } from 'components';
 import Select from 'react-select';
 
 const ModalChangeStatus = props => {
-    const { show, setShow, member} = props;
+    const { show, setShow, user} = props;
     const [statuses, setStatuses] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
@@ -26,60 +26,14 @@ const ModalChangeStatus = props => {
             <Modal.Body>
                 <Row>
                     {showIcon &&
-                    <Col xs={2} className="text-right mg-t-10 text-warning">
+                    <Col xs={2} className="text-right mg-t-10 text-success">
                         <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                     </Col>}
                     <Col xs={showIcon ? 10 : 12}>
-                        <h3 className="text-success"> Update CBI Member Status</h3>
+                        <h3 className="text-success"> Resend Password</h3>
                         <hr />
                         <form>
-                                <div className="form-group">
-                                    <label htmlFor="fullname">Full Names</label>
-                                    {member ? 
-                                    <input
-                                        type="text"
-                                        id="fullname"
-                                        className="form-control form-control-m"
-                                        value={member.first_name+' '+member.last_name}
-                                        disabled
-                                    /> 
-                                    : ''}
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="firstname">Id Number</label>
-                                    {member ? 
-                                    <input
-                                        type="text"
-                                        id="firstname"
-                                        className="form-control form-control-m"
-                                        value={member.id_number}
-                                        disabled
-                                    />
-                                    : ''}
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="email">Email Address</label>
-                                    {member ? 
-                                    <input
-                                        type="text"
-                                        id="email"
-                                        className="form-control form-control-m"
-                                        value={member.email}
-                                        disabled
-                                    />
-                                    : ''}
-                                </div>
-                                <div>
-                                <label htmlFor="email">Select Status</label>
-                                <Select
-                                    id="status"
-                                    name="status"
-                                    options={statusOptions}
-                                    onChange={item => setSelectedStatus(item)}
-                                    className={`basic-multi-select form-control-m`}
-                                    classNamePrefix="select"
-                                    />
-                                </div>
+                    <p>Are you sure you want to resend password for {user.first_name} {user.last_name}?</p>
                                 <hr />
                                 <Row>
                         <Col md={6}>

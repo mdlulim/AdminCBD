@@ -7,7 +7,7 @@ import { FeatherIcon } from 'components';
 const AlertModal = props => {
     const {
         title,
-        member,
+        user,
         show,
         type,
         setShow,
@@ -41,38 +41,43 @@ const AlertModal = props => {
                         <FeatherIcon icon={icon} width="48" height="48" classes="mg-t-0" />
                     </Col>
                     <Col xs={10}>
-                        <h3 className="text-danger">Delete Member</h3>
-                        <div className="form-group">
+                        <h3 className="text-danger">Delete Admin User</h3>
+                        {user ? 
+                             <div className="form-group">
                                     <label htmlFor="fullname">Full Names</label>
                                     <input
                                         type="text"
                                         id="fullname"
                                         className="form-control form-control-m"
-                                        value={member.first_name+' '+member.last_name}
+                                        value={user.first_name+' '+user.last_name}
                                         disabled
                                     />
                                 </div>
+                                 : ''}
+                                 {user ? 
                                 <div className="form-group">
-                                    <label htmlFor="firstname">Id Number</label>
+                                    <label htmlFor="username">Username</label>
                                     <input
                                         type="text"
-                                        id="firstname"
+                                        id="username"
                                         className="form-control form-control-m"
-                                        value={member.id_number}
+                                        value={user.username}
                                         disabled
                                     />
                                 </div>
+                                 : ''}
+                                {user ? 
                                 <div className="form-group">
                                     <label htmlFor="email">Email Address</label>
                                     <input
                                         type="text"
                                         id="email"
                                         className="form-control form-control-m"
-                                        value={member.email}
+                                        value={user.email}
                                         disabled
                                     />
                                 </div>
-                                {''}
+                                 : ''}
                         <h5 className="text-danger">Are you sure you want to delete this member?</h5>
                         {''}
                         <Row>

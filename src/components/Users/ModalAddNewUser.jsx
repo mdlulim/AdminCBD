@@ -6,8 +6,9 @@ import { FeatherIcon } from 'components';
 import Select from 'react-select';
 
 const ModalChangeStatus = props => {
-    const { show, setShow, member} = props;
+    const { show, setShow} = props;
     const [statuses, setStatuses] = useState([]);
+    const [selectedRole, setSelectedRole] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
@@ -15,9 +16,14 @@ const ModalChangeStatus = props => {
         //setSelectedStatus({ value: member.status,  label: member.status });
     }, []);
 
-    const statusOptions = [
+    const rolessOptions = [
+        { value: '7563285', label: 'Platform Administrator' },
+        { value: '2345624', label: 'Training Administrator' },
+        { value: '9843444', label: 'EcoSystem Administrator' },
+        { value: '3645364', label: 'Super Administrator' }
+      ];
+      const statusOptions = [
         { value: 'Active',  label: 'Active' },
-        { value: 'Pending', label: 'Pending' },
         { value: 'Blocked', label: 'Blocked' }
       ];
     const handleClose = () => setShow(false);
@@ -30,44 +36,51 @@ const ModalChangeStatus = props => {
                         <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                     </Col>}
                     <Col xs={showIcon ? 10 : 12}>
-                        <h3 className="text-success"> Update CBI Member Status</h3>
+                        <h3 className="text-info"> Add New Admin User</h3>
                         <hr />
                         <form>
                                 <div className="form-group">
-                                    <label htmlFor="fullname">Full Names</label>
-                                    {member ? 
+                                    <label htmlFor="first_name">First Name</label>
                                     <input
                                         type="text"
-                                        id="fullname"
+                                        id="first_name"
                                         className="form-control form-control-m"
-                                        value={member.first_name+' '+member.last_name}
-                                        disabled
-                                    /> 
-                                    : ''}
+                                    />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="firstname">Id Number</label>
-                                    {member ? 
+                                    <label htmlFor="last_name">Last Name</label>
                                     <input
                                         type="text"
-                                        id="firstname"
+                                        id="last_name"
                                         className="form-control form-control-m"
-                                        value={member.id_number}
-                                        disabled
+                                    /> 
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="username">Username</label>
+                                    <input
+                                        type="text"
+                                        id="username"
+                                        className="form-control form-control-m"
                                     />
-                                    : ''}
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="email">Email Address</label>
-                                    {member ? 
                                     <input
                                         type="text"
                                         id="email"
                                         className="form-control form-control-m"
-                                        value={member.email}
-                                        disabled
                                     />
-                                    : ''}
+                                </div>
+                                <div>
+                                <label htmlFor="email">Select User Role</label>
+                                <Select
+                                    id="role"
+                                    name="role"
+                                    options={rolessOptions}
+                                    onChange={item => setSelectedRole(item)}
+                                    className={`basic-multi-select form-control-m`}
+                                    classNamePrefix="select"
+                                    />
                                 </div>
                                 <div>
                                 <label htmlFor="email">Select Status</label>
@@ -93,11 +106,11 @@ const ModalChangeStatus = props => {
                             </Col>
                             <Col md={6} >
                             <button
-                                        className="btn btn-success float-right"
+                                        className="btn btn-info float-right"
                                         onClick={confirmButton.onClick}
                                         disabled={confirmButtonDisabled || processing}
                                     >
-                                    {processing ? 'Processing...' : 'Update'}
+                                    {processing ? 'Processing...' : 'Add New'}
                                 </button>
                             </Col>
                             </Row>

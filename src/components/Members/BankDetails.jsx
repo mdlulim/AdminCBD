@@ -176,7 +176,7 @@ const onSubmitChangeStatus= data => {
                     style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-rounded form-control-sm`}
+                        className={`form-control form-control-sm`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />

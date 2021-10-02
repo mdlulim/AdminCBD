@@ -2,9 +2,12 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody } from 'reactstrap';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
-import { Eye,  Edit, UserMinus} from 'react-feather';
+import { Unlock,  Edit, UserMinus} from 'react-feather';
 import { useHistory } from 'react-router-dom';
-import Confirm from './ModalChangeUserStatus';
+import ModalUpdateAdminUser from './ModalUpdateAdminUser';
+import DeleteAdminUserAlert from './DeleteAdminUserAlert';
+import ModalResendPassword from './ModalResendPassword';
+import ModalAddNewUser from './ModalAddNewUser';
 // styles
 const customStyles = {
    
@@ -59,16 +62,21 @@ const Image = () => {
 };
 
 export default function Users(props) {
-    const { show, setShow } = props;
+    const [show, setShow] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [showResend, setShowResend] = useState(false);
+    const [showAddNew, setShowAddNew] = useState(false);
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState({});
     const history = useHistory();
 
 
     useMemo(() => {
         const usersList = [{
             userId: '109977041',
-            full_names: 'Mduduzi Mdluli',
+            first_name: 'Mdu',
+            last_name: 'Mdluli',
             username: 'JSmith',
             email: 'example1@demo.com',
             country: 'South Africa',
@@ -77,7 +85,8 @@ export default function Users(props) {
             status: 'Active',
         }, {
             userId: '109977042',
-            full_names: 'Msizi Mpanza',
+            first_name: 'Msizi',
+            last_name: 'Mpanza',
             username: 'MsiziM',
             email: 'example2@demo.com',
             country: 'Namibia',
@@ -86,8 +95,8 @@ export default function Users(props) {
             status: 'Active',
         }, {
             userId: '109977043',
-            full_names: 'Amanda Zungu',
-            last_name: 'ZunguAmanda',
+            first_name: 'Amanda',
+            last_name: 'Zundu',
             username: 'McCallJ',
             email: 'example3@demo.com',
             country: 'South Africa',
@@ -111,6 +120,10 @@ const columns = [{
     selector: 'full_names',
     sortable: true,
     wrap: true,
+    cell: row => <div><div>{row.first_name} {row.last_name}</div>
+        <div className="small text-muted">
+          <span>{row.id_number}</span>
+        </div></div>
 },{
     name: 'Username',
     selector: 'username',
@@ -136,10 +149,20 @@ const columns = [{
     <spam style={iconPadding}>
       <a
       href={`#`}
+      className="btn btn-lg btn-success btn-sm"
+      onClick={e => {
+        e.preventDefault();
+        onSubmitResendPassword(row);
+      }}
+    ><Unlock width={16} height={16}/>
+    </a></spam>
+    <spam style={iconPadding}>
+      <a
+      href={`#`}
       className="btn btn-lg btn-info btn-sm"
       onClick={e => {
         e.preventDefault();
-        onSubmitChangeStatus(row);
+        onSubmitUpdateUser(row);
       }}
     ><Edit width={16} height={16}/>
     </a></spam>
@@ -163,14 +186,19 @@ const handleChangePassword = async data => {
 const handleDeleteUser = async data => {
 }
 
-const onSubmitChangeStatus= data => {
-  // setShow(true)
-  console.log(data);
-    return <Confirm show={true} setShow={setShow} />;
+const onSubmitUpdateUser= data => {
+  setSelectedUser(data);
+  setShow(true);
   };
 
+  const onSubmitResendPassword= data => {
+    setSelectedUser(data);
+    setShowResend(true);
+    };
+
   const onSubmitDeleteUser= data => {
-    console.log('delete user')
+    setSelectedUser(data);
+    setShowDelete(true)
   };
 
   const onSearchFilter = filterText => {
@@ -185,6 +213,11 @@ const onSubmitChangeStatus= data => {
 
     return (
         <Card className="o-hidden mb-4">
+          <ModalUpdateAdminUser show={show} setShow={setShow} member={selectedUser} />
+          <DeleteAdminUserAlert show={showDelete} setShow={setShowDelete} user={selectedUser} />
+          <ModalResendPassword show={showResend} setShow={setShowResend} user={selectedUser} />
+          <ModalAddNewUser show={showAddNew} setShow={setShowAddNew} />
+          
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>Admin Users</span>
@@ -192,16 +225,20 @@ const onSubmitChangeStatus= data => {
                         style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-rounded form-control-m`}
+                        className={`form-control form-control-m`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
                     <div>
-                        <HashLinkContainer to="/users/add">
-                            <button className="btn btn-secondary" type="button">
+                            <button 
+                            className="btn btn-secondary" 
+                            type="button"
+                            onClick={e => {
+                              e.preventDefault();
+                              setShowAddNew(true);
+                            }}>
                                 Add User
                             </button>
-                        </HashLinkContainer>
                     </div>
                 </div>
             </CardBody>

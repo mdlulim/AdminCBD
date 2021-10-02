@@ -226,7 +226,7 @@ const onSubmitChangeStatus= data => {
                     <span className="text-primary">Transactions</span>
                     <span className="flex-grow-1" />
                     <div style={selectPadding}>
-                            <select class="form-control form-control-rounded form-control-sm">
+                            <select class="form-control form-control-sm">
                                 <option>All Transactions</option>
                                 <option>Pending</option>
                                 <option>Failed</option>
@@ -240,7 +240,7 @@ const onSubmitChangeStatus= data => {
                     style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-rounded form-control-sm`}
+                        className={`form-control form-control-sm`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
