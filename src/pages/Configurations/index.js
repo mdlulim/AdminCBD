@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Layout } from 'containers';
 import { Users } from 'components';
+import { UserRoles } from 'components';
 
 const UsersList = props => {
 	const breadcrumb = { heading: "Admin Users" };

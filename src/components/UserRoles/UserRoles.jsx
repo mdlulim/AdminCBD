@@ -4,9 +4,7 @@ import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { Trash, Edit, UserMinus} from 'react-feather';
 import { useHistory } from 'react-router-dom';
-import ModalUpdateUserRole from '../UserRoles/ModalUpdateUserRole';
-import ModalAddNewRole from '../UserRoles/ModalAddNewRole';
-import DeleteUserRoleAlert from '../UserRoles/DeleteUserRoleAlert';
+import Confirm from './ModalChangeUserStatus';
 // styles
 const customStyles = {
    
@@ -53,7 +51,6 @@ export default function UsersRoles(props) {
     const [showDelete, setShowDelete] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
     const [roles, setRoles] = useState([]);
-    const [selectedRole, setSelectedRole] = useState({});
     const [filteredRoles, setFilteredRoles] = useState([]);
     const history = useHistory();
 
@@ -118,7 +115,7 @@ const columns = [ {
       className="btn btn-lg btn-info btn-sm"
       onClick={e => {
         e.preventDefault();
-        onSubmitUpdateRole(row);
+        onSubmitChangeStatus(row);
       }}
     ><Edit width={16} height={16}/>
     </a></spam>
@@ -128,7 +125,7 @@ const columns = [ {
       onClick={e => {
         e.preventDefault();
     
-        onSubmitDeleteRole(row);
+        onSubmitDeleteUser(row);
       }}
     >
       <Trash width={16} height={16}/>
@@ -136,16 +133,20 @@ const columns = [ {
   </div>
 }];
 
+const handleChangePassword = async data => {
+}
 
-const onSubmitUpdateRole= data => {
-  setShow(true)
-  setSelectedRole(data);
+const handleDeleteUser = async data => {
+}
+
+const onSubmitChangeStatus= data => {
+  // setShow(true)
   console.log(data);
+    return <Confirm show={true} setShow={setShow} />;
   };
 
-  const onSubmitDeleteRole= data => {
-    setShowDelete(true);
-    setSelectedRole(data);
+  const onSubmitDeleteUser= data => {
+    console.log('delete user')
   };
 
   const onSearchFilter = filterText => {
@@ -159,30 +160,27 @@ const onSubmitUpdateRole= data => {
 
     return (
         <Card className="o-hidden mb-4">
-          <ModalUpdateUserRole show={show} setShow={setShow} role={selectedRole} />
-          <DeleteUserRoleAlert show={showDelete} setShow={setShowDelete} role={selectedRole} />
-          <ModalAddNewRole show={showAddNew} setShow={setShowAddNew} />
+          <ModalUpdateAdminUser show={show} setShow={setShow} member={selectedUser} />
+          <DeleteAdminUserAlert show={showDelete} setShow={setShowDelete} user={selectedUser} />
+          <ModalResendPassword show={showResend} setShow={setShowResend} user={selectedUser} />
+          <ModalAddNewUser show={showAddNew} setShow={setShowAddNew} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>User Roles</span>
+                    <span>User Roles Users</span>
                     <span className="flex-grow-1" /><input
                         style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-m`}
+                        className={`form-control form-control-rounded form-control-m`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
                     <div>
-                    <button
-                            className="btn btn-secondary"
-                            type="button"
-                            onClick={e => {
-                              e.preventDefault();
-                              setShowAddNew(true);
-                            }}>
-                                Add User
+                        <HashLinkContainer to="/users/add">
+                            <button className="btn btn-secondary" type="button">
+                                Add Role
                             </button>
+                        </HashLinkContainer>
                     </div>
                 </div>
             </CardBody>
