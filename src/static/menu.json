@@ -27,6 +27,23 @@
         "link": "/transactions",
         "icon": "i-Money",
         "childitems": []
+    }, {
+        "id": "products",
+        "title": " Products",
+        "description": "Manage Products",
+        "link": "/products",
+        "icon": "i-Shopping-Bag",
+        "childitems": [{
+            "id": "products",
+            "title": "Manage Products",
+            "link": "/products",
+            "icon": "i-Shopping-Bag"
+        },{
+            "id": "group",
+            "title": "Manage Group",
+            "link": "/group",
+            "icon": "i-Share"
+        }]
     },
     {
         "id": "messaging",

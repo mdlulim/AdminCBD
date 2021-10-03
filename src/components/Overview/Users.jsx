@@ -30,7 +30,7 @@ const iconPadding ={
     paddingRight: '3px',
 }
 const inputWith={
-  width: '20%'
+  width: '25%'
 }
 
 const Image = () => {
@@ -191,7 +191,7 @@ const onSubmitChangeStatus= data => {
         <Card className="o-hidden mb-4">
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>CBI Members</span>
+                    <span>Latest CBI Members</span>
                     <span className="flex-grow-1" />
                     <input
                     style={inputWith}

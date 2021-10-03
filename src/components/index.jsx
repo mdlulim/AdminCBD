@@ -8,6 +8,8 @@ import Users from './Users';
 import Members from './Members';
 import MemberDetails from './Members';
 import Transactions from './Transactions';
+import Products from './Products';
+import UserRoles from './UserRoles';
 
 export {
     Breadcrumb,
@@ -19,5 +21,7 @@ export {
     Transactions,
     Users,
     Members,
-    MemberDetails
+    MemberDetails,
+    Products,
+    UserRoles
 };

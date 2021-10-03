@@ -23,11 +23,13 @@ import MessagingChat from 'pages/Messaging/Chat';
 import MessagingInbox from 'pages/Messaging/Inbox';
 import Reports from 'pages/Reports';
 import Users from 'pages/Configurations';
-import UserRoles from './pages/Configurations/UserRoles';
+import UserRoles from './pages/UserRoles';
 import Configurations from './pages/Configurations/Configurations';
 import Members from 'pages/Members';
 import MemberDetails from 'pages/Members/MemberDetails';
 import Transactions from 'pages/Transactions';
+import Products from 'pages/Products';
+import ProductDetails from 'pages/Products/ProductDetails';
 
 const App = () => {
 	const settings = config;
@@ -56,6 +58,8 @@ const App = () => {
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
 					{/* <PrivateRoute exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} /> */}
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
 				</Switch>

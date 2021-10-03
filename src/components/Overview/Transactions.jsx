@@ -35,7 +35,7 @@ const selectPadding ={
 }
 
 const inputWith={
-  width: '20%'
+  width: '25%'
 }
 const tableColumnWith={
     width: '10px'
@@ -237,7 +237,7 @@ const onSubmitChangeStatus= data => {
         <Card className="o-hidden mb-4">
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Transactions</span>
+                    <span>Latest Transactions</span>
                     <span className="flex-grow-1" />
                     <div style={selectPadding}>
                             <select class="form-control form-control-m">
