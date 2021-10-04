@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Layout } from 'containers';
-import { Members, Transactions } from 'components';
+import { Members, Transactions, Products } from 'components';
 
 const Image = () => {
     return (
@@ -136,26 +136,7 @@ const MemberDetails = props => {
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
-                                                    <div className="change-password-form">
-                                                        <form onSubmit={''}>
-                                                            <h4 className="text-primary mt-0 mb-1">Products</h4>
-                                                            <dt>
-                                                                Please use form below to change your password. It is important you don't share your password with anyone.
-                                                            </dt>
-                                                            <br />
-                                                            <div className="alert alert-light left-icon-big alert-dismissible fade">
-                                                                <div className="media">
-                                                                    <div className="alert-left-icon-big">
-                                                                        <span><i className="i-Information" /></span>
-                                                                    </div>
-                                                                    <div className="media-body">
-                                                                        <h5 className="mt-1 mb-1">Password Policy:</h5>
-                                                                        <p className="mb-0">Use a minimum of 6 characters, 1 number, 1 symbol and 1 uppercase letter</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                                    <Products.ProductsByMember />
                                                 </CardBody>
                                             </div>
                                         </div>

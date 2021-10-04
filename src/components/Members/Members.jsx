@@ -150,7 +150,7 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}><a
-      c
+      href={`members/${row.memberId}`}
       className="btn btn-lg btn-primary btn-sm"
     >
         <Eye width={16} height={16}/>
