@@ -248,15 +248,11 @@ const onSubmitUpdateProduct= data => {
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
                     <div>
-                            <button 
-                            className="btn btn-secondary" 
-                            type="button"
-                            onClick={e => {
-                              e.preventDefault();
-                              setShowAddNew(true);
-                            }}>
+                            <a 
+                            href={`add`}
+                            className="btn btn-secondary">
                                 Add Product
-                            </button>
+                            </a>
                     </div>
                 </div>
             </CardBody>

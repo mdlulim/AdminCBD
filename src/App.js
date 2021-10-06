@@ -29,6 +29,7 @@ import Members from 'pages/Members';
 import MemberDetails from 'pages/Members/MemberDetails';
 import Transactions from 'pages/Transactions';
 import Products from 'pages/Products';
+import ProductAddNew from 'pages/Products/ProductAddNew';
 import ProductDetails from 'pages/Products/ProductDetails';
 
 const App = () => {
@@ -59,6 +60,7 @@ const App = () => {
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products/add" component={(props) => <ProductAddNew config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
 					{/* <PrivateRoute exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} /> */}
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />

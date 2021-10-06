@@ -1,3 +1,9 @@
-column-full_names{
+.column-full_names{
     width: 405px;
+}
+
+.login-logo{
+    background-color: white;
+    border-radius: 50% !important;
+
 }

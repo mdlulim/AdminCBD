@@ -1,11 +1,13 @@
 import Products from './Products';
 import ProductUpdate from './ProductUpdate';
-import ProductNew from './ProductNew';
+import ProductAddNew from './ProductAddNew';
 import ProductsByMember from './ProductsByMember';
+import LineChart from './LineChart';
 
 export default {
     Products,
     ProductUpdate,
-    ProductNew,
+    ProductAddNew,
     ProductsByMember,
+    LineChart,
 }

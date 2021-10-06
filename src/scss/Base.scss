@@ -3674,7 +3674,7 @@ i {
     --cyan: #9C27B0;
     --white: #fff;
     --gray: #70657b;
-    --gray-dark: #52495a;
+    --gray-dark: #800020;
     --blue: #263db5;
     --indigo: #6610f2;
     --purple: #663399;
@@ -3688,7 +3688,7 @@ i {
     --white: #fff;
     --gray: #70657b;
     --primary: #663399;
-    --secondary: #52495a;
+    --secondary: #800020;
     --success: #4CAF50;
     --info: #263db5;
     --warning: #FFC107;
@@ -5270,7 +5270,7 @@ a.btn.disabled, fieldset:disabled a.btn {
     box-shadow: 0 0 0 .2rem rgba(102, 51, 153, .5);
 }
 .btn-secondary {
-    border-color: #52495a;
+    border-color: #800020;
 }
 .btn-secondary:hover {
     color: #fff;
@@ -5282,8 +5282,8 @@ a.btn.disabled, fieldset:disabled a.btn {
 }
 .btn-secondary.disabled, .btn-secondary:disabled {
     color: #fff;
-    background-color: #52495a;
-    border-color: #52495a;
+    background-color: #800020;
+    border-color: #800020;
 }
 .btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
     color: #fff;
@@ -5580,27 +5580,27 @@ a.btn.disabled, fieldset:disabled a.btn {
     box-shadow: 0 0 0 .2rem rgba(102, 51, 153, .5);
 }
 .btn-outline-secondary {
-    color: #52495a;
+    color: #800020;
     background-color: transparent;
     background-image: none;
-    border-color: #52495a;
+    border-color: #800020;
 }
 .btn-outline-secondary:hover {
     color: #fff;
-    background-color: #52495a;
-    border-color: #52495a;
+    background-color: #800020;
+    border-color: #800020;
 }
 .btn-outline-secondary.focus, .btn-outline-secondary:focus {
     box-shadow: 0 0 0 .2rem rgba(82, 73, 90, .5);
 }
 .btn-outline-secondary.disabled, .btn-outline-secondary:disabled {
-    color: #52495a;
+    color: #800020;
     background-color: transparent;
 }
 .btn-outline-secondary:not(:disabled):not(.disabled).active, .btn-outline-secondary:not(:disabled):not(.disabled):active, .show>.btn-outline-secondary.dropdown-toggle {
     color: #fff;
-    background-color: #52495a;
-    border-color: #52495a;
+    background-color: #800020;
+    border-color: #800020;
 }
 .btn-outline-secondary:not(:disabled):not(.disabled).active:focus, .btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .show>.btn-outline-secondary.dropdown-toggle:focus {
     box-shadow: 0 0 0 .2rem rgba(82, 73, 90, .5);
@@ -7254,7 +7254,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 .badge-secondary {
     color: #fff;
-    background-color: #52495a;
+    background-color: #800020;
 }
 .badge-secondary[href]:focus, .badge-secondary[href]:hover {
     color: #fff;
@@ -8413,7 +8413,7 @@ a.bg-primary:focus, a.bg-primary:hover, button.bg-primary:focus, button.bg-prima
     background-color: #4d2673!important;
 }
 .bg-secondary {
-    background-color: #52495a!important;
+    background-color: #800020!important;
 }
 a.bg-secondary:focus, a.bg-secondary:hover, button.bg-secondary:focus, button.bg-secondary:hover {
     background-color: #38323e!important;
@@ -8518,7 +8518,7 @@ a.bg-gray-400:focus, a.bg-gray-400:hover, button.bg-gray-400:focus, button.bg-gr
     border-color: #639!important;
 }
 .border-secondary {
-    border-color: #52495a!important;
+    border-color: #800020!important;
 }
 .border-success {
     border-color: #4caf50!important;
@@ -9233,7 +9233,7 @@ a.text-primary:focus, a.text-primary:hover {
     color: #4d2673!important;
 }
 .text-secondary {
-    color: #52495a!important;
+    color: #800020!important;
 }
 a.text-secondary:focus, a.text-secondary:hover {
     color: #38323e!important;
@@ -11228,15 +11228,15 @@ h2, h3 {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from',  endColorstr='$to',  GradientType=1 );
 }
 .gradient-black-gray, .sidebar-gradient-black-gray .sidebar-left {
-    background-color: #404040;
-    background-image: -o-linear-gradient(-154deg, #404040 0, #000 100%);
-    background: linear-gradient(-154deg, #404040 0, #000 100%);
+    background-color: #800020;
+    background-image: -o-linear-gradient(-154deg, #800020 0, #361010 100%);
+    background: linear-gradient(-154deg, #800020 0, #361010 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from',  endColorstr='$to',  GradientType=1 );
 }
 .btn.gradient-black-gray.active, .btn.gradient-black-gray:active {
-    background-color: #404040;
-    background-image: -o-linear-gradient(-90deg, #404040 0, #000 100%);
-    background: linear-gradient(-90deg, #404040 0, #000 100%);
+    background-color: #800020;
+    background-image: -o-linear-gradient(-90deg, #800020 0, #361010 100%);
+    background: linear-gradient(-90deg, #800020 0, #361010 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from',  endColorstr='$to',  GradientType=1 );
 }
 .gradient-steel-gray, .sidebar-gradient-steel-gray .sidebar-left {
@@ -14311,7 +14311,7 @@ h2, h3 {
     border-bottom: 1px solid #639;
 }
 .border-bottom-secondary {
-    border-bottom: 1px solid #52495a;
+    border-bottom: 1px solid #800020;
 }
 .border-bottom-success {
     border-bottom: 1px solid #4caf50;
@@ -14347,7 +14347,7 @@ h2, h3 {
     border-bottom: 1px dotted #639;
 }
 .border-bottom-dotted-secondary {
-    border-bottom: 1px dotted #52495a;
+    border-bottom: 1px dotted #800020;
 }
 .border-bottom-dotted-success {
     border-bottom: 1px dotted #4caf50;
@@ -15134,7 +15134,7 @@ ngb-tabset.p-0 .tab-content {
     flex-direction: column;
     align-items: center;
     padding: 18px 12px;
-    color: #52495a;
+    color: #800020;
     border-radius: 4px;
 }
 .menu-icon-grid>a i {
@@ -15294,7 +15294,7 @@ select.form-control {
     background-color: #639!important;
 }
 .checkbox-secondary input:checked~.checkmark {
-    background-color: #52495a!important;
+    background-color: #800020!important;
 }
 .checkbox-success input:checked~.checkmark {
     background-color: #4caf50!important;
@@ -15347,10 +15347,10 @@ select.form-control {
 }
 .checkbox-outline-secondary .checkmark {
     background: #fff;
-    border: 1px solid #52495a;
+    border: 1px solid #800020;
 }
 .checkbox-outline-secondary .checkmark:after {
-    border-color: #52495a;
+    border-color: #800020;
 }
 .checkbox-outline-success:hover input~.checkmark {
     background-color: #eee;
@@ -15502,7 +15502,7 @@ select.form-control {
     background-color: #639;
 }
 .radio-secondary input:checked~.checkmark {
-    background-color: #52495a;
+    background-color: #800020;
 }
 .radio-success input:checked~.checkmark {
     background-color: #4caf50;
@@ -15556,11 +15556,11 @@ select.form-control {
 }
 .radio-outline-secondary .checkmark {
     background: #fff;
-    border: 1px solid #52495a;
+    border: 1px solid #800020;
 }
 .radio-outline-secondary .checkmark:after {
     border: 0;
-    background: #52495a;
+    background: #800020;
 }
 .radio-outline-success:hover input~.checkmark {
     background-color: #eee;
@@ -15759,10 +15759,10 @@ select.form-control {
     box-shadow: 0 0 1px #639;
 }
 .switch-secondary input:checked+.slider {
-    background-color: #52495a;
+    background-color: #800020;
 }
 .switch-secondary input:focus+.slider {
-    box-shadow: 0 0 1px #52495a;
+    box-shadow: 0 0 1px #800020;
 }
 .switch-success input:checked+.slider {
     background-color: #4caf50;
@@ -16283,11 +16283,11 @@ select.form-control {
     background: #639;
 }
 .spinner-secondary {
-    background: #52495a;
-    background: linear-gradient(to right, #52495a 10%, rgba(67, 236, 76, 0) 42%);
+    background: #800020;
+    background: linear-gradient(to right, #800020 10%, rgba(67, 236, 76, 0) 42%);
 }
 .spinner-secondary:before {
-    background: #52495a;
+    background: #800020;
 }
 .spinner-success {
     background: #4caf50;
@@ -16395,7 +16395,7 @@ select.form-control {
     color: #639;
 }
 .spinner-bubble-secondary {
-    color: #52495a;
+    color: #800020;
 }
 .spinner-bubble-success {
     color: #4caf50;
@@ -16499,7 +16499,7 @@ select.form-control {
     color: #639;
 }
 .loader-bubble-secondary {
-    color: #52495a;
+    color: #800020;
 }
 .loader-bubble-success {
     color: #4caf50;
@@ -16931,8 +16931,8 @@ form-wizard .card .card-footer .btn.disabled, form-wizard .card .card-footer .bt
 }
 .badge-outline-secondary {
     background: unset;
-    border: 1px solid #52495a;
-    color: #52495a;
+    border: 1px solid #800020;
+    color: #800020;
 }
 .badge-outline-success {
     background: unset;
@@ -17034,13 +17034,13 @@ ngb-rating .half {
     color: #639;
 }
 .rating-secondary {
-    color: #52495a;
+    color: #800020;
 }
 .rating-secondary .star {
     color: #bbb;
 }
 .rating-secondary .full, .rating-secondary .half {
-    color: #52495a;
+    color: #800020;
 }
 .rating-success {
     color: #4caf50;

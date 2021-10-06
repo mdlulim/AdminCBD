@@ -29,7 +29,7 @@
         "childitems": []
     }, {
         "id": "products",
-        "title": " Products",
+        "title": "Products",
         "description": "Manage Products",
         "link": "/products",
         "icon": "i-Shopping-Bag",

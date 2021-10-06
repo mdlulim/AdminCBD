@@ -1,16 +1,16 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Layout } from 'containers';
-import { UserRoles } from 'components';
+import { Products } from 'components';
 
-const UserRolesList = props => {
-	const breadcrumb = { heading: "User Roles" };
+const ProductAddNew = props => {
+	const breadcrumb = { heading: "New Product" };
 	return (
 		<Layout {...props} breadcrumb={breadcrumb}>
 			<Row className="mt-4">
-				<Col lg={10} xl={10}>
+				<Col lg={12} xl={12}>
 				<Col md={12}>
-                    <UserRoles.UserRoles />
+                    <Products.ProductAddNew />
                 </Col>
 				</Col>
 			</Row>
@@ -18,4 +18,4 @@ const UserRolesList = props => {
 	);
 };
 
-export default UserRolesList;
+export default ProductAddNew;
