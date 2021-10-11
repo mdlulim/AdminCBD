@@ -78,16 +78,16 @@ pipeline {
             git branch: 'feature/1884-cbigold-admin-react', credentialsId: '38f1358e-7a55-488b-b1ee-40eb0cc6b3f4', url: 'https://github.com/cbiglobal/dev_ops.git'
             script {
               switch(JOB_NAME) {
-                case 'cbigold-develop':
+                case 'cbigold-admin-develop':
                   sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-develop:${developmentTag}");
                   break;
-                case 'cbigold-production':
+                case 'cbigold-admin-production':
                   sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-production:${developmentTag}");
                   break;
-                case 'cbigold-qa':
+                case 'cbigold-admin-qa':
                   sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-qa:${developmentTag}");
                   break;
-                case 'cbigold-staging':
+                case 'cbigold-admin-staging':
                   sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-staging:${developmentTag}");
                   break;
                 default:
