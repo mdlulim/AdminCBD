@@ -10,6 +10,7 @@ import MemberDetails from './Members';
 import Transactions from './Transactions';
 import Products from './Products';
 import UserRoles from './UserRoles';
+import GroupProducts from './GroupProducts';
 
 export {
     Breadcrumb,
@@ -23,5 +24,6 @@ export {
     Members,
     MemberDetails,
     Products,
-    UserRoles
+    UserRoles,
+    GroupProducts
 };

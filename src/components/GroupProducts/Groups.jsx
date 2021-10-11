@@ -4,9 +4,9 @@ import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { Trash, Edit, UserMinus} from 'react-feather';
 import { useHistory } from 'react-router-dom';
-import ModalUpdateGroup from '../GroupProduct/ModalUpdateGroup';
-import ModalAddGroup from '../GroupProduct/ModalAddGroup';
-import DeleteGroupAlert from '../GroupProduct/DeleteGroupAlert';
+import ModalUpdateGroup from './ModalUpdateGroup';
+import ModalAddGroup from './ModalAddGroup';
+import DeleteGroupAlert from './DeleteGroupAlert';
 // styles
 const customStyles = {
    
@@ -159,9 +159,9 @@ const onSubmitUpdateGroup= data => {
 
     return (
         <Card className="o-hidden mb-4">
-          <ModalUpdateUserGroup show={show} setShow={setShow} group={selectedGroup} />
-          <DeleteUserGroupAlert show={showDelete} setShow={setShowDelete} group={selectedGroup} />
-          <ModalAddNewGroup show={showAddNew} setShow={setShowAddNew} />
+          <ModalUpdateGroup show={show} setShow={setShow} group={selectedGroup} />
+          <ModalAddGroup show={showDelete} setShow={setShowDelete} group={selectedGroup} />
+          <ModalAddGroup show={showAddNew} setShow={setShowAddNew} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>User Groups</span>
@@ -181,7 +181,7 @@ const onSubmitUpdateGroup= data => {
                               e.preventDefault();
                               setShowAddNew(true);
                             }}>
-                                Add User
+                                Add Group
                             </button>
                     </div>
                 </div>
