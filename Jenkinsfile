@@ -75,20 +75,20 @@ pipeline {
               }
             }
           } else {
-            git branch: 'feature/1884-cbigold-react', credentialsId: '38f1358e-7a55-488b-b1ee-40eb0cc6b3f4', url: 'https://github.com/cbiglobal/dev_ops.git'
+            git branch: 'feature/1884-cbigold-admin-react', credentialsId: '38f1358e-7a55-488b-b1ee-40eb0cc6b3f4', url: 'https://github.com/cbiglobal/dev_ops.git'
             script {
               switch(JOB_NAME) {
                 case 'cbigold-develop':
-                  sh("cd cbigold-react/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-develop:${developmentTag}");
+                  sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-develop:${developmentTag}");
                   break;
                 case 'cbigold-production':
-                  sh("cd cbigold-react/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-production:${developmentTag}");
+                  sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-production:${developmentTag}");
                   break;
                 case 'cbigold-qa':
-                  sh("cd cbigold-react/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-qa:${developmentTag}");
+                  sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-qa:${developmentTag}");
                   break;
                 case 'cbigold-staging':
-                  sh("cd cbigold-react/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-staging:${developmentTag}");
+                  sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-staging:${developmentTag}");
                   break;
                 default:
                   echo 'No Kustomize application found';
