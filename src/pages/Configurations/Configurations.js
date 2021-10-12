@@ -65,7 +65,7 @@ const ConfigurationPage = props => {
                                     <div className="tab-content">
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
                                             <CardBody className="pl-0 pr-0 pb-0">
-												Tab 1
+												<Configurations.General />
                                             </CardBody>
                                         </div>
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
