@@ -1,6 +1,6 @@
 import Settings from './Settings'
 import General from './General'
-import ConfigRegistration from './ConfigRegistration'
+import ConfigRegistration from '../FormsConfig/ConfigRegistration'
 
 
 export default {
