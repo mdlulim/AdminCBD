@@ -46,7 +46,8 @@ const FormsConfigurations = props => {
                     "input_group": true,
                     "input_group_suffix": "mdi mdi-eye-outline",
                     "errors": {
-                        "required": "Password is required"
+                        "required": "Password is required",
+                        "invalid": ""
                     }
                 }]
             },
