@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Col } from 'reactstrap';
+import { Card, CardBody, Col, Select2 } from 'reactstrap';
 import DataTable from 'react-data-table-component';
 import { HashLinkContainer } from 'components';
 import Moment from 'react-moment';
 import { useHistory } from 'react-router-dom';
-
+import Select from 'react-select';
 // styles
 const customStyles = {
    
@@ -35,12 +35,19 @@ export default function ConfigLogin(props) {
     const [activeTab, setActiveTab] = useState('referals');
     const [checked, setChecked] = useState(false);
     const [fields, setFields] = useState([]);
+    const [selectedInputType, setSelectedInputType] = useState('');
     const [exportDropdownExpanded, setExportDropdownExpanded] = useState(false);
     const { processing,confirmButtonDisabled, confirmButton,} = props;
 	const toggleTab = (e, tab) => {
 		e.preventDefault();
 		setActiveTab(tab);
     };
+
+    const inputTypeOptions = [
+        { value: 'text',  label: 'Text' },
+        { value: 'email', label: 'Email' },
+        { value: 'password', label: 'Password' }
+      ];
 
     // A super simple expandable component.
     useMemo(() => {
@@ -84,12 +91,14 @@ export default function ConfigLogin(props) {
         name: 'Type',
         selector: 'type',
         sortable: true,
-        cell: row => <div><input
-        type="text"
-        id="target_weight"
-        className="form-control form-control-m"
-        value={row.type}
-    /></div>
+        cell: row => <div>
+            <select class="form-control" id={row.name+'-type'}>
+                <option value={row.type}>text</option>
+                <option value="text">Text</option>
+                <option value="email">Email</option>
+                <option value="password">Password</option>
+            </select>
+        </div>
     },{
         name: 'Placeholder',
         selector: 'placeholder',
@@ -122,6 +131,8 @@ export default function ConfigLogin(props) {
         onChange={() => setChecked(!row.required)}
     />Required</label></div>
     }];
+
+   
 
     const ExpandedComponent = ({ data }) => {
         const row = JSON.stringify(data, null, 2);

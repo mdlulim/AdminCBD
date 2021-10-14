@@ -223,7 +223,7 @@ const FormsConfigurations = props => {
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
-                                                    Tab 2
+                                                     <FormsConfig.ConfigRegistration registerForm={registerForm} />
                                                 </CardBody>
                                             </div>
                                         </div>

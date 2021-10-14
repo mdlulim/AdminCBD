@@ -4,7 +4,7 @@ import DataTable from 'react-data-table-component';
 import { HashLinkContainer } from 'components';
 import Moment from 'react-moment';
 import { useHistory } from 'react-router-dom';
-
+import Select from 'react-select';
 // styles
 const customStyles = {
    
@@ -31,39 +31,33 @@ const inputWith={
 }
 
 export default function ConfigRegistration(props) {
-    const { loginForm } = props;
+    const { registerForm } = props;
     const [activeTab, setActiveTab] = useState('referals');
     const [checked, setChecked] = useState(false);
+    const [fields, setFields] = useState([]);
+    const [exportDropdownExpanded, setExportDropdownExpanded] = useState(false);
     const { processing,confirmButtonDisabled, confirmButton,} = props;
 	const toggleTab = (e, tab) => {
 		e.preventDefault();
 		setActiveTab(tab);
     };
-    
-    // {
-    //     "id": "email",
-    //     "label": "Your email address",
-    //     "type": "text",
-    //     "name": "email",
-    //     "placeholder": "Your email address",
-    //     "icon": "flaticon-mail-2",
-    //     "required": true,
-    //     "input_group": true,
-    //     "errors": {
-    //         "required": "Email Address is required",
-    //         "invalid": "Please enter a valid email address"
-    //     }
-    // }
 
+    // A super simple expandable component.
+    useMemo(() => {
+        console.log(registerForm.fieldset[0])
+        setFields(registerForm.fieldset[0]);
+    },[]);
     const columns = [{
         name: 'ID',
         selector: 'id',
         sortable: true,
         cell: row => <div><input
         type="text"
+        name={row.name}
         id="target_weight"
         className="form-control form-control-m"
         value={row.id}
+        disabled
     /></div>
     },{
         name: 'Name',
@@ -72,8 +66,10 @@ export default function ConfigRegistration(props) {
         cell: row => <div><input
         type="text"
         id="target_weight"
+        name={row.name}
         className="form-control form-control-m"
         value={row.name}
+        disabled
     /></div>
     },{
         name: 'Label',
@@ -89,12 +85,13 @@ export default function ConfigRegistration(props) {
         name: 'Type',
         selector: 'type',
         sortable: true,
-        cell: row => <div><input
-        type="text"
-        id="target_weight"
-        className="form-control form-control-m"
-        value={row.type}
-    /></div>
+        cell: row => <div>
+            <select class="form-control" id={row.name+'-type'}>
+                <option value={row.type}>text</option>
+                <option value="text">Text</option>
+                <option value="email">Email</option>
+                <option value="password">Password</option>
+            </select></div>
     },{
         name: 'Placeholder',
         selector: 'placeholder',
@@ -127,52 +124,47 @@ export default function ConfigRegistration(props) {
         onChange={() => setChecked(!row.required)}
     />Required</label></div>
     }];
-    const columnsError = [{
-        name: 'Id',
-        selector: 'id',
-        sortable: true
-    },{
-        name: 'Required Error Message',
-        selector: 'required',
-        sortable: true,
-        cell: row => <input
-        type="text"
-        id="target_weight"
-        className="form-control form-control-m"
-        value={row.errors.required}
-    />
-    },{
-        name: 'Invalid Error Message',
-        selector: 'invalid',
-        sortable: true,
-        cell: row => <input
-        type="text"
-        id="target_weight"
-        className="form-control form-control-m"
-        value={row.errors.invalid}
-    />
-    }];
+
+    const ExpandedComponent = ({ data }) => {
+        const row = JSON.stringify(data, null, 2);
+        return (
+            <div className="row__expandable">
+                <pre>{row.label}</pre>
+                <Col md={6} >
+                <div className="form-group">
+                    <label htmlFor="next_rebalance">Invalid Error Message</label><input
+                        type="text"
+                        id="target_weight"
+                        className="form-control form-control-m"
+                        value={data.errors.invalid}
+                    />
+                </div>
+                <div className="form-group">
+                <label htmlFor="next_rebalance">Required Error Message</label>
+                    <input
+                        type="text"
+                        id="target_weight"
+                        className="form-control form-control-m"
+                        value={data.errors.required}
+                    />
+                    </div>
+            </Col>
+     </div>
+    );
+}
 
     return (
             <Col md={12} lg={12} xl={12}>
-                <h3 className="text-primary" >Login Custom Fields</h3>
+                <h3 className="text-primary" >Register Fields</h3>
                 <DataTable
-                        data={loginForm.fields}
+                        data={fields}
                         columns={columns}
                         customStyles={customStyles}
                         noHeader
                         selectableRowsHighlight
                         highlightOnHover
-                    />
-                    <hr />
-                    <h3 className="text-primary" >Login Custom Error Messages</h3>
-                    <DataTable
-                        data={loginForm.fields}
-                        columns={columnsError}
-                        customStyles={customStyles}
-                        noHeader
-                        selectableRowsHighlight
-                        highlightOnHover
+                        expandableRows
+                        expandableRowsComponent={<ExpandedComponent />}
                     />
                     <hr/>
                     <Col md={12} >
