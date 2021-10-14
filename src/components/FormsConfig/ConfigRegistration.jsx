@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Col } from 'reactstrap';
+import { Card, CardBody, Col, Row } from 'reactstrap';
 import DataTable from 'react-data-table-component';
 import { HashLinkContainer } from 'components';
 import Moment from 'react-moment';
@@ -129,8 +129,8 @@ export default function ConfigRegistration(props) {
         const row = JSON.stringify(data, null, 2);
         return (
             <div className="row__expandable">
-                <pre>{row.label}</pre>
-                <Col md={6} >
+                <Row>
+                <Col md={5} xs="auto">
                 <div className="form-group">
                     <label htmlFor="next_rebalance">Invalid Error Message</label><input
                         type="text"
@@ -139,6 +139,8 @@ export default function ConfigRegistration(props) {
                         value={data.errors.invalid}
                     />
                 </div>
+                </Col>
+                <Col md={5} xs="auto">
                 <div className="form-group">
                 <label htmlFor="next_rebalance">Required Error Message</label>
                     <input
@@ -149,6 +151,7 @@ export default function ConfigRegistration(props) {
                     />
                     </div>
             </Col>
+            </Row>
      </div>
     );
 }

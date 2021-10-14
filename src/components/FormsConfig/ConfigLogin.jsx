@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Col, Select2 } from 'reactstrap';
+import { Card, CardBody, Col, Row, Container } from 'reactstrap';
 import DataTable from 'react-data-table-component';
 import { HashLinkContainer } from 'components';
 import Moment from 'react-moment';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
+import { AlignCenter } from 'react-feather';
 // styles
 const customStyles = {
    
@@ -138,26 +139,30 @@ export default function ConfigLogin(props) {
         const row = JSON.stringify(data, null, 2);
         return (
             <div className="row__expandable">
-                <pre>{row.label}</pre>
-                <Col md={6} >
-                <div className="form-group">
-                    <label htmlFor="next_rebalance">Invalid Error Message</label><input
-                        type="text"
-                        id="target_weight"
-                        className="form-control form-control-m"
-                        value={data.errors.invalid}
-                    />
-                </div>
-                <div className="form-group">
-                <label htmlFor="next_rebalance">Required Error Message</label>
-                    <input
-                        type="text"
-                        id="target_weight"
-                        className="form-control form-control-m"
-                        value={data.errors.required}
-                    />
-                    </div>
-            </Col>
+                <Row >
+                    <Col md={5} xs="auto">
+                        <div className="form-group">
+                            <label htmlFor="next_rebalance">Invalid Error Message</label><input
+                                type="text"
+                                id="target_weight"
+                                className="form-control form-control-m"
+                                value={data.errors.invalid}
+                            />
+                        </div>
+                        </Col>
+                        <Col md={5} xs="auto">
+                        <div className="form-group">
+                        <label htmlFor="next_rebalance">Required Error Message</label>
+                            <input
+                                type="text"
+                                id="target_weight"
+                                className="form-control form-control-m"
+                                value={data.errors.required}
+                            />
+                            </div>
+                    </Col>
+                </Row>
+                <hr />
      </div>
     );
 }

@@ -230,7 +230,7 @@ const FormsConfigurations = props => {
 										<div role="tabpanel" className={`tab-pane show ${activeTab === 'transactions' ? 'active' : ''}`}>
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
-												 Tab 3
+                                                <FormsConfig.ConfigForgotPassword forgotPasswordForm={forgotPasswordForm} />
                                                 </CardBody>
                                             </div>
                                         </div>
