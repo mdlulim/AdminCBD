@@ -24,16 +24,19 @@ const Login = props => {
                 <Row>
                     <Col xs={12}>
                         <div className="mb-4">
-                            <div className="auth-logo mb-4" style={backG}>
-                            <span className="login-logo">
+                            <center>
+                             <span className="login-logo">
                                 <img src={require("images/logo.png")} alt="Login" />
                              </span>
+                             </center>
+                            <div className="auth-logo mb-4" style={backG}>
                             </div>
                             <Col xs={12}>
-                            <h1 className="mb-3 text-18">Sign In</h1>
+                            <h1 className="mb-3 text-24">Welcome back</h1>
+                            <p>Enter your email and password to sign in</p>
                             <form>
                                 <div className="form-group">
-                                    <label htmlFor="username">Username</label>
+                                    <label htmlFor="username">Email</label>
                                     <input
                                         type="text"
                                         id="username"
