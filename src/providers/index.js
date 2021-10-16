@@ -2,9 +2,9 @@
 import AuthService from './AuthService';
 import GeoLocationService from './GeoLocationService';
 import UserRolesService from './UserRolesService';
-import UserRolesService from './ProductService';
-import UserRolesService from './MemberService';
-import UserRolesService from './TransactionService';
+import ProductService from './ProductService';
+import MemberService from './MemberService';
+import TransactionService from './TransactionService';
 
 export {
     AuthService,

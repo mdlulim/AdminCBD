@@ -65,6 +65,7 @@ const SecondaryNav = item => {
                             <HashLinkContainer to={link + subitem.link}>
                                 <a
                                     href={link + subitem.link}
+                                    data-toggle="tooltip" data-placement="right" title={subitem.title}
                                 >
                                     <i className={`nav-icon ${subitem.icon}`} />
                                     <span className="item-name lvl1">
