@@ -3,10 +3,12 @@ import { Card, CardBody } from 'reactstrap';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { Trash, Edit, UserMinus} from 'react-feather';
+import Moment from 'react-moment';
 import { useHistory } from 'react-router-dom';
 import ModalUpdateUserRole from '../UserRoles/ModalUpdateUserRole';
 import ModalAddNewRole from '../UserRoles/ModalAddNewRole';
 import DeleteUserRoleAlert from '../UserRoles/DeleteUserRoleAlert';
+import { UserRolesService } from '../../providers';
 // styles
 const customStyles = {
    
@@ -59,34 +61,13 @@ export default function UsersRoles(props) {
 
 
     useMemo(() => {
-        const rolesList = [{
-            roleID: '109977041',
-            name: 'SUPER',
-            description: 'SUPER Admin has all the access',
-            created: 'just now',
-            status: 'Active',
-        }, {
-            roleID: '109977042',
-            name: 'Platform Administrator',
-            description: 'Platform Administrator',
-            created: '2 mins ago',
-            status: 'Active',
-        }, {
-            roleID: '109977043',
-            name: 'Training Administrator',
-            description: 'SUPER Admin has all the access',
-            created: '5 mins ago',
-            status: 'Blocked',
-        }, {
-          roleID: '109977055',
-          name: 'EcoSystem Administrator',
-          description: 'EcoSystem Administrator',
-          created: '5 mins ago',
-          status: 'Blocked',
-      }];
-     setRoles(rolesList);
-     setFilteredRoles(rolesList);
 
+      UserRolesService.getUserRoles().then((res) => {
+          console.log(res.data.data.results)
+          const userRolesList = res.data.data.results;
+          setRoles(userRolesList);
+          setFilteredRoles(userRolesList);
+        });
 
       }, []);
     // table headings definition
@@ -96,6 +77,11 @@ const columns = [ {
     sortable: true,
     wrap: true,
 },{
+  name: 'Label',
+  selector: 'label',
+  sortable: true,
+  wrap: true,
+},{
     name: 'Description',
     selector: 'description',
     sortable: true,
@@ -103,11 +89,7 @@ const columns = [ {
     name: 'Date Created',
     selector: 'created',
     sortable: true,
-}, {
-    name: 'Status',
-    selector: 'status',
-    sortable: true,
-    cell: row => <Status {...row} />
+    cell: row => <div><Moment format="MMM D, YYYY">{row.created}</Moment></div>
 }, {
     name: 'Actions',
     sortable: true,
@@ -138,9 +120,9 @@ const columns = [ {
 
 
 const onSubmitUpdateRole= data => {
-  setShow(true)
-  setSelectedRole(data);
-  console.log(data);
+    setSelectedRole(data);
+    setShow(true);
+    //console.log(data);
   };
 
   const onSubmitDeleteRole= data => {

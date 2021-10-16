@@ -17,7 +17,7 @@ const AlertModal = props => {
         closeButtonText,
     } = props;
 
-    let icon = 'alert-triangle';
+    let icon = 'trash-2';
     let iconClass = type;
 
     if (type === 'error') {
@@ -72,7 +72,7 @@ const AlertModal = props => {
                         <Row>
                         <Col md={6}>
                         <button
-                                        className="btn btn-dark btn-rounded"
+                                        className="btn btn-dark"
                                         onClick={handleClose}
                                         disabled={processing}
                                     >
@@ -81,7 +81,7 @@ const AlertModal = props => {
                             </Col>
                             <Col md={6} >
                             <button
-                                        className="btn btn-danger btn-rounded float-right"
+                                        className="btn btn-danger float-right"
                                         onClick={''}
                                         disabled={confirmButtonDisabled || processing}
                                     >

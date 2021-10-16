@@ -43,7 +43,17 @@ const ModalChangeStatus = props => {
                                     <label htmlFor="name">Name</label>
                                     <input
                                         type="text"
-                                        id="name"
+                                        id="role-name"
+                                        name="role-name"
+                                        className="form-control form-control-m"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="name">Label</label>
+                                    <input
+                                        type="text"
+                                        id="label"
+                                        name="label"
                                         className="form-control form-control-m"
                                     />
                                 </div>
@@ -52,10 +62,11 @@ const ModalChangeStatus = props => {
                                     <textarea
                                         type="text"
                                         id="description"
+                                        name="description"
                                         className="form-control form-control-m"
                                     /> 
                                 </div>
-                                <div>
+                                {/* <div>
                                 <label htmlFor="email">Select Status</label>
                                 <Select
                                     id="status"
@@ -65,7 +76,7 @@ const ModalChangeStatus = props => {
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
                                     />
-                                </div>
+                                </div> */}
                                 <hr />
                                 <Row>
                         <Col md={6}>

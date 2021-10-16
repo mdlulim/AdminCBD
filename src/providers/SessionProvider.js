@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import config from '../config';
 
 class SessionProvider {
-    static cookiename = config.auth.cookie.name || 'Ben';
+    static cookiename = config.auth.cookie.name || '';
     static start(token) {
         this.destroy();
         this.set(token);

@@ -1,73 +1,85 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
-import Select from 'react-select';
 
-const ModalChangeStatus = props => {
-    const { show, setShow, role} = props;
-    const [statuses, setStatuses] = useState([]);
-    const [selectedStatus, setSelectedStatus] = useState('');
-    const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
+const AlertModal = props => {
+    const {
+        title,
+        role,
+        show,
+        type,
+        setShow,
+        callback,
+        processing,
+        confirmButtonDisabled, confirmButton,
+        closeButtonText,
+    } = props;
 
-    useMemo(() => {
-        //setSelectedStatus({ value: member.status,  label: member.status });
-    }, []);
+    let icon = 'edit';
+    let iconClass = type;
 
-    const statusOptions = [
-        { value: 'Active',  label: 'Active' },
-        { value: 'Pending', label: 'Pending' },
-        { value: 'Blocked', label: 'Blocked' }
-      ];
-    const handleClose = () => setShow(false);
+    if (type === 'error') {
+        icon = 'slash';
+        iconClass = 'danger';
+    }
+    if (type === 'success') {
+        icon = 'check';
+    }
+
+    const handleClose = () => {
+        setShow(false);
+        if (callback) callback();
+    };
+
     return (
-        <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
+        <Modal show={show} onHide={handleClose} centered className="confirm-modal">
             <Modal.Body>
                 <Row>
-                    {showIcon &&
-                    <Col xs={2} className="text-right mg-t-10 text-warning">
-                        <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
-                    </Col>}
-                    <Col xs={showIcon ? 10 : 12}>
-                        <h3 className="text-info"> Update User Role</h3>
-                        <hr />
-                        <form>
-                                <div className="form-group">
-                                    <label htmlFor="name">Role Name</label>
-                                    {role ? 
-                                    <text
+                    <Col xs={2} className={`text-right mg-t-10 text-info`}>
+                        <FeatherIcon icon={icon} width="48" height="48" classes="mg-t-0" />
+                    </Col>
+                    <Col xs={10}>
+                        <h3 className="text-info">Update User Role</h3>
+                        {role ? 
+                             <div className="form-group">
+                                    <label htmlFor="role">Name</label>
+                                    <input
                                         type="text"
-                                        id="name"
+                                        id="role"
                                         className="form-control form-control-m"
                                         value={role.name}
-                                    /> 
-                                    : ''}
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="last_name">Description</label>
-                                    {role ? 
-                                    <textarea
-                                        type="text"
-                                        id="last_name"
-                                        className="form-control form-control-m"
-                                        value={role.description}
-                                    /> 
-                                    : ''}
-                                </div>
-                                <div>
-                                <label htmlFor="email">Select Status</label>
-                                <Select
-                                    id="status"
-                                    name="status"
-                                    options={statusOptions}
-                                    onChange={item => setSelectedStatus(item)}
-                                    className={`basic-multi-select form-control-m`}
-                                    classNamePrefix="select"
+                                        disabled
                                     />
                                 </div>
-                                <hr />
-                                <Row>
+                                 : ''}
+                                 {role ? 
+                             <div className="form-group">
+                                    <label htmlFor="role">Label</label>
+                                    <input
+                                        type="text"
+                                        id="role"
+                                        className="form-control form-control-m"
+                                        value={role.label}
+                                        
+                                    />
+                                </div>
+                                 : ''}
+                                 {role ? 
+                             <div className="form-group">
+                                    <label htmlFor="description">Description</label>
+                                    <textarea
+                                        type="text"
+                                        id="description"
+                                        className="form-control form-control-m"
+                                        value={role.description}
+                                    />
+                                </div>
+                                 : ''}
+                               
+                        
+                        <Row>
                         <Col md={6}>
                         <button
                                         className="btn btn-dark"
@@ -80,14 +92,14 @@ const ModalChangeStatus = props => {
                             <Col md={6} >
                             <button
                                         className="btn btn-info float-right"
-                                        onClick={confirmButton.onClick}
+                                        onClick={''}
                                         disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Update'}
                                 </button>
                             </Col>
                             </Row>
-                            </form>
+                    
                     </Col>
                 </Row>
             </Modal.Body>
@@ -95,31 +107,24 @@ const ModalChangeStatus = props => {
     );
 };
 
-ModalChangeStatus.propTypes = {
+AlertModal.propTypes = {
     show: PropTypes.bool.isRequired,
     setShow: PropTypes.func.isRequired,
     title: PropTypes.string,
     body: PropTypes.any,
-    processing: PropTypes.bool,
-    confirmButtonDisabled: PropTypes.bool,
+    type: PropTypes.string,
+    callback: PropTypes.func,
     confirmButton: PropTypes.shape({}),
     cancelButton: PropTypes.shape({}),
-    showIcon: PropTypes.bool,
-    size: PropTypes.string,
+    closeButtonText: PropTypes.string,
 };
 
-ModalChangeStatus.defaultProps = {
-    title: 'Confirm',
+AlertModal.defaultProps = {
+    title: 'Alert',
     body: <p />,
-    processing: false,
-    confirmButtonDisabled: false,
-    cancelButton: { text: 'No' },
-    showIcon: false,
-    size: 'md',
-    confirmButton: {
-        text: 'Yes',
-        onClick: e => e.preventDefault(),
-    },
+    type: 'warning',
+    callback: null,
+    closeButtonText: 'OK',
 };
 
-export default ModalChangeStatus;
+export default AlertModal;
