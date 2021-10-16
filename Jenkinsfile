@@ -15,7 +15,7 @@ developmentImage = ''
 
 
 def COLOR_MAP = [
-    'SUCCESS': 'good', 
+    'SUCCESS': 'good',
     'FAILURE': 'danger',
 ]
 
@@ -53,56 +53,33 @@ pipeline {
     stage('Update GitOps repo for ArgoCD') {
       steps {
         script {
-          if(env.JOB_NAME.matches("uhurucash(.*)")) {
-            git branch: 'feature/1429-create-kustomize-app', credentialsId: '38f1358e-7a55-488b-b1ee-40eb0cc6b3f4', url: 'https://github.com/cbiglobal/dev_ops.git'
-            script {
-              switch(JOB_NAME) {
-                case 'uhurucash-develop':
-                  sh("cd uhurucash-application/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/uhurucash-develop:${developmentTag}");
-                  break;
-                case 'uhurucash-production':
-                  sh("cd uhurucash-application/overlays/production && kustomize edit set image registry.digitalocean.com/cbiglobal/uhurucash-production:${developmentTag}");
-                  break;
-                case 'uhurucash-qa':
-                  sh("cd uhurucash-application/overlays/qa && kustomize edit set image registry.digitalocean.com/cbiglobal/uhurucash-qa:${developmentTag}");
-                  break;
-                case 'uhurucash-staging':
-                  sh("cd uhurucash-application/overlays/staging && kustomize edit set image registry.digitalocean.com/cbiglobal/uhurucash-staging:${developmentTag}");
-                  break;
-                default:
-                  echo 'No Kustomize application found';
-                  break;
-              }
-            }
-          } else {
-            git branch: 'feature/1884-cbigold-admin-react', credentialsId: '38f1358e-7a55-488b-b1ee-40eb0cc6b3f4', url: 'https://github.com/cbiglobal/dev_ops.git'
+            git branch: 'feature/1884-cbigold-react', credentialsId: '38f1358e-7a55-488b-b1ee-40eb0cc6b3f4', url: 'https://github.com/cbiglobal/dev_ops.git'
             script {
               switch(JOB_NAME) {
                 case 'cbigold-admin-develop':
-                  sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-develop:${developmentTag}");
+                  sh("cd cbigold/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-develop:${developmentTag}");
                   break;
                 case 'cbigold-admin-production':
-                  sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-production:${developmentTag}");
+                  sh("cd cbigold/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-production:${developmentTag}");
                   break;
                 case 'cbigold-admin-qa':
-                  sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-qa:${developmentTag}");
+                  sh("cd cbigold/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-qa:${developmentTag}");
                   break;
                 case 'cbigold-admin-staging':
-                  sh("cd cbigold-admin/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-staging:${developmentTag}");
+                  sh("cd cbigold/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-staging:${developmentTag}");
                   break;
                 default:
                   echo 'No Kustomize application found';
                   break;
               }
             }
-          }
         }
         sh('git add .')
         sh("git commit -m \"Update ${JOB_NAME} to v-${developmentTag}\"")
         withCredentials([usernamePassword(credentialsId: '38f1358e-7a55-488b-b1ee-40eb0cc6b3f4', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
           sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/cbiglobal/dev_ops.git')
         }
-      }        
+      }
     }
     stage('Apply Sync with ArgoCD') {
       environment {
@@ -110,8 +87,8 @@ pipeline {
         ARGOCD_AUTH_TOKEN = credentials('14eb5095-973d-43a0-8889-5ed02b31b432')
       }
       steps {
-        sh("argocd app sync ${JOB_NAME}")
-        sh("argocd app wait ${JOB_NAME}")
+        sh("argocd app sync cbigold-develop")
+        sh("argocd app wait cbigold-develop")
       }
     }
     stage('Error') {
@@ -134,14 +111,14 @@ pipeline {
       }
     }
   }
-  post { 
+  post {
     always {
       script {
         BUILD_TRIGGER_BY = "${currentBuild.getBuildCauses()[0].shortDescription}".substring(26)
       }
       echo 'I will always say hello in the console.'
       echo "${currentBuild.getBuildCauses()}"
-      slackSend channel: '#old-website-deployments',
+      slackSend channel: '#proj-new-website',
         color: COLOR_MAP[currentBuild.currentResult],
         message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} by ${BUILD_TRIGGER_BY}\n More info at: ${env.BUILD_URL}"
       cleanWs()
