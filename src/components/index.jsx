@@ -11,6 +11,8 @@ import Transactions from './Transactions';
 import Products from './Products';
 import UserRoles from './UserRoles';
 import GroupProducts from './GroupProducts';
+import Configurations from './Configurations';
+import FormsConfig from './FormsConfig';
 
 export {
     Breadcrumb,
@@ -25,5 +27,7 @@ export {
     MemberDetails,
     Products,
     UserRoles,
-    GroupProducts
+    GroupProducts,
+    Configurations,
+    FormsConfig
 };

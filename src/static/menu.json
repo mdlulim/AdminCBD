@@ -87,11 +87,16 @@
         "title": "Manage User Roles",
         "link": "/roles",
         "icon": "i-Gear"
-    },{
-        "id": "configurations",
-        "title": "Configurations",
-        "link": "/configurations",
-        "icon": "i-Gears-2"
-    }]
+        },{
+            "id": "forms",
+            "title": "Manage Forms",
+            "link": "/forms",
+            "icon": "i-Gear"
+        },{
+            "id": "configurations",
+            "title": "Configurations",
+            "link": "/configurations",
+            "icon": "i-Gears-2"
+        }]
     }
 ]

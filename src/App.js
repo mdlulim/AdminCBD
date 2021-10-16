@@ -28,6 +28,7 @@ import Configurations from './pages/Configurations/Configurations';
 import Members from 'pages/Members';
 import MemberDetails from 'pages/Members/MemberDetails';
 import Transactions from 'pages/Transactions';
+import FormsConfig from 'pages/Configurations/FormsConfigurations';
 import Products from 'pages/Products';
 import ProductAddNew from 'pages/Products/ProductAddNew';
 import ProductDetails from 'pages/Products/ProductDetails';
@@ -56,6 +57,7 @@ const App = () => {
 					<Route exact path="/configurations/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/roles" component={(props) => <UserRoles config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/configurations" component={(props) => <Configurations config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/configurations/forms" component={(props) => <FormsConfig config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />

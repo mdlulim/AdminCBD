@@ -86,11 +86,19 @@ const SideNav = props => {
     const { path } = match;
     const [activeNav, setActiveNav] = useState('overview');
     const [selectedItem, setSelectedItem] = useState({});
+    const [show, setShow] = useState('');
+
 
     useEffect(() => {
+        setShow('');
+        console.log()
         setActiveNav(path.replace('/', ''));
     }, [path]);
 
+    const onClick = () => {
+        
+        setShow('')
+    }
     return (
         <div className="side-content-wrap">
             <div className={`sidebar-left rtl-ps-none ps ps--active-y ${sidebarClass}`}>
@@ -115,8 +123,8 @@ const SideNav = props => {
                     ))}
                 </ul>
             </div>
-            <div className={`sidebar-left-secondary rtl-ps-none ps ${sidebarClass}`}>
-                <i className="sidebar-close i-Close" />
+            <div id="second" className={`sidebar-left-secondary rtl-ps-none ps`}>
+                <i className="sidebar-close i-Close" onClick={onClick} />
                 <SecondaryNav
                     {...selectedItem}
                 />
