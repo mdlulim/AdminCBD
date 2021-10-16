@@ -8,25 +8,25 @@ const headers = {
   'Authorization': `Bearer ${authToken}`
 };
 
-class MemberService {
+class UserService {
 
-  static async getMembers() {
+  static async getUsers() {
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/members`,
+      url: `${Config.API.BASE_URL}:8082/admin/users`,
     });
   }
 
-  static async getMember(id) {
+  static async getUser(id) {
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/members/${id}`,
+      url: `${Config.API.BASE_URL}:8082/admin/users/${id}`,
     });
   }
 }
 
-export default MemberService;
+export default UserService;
