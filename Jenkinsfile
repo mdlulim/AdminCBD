@@ -89,16 +89,16 @@ pipeline {
       steps {
         script {
           switch(JOB_NAME) {
-            case 'cbigold-api-develop':
+            case 'cbigold-admin-develop':
               application = "develop";
               break;
-            case 'cbigold-api-production':
+            case 'cbigold-admin-production':
               application = "production";
               break;
-            case 'cbigold-api-qa':
+            case 'cbigold-admin-qa':
               application = "qa";
               break;
-            case 'cbigold-api-staging':
+            case 'cbigold-admin-staging':
               application = "staging";
               break;
             default:
