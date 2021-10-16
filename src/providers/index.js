@@ -1,5 +1,8 @@
-import SessionProvider from './SessionProvider';
+//import SessionProvider from './SessionProvider';
+import AuthService from './AuthService';
+import GeoLocationService from './GeoLocationService';
 
 export {
-    SessionProvider,
+    AuthService,
+    GeoLocationService,
 };
