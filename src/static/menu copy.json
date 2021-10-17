@@ -46,6 +46,32 @@
         }]
     },
     {
+        "id": "messaging",
+        "title": "Messaging",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "link": "/messaging",
+        "icon": "i-Speach-Bubble-3",
+        "childitems": [{
+            "id": "inbox",
+            "title": "Inbox",
+            "link": "/inbox",
+            "icon": "i-Email"
+        }, {
+            "id": "chat",
+            "title": "Chat",
+            "link": "/chat",
+            "icon": "i-Speach-Bubble-3"
+        }]
+    },
+    {
+        "id": "reports",
+        "title": "Reports",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "link": "/reports",
+        "icon": "i-File-Chart",
+        "childitems": []
+    },
+    {
         "id": "configurations",
         "title": "Configurations",
         "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",

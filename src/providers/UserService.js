@@ -10,23 +10,23 @@ const headers = {
 
 class UserService {
 
-  static async getUsers() {
-    return await axios({
-      mode: 'no-cors',
-      method: 'GET',
-      headers: headers,
-      url: `${Config.API.BASE_URL}/admin/users`,
-    });
-  }
+    static async getUsers() {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/admin/users`,
+      });
+    }
 
-  static async getUser(id) {
-    return await axios({
-      mode: 'no-cors',
-      method: 'GET',
-      headers: headers,
-      url: `${Config.API.BASE_URL}/admin/users/${id}`,
-    });
-  }
+    static async getUser(id) {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/admin/users/${id}`,
+      });
+    }
 }
 
 export default UserService;
