@@ -15,7 +15,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/products`,
+      url: `${Config.API.BASE_URL}/admin/products`,
     });
   }
 
@@ -24,7 +24,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/products/${id}`,
+      url: `${Config.API.BASE_URL}/admin/products/${id}`,
     });
   }
 }

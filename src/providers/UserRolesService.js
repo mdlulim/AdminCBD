@@ -15,7 +15,7 @@ class UserRolesService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/groups`,
+      url: `${Config.API.BASE_URL}/admin/groups`,
     });
   }
 
@@ -24,7 +24,7 @@ class UserRolesService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/groups/${id}`,
+      url: `${Config.API.BASE_URL}/admin/groups/${id}`,
     });
   }
 }

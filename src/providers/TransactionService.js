@@ -15,7 +15,7 @@ class TransactionService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/transactions`,
+      url: `${Config.API.BASE_URL}/admin/transactions`,
     });
   }
 
@@ -24,7 +24,7 @@ class TransactionService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/transactions/${id}`,
+      url: `${Config.API.BASE_URL}/admin/transactions/${id}`,
     });
   }
 }

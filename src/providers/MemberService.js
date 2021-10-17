@@ -15,7 +15,7 @@ class MemberService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/members`,
+      url: `${Config.API.BASE_URL}/admin/members`,
     });
   }
 
@@ -24,7 +24,7 @@ class MemberService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/members/${id}`,
+      url: `${Config.API.BASE_URL}/admin/members/${id}`,
     });
   }
 }

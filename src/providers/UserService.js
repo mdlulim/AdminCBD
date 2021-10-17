@@ -15,7 +15,7 @@ class UserService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/users`,
+      url: `${Config.API.BASE_URL}/admin/users`,
     });
   }
 
@@ -24,7 +24,7 @@ class UserService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}:8082/admin/users/${id}`,
+      url: `${Config.API.BASE_URL}/admin/users/${id}`,
     });
   }
 }
