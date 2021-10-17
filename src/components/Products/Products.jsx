@@ -5,6 +5,7 @@ import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import DeleteProductAlert from './DeleteProductAlert';
+import { ProductService } from '../../providers';
 // styles
 const customStyles = {
    
@@ -70,6 +71,13 @@ export default function Products(props) {
 
 
     useMemo(() => {
+      ProductService.getProducts().then((res) => {
+        console.log(res.data.data.results)
+        const productlist = res.data.data.results;
+        setProducts(productlist);
+        setFilteredProducts(productlist);
+      });
+
         const productsList = [{
             productId: '109977001',
             name: 'Smart Contract Bundle',

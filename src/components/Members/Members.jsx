@@ -10,6 +10,7 @@ import DeleteAlert from './DeleteAlert';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { MemberService } from '../../providers';
 // styles
 const customStyles = {
    
@@ -72,6 +73,13 @@ export default function Members(props) {
     const history = useHistory();
 
     useMemo(() => {
+      MemberService.getMembers().then((res) => {
+        console.log(res.data.data.results)
+        const memberslist = res.data.data.results;
+        setMembers(memberslist);
+        setFilteredMembers(memberslist);
+      });
+
         const membersList = [{
             memberId: '109977041',
             first_name: 'Mduduzi',

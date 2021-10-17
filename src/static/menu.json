@@ -92,11 +92,8 @@
             "title": "Manage Forms",
             "link": "/forms",
             "icon": "i-Gear"
-        },{
-            "id": "configurations",
-            "title": "Configurations",
-            "link": "/configurations",
-            "icon": "i-Gears-2"
-        }]
+         }
+        
+    ]
     }
 ]

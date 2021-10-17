@@ -40,11 +40,10 @@ const Login = props => {
     setLoading(true);
     setDisabled(true);
     const form = event.currentTarget;
-    
+
     const user = form.username.value;
     const password = form.password.value;
 
-    
       const device = {
         browser: browserName,
         os_name: osName,
@@ -128,7 +127,7 @@ const Login = props => {
                                 >
                                     Sign In
                                 </button>
-                                { loading && <img style={loading_size} src={loader}/> }
+                                {/* { loading && <img style={loading_size} src={loader}/> } */}
                             </Form>
                             <div className="mt-3 text-center">
                                 <a
