@@ -26,6 +26,7 @@ import Users from 'pages/Configurations';
 import UserRoles from './pages/UserRoles';
 import Configurations from './pages/Configurations/Configurations';
 import Members from 'pages/Members';
+import Leads from 'pages/Leads';
 import WealthCreaters from 'pages/Members/WealthCreatersPage';
 import MemberDetails from 'pages/Members/MemberDetails';
 import Transactions from 'pages/Transactions';
@@ -60,6 +61,7 @@ const App = () => {
 					<Route exact path="/configurations/configurations" component={(props) => <Configurations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/forms" component={(props) => <FormsConfig config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/leads" component={(props) => <Leads config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/wealth-creaters" component={(props) => <WealthCreaters config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />

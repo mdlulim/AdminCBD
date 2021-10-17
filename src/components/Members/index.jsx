@@ -14,5 +14,5 @@ export default {
     Referals,
     BankDetails,
     DeleteAlert,
-    ModalChangeStatus
+    ModalChangeStatus,
 }

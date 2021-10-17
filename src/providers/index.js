@@ -5,6 +5,7 @@ import UserRolesService from './UserRolesService';
 import ProductService from './ProductService';
 import MemberService from './MemberService';
 import TransactionService from './TransactionService';
+import LeadService from './LeadService';
 
 export {
     AuthService,
@@ -13,4 +14,5 @@ export {
     ProductService,
     MemberService,
     TransactionService,
+    LeadService,
 };

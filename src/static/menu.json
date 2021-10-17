@@ -2,7 +2,7 @@
     {
         "id": "overview",
         "title": "Overview",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "description": "Dashboard",
         "link": "/overview",
         "icon": "i-Bar-Chart",
         "childitems": []
@@ -24,6 +24,13 @@
             "link": "/wealth-creaters",
             "icon": "i-MaleFemale"
         }]
+    },{
+        "id": "leads",
+        "title": "Leads",
+        "description": "Manage Leads",
+        "link": "/leads",
+        "icon": "i-MaleFemale",
+        "childitems": []
     },
     {
         "id": "transactions",
@@ -53,7 +60,7 @@
     {
         "id": "configurations",
         "title": "Configurations",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "description": "Configurations",
         "link": "/configurations",
         "icon": "i-Gears-2",
         "childitems": [{

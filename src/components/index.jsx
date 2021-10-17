@@ -13,6 +13,7 @@ import UserRoles from './UserRoles';
 import GroupProducts from './GroupProducts';
 import Configurations from './Configurations';
 import FormsConfig from './FormsConfig';
+import Leads from './Leads';
 
 export {
     Breadcrumb,
@@ -29,5 +30,6 @@ export {
     UserRoles,
     GroupProducts,
     Configurations,
-    FormsConfig
+    FormsConfig,
+    Leads
 };
