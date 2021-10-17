@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
@@ -21,6 +21,9 @@ const ModalChangeStatus = props => {
         { value: 'Blocked', label: 'Blocked' }
       ];
     const handleClose = () => setShow(false);
+    const updateMemberStatus = (event) => {
+        event.preventDefault();
+    }
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
             <Modal.Body>
@@ -32,7 +35,7 @@ const ModalChangeStatus = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success"> Update CBI Member Status</h3>
                         <hr />
-                        <form>
+                        <Form onSubmit={updateMemberStatus}>
                                 <div className="form-group">
                                     <label htmlFor="fullname">Full Names</label>
                                     {member ? 
@@ -101,7 +104,7 @@ const ModalChangeStatus = props => {
                                 </button>
                             </Col>
                             </Row>
-                            </form>
+                            </Form>
                     </Col>
                 </Row>
             </Modal.Body>

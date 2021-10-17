@@ -15,8 +15,13 @@
         "icon": "i-Business-ManWoman",
         "childitems": [{
             "id": "members",
-            "title": "Manage CBI Members",
+            "title": "Members",
             "link": "/members",
+            "icon": "i-MaleFemale"
+        },{
+            "id": "wealth-creaters",
+            "title": "Wealth Creaters",
+            "link": "/wealth-creaters",
             "icon": "i-MaleFemale"
         }]
     },

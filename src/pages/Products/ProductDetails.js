@@ -30,6 +30,7 @@ const ProductDetails = props => {
             }        
         });
     },[]);
+    
 	const profile = {
 		customerId: '109977041',
 		name: 'Mduduzi Mdluli',

@@ -64,7 +64,7 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Members(props) {
+export default function WealthCreaters(props) {
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
     const [members, setMembers] = useState([]);
@@ -205,11 +205,6 @@ const onSubmitChangeStatus= data => {
     setShowDelete(true);
   };
 
-  const countMembers = (type) =>{
-    const countTypes = this.props.movies.filter(movie => movie.media_type === type);
-    return countTypes.length;
-};
-
   const onSearchFilter = filterText => {
     const filteredItems = members.filter(item => (
       (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -228,7 +223,7 @@ const onSubmitChangeStatus= data => {
           <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedMember} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>CBI Members</span>
+                    <span>CBI Wealth Creaters</span>
                     <span className="flex-grow-1" />
                     <input
                     style={inputWith}

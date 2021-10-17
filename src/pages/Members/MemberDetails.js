@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Layout } from 'containers';
 import { Members, Transactions, Products } from 'components';
+import { MemberService } from '../../providers';
 
 const Image = () => {
     return (
@@ -17,7 +18,18 @@ const Image = () => {
 
 const MemberDetails = props => {
 	const breadcrumb = { heading: "Member Details" };
-	const [activeTab, setActiveTab] = useState('referals');
+    const [activeTab, setActiveTab] = useState('referals');
+    const [member, setMember] = useState({});
+
+    useMemo(() => {
+        const member_id = props.match.params.id;
+        MemberService.getMembers(member_id).then((response) =>{
+            if(response.data.data !== null){
+                console.log(response.data.data);
+                setMember(response.data.data);
+            }
+        });
+    },[]);
 	const profile = {
 		customerId: '109977041',
 		name: 'Mduduzi Mdluli',

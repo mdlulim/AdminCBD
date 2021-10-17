@@ -13,13 +13,13 @@ export default function Header(props) {
     const [showAlerts, setShowAlerts] = useState(false);
     const [token, setToken] = useState('');
 
-    useMemo(() => {
-        if(session.isValid){
-            setToken(session.payload.token);
-        }else{
-        window.location = '/login';
-        }
-    },[]);
+    // useMemo(() => {
+    //     if(session.isValid){
+    //         setToken(session.payload.token);
+    //     }else{
+    //     window.location = '/login';
+    //     }
+    // },[]);
 
     const toggleShowMenu = () => {
         setShowUserMenu(!showUserMenu);
