@@ -71,7 +71,7 @@ const AlertModal = props => {
                                         onClick={''}
                                         disabled={confirmButtonDisabled || processing}
                                     >
-                                    {processing ? 'Processing...' : 'Update'}
+                                    {processing ? 'Processing...' : 'Delete'}
                                 </button>
                             </Col>
                             </Row>

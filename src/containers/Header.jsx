@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { HashLinkContainer } from 'components';
+import {Session} from 'bc-react-session';
+import { AuthService } from '../providers';
+
+
+const session = Session.get();
+
 
 export default function Header(props) {
     const { toggleSidebarClass } = props;
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [showAlerts, setShowAlerts] = useState(false);
+    const [token, setToken] = useState('');
+
+    // useMemo(() => {
+    //     if(session.isValid){
+    //         setToken(session.payload.token);
+    //     }else{
+    //     window.location = '/login';
+    //     }
+    // },[]);
 
     const toggleShowMenu = () => {
         setShowUserMenu(!showUserMenu);
@@ -14,6 +29,13 @@ export default function Header(props) {
     const toggleShowAlert = () => {
         setShowAlerts(!showAlerts);
         setShowUserMenu(false);
+    };
+
+    const onLogout = () => {
+        if (AuthService.logout()){
+            // history.push('/login'); 
+            window.location = '/login';
+          }
     };
 
 	return (
@@ -153,7 +175,7 @@ export default function Header(props) {
                                 <a className="dropdown-item">My Profile</a>
                             </HashLinkContainer>
                             <a className="dropdown-item">Account Settings</a>
-                            <a className="dropdown-item" href="/login">Sign Out</a>
+                            <a className="dropdown-item" onClick={e => onLogout(e)}>Sign Out</a>
                         </div>
                     </div>
                 </div>

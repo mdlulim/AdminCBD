@@ -1,32 +1,29 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
 
-const ModalChangeStatus = props => {
-    const { show, setShow} = props;
+const ModalUpdateLead = props => {
+    const { show, setShow, lead} = props;
     const [statuses, setStatuses] = useState([]);
-    const [selectedRole, setSelectedRole] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
     useMemo(() => {
-        //setSelectedStatus({ value: member.status,  label: member.status });
+        //setSelectedStatus({ value: lead.status,  label: lead.status });
     }, []);
 
-    const rolessOptions = [
-        { value: '7563285', label: 'Platform Administrator' },
-        { value: '2345624', label: 'Training Administrator' },
-        { value: '9843444', label: 'EcoSystem Administrator' },
-        { value: '3645364', label: 'Super Administrator' }
-      ];
-      const statusOptions = [
+    const statusOptions = [
         { value: 'Active',  label: 'Active' },
+        { value: 'Pending', label: 'Pending' },
         { value: 'Blocked', label: 'Blocked' }
       ];
     const handleClose = () => setShow(false);
+    const updateLeadStatus = (event) => {
+        event.preventDefault();
+    }
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
             <Modal.Body>
@@ -36,37 +33,46 @@ const ModalChangeStatus = props => {
                         <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                     </Col>}
                     <Col xs={showIcon ? 10 : 12}>
-                        <h3 className="text-info"> Add New User Role</h3>
+                        <h3 className="text-success"> Update CBI Lead Status</h3>
                         <hr />
-                        <form>
+                        <Form onSubmit={updateLeadStatus}>
                                 <div className="form-group">
-                                    <label htmlFor="name">Name</label>
+                                    <label htmlFor="fullname">Full Names</label>
+                                    {lead ? 
                                     <input
                                         type="text"
-                                        id="role-name"
-                                        name="role-name"
+                                        id="fullname"
                                         className="form-control form-control-m"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="name">Label</label>
-                                    <input
-                                        type="text"
-                                        id="label"
-                                        name="label"
-                                        className="form-control form-control-m"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="description">Description</label>
-                                    <textarea
-                                        type="text"
-                                        id="description"
-                                        name="description"
-                                        className="form-control form-control-m"
+                                        value={lead.first_name+' '+lead.last_name}
+                                        disabled
                                     /> 
+                                    : ''}
                                 </div>
-                                {/* <div>
+                                <div className="form-group">
+                                    <label htmlFor="firstname">Id Number</label>
+                                    {lead ? 
+                                    <input
+                                        type="text"
+                                        id="firstname"
+                                        className="form-control form-control-m"
+                                        value={lead.id_number}
+                                        disabled
+                                    />
+                                    : ''}
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="email">Email Address</label>
+                                    {lead ? 
+                                    <input
+                                        type="text"
+                                        id="email"
+                                        className="form-control form-control-m"
+                                        value={lead.email}
+                                        disabled
+                                    />
+                                    : ''}
+                                </div>
+                                <div>
                                 <label htmlFor="email">Select Status</label>
                                 <Select
                                     id="status"
@@ -76,7 +82,7 @@ const ModalChangeStatus = props => {
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
                                     />
-                                </div> */}
+                                </div>
                                 <hr />
                                 <Row>
                         <Col md={6}>
@@ -90,15 +96,15 @@ const ModalChangeStatus = props => {
                             </Col>
                             <Col md={6} >
                             <button
-                                        className="btn btn-info float-right"
+                                        className="btn btn-success float-right"
                                         onClick={confirmButton.onClick}
                                         disabled={confirmButtonDisabled || processing}
                                     >
-                                    {processing ? 'Processing...' : 'Add New'}
+                                    {processing ? 'Processing...' : 'Update'}
                                 </button>
                             </Col>
                             </Row>
-                            </form>
+                            </Form>
                     </Col>
                 </Row>
             </Modal.Body>
@@ -106,7 +112,7 @@ const ModalChangeStatus = props => {
     );
 };
 
-ModalChangeStatus.propTypes = {
+ModalUpdateLead.propTypes = {
     show: PropTypes.bool.isRequired,
     setShow: PropTypes.func.isRequired,
     title: PropTypes.string,
@@ -119,7 +125,7 @@ ModalChangeStatus.propTypes = {
     size: PropTypes.string,
 };
 
-ModalChangeStatus.defaultProps = {
+ModalUpdateLead.defaultProps = {
     title: 'Confirm',
     body: <p />,
     processing: false,
@@ -133,4 +139,4 @@ ModalChangeStatus.defaultProps = {
     },
 };
 
-export default ModalChangeStatus;
+export default ModalUpdateLead;

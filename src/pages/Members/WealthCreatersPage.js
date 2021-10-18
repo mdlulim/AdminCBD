@@ -4,8 +4,8 @@ import { Layout } from 'containers';
 import { Members } from 'components';
 import { MemberService } from '../../providers';
 
-const MembersList = props => {
-    const breadcrumb = { heading: "CBI Members" };
+const WealthCreatersPage = props => {
+    const breadcrumb = { heading: "Wealth Creaters" };
     const [members, setMembers] = useState([]);
 
     useMemo(() => {
@@ -68,7 +68,7 @@ const MembersList = props => {
                         <CardBody className="card-body text-center">
                             <i className="i-Business-ManWoman" />
                             <div className="content">
-                                <p className="text-muted mt-2 mb-0">All Members</p>
+                                <p className="text-muted mt-2 mb-0">All Wealth Creaters</p>
                                 <p className="text-primary text-24 line-height-1 mb-2">{members.length}</p>
                             </div>
                         </CardBody>
@@ -79,7 +79,7 @@ const MembersList = props => {
                         <CardBody className="card-body text-center">
                             <i className="i-Business-ManWoman" />
                             <div className="content">
-                                <p className="text-muted mt-2 mb-0">Active Members</p>
+                                <p className="text-muted mt-2 mb-0">Active  Wealth Creaters</p>
                                 <p className="text-success text-24 line-height-1 mb-2">{countMembers('Active')}</p>
                             </div>
                         </CardBody>
@@ -90,7 +90,7 @@ const MembersList = props => {
                         <CardBody className="card-body text-center">
                             <i className="i-Business-ManWoman" />
                             <div className="content">
-                                <p className="text-muted mt-2 mb-0">Panding  Members</p>
+                                <p className="text-muted mt-2 mb-0">Panding  Wealth Creaters</p>
                                 <p className="text-warning text-24 line-height-1 mb-2">{countMembers('Pending')}</p>
                             </div>
                         </CardBody>
@@ -101,7 +101,7 @@ const MembersList = props => {
                         <CardBody className="card-body text-center">
                             <i className="i-Business-ManWoman" />
                             <div className="content">
-                                <p className="text-muted mt-2 mb-0">Blocked Members</p>
+                                <p className="text-muted mt-2 mb-0">Blocked Wealth Creaters</p>
                                 <p className="text-danger text-24 line-height-1 mb-2">{countMembers('Blocked')}</p>
                             </div>
                         </CardBody>
@@ -111,7 +111,7 @@ const MembersList = props => {
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
 				<Col md={12}>
-                    <Members.Members />
+                    <Members.WealthCreaters />
                 </Col>
 				</Col>
 			</Row>
@@ -119,4 +119,4 @@ const MembersList = props => {
 	);
 };
 
-export default MembersList;
+export default WealthCreatersPage;

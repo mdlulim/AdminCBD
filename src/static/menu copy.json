@@ -2,7 +2,7 @@
     {
         "id": "overview",
         "title": "Overview",
-        "description": "Dashboard",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
         "link": "/overview",
         "icon": "i-Bar-Chart",
         "childitems": []
@@ -15,22 +15,10 @@
         "icon": "i-Business-ManWoman",
         "childitems": [{
             "id": "members",
-            "title": "Members",
+            "title": "Manage CBI Members",
             "link": "/members",
             "icon": "i-MaleFemale"
-        },{
-            "id": "wealth-creaters",
-            "title": "Wealth Creaters",
-            "link": "/wealth-creaters",
-            "icon": "i-MaleFemale"
         }]
-    },{
-        "id": "leads",
-        "title": "Leads",
-        "description": "Manage Leads",
-        "link": "/leads",
-        "icon": "i-MaleFemale",
-        "childitems": []
     },
     {
         "id": "transactions",
@@ -58,9 +46,35 @@
         }]
     },
     {
+        "id": "messaging",
+        "title": "Messaging",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "link": "/messaging",
+        "icon": "i-Speach-Bubble-3",
+        "childitems": [{
+            "id": "inbox",
+            "title": "Inbox",
+            "link": "/inbox",
+            "icon": "i-Email"
+        }, {
+            "id": "chat",
+            "title": "Chat",
+            "link": "/chat",
+            "icon": "i-Speach-Bubble-3"
+        }]
+    },
+    {
+        "id": "reports",
+        "title": "Reports",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "link": "/reports",
+        "icon": "i-File-Chart",
+        "childitems": []
+    },
+    {
         "id": "configurations",
         "title": "Configurations",
-        "description": "Configurations",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
         "link": "/configurations",
         "icon": "i-Gears-2",
         "childitems": [{

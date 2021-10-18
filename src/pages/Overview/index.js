@@ -8,29 +8,40 @@ export default function OverviewPage(props) {
     return (
         <Layout {...props} breadcrumb={breadcrumb}>
             <Row>
-                <Col lg={4} md={6} sm={6}>
+                <Col lg={3} md={6} sm={6}>
                     <Card className="card-icon-bg card-icon-bg-primary o-hidden mb-4">
                         <CardBody className="card-body text-center">
                             <i className="i-Money" />
                             <div className="content">
                                 <p className="text-muted mt-2 mb-0">Transactions</p>
-                                <p className="text-primary text-24 line-height-1 mb-2">29</p>
+                                <p className="text-primary text-24 line-height-1 mb-2">4890</p>
                             </div>
                         </CardBody>
                     </Card>
                 </Col>
-                <Col lg={4} md={6} sm={6}>
+                <Col lg={3} md={6} sm={6}>
                     <Card className="card-icon-bg card-icon-bg-primary o-hidden mb-4">
                         <CardBody className="card-body text-center">
                             <i className="i-Business-ManWoman" />
                             <div className="content">
                                 <p className="text-muted mt-2 mb-0">Members</p>
-                                <p className="text-primary text-24 line-height-1 mb-2">48</p>
+                                <p className="text-primary text-24 line-height-1 mb-2">5432</p>
                             </div>
                         </CardBody>
                     </Card>
                 </Col>
-                <Col lg={4} md={6} sm={6}>
+                <Col lg={3} md={6} sm={6}>
+                    <Card className="card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                        <CardBody className="card-body text-center">
+                            <i className="i-Business-ManWoman" />
+                            <div className="content">
+                                <p className="text-muted mt-2 mb-0">Wealth-Creaters</p>
+                                <p className="text-primary text-24 line-height-1 mb-2">189</p>
+                            </div>
+                        </CardBody>
+                    </Card>
+                </Col>
+                <Col lg={3} md={6} sm={6}>
                     <Card className="card-icon-bg card-icon-bg-primary o-hidden mb-4">
                         <CardBody className="card-body text-center">
                             <i className="i-Shopping-Bag" />
@@ -88,8 +99,8 @@ export default function OverviewPage(props) {
                             labels: ['Deposit', 'Withdrawals', 'Rejected', 'Pending', 'Completed'],
                             datasets: [
                             {
-                                label: '# of Leads',
-                                data: [12, 19, 10, 5, 9],
+                                label: 'ZAR ',
+                                data: [7989000, 5087600, 150000, 350000, 4878870],
                                 backgroundColor: [
                                 '#86abc9',
                                 '#2196f3',

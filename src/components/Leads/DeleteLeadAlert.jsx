@@ -4,10 +4,10 @@ import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 
-const AlertModal = props => {
+const DeleteLeadAlert = props => {
     const {
         title,
-        member,
+        lead,
         show,
         type,
         setShow,
@@ -41,14 +41,14 @@ const AlertModal = props => {
                         <FeatherIcon icon={icon} width="48" height="48" classes="mg-t-0" />
                     </Col>
                     <Col xs={10}>
-                        <h3 className="text-danger">Delete Member</h3>
+                        <h3 className="text-danger">Delete Lead</h3>
                         <div className="form-group">
                                     <label htmlFor="fullname">Full Names</label>
                                     <input
                                         type="text"
                                         id="fullname"
                                         className="form-control form-control-m"
-                                        value={member.first_name+' '+member.last_name}
+                                        value={lead.first_name+' '+lead.last_name}
                                         disabled
                                     />
                                 </div>
@@ -58,7 +58,7 @@ const AlertModal = props => {
                                         type="text"
                                         id="firstname"
                                         className="form-control form-control-m"
-                                        value={member.id_number}
+                                        value={lead.id_number}
                                         disabled
                                     />
                                 </div>
@@ -68,12 +68,12 @@ const AlertModal = props => {
                                         type="text"
                                         id="email"
                                         className="form-control form-control-m"
-                                        value={member.email}
+                                        value={lead.email}
                                         disabled
                                     />
                                 </div>
                                 {''}
-                        <h5 className="text-danger">Are you sure you want to delete this member?</h5>
+                        <h5 className="text-danger">Are you sure you want to delete this lead?</h5>
                         {''}
                         <Row>
                         <Col md={6}>
@@ -103,7 +103,7 @@ const AlertModal = props => {
     );
 };
 
-AlertModal.propTypes = {
+DeleteLeadAlert.propTypes = {
     show: PropTypes.bool.isRequired,
     setShow: PropTypes.func.isRequired,
     title: PropTypes.string,
@@ -115,7 +115,7 @@ AlertModal.propTypes = {
     closeButtonText: PropTypes.string,
 };
 
-AlertModal.defaultProps = {
+DeleteLeadAlert.defaultProps = {
     title: 'Alert',
     body: <p />,
     type: 'warning',
@@ -123,4 +123,4 @@ AlertModal.defaultProps = {
     closeButtonText: 'OK',
 };
 
-export default AlertModal;
+export default DeleteLeadAlert;

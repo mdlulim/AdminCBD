@@ -6,17 +6,31 @@ import { EditorState } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Select from 'react-select';
+import { ProductService } from '../../providers';
+
 
 const ProductDetails = props => {
 	const breadcrumb = { heading: "Product Details" };
     const [activeTab, setActiveTab] = useState('referals');
     const [selectedGroup, setSelectedGroup] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
+    const [product, setProduct] = useState({});
     const { processing,confirmButtonDisabled, confirmButton,} = props;
     const [selectedRebalancingFrequency, setSelectedRebalancingFrequency] = useState('');
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
 
+    useMemo(() => {
+        const product_id = props.match.params.id;
+        ProductService.getProduct(product_id).then((response) =>{
+       
+            if(response.data.data !== null){
+                console.log(response.data.data);
+                setProduct(response.data.data);
+            }        
+        });
+    },[]);
+    
 	const profile = {
 		customerId: '109977041',
 		name: 'Mduduzi Mdluli',
