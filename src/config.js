@@ -1,8 +1,8 @@
 var Config = {};
 Config.STAGE = process.ENV ? process.ENV : 'dev';
 Config.API = {
-    BASE_URL: 'http://admin-service:8080',
-    BASE_URL_LOGIN: 'http://auth-service:8080',
+    BASE_URL: 'dev.cbiglobal.io/v1/admin',
+    BASE_URL_LOGIN: 'https://dev.cbiglobal.io/v1/auth',
 };
 
 export default Config;

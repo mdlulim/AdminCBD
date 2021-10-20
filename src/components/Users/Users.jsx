@@ -217,11 +217,12 @@ const onSubmitUpdateUser= data => {
           <DeleteAdminUserAlert show={showDelete} setShow={setShowDelete} user={selectedUser} />
           <ModalResendPassword show={showResend} setShow={setShowResend} user={selectedUser} />
           <ModalAddNewUser show={showAddNew} setShow={setShowAddNew} />
-          
+
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>Admin Users</span>
-                    <span className="flex-grow-1" /><input
+                    <span className="flex-grow-1" />
+                    <input
                         style={inputWith}
                         type="text"
                         name="search"

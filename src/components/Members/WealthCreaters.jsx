@@ -173,17 +173,16 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
       }}
     ><Edit width={16} height={16}/>
     </a></spam>
-    <spam style={iconPadding}><a
+    {/* <spam style={iconPadding}><a
       href={`#`}
       className="btn btn-lg btn-danger btn-sm"
       onClick={e => {
         e.preventDefault();
-    
         onSubmitDeleteMember(row);
       }}
     >
       <UserMinus width={16} height={16}/>
-    </a></spam>
+    </a></spam> */}
   </div>
 }];
 
