@@ -53,7 +53,7 @@ pipeline {
     stage('Update GitOps repo for ArgoCD') {
       steps {
         script {
-            git branch: 'feature/1884-cbigold-react', credentialsId: '38f1358e-7a55-488b-b1ee-40eb0cc6b3f4', url: 'https://github.com/cbiglobal/dev_ops.git'
+            git branch: 'develop', credentialsId: '38f1358e-7a55-488b-b1ee-40eb0cc6b3f4', url: 'https://github.com/cbiglobal/dev_ops.git'
             script {
               switch(JOB_NAME) {
                 case 'cbigold-admin-develop':
@@ -136,7 +136,6 @@ pipeline {
         BUILD_TRIGGER_BY = "${currentBuild.getBuildCauses()[0].shortDescription}".substring(26)
       }
       echo 'I will always say hello in the console.'
-      echo "${currentBuild.getBuildCauses()}"
       slackSend channel: '#proj-new-website',
         color: COLOR_MAP[currentBuild.currentResult],
         message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} by ${BUILD_TRIGGER_BY}\n More info at: ${env.BUILD_URL}"

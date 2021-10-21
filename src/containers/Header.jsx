@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, useRef, Fragment, useEffect } from 'react';
 import { HashLinkContainer } from 'components';
 import {Session} from 'bc-react-session';
 import { AuthService } from '../providers';
-
+import moment from 'moment';
 
 const session = Session.get();
 
@@ -13,13 +13,78 @@ export default function Header(props) {
     const [showAlerts, setShowAlerts] = useState(false);
     const [token, setToken] = useState('');
 
-    useMemo(() => {
+    const [events, setEvents] = useState(['click', 'load', 'scroll']);
+    const [second, setSecond] = useState(0);
+    const [isAuthenticated, setIsAuthenticated] =useState(true);
+
+    let timeStamp;
+    let warningInactiveInterval = useRef();
+    let startTimerInterval = useRef();
+
+    // start inactive check
+    let timeChecker = () => {
+        startTimerInterval.current = setTimeout(() => {
+        let storedTimeStamp = sessionStorage.getItem('lastTimeStamp');
+        warningInactive(storedTimeStamp);
+        }, 60000);
+    };
+
+    // warning timer
+    let warningInactive = (timeString) => {
+        clearTimeout(startTimerInterval.current);
+
+        warningInactiveInterval.current = setInterval(() => {
+        const maxTime = 2; // Maximum ideal time given before logout 
+        const popTime = 1; // remaining time (notification) left to logout.
+
+        const diff = moment.duration(moment().diff(moment(timeString)));
+        const minPast = diff.minutes();
+        const leftSecond = 60 - diff.seconds();
+
+        if (minPast === popTime) {
+            setSecond(leftSecond);
+        }
+
+        if (minPast === maxTime) {
+            clearInterval(warningInactiveInterval.current);
+            sessionStorage.removeItem('lastTimeStamp');
+            // your logout function here
+        }
+        }, 1000);
+    };
+
+     // reset interval timer
+    let resetTimer = useCallback(() => {
+        clearTimeout(startTimerInterval.current);
+        clearInterval(warningInactiveInterval.current);
+
+        if (isAuthenticated) {
+            timeStamp = moment();
+            sessionStorage.setItem('lastTimeStamp', timeStamp);
+        } else {
+            clearInterval(warningInactiveInterval.current);
+            sessionStorage.removeItem('lastTimeStamp');
+        }
+        timeChecker();
+    }, [isAuthenticated]);
+
+
+    useEffect(() => {
         if(session.isValid){
             setToken(session.payload.token);
+            // Run the timeChecker
+            timeChecker();
+            return () => {
+                clearTimeout(startTimerInterval.current);
+            };
         }else{
         window.location = '/login';
         }
-    },[]);
+
+        events.forEach((event) => {
+            window.addEventListener(event, resetTimer);
+        });
+    },[resetTimer, events, timeChecker]);
 
     const toggleShowMenu = () => {
         setShowUserMenu(!showUserMenu);
