@@ -1,0 +1,185 @@
+{
+    "main": [
+        {
+            "id": "dashboard",
+            "title": "Dashboard",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/dashboard",
+            "icon": "li-home",
+            "childitems": []
+        },
+        {
+            "id": "members",
+            "title": "Members",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/members",
+            "icon": "li-users",
+            "childitems": [
+                {
+                    "id": "leads",
+                    "title": "Leads",
+                    "link": "/leads",
+                    "icon": null
+                },
+                {
+                    "id": "members",
+                    "title": "Members",
+                    "link": "",
+                    "icon": null
+                },
+                {
+                    "id": "wealth-creators",
+                    "title": "Wealth Creators",
+                    "link": "/wealth-creators",
+                    "icon": null
+                }
+            ]
+        },
+        {
+            "id": "products",
+            "title": "Products",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/products",
+            "icon": "li-layers",
+            "childitems": []
+        },
+        {
+            "id": "transactions",
+            "title": "Transactions",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/transactions",
+            "icon": "li-cash-dollar",
+            "childitems": [
+                {
+                    "id": "deposits",
+                    "title": "Deposits",
+                    "link": "/deposits",
+                    "icon": null
+                },
+                {
+                    "id": "withdrawals",
+                    "title": "Withdrawals",
+                    "link": "/withdrawals",
+                    "icon": null
+                }
+            ]
+        },
+        {
+            "id": "reports",
+            "title": "Reports",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/reports",
+            "icon": "li-chart-growth",
+            "childitems": []
+        }
+    ],
+    "system": [
+        {
+            "id": "accounts",
+            "title": "Accounts",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/accounts",
+            "icon": "li-drawers2",
+            "childitems": [
+                {
+                    "id": "banks",
+                    "title": "Bank Accounts",
+                    "link": "/banks",
+                    "icon": null
+                },
+                {
+                    "id": "crypto",
+                    "title": "Crypto Accounts",
+                    "link": "/crypto",
+                    "icon": null
+                }
+            ]
+        },
+        {
+            "id": "users",
+            "title": "Users",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/users",
+            "icon": "li-users2",
+            "childitems": [
+                {
+                    "id": "roles",
+                    "title": "Roles",
+                    "link": "/roles",
+                    "icon": null
+                },
+                {
+                    "id": "users",
+                    "title": "Users",
+                    "link": "",
+                    "icon": null
+                }
+            ]
+        },
+        {
+            "id": "configurations",
+            "title": "Configurations",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/configurations",
+            "icon": "li-equalizer",
+            "childitems": [
+                {
+                    "id": "general",
+                    "title": "General",
+                    "link": "",
+                    "icon": null
+                },
+                {
+                    "id": "forms",
+                    "title": "Forms",
+                    "link": "/forms",
+                    "icon": null
+                },
+                {
+                    "id": "countries",
+                    "title": "Countries",
+                    "link": "/countries",
+                    "icon": null
+                },
+                {
+                    "id": "currencies",
+                    "title": "Currencies",
+                    "link": "/currencies",
+                    "icon": null
+                },
+                {
+                    "id": "tiers",
+                    "title": "Tiers",
+                    "link": "/tiers",
+                    "icon": null
+                }
+            ]
+        }
+    ],
+    "content": [
+        {
+            "id": "pages",
+            "title": "Pages",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/pages",
+            "icon": "li-papers",
+            "childitems": []
+        },
+        {
+            "id": "news",
+            "title": "News",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/news",
+            "icon": "li-news",
+            "childitems": []
+        },
+        {
+            "id": "faqs",
+            "title": "FAQs",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/faqs",
+            "icon": "li-bubble-question",
+            "childitems": []
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+.invert .navigation > ul > li.active > a .icon {
+    color: $primary;
+}
+
+.navigation--condensed ul > li.active > a:before {
+    background-color: $primary;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: $primary;
+    border-color: $primary;
+}
+
+.btn {
+    &.btn-primary {
+        background-color: $primary;
+        border-color: $primary;
+
+        &:hover {
+            background-color: $gold-lighter;
+            border-color: $gold-lighter;
+        }
+    }
+}
+
+a {
+    &:hover {
+        color: $gold-lighter;
+    }
+}

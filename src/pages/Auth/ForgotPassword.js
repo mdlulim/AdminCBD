@@ -2,7 +2,7 @@ import React from 'react';
 import { Col } from 'reactstrap';
 import { AuthPages } from 'containers';
 
-export default function LoginPage(props) {
+export default function ForgotPassword(props) {
     return (
         <AuthPages {...props}>
             <a href="/" className="logo-holder logo-holder--lg logo-holder--wide">
@@ -15,35 +15,13 @@ export default function LoginPage(props) {
             </p>
             <form autoComplete="off">
                 <div className="form-group">
-                    <label>Username</label>
+                    <label>Email address</label>
                     <input type="text" className="form-control" placeholder="Email address" />
                 </div>
-                <div className="form-group margin-bottom-20">
-                    <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Your password" autoComplete="new-password" />
-                </div>
                 <div className="form-group margin-bottom-30">
-                    <div className="form-row">
-                        <div className="col-6">
-                            <label className="custom-control custom-checkbox">
-                                <input type="checkbox" className="custom-control-input" checked="" />
-                                <span className="custom-control-label">Remember me</span>
-                            </label>
-                        </div>
-                        <div className="col-6 text-right">
-                            <a href="/forgot-password">Forgot password?</a>
-                        </div>
-                    </div>
-                </div>
-                <div className="form-group margin-bottom-30">
-                    <div className="form-row">
-                        <Col xs={2} />
-                        <Col xs={8}>
-                            <button className="btn btn-secondary btn-block">
-                                Login to account
-                            </button>
-                        </Col>
-                    </div>
+                    <button className="btn btn-secondary btn-block">
+                        Send Request
+                    </button>
                 </div>
             </form>
             <div className="divider" />

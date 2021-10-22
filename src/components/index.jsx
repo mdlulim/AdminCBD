@@ -1,4 +1,6 @@
 import Breadcrumb from './Breadcrumb';
+import Common from './Common';
+import Dashboard from './Dashboard';
 import FeatherIcon from './FeatherIcon';
 import Form from './Form';
 import HashLinkContainer from './HashLinkContainer';
@@ -8,12 +10,16 @@ import Users from './Users';
 import Members from './Members';
 import MemberDetails from './Members';
 import Transactions from './Transactions';
+import PageHeading from './PageHeading';
+import Pagination from './Pagination';
 import Products from './Products';
 import UserRoles from './UserRoles';
 import GroupProducts from './GroupProducts';
 
 export {
     Breadcrumb,
+    Common,
+    Dashboard,
     FeatherIcon,
     Form,
     HashLinkContainer,
@@ -23,6 +29,8 @@ export {
     Users,
     Members,
     MemberDetails,
+    PageHeading,
+    Pagination,
     Products,
     UserRoles,
     GroupProducts
