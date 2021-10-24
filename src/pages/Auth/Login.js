@@ -1,8 +1,63 @@
-import React from 'react';
-import { Col } from 'reactstrap';
+import React, { useState, useMemo } from 'react';
+import { Col, Alert } from 'reactstrap';
+import { browserName, osName, osVersion } from 'react-device-detect';
+import { Session } from 'bc-react-session';
+import AuthAervice from '../../providers/AuthService';
 import { AuthPages } from 'containers';
 
 export default function LoginPage(props) {
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [disabled, setDisabled] = useState(false);
+        // when the form is submitted
+  const onSubmit = (event) => {
+        event.preventDefault();
+        setLoading(true);
+        setDisabled(true);
+        const form = event.currentTarget;
+
+        const user = form.username.value;
+        const password = form.password.value;
+
+        const device = {
+            browser: browserName,
+            os_name: osName,
+            os_version: osVersion,
+        };
+        const geoLocation= {
+                IPv4: "123456"
+            };
+            AuthAervice.login(user, password, device,geoLocation).then((response) =>{
+                console.log(response);
+            if(response.data.success === true){
+                console.log(response.data.data.token)
+                let sessionDuration = 864000;
+                Session.start({
+                    payload: {
+                        admin: response.data.data.admin,
+                        token: response.data.data.token
+                    },
+                    expiration: sessionDuration 
+                });
+            window.location = '/dashboard';
+            }else{
+                setLoading(false);
+                setDisabled(false);
+                setError(response.data.message);
+            }
+        console.log(response);
+        }).catch(error => {
+            console.log(error);
+            setError(error.message);
+            setLoading(false);
+            setDisabled(false);
+        });
+
+        //const geoLocation = GeoLocationService.getClientLocation();
+        //console.log('');
+        //console.log(geoLocation);
+    }
+
     return (
         <AuthPages {...props}>
             <a href="/" className="logo-holder logo-holder--lg logo-holder--wide">
@@ -13,14 +68,14 @@ export default function LoginPage(props) {
             <p className="caption text-center margin-bottom-30">
                 The KEY to the 4th Industrial Revolution
             </p>
-            <form autoComplete="off">
+            <form onSubmit={onSubmit}>
                 <div className="form-group">
                     <label>Username</label>
-                    <input type="text" className="form-control" placeholder="Email address" />
+                    <input type="text" name="username" id="username" className="form-control" placeholder="Email address" />
                 </div>
                 <div className="form-group margin-bottom-20">
                     <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Your password" autoComplete="new-password" />
+                    <input type="password" name="password" id="password" className="form-control" placeholder="Your password" autoComplete="new-password" />
                 </div>
                 <div className="form-group margin-bottom-30">
                     <div className="form-row">
@@ -35,11 +90,14 @@ export default function LoginPage(props) {
                         </div>
                     </div>
                 </div>
+                {error ? <Alert className="alert alert-danger" color="danger" id="error_message_div" >
+                            {error}
+                  </Alert>: ''}
                 <div className="form-group margin-bottom-30">
                     <div className="form-row">
                         <Col xs={2} />
                         <Col xs={8}>
-                            <button className="btn btn-secondary btn-block">
+                            <button disabled={disabled} type="submit" className="btn btn-secondary btn-block">
                                 Login to account
                             </button>
                         </Col>

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Common, Pagination, Members } from 'components';
+import { Common, Pagination } from 'components';
 import { AuthLayout } from 'containers';
-
 
 export default function MembersPage(props) {
     return (
@@ -54,8 +53,7 @@ export default function MembersPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                <Members.Members />
-                    {/* <div className="table-responsive">
+                    <div className="table-responsive">
                         <table className="table table-indent-rows margin-bottom-0">
                             <thead>
                                 <tr>
@@ -136,8 +134,12 @@ export default function MembersPage(props) {
                                 </tr>
                             </tbody>
                         </table>
-                    </div> */}
-                    
+                    </div>
+                    <div className="form-row margin-top-10">
+                        <Col xs={12} className="text-center margin-auto">
+                            <Pagination />
+                        </Col>
+                    </div>
                 </CardBody>
             </Card>
         </AuthLayout>

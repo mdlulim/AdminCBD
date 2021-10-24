@@ -6,7 +6,6 @@ import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
 import DeleteAlert from './DeleteAlert';
-import { MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -73,50 +72,43 @@ export default function Members(props) {
     const history = useHistory();
 
     useMemo(() => {
-      console.log('members')
-      MemberService.getMembers().then((res) => {
-        console.log(res.data.data.results)
-        const memberslist = res.data.data.results;
-        setMembers(memberslist);
-        setFilteredMembers(memberslist);
-      });
-    //     const membersList = [{
-    //         memberId: '109977041',
-    //         first_name: 'Mduduzi',
-    //         last_name: 'Mdluli',
-    //         username: 'JSmith',
-    //         email: 'example1@demo.com',
-    //         id_number: '9103025869089',
-    //         country: 'South Africa',
-    //         level: 'General',
-    //         created: 'just now',
-    //         status: 'Active',
-    //     }, {
-    //         memberId: '109977042',
-    //         first_name: 'Msizi',
-    //         last_name: 'Mpanza',
-    //         username: 'MsiziM',
-    //         email: 'example2@demo.com',
-    //         id_number: '9103025869084',
-    //         country: 'Namibia',
-    //         level: 'Wealth Creator',
-    //         created: '2 mins ago',
-    //         status: 'Pending',
-    //     }, {
-    //         memberId: '109977043',
-    //         first_name: 'Zungu',
-    //         last_name: 'Zungu',
-    //         last_name: 'ZunguAmanda',
-    //         username: 'McCallJ',
-    //         id_number: '9103025869085',
-    //         email: 'example3@demo.com',
-    //         country: 'South Africa',
-    //         level: 'General',
-    //         created: '5 mins ago',
-    //         status: 'Blocked',
-    //     }];
-    //  setMembers(membersList);
-    //  setFilteredMembers(membersList);
+        const membersList = [{
+            memberId: '109977041',
+            first_name: 'Mduduzi',
+            last_name: 'Mdluli',
+            username: 'JSmith',
+            email: 'example1@demo.com',
+            id_number: '9103025869089',
+            country: 'South Africa',
+            level: 'General',
+            created: 'just now',
+            status: 'Active',
+        }, {
+            memberId: '109977042',
+            first_name: 'Msizi',
+            last_name: 'Mpanza',
+            username: 'MsiziM',
+            email: 'example2@demo.com',
+            id_number: '9103025869084',
+            country: 'Namibia',
+            level: 'Wealth Creator',
+            created: '2 mins ago',
+            status: 'Pending',
+        }, {
+            memberId: '109977043',
+            first_name: 'Zungu',
+            last_name: 'Zungu',
+            last_name: 'ZunguAmanda',
+            username: 'McCallJ',
+            id_number: '9103025869085',
+            email: 'example3@demo.com',
+            country: 'South Africa',
+            level: 'General',
+            created: '5 mins ago',
+            status: 'Blocked',
+        }];
+     setMembers(membersList);
+     setFilteredMembers(membersList);
 
 
       }, []);
@@ -159,19 +151,30 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     cell: row => <div>
     <spam style={iconPadding}><a
       href={`members/${row.memberId}`}
-      className="btn btn-secondary btn-sm btn-icon ml-2"
+      className="btn btn-lg btn-primary btn-sm"
     >
-         <span className="fa fa-eye" />
+        <Eye width={16} height={16}/>
     </a></spam>
     <spam style={iconPadding}>
       <a
       href={`#`}
-      className="btn btn-light btn-sm btn-icon"
+      className="btn btn-lg btn-info btn-sm"
       onClick={e => {
         e.preventDefault();
         onSubmitChangeStatus(row);
       }}
-    > <span className="fa fa-pencil" />
+    ><Edit width={16} height={16}/>
+    </a></spam>
+    <spam style={iconPadding}><a
+      href={`#`}
+      className="btn btn-lg btn-danger btn-sm"
+      onClick={e => {
+        e.preventDefault();
+    
+        onSubmitDeleteMember(row);
+      }}
+    >
+      <UserMinus width={16} height={16}/>
     </a></spam>
   </div>
 }];
@@ -212,7 +215,7 @@ const onSubmitChangeStatus= data => {
           <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedMember} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>CBI Members</span>
+                    <span>Leads</span>
                     <span className="flex-grow-1" />
                     <input
                     style={inputWith}

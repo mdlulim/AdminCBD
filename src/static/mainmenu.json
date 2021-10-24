@@ -124,15 +124,15 @@
             "icon": "li-equalizer",
             "childitems": [
                 {
-                    "id": "general",
-                    "title": "General",
-                    "link": "",
+                    "id": "users",
+                    "title": "Users",
+                    "link": "/users",
                     "icon": null
                 },
                 {
-                    "id": "forms",
-                    "title": "Forms",
-                    "link": "/forms",
+                    "id": "roles",
+                    "title": "User Roles",
+                    "link": "/roles",
                     "icon": null
                 },
                 {
@@ -151,6 +151,11 @@
                     "id": "tiers",
                     "title": "Tiers",
                     "link": "/tiers",
+                    "icon": null
+                },{
+                    "id": "settings",
+                    "title": "Settings",
+                    "link": "/settings",
                     "icon": null
                 }
             ]
