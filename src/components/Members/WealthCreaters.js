@@ -5,7 +5,6 @@ import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
-import DeleteAlert from './DeleteAlert';
 import { MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
@@ -64,24 +63,24 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Members(props) {
-  const [show, setShow] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
-    const [members, setMembers] = useState([]);
-    const [filteredMembers, setFilteredMembers] = useState([]);
-    const [selectedMember, setSelectedMember] = useState({});
+export default function WealthCreaters(props) {
+    const [show, setShow] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [wealthCreaters, setWealthCreaters] = useState([]);
+    const [filteredWealthCreaters, setFilteredWealthCreaters] = useState([]);
+    const [selectedWealthCreater, setSelectedWealthCreater] = useState({});
     const history = useHistory();
 
     useMemo(() => {
-      console.log('members')
-      MemberService.getMembers().then((res) => {
+      console.log('wealthCreaters')
+      MemberService.getWealthCreaters().then((res) => {
         console.log(res.data.data.results)
-        const memberslist = res.data.data.results;
-        setMembers(memberslist);
-        setFilteredMembers(memberslist);
+        const wealthCreaterslist = res.data.data.results;
+        setWealthCreaters(wealthCreaterslist);
+        setFilteredWealthCreaters(wealthCreaterslist);
       });
-    //     const membersList = [{
-    //         memberId: '109977041',
+    //     const wealthCreatersList = [{
+    //         wealthCreaterId: '109977041',
     //         first_name: 'Mduduzi',
     //         last_name: 'Mdluli',
     //         username: 'JSmith',
@@ -92,7 +91,7 @@ export default function Members(props) {
     //         created: 'just now',
     //         status: 'Active',
     //     }, {
-    //         memberId: '109977042',
+    //         wealthCreaterId: '109977042',
     //         first_name: 'Msizi',
     //         last_name: 'Mpanza',
     //         username: 'MsiziM',
@@ -103,7 +102,7 @@ export default function Members(props) {
     //         created: '2 mins ago',
     //         status: 'Pending',
     //     }, {
-    //         memberId: '109977043',
+    //         wealthCreaterId: '109977043',
     //         first_name: 'Zungu',
     //         last_name: 'Zungu',
     //         last_name: 'ZunguAmanda',
@@ -115,8 +114,8 @@ export default function Members(props) {
     //         created: '5 mins ago',
     //         status: 'Blocked',
     //     }];
-    //  setMembers(membersList);
-    //  setFilteredMembers(membersList);
+    //  setWealthCreaters(wealthCreatersList);
+    //  setFilteredWealthCreaters(wealthCreatersList);
 
 
       }, []);
@@ -158,7 +157,7 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}><a
-      href={`members/${row.memberId}`}
+      href={`wealthCreaters/${row.wealthCreaterId}`}
       className="btn btn-secondary btn-sm btn-icon ml-2"
     >
          <span className="fa fa-eye" />
@@ -179,40 +178,39 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
 const handleChangePassword = async data => {
 }
 
-const handleDeleteMember = async data => {
+const handleDeleteWealthCreater = async data => {
 }
 
 const onSubmitChangeStatus= data => {
-  setSelectedMember(data);
+  setSelectedWealthCreater(data);
   setShow(true);
   console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 
-  const onSubmitDeleteMember= data => {
-    setSelectedMember(data);
+  const onSubmitDeleteWealthCreater= data => {
+    setSelectedWealthCreater(data);
     setShowDelete(true);
   };
 
   const onSearchFilter = filterText => {
-    const filteredItems = members.filter(item => (
+    const filteredItems = wealthCreaters.filter(item => (
       (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.last_name && item.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.id_number && item.id_number.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredMembers(filteredItems);
+    setFilteredWealthCreaters(filteredItems);
   }
 
 
     return (
         <Card className="o-hidden mb-4">
-          <ModalChangeStatus show={show} setShow={setShow} member={selectedMember} />
-          <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedMember} />
+          <ModalChangeStatus show={show} setShow={setShow} wealthCreater={selectedWealthCreater} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>CBI Members</span>
+                    <span>CBI WealthCreaters</span>
                     <span className="flex-grow-1" />
                     <input
                     style={inputWith}
@@ -225,7 +223,7 @@ const onSubmitChangeStatus= data => {
                 </div>
             </CardBody>
             <DataTable
-                data={filteredMembers}
+                data={filteredWealthCreaters}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader

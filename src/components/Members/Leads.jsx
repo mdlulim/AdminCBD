@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
 import DeleteAlert from './DeleteAlert';
+import { LeadService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -63,52 +64,59 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Members(props) {
+export default function Leads(props) {
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-    const [members, setMembers] = useState([]);
-    const [filteredMembers, setFilteredMembers] = useState([]);
-    const [selectedMember, setSelectedMember] = useState({});
+    const [leads, setLeads] = useState([]);
+    const [filteredLeads, setFilteredLeads] = useState([]);
+    const [selectedLead, setSelectedLead] = useState({});
     const history = useHistory();
 
     useMemo(() => {
-        const membersList = [{
-            memberId: '109977041',
-            first_name: 'Mduduzi',
-            last_name: 'Mdluli',
-            username: 'JSmith',
-            email: 'example1@demo.com',
-            id_number: '9103025869089',
-            country: 'South Africa',
-            level: 'General',
-            created: 'just now',
-            status: 'Active',
-        }, {
-            memberId: '109977042',
-            first_name: 'Msizi',
-            last_name: 'Mpanza',
-            username: 'MsiziM',
-            email: 'example2@demo.com',
-            id_number: '9103025869084',
-            country: 'Namibia',
-            level: 'Wealth Creator',
-            created: '2 mins ago',
-            status: 'Pending',
-        }, {
-            memberId: '109977043',
-            first_name: 'Zungu',
-            last_name: 'Zungu',
-            last_name: 'ZunguAmanda',
-            username: 'McCallJ',
-            id_number: '9103025869085',
-            email: 'example3@demo.com',
-            country: 'South Africa',
-            level: 'General',
-            created: '5 mins ago',
-            status: 'Blocked',
-        }];
-     setMembers(membersList);
-     setFilteredMembers(membersList);
+      console.log('leads')
+      LeadService.getLeads().then((res) => {
+        console.log(res.data.data.results)
+        const leadslist = res.data.data.results;
+        setLeads(leadslist);
+        setFilteredLeads(leadslist);
+      });
+    //     const leadsList = [{
+    //         memberId: '109977041',
+    //         first_name: 'Mduduzi',
+    //         last_name: 'Mdluli',
+    //         username: 'JSmith',
+    //         email: 'example1@demo.com',
+    //         id_number: '9103025869089',
+    //         country: 'South Africa',
+    //         level: 'General',
+    //         created: 'just now',
+    //         status: 'Active',
+    //     }, {
+    //         memberId: '109977042',
+    //         first_name: 'Msizi',
+    //         last_name: 'Mpanza',
+    //         username: 'MsiziM',
+    //         email: 'example2@demo.com',
+    //         id_number: '9103025869084',
+    //         country: 'Namibia',
+    //         level: 'Wealth Creator',
+    //         created: '2 mins ago',
+    //         status: 'Pending',
+    //     }, {
+    //         memberId: '109977043',
+    //         first_name: 'Zungu',
+    //         last_name: 'Zungu',
+    //         last_name: 'ZunguAmanda',
+    //         username: 'McCallJ',
+    //         id_number: '9103025869085',
+    //         email: 'example3@demo.com',
+    //         country: 'South Africa',
+    //         level: 'General',
+    //         created: '5 mins ago',
+    //         status: 'Blocked',
+    //     }];
+    //  setLeads(leadsList);
+    //  setFilteredLeads(leadsList);
 
 
       }, []);
@@ -150,31 +158,20 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}><a
-      href={`members/${row.memberId}`}
-      className="btn btn-lg btn-primary btn-sm"
+      href={`leads/${row.memberId}`}
+      className="btn btn-secondary btn-sm btn-icon ml-2"
     >
-        <Eye width={16} height={16}/>
+         <span className="fa fa-eye" />
     </a></spam>
     <spam style={iconPadding}>
       <a
       href={`#`}
-      className="btn btn-lg btn-info btn-sm"
+      className="btn btn-light btn-sm btn-icon"
       onClick={e => {
         e.preventDefault();
         onSubmitChangeStatus(row);
       }}
-    ><Edit width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-lg btn-danger btn-sm"
-      onClick={e => {
-        e.preventDefault();
-    
-        onSubmitDeleteMember(row);
-      }}
-    >
-      <UserMinus width={16} height={16}/>
+    > <span className="fa fa-pencil" />
     </a></spam>
   </div>
 }];
@@ -182,40 +179,40 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
 const handleChangePassword = async data => {
 }
 
-const handleDeleteMember = async data => {
+const handleDeleteLead = async data => {
 }
 
 const onSubmitChangeStatus= data => {
-  setSelectedMember(data);
+  setSelectedLead(data);
   setShow(true);
   console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 
-  const onSubmitDeleteMember= data => {
-    setSelectedMember(data);
+  const onSubmitDeleteLead= data => {
+    setSelectedLead(data);
     setShowDelete(true);
   };
 
   const onSearchFilter = filterText => {
-    const filteredItems = members.filter(item => (
+    const filteredItems = leads.filter(item => (
       (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.last_name && item.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.id_number && item.id_number.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredMembers(filteredItems);
+    setFilteredLeads(filteredItems);
   }
 
 
     return (
         <Card className="o-hidden mb-4">
-          <ModalChangeStatus show={show} setShow={setShow} member={selectedMember} />
-          <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedMember} />
+          <ModalChangeStatus show={show} setShow={setShow} member={selectedLead} />
+          <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedLead} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Leads</span>
+                    {/* <span>CBI Leads</span> */}
                     <span className="flex-grow-1" />
                     <input
                     style={inputWith}
@@ -228,7 +225,7 @@ const onSubmitChangeStatus= data => {
                 </div>
             </CardBody>
             <DataTable
-                data={filteredMembers}
+                data={filteredLeads}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader
@@ -236,13 +233,6 @@ const onSubmitChangeStatus= data => {
                 highlightOnHover
                 pagination
             />
-            <CardBody className="text-center border-top">
-                <HashLinkContainer to="/members">
-                    <a className="card-link font-weight-bold" href="/members">
-                        More Users...
-                    </a>
-                </HashLinkContainer>
-            </CardBody>
           
         </Card>
     );

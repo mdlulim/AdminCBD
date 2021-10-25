@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Layout } from 'containers';
+import { AuthLayout } from 'containers';
 import { Products } from 'components';
 import { EditorState } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
@@ -62,7 +62,7 @@ const ProductDetails = props => {
               ];
 
 	return (
-		<Layout {...props} breadcrumb={breadcrumb}>
+		<AuthLayout {...props} breadcrumb={breadcrumb}>
                     <Row>
                         <Col md={6} lg={6} xl={6}>
                             <Card>
@@ -197,7 +197,7 @@ const ProductDetails = props => {
                                     </Col>
                     </Row>
 			
-		</Layout>
+		</AuthLayout>
 	);
 };
 

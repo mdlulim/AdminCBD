@@ -249,7 +249,7 @@ const onSubmitUpdateProduct= data => {
                       />
                     <div>
                             <a 
-                            href={`add`}
+                            href={`products/add`}
                             className="btn btn-secondary">
                                 Add Product
                             </a>
@@ -265,13 +265,6 @@ const onSubmitUpdateProduct= data => {
                 highlightOnHover
                 pagination
             />
-            <CardBody className="text-center border-top">
-                <HashLinkContainer to="/products">
-                    <a className="card-link font-weight-bold" href="/products">
-                        More Products...
-                    </a>
-                </HashLinkContainer>
-            </CardBody>
         </Card>
     );
 }

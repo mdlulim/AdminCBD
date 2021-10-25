@@ -24,20 +24,20 @@ const Filter = () => {
     );
 }
 
-export default function LeadsPage(props) {
+export default function WealthCreatersPage(props) {
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "Leads" }}
+            breadcrumb={{ active: "WealthCreaters" }}
             pageHeading={{
-                title: 'CBI Leads',
+                title: 'CBI WealthCreaters',
                 caption: 'EXPLORE OVERVIEW LEADS FOR CRYPTO BASED INNOVATION',
                 actions: <Filter />
             }}
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Members.Leads />
+                <Members.WealthCreaters />
                 </Col>
             </div>
         </AuthLayout>

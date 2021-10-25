@@ -19,6 +19,15 @@ class MemberService {
     });
   }
 
+  static async getWealthCreaters() {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/admin/members`,
+    });
+  }
+
   static async getMember(id) {
     return await axios({
       mode: 'no-cors',

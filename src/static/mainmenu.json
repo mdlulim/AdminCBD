@@ -18,19 +18,19 @@
                 {
                     "id": "leads",
                     "title": "Leads",
-                    "link": "/leads",
+                    "link": "/members/leads",
                     "icon": null
                 },
                 {
                     "id": "members",
                     "title": "Members",
-                    "link": "",
+                    "link": "/members",
                     "icon": null
                 },
                 {
                     "id": "wealth-creators",
                     "title": "Wealth Creators",
-                    "link": "/wealth-creators",
+                    "link": "/members/wealth-creators",
                     "icon": null
                 }
             ]
@@ -96,27 +96,6 @@
             ]
         },
         {
-            "id": "users",
-            "title": "Users",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-            "link": "/users",
-            "icon": "li-users2",
-            "childitems": [
-                {
-                    "id": "roles",
-                    "title": "Roles",
-                    "link": "/roles",
-                    "icon": null
-                },
-                {
-                    "id": "users",
-                    "title": "Users",
-                    "link": "",
-                    "icon": null
-                }
-            ]
-        },
-        {
             "id": "configurations",
             "title": "Configurations",
             "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
@@ -162,14 +141,6 @@
         }
     ],
     "content": [
-        {
-            "id": "pages",
-            "title": "Pages",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-            "link": "/pages",
-            "icon": "li-papers",
-            "childitems": []
-        },
         {
             "id": "news",
             "title": "News",

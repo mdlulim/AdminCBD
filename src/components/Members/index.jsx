@@ -5,6 +5,7 @@ import MemberDetails from './MemberDetails';
 import ModalChangeStatus from './ModalChangeStatus';
 import DeleteAlert from './DeleteAlert';
 import Leads from './Leads';
+import WealthCreaters from './WealthCreaters';
 
 export default {
     Members,
@@ -13,5 +14,6 @@ export default {
     BankDetails,
     DeleteAlert,
     ModalChangeStatus,
-    Leads
+    Leads,
+    WealthCreaters
 }

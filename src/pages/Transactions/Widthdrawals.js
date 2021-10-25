@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
-import { Common, Members } from 'components';
+import { Common, Transactions } from 'components';
 
 const Filter = () => {
     return (
@@ -24,20 +24,20 @@ const Filter = () => {
     );
 }
 
-export default function LeadsPage(props) {
+export default function Width(props) {
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "Leads" }}
+            breadcrumb={{ active: "Widthdrawals" }}
             pageHeading={{
-                title: 'CBI Leads',
-                caption: 'EXPLORE OVERVIEW LEADS FOR CRYPTO BASED INNOVATION',
+                title: 'CBI Widthdrawals',
+                caption: 'EXPLORE OVERVIEW WIDTHDRAWALS FOR CRYPTO BASED INNOVATION',
                 actions: <Filter />
             }}
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Members.Leads />
+                <Transactions.Widthdrawals />
                 </Col>
             </div>
         </AuthLayout>
