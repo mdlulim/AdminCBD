@@ -130,65 +130,58 @@ export default function Customers(props) {
 
 
       }, []);
-    // table headings definition
-const columns = [{
-    name: '',
-    sortable: false,
-    width: '80px',
-    cell: () => <Image />
-}, {
-    name: 'Full Names',
-    selector: 'full_names',
-    sortable: true,
-    wrap: true,
-    cell: row => <div><div>{row.user.full_names}</div>
-    <div className="small text-muted">
-      <span>{row.user.id_number}</span>
-    </div></div>
-},{
-    name: 'Transaction Type',
-    selector: 'type',
-    sortable: true,
-},{
-    name: 'Amount',
-    selector: 'amount',
-    sortable: true,
-    cell: row => <div>{row.currency.code} {row.amount}</div>
-},
-{
-    name: 'Fee',
-    selector: 'fee',
-    sortable: true,
-    cell: row => <div>{row.currency.code} {row.fee}</div>
-},{
-    name: 'Total Amount',
-    selector: 'total_amount',
-    sortable: true,
-    cell: row => <div>{row.currency.code} {row.total_amount}</div>
-},{
-    name: 'Balance',
-    selector: 'balance',
-cell: row => <div>{row.currency.code} {row.balance}</div>
-},{
-    name: 'Date Created',
-    selector: 'created',
-    sortable: true,
-}, {
-    name: 'Status',
-    selector: 'status',
-    sortable: true,
-    cell: row => <Status {...row} />
-}, {
-    name: 'Actions',
-    sortable: true,
-    cell: row => <div>
-        <select class="form-control form-control-sm">
-            <option>Update Status</option>
-            <option>Completed</option>
-            <option>Rejected</option>
-        </select>
-  </div>
-}];
+      const columns = [{
+        name: '',
+        sortable: false,
+        width: '80px',
+        cell: () => <Image />
+    }, {
+        name: 'Full Names',
+        selector: 'full_names',
+        sortable: true,
+        wrap: true,
+        cell: row => <div><div>{row.user.full_names}</div>
+        <div className="small text-muted">
+          <span>{row.user.id_number}</span>
+        </div></div>
+    },{
+        name: 'ID',
+        selector: 'transactionId',
+        sortable: true,
+        cell: row => <div>6293043434</div>
+    },{
+        name: 'City',
+        selector: 'city',
+        sortable: true,
+        cell: row => <div>Durban, ZA</div>
+    },{
+        name: 'Amount',
+        selector: 'amount',
+        sortable: true,
+        cell: row => <div> <strong className="text-success">+403.22 CBI</strong><br />
+        <span className="text-muted">1,500 ZAR</span></div>
+    }, {
+        name: 'Status',
+        selector: 'status',
+        sortable: true,
+        cell: row => <Status {...row} />
+    },{
+        name: 'Date Created',
+        selector: 'created',
+        sortable: true,
+        cell: row => <div>
+             <strong>25 March 2018</strong><br />
+                    <span className="text-muted">12:23:15 GMT</span>
+        </div>
+    }, {
+        name: 'Actions',
+        sortable: true,
+        cell: row => <div>
+            <button className="btn btn-secondary btn-sm btn-icon">
+                        <span className="fa fa-pencil"></span>
+                    </button>
+      </div>
+    }];
 
 const handleChangePassword = async data => {
 }

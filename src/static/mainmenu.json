@@ -16,12 +16,6 @@
             "icon": "li-users",
             "childitems": [
                 {
-                    "id": "leads",
-                    "title": "Leads",
-                    "link": "/members/leads",
-                    "icon": null
-                },
-                {
                     "id": "members",
                     "title": "Members",
                     "link": "/members",
@@ -59,7 +53,7 @@
                 {
                     "id": "withdrawals",
                     "title": "Withdrawals",
-                    "link": "/withdrawals",
+                    "link": "/widthdrawals",
                     "icon": null
                 }
             ]
