@@ -1,34 +1,32 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Common, Pagination, UserRoles } from 'components';
+import { Common, Pagination, Countries } from 'components';
 import { AuthLayout } from 'containers';
 
 
-export default function UserRolesPage(props) {
+export default function CountriesPage(props) {
     return (
         <AuthLayout
             {...props}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
-                active: "Users"
+                active: "Countries"
             }}
             pageHeading={{
-                title: 'Manage Users',
+                title: 'Manage Countries',
                 caption: 'EXPLORE MEMBERS DASHBOARD FOR CRYPTO BASED INNOVATION',
             }}
         >
             <Card>
                 <Common.Widget
                     icon="li-cog"
-                    title="User Roles"
-                    subtitle="List of all User Roles"
+                    title="Countries"
+                    subtitle="List of all Countries"
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                <UserRoles.UserRoles />
-                   
-                    
-                </CardBody>
+                 <Countries.Countries />
+              </CardBody>
             </Card>
         </AuthLayout>
     );

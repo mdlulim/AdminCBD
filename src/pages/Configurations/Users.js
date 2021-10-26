@@ -22,17 +22,17 @@ export default function UsersPage(props) {
                     <Common.Widget
                         icon="li-user"
                         title="Active"
-                        subtitle="All active members"
-                        informer={<span className="text-bold text-success">23,500</span>}
+                        subtitle="All active users"
+                        informer={<span className="text-bold text-success">10</span>}
                         invert={false}
                     />
                 </Col>
                 <Col xs={12} lg={4}>
                     <Common.Widget
                         icon="li-user-lock"
-                        title="Blocked"
-                        subtitle="Blocked members"
-                        informer={<><span className="text-bold">232</span></>}
+                        title="In-Active"
+                        subtitle="In-Active users"
+                        informer={<><span className="text-bold">4</span></>}
                         invert={false}
                     />
                 </Col>
@@ -40,8 +40,8 @@ export default function UsersPage(props) {
                     <Common.Widget
                         icon="li-user-minus"
                         title="Archived"
-                        subtitle="Archived members"
-                        informer={<span className="text-bold text-danger">21</span>}
+                        subtitle="Archived users"
+                        informer={<span className="text-bold text-danger">3</span>}
                         invert={false}
                     />
                 </Col>
@@ -55,9 +55,10 @@ export default function UsersPage(props) {
                 />
                 <CardBody className="padding-botton-0">
                 <Users.Users />
+                   
                     
                 </CardBody>
             </Card>
         </AuthLayout>
     );
-}
+} 

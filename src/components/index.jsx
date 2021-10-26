@@ -15,6 +15,8 @@ import Pagination from './Pagination';
 import Products from './Products';
 import UserRoles from './UserRoles';
 import GroupProducts from './GroupProducts';
+import Countries from './Countries';
+import Currencies from './Currencies';
 
 export {
     Breadcrumb,
@@ -33,5 +35,7 @@ export {
     Pagination,
     Products,
     UserRoles,
-    GroupProducts
+    GroupProducts,
+    Countries,
+    Currencies
 };
