@@ -24,6 +24,7 @@ import MessagingInbox from 'pages/Messaging/Inbox';
 import Reports from 'pages/Reports';
 import Users from 'pages/Configurations';
 import UserRoles from './pages/UserRoles';
+import UserRoleConfig from './pages/UserRoles/UserRoleConfig';
 import Configurations from './pages/Configurations/Configurations';
 import Members from 'pages/Members';
 import Leads from 'pages/Leads';
@@ -58,6 +59,7 @@ const App = () => {
 					<Route exact path="/reports" component={(props) => <Reports config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/roles" component={(props) => <UserRoles config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/configurations/roles/:id" component={(props) => <UserRoleConfig config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/configurations" component={(props) => <Configurations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/forms" component={(props) => <FormsConfig config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} setMenu={setMenu} />} />

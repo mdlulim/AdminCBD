@@ -4,10 +4,12 @@ import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
+import LoadingSpinner from '../../components/utils/LoadingSpinner';
 
 const ModalChangeStatus = props => {
     const { show, setShow, member} = props;
     const [statuses, setStatuses] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
@@ -21,11 +23,17 @@ const ModalChangeStatus = props => {
         { value: 'Blocked', label: 'Blocked' }
       ];
     const handleClose = () => setShow(false);
+
     const updateMemberStatus = (event) => {
         event.preventDefault();
+        const form = event.currentTarget;
+        const reason = form.reason.value;
+        console.log(reason);
+
     }
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
+            <LoadingSpinner loading={loading} messageColor="primary" />
             <Modal.Body>
                 <Row>
                     {showIcon &&
@@ -83,6 +91,17 @@ const ModalChangeStatus = props => {
                                     classNamePrefix="select"
                                     />
                                 </div>
+                                <div className="form-group">
+                                    <label htmlFor="reason">Reason</label>
+                                    {member ?
+                                    <textarea
+                                        type="text"
+                                        id="reason"
+                                        name="reason"
+                                        className="form-control form-control-m"
+                                    />
+                                    : ''}
+                                </div>
                                 <hr />
                                 <Row>
                         <Col md={6}>
@@ -96,9 +115,8 @@ const ModalChangeStatus = props => {
                             </Col>
                             <Col md={6} >
                             <button
+                                        type="submit"
                                         className="btn btn-success float-right"
-                                        onClick={confirmButton.onClick}
-                                        disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Update'}
                                 </button>

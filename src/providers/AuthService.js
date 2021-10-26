@@ -24,11 +24,9 @@ class AuthService {
           url: `${Config.API.BASE_URL}users`,
         }).then((res) =>{
           const result = {status: res.data.status, message: res.data.message}
-          
           return result;
         });
       }
-
 
       static async editUser(id, user){
         return await axios({
@@ -39,7 +37,6 @@ class AuthService {
           url: `${Config.API.BASE_URL}users/${id}`,
         }).then((res) =>{
           const result = {status: res.data.status, message: res.data.message}
-          
           return result;
         });
       }
@@ -51,7 +48,5 @@ class AuthService {
         // remove user from local storage to log user out bPDg2i
         Session.destroy();
     }
-
-
 }
 export default AuthService;

@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, useRef, Fragment, useEffect } from 'react';
 import { HashLinkContainer } from 'components';
 import {Session} from 'bc-react-session';
 import { AuthService } from '../providers';
-
+import moment from 'moment';
+import AutoLogoutTimer from '../nativeClass/AutoLogoutTimer';
 
 const session = Session.get();
 
@@ -13,14 +14,29 @@ export default function Header(props) {
     const [showAlerts, setShowAlerts] = useState(false);
     const [token, setToken] = useState('');
 
-    // useMemo(() => {
-    //     if(session.isValid){
-    //         setToken(session.payload.token);
-    //     }else{
-    //     window.location = '/login';
-    //     }
-    // },[]);
+    const [isTimeout, setIsTimeout] = useState(false);
 
+    useEffect(() => {
+        const timer = new AutoLogoutTimer({
+            timeout: 10,
+            onTimeout: () =>{
+                setIsTimeout(true);
+            },
+            onExpired: () =>{
+                setIsTimeout(true)
+            }
+        });
+        return () =>{
+            timer.cleanUp();
+        }
+        if(session.isValid){
+            setToken(session.payload.token);
+        }else{
+        window.location = '/login';
+        }
+
+    },[]);
+   return <div>{isTimeout ? "Timeout": "Active"}</div>
     const toggleShowMenu = () => {
         setShowUserMenu(!showUserMenu);
         setShowAlerts(false);

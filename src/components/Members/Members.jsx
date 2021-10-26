@@ -85,6 +85,7 @@ export default function Members(props) {
             first_name: 'Mduduzi',
             last_name: 'Mdluli',
             username: 'JSmith',
+            phone: '+27845880977',
             email: 'example1@demo.com',
             id_number: '9103025869089',
             country: 'South Africa',
@@ -96,6 +97,7 @@ export default function Members(props) {
             first_name: 'Msizi',
             last_name: 'Mpanza',
             username: 'MsiziM',
+            phone: '+27645880788',
             email: 'example2@demo.com',
             id_number: '9103025869084',
             country: 'Namibia',
@@ -106,8 +108,8 @@ export default function Members(props) {
             memberId: '109977043',
             first_name: 'Zungu',
             last_name: 'Zungu',
-            last_name: 'ZunguAmanda',
             username: 'McCallJ',
+            phone: '+27827890844',
             id_number: '9103025869085',
             email: 'example3@demo.com',
             country: 'South Africa',
@@ -139,6 +141,10 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     name: 'Username',
     selector: 'username',
     sortable: true,
+},{
+  name: 'Phone',
+  selector: 'phone',
+  sortable: true,
 },
 {
     name: 'Email Address',
@@ -173,17 +179,16 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
       }}
     ><Edit width={16} height={16}/>
     </a></spam>
-    <spam style={iconPadding}><a
+    {/* <spam style={iconPadding}><a
       href={`#`}
       className="btn btn-lg btn-danger btn-sm"
       onClick={e => {
         e.preventDefault();
-    
         onSubmitDeleteMember(row);
       }}
     >
       <UserMinus width={16} height={16}/>
-    </a></spam>
+    </a></spam> */}
   </div>
 }];
 
@@ -256,7 +261,6 @@ const onSubmitChangeStatus= data => {
                     </a>
                 </HashLinkContainer>
             </CardBody>
-          
         </Card>
     );
 }

@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody } from 'reactstrap';
+import { Card, CardBody, Row, Col } from 'reactstrap';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
-import { Trash, Edit, UserMinus} from 'react-feather';
+import { Trash, Edit, Settings} from 'react-feather';
 import Moment from 'react-moment';
 import { useHistory } from 'react-router-dom';
 import ModalUpdateUserRole from '../UserRoles/ModalUpdateUserRole';
@@ -57,11 +57,32 @@ export default function UsersRoles(props) {
     const [roles, setRoles] = useState([]);
     const [selectedRole, setSelectedRole] = useState({});
     const [filteredRoles, setFilteredRoles] = useState([]);
+    const [exportDropdownExpanded, setExportDropdownExpanded] = useState(false);
     const history = useHistory();
 
 
     useMemo(() => {
-
+      const roleList = [{
+        role_id: '109977041',
+        name: 'Super Administrator',
+        label: 'Super Administrator',
+        description: 'all user access',
+        created: '2021-10-21',
+    }, {
+      role_id: '109977042',
+        name: 'Platform Administrator',
+        label: 'Platform Administrator',
+        description: 'Mid user access',
+        created: '2021-10-21',
+    }, {
+      role_id: '109977043',
+        name: ' System Administrator',
+        label: 'System Administrator',
+        description: 'config access',
+        created: '2021-10-21',
+    }];
+    setRoles(roleList);
+    setFilteredRoles(roleList);
       UserRolesService.getUserRoles().then((res) => {
           console.log(res.data.data.results)
           const userRolesList = res.data.data.results;
@@ -94,6 +115,12 @@ const columns = [ {
     name: 'Actions',
     sortable: true,
     cell: row => <div>
+      <spam style={iconPadding}><a
+      href={`roles/${row.role_id}`}
+      className="btn btn-lg btn-primary btn-sm"
+    >
+        <Settings width={16} height={16}/>
+    </a></spam>
     <spam style={iconPadding}>
       <a
       href={`#`}
@@ -109,7 +136,6 @@ const columns = [ {
       className="btn btn-lg btn-danger btn-sm"
       onClick={e => {
         e.preventDefault();
-    
         onSubmitDeleteRole(row);
       }}
     >
@@ -137,6 +163,18 @@ const onSubmitUpdateRole= data => {
     ));
     setFilteredRoles(filteredItems);
   }
+
+  const ExpandedComponent = ({ data }) => {
+        const row = JSON.stringify(data, null, 2);
+        return (
+            <div className="row__expandable">
+                <Row >
+                    {row}
+                </Row>
+                <hr />
+    </div>
+    );
+    }
 
 
     return (
@@ -175,6 +213,8 @@ const onSubmitUpdateRole= data => {
                 noHeader
                 selectableRowsHighlight
                 highlightOnHover
+                expandableRows
+                expandableRowsComponent={<ExpandedComponent />}
                 pagination
             />
         </Card>
