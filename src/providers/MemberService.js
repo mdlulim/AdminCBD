@@ -12,7 +12,6 @@ const headers = {
 class MemberService {
 
   static async getMembers() {
-    console.log('Token: '+authToken);
     return await axios({
       mode: 'no-cors',
       method: 'GET',
@@ -47,6 +46,17 @@ class MemberService {
       url: `${Config.API.BASE_URL}/users/${id}/addresses`,
     });
   }
+
+  //Get member referels
+  static async getMemberReferrals(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users/${id}/referrals`,
+    });
+  }
+
 }
 
 export default MemberService;

@@ -2,8 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
+import { TransactionService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -66,13 +67,21 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Customers(props) {
-    const [customers, setCustomers] = useState([]);
-    const [filteredCustomers, setFilteredCustomers] = useState([]);
+export default function Transactions(props) {
+    const [transactions, setTransactions] = useState([]);
+    const [filteredTransactions, setFilteredTransactions] = useState([]);
     const history = useHistory();
 
     useMemo(() => {
-        const customersList = [{
+      TransactionService.getTransactions().then((res) => {
+        console.log(res.data.data.results)
+        const transaList = res.data.data.results;
+        setTransactions(transaList);
+        setFilteredTransactions(transaList);
+      });
+      
+
+        const transactionsList = [{
             transactionId: '109977041',
             type:'Withdrawals',
             amount: 3000,
@@ -125,8 +134,8 @@ export default function Customers(props) {
             created: '5 mins ago',
             status: 'Rejected',
         }];
-     setCustomers(customersList);
-     setFilteredCustomers(customersList);
+     setTransactions(transactionsList);
+     setFilteredTransactions(transactionsList);
 
 
       }, []);
@@ -198,7 +207,7 @@ const handleDeleteMember = async data => {
 
 const onSubmitChangeStatus= data => {
     return confirmAlert({
-      title: 'Change Customer Status',
+      title: 'Change Transaction Status',
       message: 'Are you sure you want to resend password for ' + data.full_names + '?',
       buttons: [{
         label: 'Yes',
@@ -223,13 +232,13 @@ const onSubmitChangeStatus= data => {
   };
 
   const onSearchFilter = filterText => {
-    const filteredItems = customers.filter(item => (
+    const filteredItems = transactions.filter(item => (
       (item && item.user.full_names && item.user.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredCustomers(filteredItems);
+    setFilteredTransactions(filteredItems);
   }
 
 
@@ -261,7 +270,7 @@ const onSubmitChangeStatus= data => {
                 </div>
             </CardBody>
             <DataTable
-                data={filteredCustomers}
+                data={filteredTransactions}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader
@@ -270,8 +279,8 @@ const onSubmitChangeStatus= data => {
                 pagination
             />
             <CardBody className="text-center border-top">
-                <HashLinkContainer to="/customers">
-                    <a className="card-link font-weight-bold" href="/customers">
+                <HashLinkContainer to="/transactions">
+                    <a className="card-link font-weight-bold" href="/transactions">
                         More Users...
                     </a>
                 </HashLinkContainer>

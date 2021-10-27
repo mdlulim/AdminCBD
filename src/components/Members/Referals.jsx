@@ -2,9 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import Confirm from './ModalChangeStatus';
+import { MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -58,19 +59,29 @@ const Status = ({ status }) => {
         badge = 'danger';
       }
     return (
-      <span className={`badge badge-${badge}`}>{status}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
     );
   };
 
 export default function Referals(props) {
+  const { member } = props;
   const [show, setShow] = useState(false);
-    const [customers, setCustomers] = useState([]);
-    const [filteredCustomers, setFilteredCustomers] = useState([]);
+    const [referrals, setReferrals] = useState([]);
+    const [filteredReferrals, setFilteredReferrals] = useState([]);
     const history = useHistory();
+    const params = useParams();
+    const { id } = params;
 
     useMemo(() => {
-        const customersList = [{
-            customerId: '109977041',
+      MemberService.getMemberReferrals(id).then((res) => {
+          console.log(res.data.data.results)
+          const memberslist = res.data.data;
+          setReferrals(memberslist);
+          setFilteredReferrals(memberslist);
+        });
+
+        const referralsList = [{
+            referralId: '109977041',
             first_name: 'Mduduzi',
             last_name: 'Mdluli',
             username: 'JSmith',
@@ -81,7 +92,7 @@ export default function Referals(props) {
             created: 'just now',
             status: 'Active',
         }, {
-            customerId: '109977042',
+            referralId: '109977042',
             first_name: 'Msizi',
             last_name: 'Mpanza',
             username: 'MsiziM',
@@ -92,7 +103,7 @@ export default function Referals(props) {
             created: '2 mins ago',
             status: 'Pending',
         }, {
-            customerId: '109977043',
+            referralId: '109977043',
             first_name: 'Ayanda',
             last_name: 'Zungu',
             last_name: 'ZunguAmanda',
@@ -104,8 +115,8 @@ export default function Referals(props) {
             created: '5 mins ago',
             status: 'Blocked',
         }];
-     setCustomers(customersList);
-     setFilteredCustomers(customersList);
+     setReferrals(referralsList);
+     setFilteredReferrals(referralsList);
 
 
       }, []);
@@ -144,7 +155,7 @@ cell: row => <div>{row.first_name} {row.last_name}</div>
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}><a
-      href={`members/${row.customerId}`}
+      href={`members/${row.id}`}
       className="btn btn-lg btn-primary btn-sm"
     >
         <Eye width={16} height={16}/>
@@ -178,14 +189,14 @@ const onSubmitChangeStatus= data => {
   };
 
   const onSearchFilter = filterText => {
-    const filteredItems = customers.filter(item => (
+    const filteredItems = referrals.filter(item => (
       (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.last_name && item.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.id_number && item.id_number.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredCustomers(filteredItems);
+    setFilteredReferrals(filteredItems);
   }
 
 
@@ -207,7 +218,7 @@ const onSubmitChangeStatus= data => {
                 </div>
             </CardBody>
             <DataTable
-                data={filteredCustomers}
+                data={filteredReferrals}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader
