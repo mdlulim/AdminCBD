@@ -47,7 +47,7 @@ const Status = ({ status }) => {
     }
 
     return (
-      <span className={`badge badge-${badge}`}>{myStatus}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
     );
   };
 

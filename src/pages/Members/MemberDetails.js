@@ -101,6 +101,8 @@ const MemberDetails = props => {
                         <Col md={12} lg={3} xl={3}>
                             <Card className="o-hidden author-box" style={{ minHeight: 300 }}>
                                 <CardBody>
+
+                                    {member ?
                                     <div className="author-box-center mt-3">
                                         <img
                                             alt={member.first_name}
@@ -132,6 +134,7 @@ const MemberDetails = props => {
                                                 </p>:<p> <br />Address not provided</p>}
                                         </div>
                                     </div>
+                                    : ''}
                                 </CardBody>
                             </Card>
                         </Col>

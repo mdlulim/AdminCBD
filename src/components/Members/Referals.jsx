@@ -75,7 +75,7 @@ export default function Referals(props) {
     useMemo(() => {
       MemberService.getMemberReferrals(id).then((res) => {
           console.log(res.data.data.results)
-          const memberslist = res.data.data;
+          const memberslist = res.data.data.results;
           setReferrals(memberslist);
           setFilteredReferrals(memberslist);
         });

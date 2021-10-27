@@ -76,6 +76,7 @@ export default function TransactionsByMember(props) {
 
     useMemo(() => {
       TransactionService.getMemberTransactions(id).then((res) => {
+        console.log('Transaction by member')
         console.log(res.data.data.results)
         const transaList = res.data.data.results;
         setTransactions(transaList);

@@ -28,11 +28,10 @@ export default function WealthCreatersPage(props) {
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "WealthCreaters" }}
+            breadcrumb={{ active: "Wealth Creators" }}
             pageHeading={{
-                title: 'CBI WealthCreaters',
-                caption: 'EXPLORE OVERVIEW LEADS FOR CRYPTO BASED INNOVATION',
-                actions: <Filter />
+                title: 'CBI Wealth Creators',
+                caption: 'EXPLORE OVERVIEW WEALTH CREATORS FOR CRYPTO BASED INNOVATION'
             }}
         >
             <div className="form-row">

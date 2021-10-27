@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
+import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
@@ -59,7 +60,7 @@ const Status = ({ status }) => {
         badge = 'danger';
       }
     return (
-      <span className={`badge badge-${badge}`}>{status}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
     );
   };
 
@@ -79,43 +80,7 @@ export default function WealthCreaters(props) {
         setWealthCreaters(wealthCreaterslist);
         setFilteredWealthCreaters(wealthCreaterslist);
       });
-    //     const wealthCreatersList = [{
-    //         wealthCreaterId: '109977041',
-    //         first_name: 'Mduduzi',
-    //         last_name: 'Mdluli',
-    //         username: 'JSmith',
-    //         email: 'example1@demo.com',
-    //         id_number: '9103025869089',
-    //         country: 'South Africa',
-    //         level: 'General',
-    //         created: 'just now',
-    //         status: 'Active',
-    //     }, {
-    //         wealthCreaterId: '109977042',
-    //         first_name: 'Msizi',
-    //         last_name: 'Mpanza',
-    //         username: 'MsiziM',
-    //         email: 'example2@demo.com',
-    //         id_number: '9103025869084',
-    //         country: 'Namibia',
-    //         level: 'Wealth Creator',
-    //         created: '2 mins ago',
-    //         status: 'Pending',
-    //     }, {
-    //         wealthCreaterId: '109977043',
-    //         first_name: 'Zungu',
-    //         last_name: 'Zungu',
-    //         last_name: 'ZunguAmanda',
-    //         username: 'McCallJ',
-    //         id_number: '9103025869085',
-    //         email: 'example3@demo.com',
-    //         country: 'South Africa',
-    //         level: 'General',
-    //         created: '5 mins ago',
-    //         status: 'Blocked',
-    //     }];
-    //  setWealthCreaters(wealthCreatersList);
-    //  setFilteredWealthCreaters(wealthCreatersList);
+
 
 
       }, []);
@@ -147,6 +112,10 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     name: 'Date Created',
     selector: 'created',
     sortable: true,
+    cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
 }, {
     name: 'Status',
     selector: 'status',

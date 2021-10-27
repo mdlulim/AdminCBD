@@ -52,7 +52,7 @@ const App = () => {
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/leads" component={(props) => <Leads config={settings} {...props} menu={menu} />} />
-					<Route exact path="/members/members/wealth-creators" component={(props) => <WealthCreater config={settings} {...props} menu={menu} />} />
+					<Route exact path="/members/wealth-creators" component={(props) => <WealthCreater config={settings} {...props} menu={menu} />} />
 					<Route exact path="/configurations/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/roles" component={(props) => <UserRoles config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/countries" component={(props) => <Countries config={settings} {...props} setMenu={setMenu} />} />\
