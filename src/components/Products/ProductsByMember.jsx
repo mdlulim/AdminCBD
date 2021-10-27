@@ -5,7 +5,7 @@ import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
 import { useParams, useHistory } from 'react-router-dom';
 import DeleteProductAlert from './DeleteProductAlert';
-import { ProductService } from '../../providers'
+import { ProductService } from '../../providers';
 // styles
 const customStyles = {
    

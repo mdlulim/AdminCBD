@@ -16,7 +16,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}/admin/products`,
+      url: `${Config.API.BASE_URL}/products`,
     });
   }
 
@@ -25,7 +25,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}/admin/products/${id}`,
+      url: `${Config.API.BASE_URL}/products/${id}`,
     });
   }
 
@@ -44,6 +44,32 @@ class ProductService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/users/${id}/products`,
+    });
+  }
+
+  static async addProduct(product){
+    return await axios({
+      mode: 'no-cors',
+      method: 'POST',
+      data: product,
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products`,
+    }).then((res) =>{
+      const result = {status: res.data.status, message: res.data.message}
+      return result;
+    });
+  }
+
+  static async updateProduct(id,product){
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      data: product,
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/${id}`,
+    }).then((res) =>{
+      const result = {status: res.data.status, message: res.data.message}
+      return result;
     });
   }
 
