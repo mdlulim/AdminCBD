@@ -6,6 +6,9 @@ import ProductService from './ProductService';
 import MemberService from './MemberService';
 import TransactionService from './TransactionService';
 import LeadService from './LeadService';
+import Countries from './Countries';
+import Currencies from './Currencies';
+
 
 export {
     AuthService,
@@ -15,4 +18,8 @@ export {
     MemberService,
     TransactionService,
     LeadService,
+    Countries,
+    Currencies
+
+
 };

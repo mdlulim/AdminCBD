@@ -15,9 +15,11 @@ const ModalChangeStatus = props => {
         //setSelectedStatus({ value: member.status,  label: member.status });
     }, []);
 
+    
+
     const statusOptions = [
-        { value: 'Active',  label: 'Active' },
-        { value: 'Pending', label: 'Pending' },
+        { value: 'Active',  label: 'Activate' },
+        { value: 'Archive', label: 'Archive' },
         { value: 'Blocked', label: 'Blocked' }
       ];
     const handleClose = () => setShow(false);
