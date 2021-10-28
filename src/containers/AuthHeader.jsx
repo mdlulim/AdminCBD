@@ -1,8 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {Session} from 'bc-react-session';
 
+const session = Session.get();
 export default function AuthHeader(props) {
     const { sideNavHidden, setSideNavHidden } = props;
     const [alertOpen, setAlertOpen] = useState(false);
+    const [token, setToken] = useState('');
+
+    useEffect(() => {
+        if(session.isValid){
+            setToken(session.name.payload.token);
+        }else{
+        window.location = '/login';
+        }
+
+    },[]);
+
     return (
         <header className="page__header invert">
             <div className="logo-holder">
