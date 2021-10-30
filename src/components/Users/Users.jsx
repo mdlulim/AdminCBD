@@ -29,6 +29,7 @@ const customStyles = {
 };
 const iconPadding ={
     paddingRight: '3px',
+    float: 'Left'
 }
 const inputWith={
   width: '30%',
@@ -136,7 +137,7 @@ cell: row => <div>{row.group.label}</div>
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-    <spam style={iconPadding}>
+    <div style={iconPadding}>
       <button
       href={`#`}
       className="btn btn-success btn-sm btn-icon"
@@ -145,8 +146,8 @@ cell: row => <div>{row.group.label}</div>
         onSubmitResendPassword(row);
       }}
     ><span className="fa fa-unlock" />
-    </button></spam>
-    <spam style={iconPadding}>
+    </button></div>
+    <div style={iconPadding}>
       <button
       className="btn btn-secondary btn-sm btn-icon"
       onClick={e => {
@@ -154,8 +155,8 @@ cell: row => <div>{row.group.label}</div>
         onSubmitUpdateUser(row);
       }}
     ><span className="fa fa-pencil" />
-    </button></spam>
-    <spam style={iconPadding}><button
+    </button></div>
+    <div style={iconPadding}><button
       className="btn btn-danger btn-sm btn-icon"
       onClick={e => {
         e.preventDefault();
@@ -164,7 +165,7 @@ cell: row => <div>{row.group.label}</div>
       }}
     >
       <span className="fa fa-trash" />
-    </button></spam>
+    </button></div>
   </div>
 }];
 
