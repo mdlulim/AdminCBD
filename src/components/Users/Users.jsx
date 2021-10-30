@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody } from 'reactstrap';
+import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, UserMinus} from 'react-feather';
@@ -8,6 +9,7 @@ import ModalUpdateAdminUser from './ModalUpdateAdminUser';
 import DeleteAdminUserAlert from './DeleteAdminUserAlert';
 import ModalResendPassword from './ModalResendPassword';
 import ModalAddNewUser from './ModalAddNewUser';
+import { UserService } from '../../providers';
 // styles
 const customStyles = {
    
@@ -45,7 +47,7 @@ const Status = ({ status }) => {
         badge = 'danger';
       }
     return (
-      <span className={`badge badge-${badge}`}>{status}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
     );
   };
 
@@ -73,41 +75,12 @@ export default function Users(props) {
 
 
     useMemo(() => {
-        const usersList = [{
-            userId: '109977041',
-            first_name: 'Mdu',
-            last_name: 'Mdluli',
-            username: 'JSmith',
-            email: 'example1@demo.com',
-            country: 'South Africa',
-            level: 'General',
-            created: 'just now',
-            status: 'Active',
-        }, {
-            userId: '109977042',
-            first_name: 'Msizi',
-            last_name: 'Mpanza',
-            username: 'MsiziM',
-            email: 'example2@demo.com',
-            country: 'Namibia',
-            level: 'Wealth Creator',
-            created: '2 mins ago',
-            status: 'Active',
-        }, {
-            userId: '109977043',
-            first_name: 'Amanda',
-            last_name: 'Zundu',
-            username: 'McCallJ',
-            email: 'example3@demo.com',
-            country: 'South Africa',
-            level: 'General',
-            created: '5 mins ago',
-            status: 'Blocked',
-        }];
-     setUsers(usersList);
-     setFilteredUsers(usersList);
-
-
+      UserService.getUsers().then((res) => {
+        console.log(res.data.data);
+        const userslist = res.data.data.results;
+        setUsers(userslist);
+        setFilteredUsers(userslist);
+      });
       }, []);
     // table headings definition
 const columns = [{
@@ -128,6 +101,11 @@ const columns = [{
     name: 'Username',
     selector: 'username',
     sortable: true,
+},{
+  name: 'User Role',
+  selector: 'group',
+  sortable: true,
+cell: row => <div>{row.group.label}</div>
 },
 {
     name: 'Email Address',
@@ -137,6 +115,18 @@ const columns = [{
     name: 'Date Created',
     selector: 'created',
     sortable: true,
+    cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
+},{
+  name: 'Updated',
+  selector: 'updated',
+  sortable: true,
+  cell: row => <div>
+              <strong><Moment date={row.ModalUpdateAdminUser} format="D MMM YYYY" /></strong><br />
+              <span className="text-muted"><Moment date={row.updated} format="hh:mm:ss" /></span>
+           </div>
 }, {
     name: 'Status',
     selector: 'status',
@@ -147,36 +137,34 @@ const columns = [{
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}>
-      <a
+      <button
       href={`#`}
-      className="btn btn-lg btn-success btn-sm"
+      className="btn btn-success btn-sm btn-icon"
       onClick={e => {
         e.preventDefault();
         onSubmitResendPassword(row);
       }}
-    ><Unlock width={16} height={16}/>
-    </a></spam>
+    ><span className="fa fa-unlock" />
+    </button></spam>
     <spam style={iconPadding}>
-      <a
-      href={`#`}
-      className="btn btn-lg btn-info btn-sm"
+      <button
+      className="btn btn-secondary btn-sm btn-icon"
       onClick={e => {
         e.preventDefault();
         onSubmitUpdateUser(row);
       }}
-    ><Edit width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-lg btn-danger btn-sm"
+    ><span className="fa fa-pencil" />
+    </button></spam>
+    <spam style={iconPadding}><button
+      className="btn btn-danger btn-sm btn-icon"
       onClick={e => {
         e.preventDefault();
     
         onSubmitDeleteUser(row);
       }}
     >
-      <UserMinus width={16} height={16}/>
-    </a></spam>
+      <span className="fa fa-trash" />
+    </button></spam>
   </div>
 }];
 

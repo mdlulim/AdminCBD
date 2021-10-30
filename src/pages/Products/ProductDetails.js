@@ -87,7 +87,12 @@ const ProductDetails = props => {
         }
 
 	return (
-		<AuthLayout {...props} breadcrumb={breadcrumb}>
+		<AuthLayout {...props}
+        breadcrumb={{ active: "Products Details" }}
+        pageHeading={{
+            title: 'Products Details',
+            caption: 'EXPLORE OVERVIEW PRODUCTS DETAILS FOR CRYPTO BASED INNOVATION'
+        }}>
                     <Row>
                         <Col md={6} lg={6} xl={6}>
                             <Card>

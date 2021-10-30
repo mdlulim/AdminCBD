@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Common, Pagination, Users } from 'components';
 import { AuthLayout } from 'containers';
-
+import { UserService } from '../../providers';
 
 export default function UsersPage(props) {
+    const [users, setUsers] = useState([]);
+    useMemo(() => {
+        UserService.getUsers().then((res) => {
+          console.log(res.data.data.results)
+          const userslist = res.data.data.results;
+          setUsers(userslist);
+        });
+        }, []);
+
+    const countUsers = (type) =>{
+        const countTypes = users.filter(user => user.status === type);
+        return countTypes.length;
+    };
+
     return (
         <AuthLayout
             {...props}
@@ -18,30 +32,39 @@ export default function UsersPage(props) {
             }}
         >
             <div className="form-row margin-bottom-20">
-                <Col xs={12} lg={4}>
+                <Col xs={12} lg={3}>
                     <Common.Widget
                         icon="li-user"
-                        title="Active"
-                        subtitle="All active users"
-                        informer={<span className="text-bold text-success">10</span>}
+                        title="All Users"
+                        subtitle="All users"
+                        informer={<span className="text-bold">{users.length}</span>}
                         invert={false}
                     />
                 </Col>
-                <Col xs={12} lg={4}>
+                <Col xs={12} lg={3}>
                     <Common.Widget
                         icon="li-user-lock"
-                        title="In-Active"
-                        subtitle="In-Active users"
-                        informer={<><span className="text-bold">4</span></>}
+                        title="Active"
+                        subtitle="Active users"
+                        informer={<><span className="text-bold text-success">{countUsers('Active')}</span></>}
                         invert={false}
                     />
                 </Col>
-                <Col xs={12} lg={4}>
+                <Col xs={12} lg={3}>
+                    <Common.Widget
+                        icon="li-user-lock"
+                        title="Blocked"
+                        subtitle="Blocked users"
+                        informer={<><span className="text-bold text-warning">{countUsers('Blocked')}</span></>}
+                        invert={false}
+                    />
+                </Col>
+                <Col xs={12} lg={3}>
                     <Common.Widget
                         icon="li-user-minus"
                         title="Archived"
                         subtitle="Archived users"
-                        informer={<span className="text-bold text-danger">3</span>}
+                        informer={<span className="text-bold text-danger">{countUsers('Archived')}</span>}
                         invert={false}
                     />
                 </Col>
@@ -55,10 +78,8 @@ export default function UsersPage(props) {
                 />
                 <CardBody className="padding-botton-0">
                 <Users.Users />
-                   
-                    
                 </CardBody>
             </Card>
         </AuthLayout>
     );
-} 
+}

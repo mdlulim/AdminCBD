@@ -1,8 +1,7 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
-import { Common, Dashboard } from 'components';
-
+import { Common, Dashboard, Overview } from 'components';
 const Filter = () => {
     return (
         <>
@@ -66,7 +65,40 @@ export default function DashboardPage(props) {
                                 </div>
                             </div>
                             <div id="dashboard-ec-line">
-                                <canvas data-zr-dom-id="zr_0" width="555" height="350" />
+                            <Overview.BarChart
+                         chartData={{
+                            labels: ['Deposit', 'Withdrawals', 'Rejected', 'Pending', 'Completed'],
+                            datasets: [
+                            {
+                                label: '# of Leads',
+                                data: [89000, 58000, 27500, 48000, 128000],
+                                backgroundColor: [
+                                '#86abc9',
+                                '#2196f3',
+                                '#d22346',
+                                'rgba(249, 194, 50, 1)',
+                                '#4CAF50',
+                                ],
+                                borderColor: [
+                                'rgba(249, 194, 50, 1)',
+                                '#f8f9fa',
+                                '#d22346',
+                                'rgba(249, 194, 38, 0.44)',
+                                '#4CAF50',
+                                ],
+                                borderWidth: 1,
+                            },
+                            ],
+                        }}
+                        options={{
+                            plugins: {
+                            legend: {
+                                display: false
+                            }
+                            }
+                        }}
+                        />
+                                {/* <canvas data-zr-dom-id="zr_0" width="555" height="350" /> */}
                                 05/18<br />
                                 <span />
                                 Sales: 58<br />
@@ -157,11 +189,11 @@ export default function DashboardPage(props) {
                             <Dashboard.RecentTransactions />
                             <Dashboard.RecentTransactions />
                         </CardBody>
-                        <div className="divider-text divider-text--xs">Canceled</div>
+                        {/* <div className="divider-text divider-text--xs">Canceled</div>
                         <CardBody className="padding-top-10 padding-bottom-0">
                             <Dashboard.RecentTransactions />
                             <Dashboard.RecentTransactions />
-                        </CardBody>
+                        </CardBody> */}
                         <CardBody className="padding-top-10">
                             <div className="form-row margin-top-0">
                                 <Col xs={12} className="text-center">

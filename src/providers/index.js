@@ -2,6 +2,7 @@
 import AuthService from './AuthService';
 import GeoLocationService from './GeoLocationService';
 import UserRolesService from './UserRolesService';
+import UserService from './UserService';
 import ProductService from './ProductService';
 import MemberService from './MemberService';
 import TransactionService from './TransactionService';
@@ -14,6 +15,7 @@ export {
     AuthService,
     GeoLocationService,
     UserRolesService,
+    UserService,
     ProductService,
     MemberService,
     TransactionService,

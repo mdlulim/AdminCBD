@@ -16,7 +16,7 @@ class UserService {
         mode: 'no-cors',
         method: 'GET',
         headers: headers,
-        url: `${Config.API.BASE_URL}/admin/users`,
+        url: `${Config.API.BASE_URL}/users?group=admin`,
       });
     }
 

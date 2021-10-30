@@ -59,31 +59,7 @@ export default function Currencies(props) {
 
 
     useMemo(() => {
-        const rolesList = [{
-            roleID: '109977041',
-            name: 'SUPER',
-            description: 'SUPER Admin has all the access',
-            created: 'just now',
-            status: 'Active',
-        }, {
-            roleID: '109977042',
-            name: 'Platform Administrator',
-            description: 'Platform Administrator',
-            created: '2 mins ago',
-            status: 'Active',
-        }, {
-            roleID: '109977043',
-            name: 'Training Administrator',
-            description: 'SUPER Admin has all the access',
-            created: '5 mins ago',
-            status: 'Blocked',
-        }, {
-          roleID: '109977055',
-          name: 'EcoSystem Administrator',
-          description: 'EcoSystem Administrator',
-          created: '5 mins ago',
-          status: 'Blocked',
-      }];
+        const rolesList = [];
      setRoles(rolesList);
      setFilteredRoles(rolesList);
 

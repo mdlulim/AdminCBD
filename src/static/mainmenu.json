@@ -130,26 +130,13 @@
                     "title": "Settings",
                     "link": "/settings",
                     "icon": null
+                },{
+                    "id": "forms",
+                    "title": "Forms Configuration",
+                    "link": "/forms",
+                    "icon": null
                 }
             ]
-        }
-    ],
-    "content": [
-        {
-            "id": "news",
-            "title": "News",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-            "link": "/news",
-            "icon": "li-news",
-            "childitems": []
-        },
-        {
-            "id": "faqs",
-            "title": "FAQs",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-            "link": "/faqs",
-            "icon": "li-bubble-question",
-            "childitems": []
         }
     ]
 }

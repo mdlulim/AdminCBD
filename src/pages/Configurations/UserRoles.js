@@ -13,8 +13,8 @@ export default function UserRolesPage(props) {
                 active: "Users"
             }}
             pageHeading={{
-                title: 'Manage Users',
-                caption: 'EXPLORE MEMBERS DASHBOARD FOR CRYPTO BASED INNOVATION',
+                title: 'Manage User Roles',
+                caption: 'EXPLORE USER ROLES FOR CRYPTO BASED INNOVATION',
             }}
         >
             <Card>
