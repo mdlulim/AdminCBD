@@ -67,19 +67,21 @@ const ProductAddNew = props => {
 				setError('');
 
                 const form = event.currentTarget;
-
+				let price = parseFloat(form.price.value);
+				let educator = parseFloat(educatorFee);
+				let regFee = parseFloat(registrationFee);
                // const title = form.title.value;
                 const productData ={
                     title				: form.title.value,
                     body				: null,
                     type				: selectedProductType,
                     currency_code		: selectedCurrency,
-					price				: form.price.value,
-					educator_fee		: educatorFee,
-					educator_persantage	: form.educator_persantage.value,
-					registration_fee	: registrationFee,
-					registration_persantage: form.registration_persantage.value,
-					total				: form.price.value+educatorFee+registrationFee,
+					price				: price,
+					educator_fee		: educator,
+					educator_persantage	: parseFloat(form.educator_persantage.value),
+					registration_fee	: regFee,
+					registration_persantage: parseFloat(form.registration_persantage.value),
+					total				: price+educator+regFee,
                     status				: selectedStatus
                  }
 				 console.log(productData);

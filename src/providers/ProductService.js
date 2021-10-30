@@ -55,7 +55,8 @@ class ProductService {
       headers: headers,
       url: `${Config.API.BASE_URL}/products`,
     }).then((res) =>{
-      const result = {status: res.data.status, message: res.data.message}
+      //const result = {status: res.data.status, message: res.data.message}
+      const result = res;
       return result;
     });
   }

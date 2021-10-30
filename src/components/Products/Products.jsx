@@ -75,11 +75,14 @@ export default function Products(props) {
     useMemo(() => {
 
       ProductService.getProducts().then((res) => {
-        console.log('Products '+res.data.data.results)
-        console.log(res.data.data.results)
-        const productlist = res.data.data.results;
-        setProducts(productlist);
-        setFilteredProducts(productlist);
+        //console.log('Products '+res.data.data.results)
+        console.log(res.data)
+        if(res.data.success){
+          const productlist = res.data.data.results;
+          setProducts(productlist);
+          setFilteredProducts(productlist);
+        }
+        
       });
 
       }, []);

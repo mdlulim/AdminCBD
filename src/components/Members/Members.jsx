@@ -32,6 +32,7 @@ const customStyles = {
 
 const iconPadding ={
     paddingRight: '3px',
+    float: 'Left'
 }
 const inputWith={
   width: '20%'
@@ -124,13 +125,13 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-    <spam style={iconPadding}><a
+    <div style={iconPadding}><a
       href={`members/${row.id}`}
       className="btn btn-secondary btn-sm btn-icon ml-2"
     >
          <span className="fa fa-eye" />
-    </a></spam>
-    <spam style={iconPadding}>
+    </a></div>
+    <div style={iconPadding}>
       <a
       href={`#`}
       className="btn btn-light btn-sm btn-icon"
@@ -139,15 +140,9 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
         onSubmitChangeStatus(row);
       }}
     > <span className="fa fa-pencil" />
-    </a></spam>
+    </a></div>
   </div>
 }];
-
-const handleChangePassword = async data => {
-}
-
-const handleDeleteMember = async data => {
-}
 
 const onSubmitChangeStatus= data => {
   setSelectedMember(data);
