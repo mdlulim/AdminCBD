@@ -84,7 +84,7 @@ class MemberService {
         mode: 'no-cors',
         method: 'PUT',
         headers: headers,
-        url: `${Config.API.BASE_URL}/users/${id}/active`,
+        url: `${Config.API.BASE_URL}/users/${id}/unblock`,
       }).then((res) =>{
         const result = res; //{status: res.data.status, message: res.data.message}
         return result;
