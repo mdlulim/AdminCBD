@@ -97,10 +97,26 @@ const columns = [{
     selector: 'type',
     sortable: true,
 }, {
-    name: 'Price',
-    selector: 'price',
-    sortable: true,
-    cell: row => <div>{row.currency_code} <CurrencyFormat value={row.price} displayType={'text'} /></div>
+  name: 'Educator Fee',
+  selector: 'educator_fee',
+  sortable: true,
+  cell: row => <div>{row.currency_code} {row.educator_fee}</div>
+},{
+  name: 'Reg Fee',
+  selector: 'registration_fee',
+  sortable: true,
+  cell: row => <div>{row.currency_code} {row.registration_fee}</div>
+},  {
+  name: 'Price',
+  selector: 'price',
+  sortable: true,
+  cell: row => <div>{row.currency_code} <CurrencyFormat value={row.price} displayType={'text'} /></div>
+},{
+  name: 'Total',
+  selector: 'total',
+  sortable: true,
+  cell: row => <div>
+    {row.currency_code} <CurrencyFormat value={parseFloat(row.educator_fee)+parseFloat(row.registration_fee)+parseFloat(row.price)} displayType={'text'} /></div>
 },{
     name: 'Status',
     selector: 'status',

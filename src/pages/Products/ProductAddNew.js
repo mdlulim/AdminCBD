@@ -88,9 +88,18 @@ const ProductAddNew = props => {
                  ProductService.addProduct(productData).then((response) =>{
 					console.log(response);
 					if(response.status){
-
+                        setShow(true);
+                        confirmAlert({
+                            title: 'Confirm submit',
+                            message: 'Product was added successfully',
+                            buttons: [
+                              {
+                                label: 'Yes'
+                              }
+                            ]
+                          })
 					}else{
-						setError(response.message);
+						setError('error message');
 					}
                     setDisabled(false);
                  })

@@ -12,6 +12,7 @@ const headers = {
 class ProductService {
 
   static async getProducts() {
+    console.log(authToken)
     return await axios({
       mode: 'no-cors',
       method: 'GET',
@@ -48,6 +49,7 @@ class ProductService {
   }
 
   static async addProduct(product){
+    console.log(product)
     return await axios({
       mode: 'no-cors',
       method: 'POST',
