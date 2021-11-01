@@ -8,10 +8,6 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Select from 'react-select';
 import { ProductService } from '../../providers';
-<<<<<<< HEAD
-
-=======
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 
 const ProductDetails = props => {
 	const breadcrumb = { heading: "Product Details" };
@@ -39,41 +35,8 @@ const ProductDetails = props => {
             setEditorState(productDetails.body)
         });
 
-<<<<<<< HEAD
-    useMemo(() => {
-        const product_id = props.match.params.id;
-        ProductService.getProduct(product_id).then((response) =>{
-       
-            if(response.data.data !== null){
-                console.log(response.data.data);
-                setProduct(response.data.data);
-            }        
-        });
-    },[]);
-    
-	const profile = {
-		customerId: '109977041',
-		name: 'Mduduzi Mdluli',
-		username: 'JSmith',
-		phone: '0845880677',
-		email: 'example1@demo.com',
-		id_number: '9103025869089',
-		country: 'South Africa',
-		level: '3',
-		created: 'just now',
-		status: 'Active',
-		bio: 'Im mdu mdluli born and raised in KZN',
-	    address: {
-			streetAddress: '23 Modiseni',
-			suburb: 'Centurion',
-			city: 'Pretoria',
-			province: 'Gauteng',
-			postalCode: '2345'
-		}};
-=======
  
       }, []);
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 		const toggleTab = (e, tab) => {
 			e.preventDefault();
 			setActiveTab(tab);
