@@ -3,16 +3,10 @@ import Config from '../config';
 import { Session } from 'bc-react-session';
 
 const session = Session.get();
-<<<<<<< HEAD
-const authToken = (session.payload.user) ? session.payload.token : null;
-const headers = {
-  'Authorization': `Bearer ${authToken}`
-=======
 const authToken = (session.name && session.name.payload && session.name.payload.admin) ? session.name.payload.token : null;
 const headers = {
   'Authorization': `Bearer ${authToken}`,
   'Content-Type': `application/json`
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 };
 
 class MemberService {
@@ -22,9 +16,6 @@ class MemberService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-<<<<<<< HEAD
-      url: `${Config.API.BASE_URL}/admin/members`,
-=======
       url: `${Config.API.BASE_URL}/users?group=member`,
     });
   }
@@ -35,7 +26,6 @@ class MemberService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/users?group=wealth-creator`,
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
     });
   }
 
@@ -44,11 +34,6 @@ class MemberService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-<<<<<<< HEAD
-      url: `${Config.API.BASE_URL}/admin/members/${id}`,
-    });
-  }
-=======
       url: `${Config.API.BASE_URL}/users/${id}`,
     });
   }
@@ -88,7 +73,7 @@ class MemberService {
         mode: 'no-cors',
         method: 'PUT',
         headers: headers,
-        url: `${Config.API.BASE_URL}/users/${id}/archive`,
+        url: {Config.API.BASE_URL}/users/${id}/archive`,
       }).then((res) =>{
         console.log(res);
         //const result = {status: res.data.status, message: res.data.message}
@@ -107,7 +92,6 @@ class MemberService {
   }
 }
 
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 }
 
 export default MemberService;

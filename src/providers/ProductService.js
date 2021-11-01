@@ -3,34 +3,21 @@ import Config from '../config';
 import { Session } from 'bc-react-session';
 
 const session = Session.get();
-<<<<<<< HEAD
-const authToken = (session.payload.user) ? session.payload.token : null;
-const headers = {
-  'Authorization': `Bearer ${authToken}`
-=======
 const authToken = (session.name && session.name.payload && session.name.payload.admin) ? session.name.payload.token : null;
 const headers = {
   'Authorization': `Bearer ${authToken}`,
   'Content-Type': `application/json`
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 };
 
 class ProductService {
 
   static async getProducts() {
-<<<<<<< HEAD
-=======
     console.log(authToken)
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-<<<<<<< HEAD
-      url: `${Config.API.BASE_URL}/admin/products`,
-=======
       url: `${Config.API.BASE_URL}/products`,
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
     });
   }
 
@@ -39,13 +26,6 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-<<<<<<< HEAD
-      url: `${Config.API.BASE_URL}/admin/products/${id}`,
-    });
-  }
-}
-
-=======
       url: `${Config.API.BASE_URL}/products/${id}`,
     });
   }
@@ -97,5 +77,4 @@ class ProductService {
   }
 
 }
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 export default ProductService;
