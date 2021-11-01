@@ -79,18 +79,18 @@ class MemberService {
         //const result = {status: res.data.status, message: res.data.message}
         const result = res;
         return result;
-      }); }
-    //else if(status === 'Active'){
-    //   return await axios({
-    //     mode: 'no-cors',
-    //     method: 'PUT',
-    //     headers: headers,
-    //     url: `${Config.API.BASE_URL}/users/${id}/archive`,
-    //   }).then((res) =>{
-    //     const result = {status: res.data.status, message: res.data.message}
-    //     return result;
-    // }
+      }); }else if(status === 'Active'){
+      return await axios({
+        mode: 'no-cors',
+        method: 'PUT',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/users/${id}/active`,
+      }).then((res) =>{
+        const result = res; //{status: res.data.status, message: res.data.message}
+        return result;
+    });
   }
+}
 
 }
 

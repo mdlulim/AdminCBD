@@ -14,7 +14,8 @@ import { ProductService } from '../../providers';
 const ProductAddNew = props => {
 	const breadcrumb = { heading: "New Product" };
 	const [disabled, setDisabled] = useState(false);
-	const [show, setShow] = useState(true);
+    const [show, setShow] = useState(true);
+    const [showFixedPlan, setShowFixedPlan] = useState(true);
 	const [errorAmount, setErrorAmount] = useState(true);
 	const [errorReg, setErrorReg] = useState(true);
 	const [errorEducator, setErrorEducator] = useState(true);
@@ -47,10 +48,8 @@ const ProductAddNew = props => {
 
             const productType = [
 				{ value: 'Fraxion', label: 'Fraxion' },
-                { value: 'Crypto Bundle', label: 'Crypto Bundle' },
-                { value: 'Bitcoin', label: 'Bitcoin' },
-                { value: 'Payment Bundle', label: 'Payment Bundle' },
-                { value: 'Top 10 Bundle', label: 'Top 10 Bundle' }
+                { value: 'Fixed Plans', label: 'Fixed Plans' },
+                { value: 'CBIx7', label: 'CBIx7' }
               ];
               const currencies = [
                 { value: 'CBI',  label: 'CBI' },
@@ -143,10 +142,13 @@ const ProductAddNew = props => {
                                             onChange={item => {
 												setSelectedProductType(item.value);
 												if(item.value == 'Fraxion'){
-													setShow(false)
-												}else{
-													setShow(true)
-												}
+                                                    setShow(false)
+                                                    
+												}else if(item.value == 'Fixed Plans'){
+                                                    setShow(true)
+                                                    setShowFixedPlan(false)
+												}else if(item.value == 'CBIx7'){
+                                                }
 											}}
                                             className={`basic-multi-select form-control-m`}
 											classNamePrefix="select"
@@ -224,6 +226,82 @@ const ProductAddNew = props => {
                                 </Col> */}
 								<Col md={6} hidden={show}>
                                         <label htmlFor="name">Registration Persentage Fee (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="registration_persantage"
+                                            name="registration_persantage"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													let value =  event.target.value/100*amountFee
+													setRegistrationFee(parseFloat(value).toFixed(2))
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+													setRegistrationFee(0)
+												}
+											}}
+                                        />
+                                </Col>
+                                <Col md={6} hidden={showFixedPlan}>
+                                        <label htmlFor="name">Estimated daily Interest (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="registration_persantage"
+                                            name="registration_persantage"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													let value =  event.target.value/100*amountFee
+													setRegistrationFee(parseFloat(value).toFixed(2))
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+													setRegistrationFee(0)
+												}
+											}}
+                                        />
+                                </Col>
+                                <Col md={6} hidden={showFixedPlan}>
+                                        <label htmlFor="name">Minimum Gross Return (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="registration_persantage"
+                                            name="registration_persantage"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													let value =  event.target.value/100*amountFee
+													setRegistrationFee(parseFloat(value).toFixed(2))
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+													setRegistrationFee(0)
+												}
+											}}
+                                        />
+                                </Col>
+                                <Col md={6} hidden={showFixedPlan}>
+                                        <label htmlFor="name">Investment Period (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="registration_persantage"
+                                            name="registration_persantage"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													let value =  event.target.value/100*amountFee
+													setRegistrationFee(parseFloat(value).toFixed(2))
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+													setRegistrationFee(0)
+												}
+											}}
+                                        />
+                                </Col>
+                                <Col md={6} hidden={showFixedPlan}>
+                                        <label htmlFor="name">Minimum Investment (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
                                         <input
                                             type="text"
                                             id="registration_persantage"
