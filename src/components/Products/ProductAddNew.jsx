@@ -62,25 +62,6 @@ export default function ProductAddNew(props) {
       }, []);
     // table headings definition
 
-	const profile = {
-		customerId: '109977041',
-		name: 'Mduduzi Mdluli',
-		username: 'JSmith',
-		phone: '0845880677',
-		email: 'example1@demo.com',
-		id_number: '9103025869089',
-		country: 'South Africa',
-		level: '3',
-		created: 'just now',
-		status: 'Active',
-		bio: 'Im mdu mdluli born and raised in KZN',
-	    address: {
-			streetAddress: '23 Modiseni',
-			suburb: 'Centurion',
-			city: 'Pretoria',
-			province: 'Gauteng',
-			postalCode: '2345'
-		}};
 		const toggleTab = (e, tab) => {
 			e.preventDefault();
 			setActiveTab(tab);

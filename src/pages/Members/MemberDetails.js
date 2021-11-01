@@ -1,8 +1,15 @@
 import React, { useMemo, useRef, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import { Card, CardBody, Col, Row } from 'reactstrap';
+<<<<<<< HEAD
 import { Layout } from 'containers';
 import { Members, Transactions, Products } from 'components';
 import { MemberService } from '../../providers';
+=======
+import { MemberService } from '../../providers';
+import { AuthLayout } from 'containers';
+import { Common, Members, Transactions, Products } from 'components';
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 
 const Image = () => {
     return (
@@ -16,8 +23,30 @@ const Image = () => {
     );
 };
 
+const Filter = () => {
+    return (
+        <>
+            <Common.Dropdown
+                actions={[
+                    { label: 'Filter by Date Range' },
+                    { label: 'Filter by Date' },
+                    { label: 'Filter Month' },
+                    { label: 'Filter Year' }
+                ]}
+            />
+            <button
+                className="btn btn-light d-none d-md-block float-right margin-right-5"
+                id="dashboard-rp-customrange"
+            >
+                September 22, 2021 - October 21, 2021
+            </button>
+        </>
+    );
+}
+
 const MemberDetails = props => {
 	const breadcrumb = { heading: "Member Details" };
+<<<<<<< HEAD
     const [activeTab, setActiveTab] = useState('referals');
     const [member, setMember] = useState({});
 
@@ -30,6 +59,30 @@ const MemberDetails = props => {
             }
         });
     },[]);
+=======
+	const [activeTab, setActiveTab] = useState('referals');
+    const [member, setMember] = useState({});
+    const [addresses, setAddresses] = useState([]);
+    const params = useParams();
+    const { id } = params;
+
+    useMemo(() => {
+        //Get member details
+        MemberService.getMember(id).then((res) => {
+          const memberDetails = res.data.data;
+          setMember(memberDetails);
+        });
+
+        //Get member details
+        MemberService.getMemberAddress(id).then((res) => {
+            console.log(res.data.data.results)
+            const memberAddress = res.data.data.results;
+            setAddresses(memberAddress);
+          });
+ 
+      }, []);
+
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 	const profile = {
 		customerId: '109977041',
 		name: 'Mduduzi Mdluli',
@@ -54,43 +107,55 @@ const MemberDetails = props => {
 			setActiveTab(tab);
 		};
 
+        const numRows = addresses.length
+
 	return (
-		<Layout {...props} breadcrumb={breadcrumb}>
+		<AuthLayout
+            {...props}
+            breadcrumb={{ active: "Member Details" }}
+            pageHeading={{
+                title: 'Member Details',
+                caption: 'EXPLORE OVERVIEW MEMBER DETAILS FOR CRYPTO BASED INNOVATION'
+            }}
+        >
                     <Row>
                         <Col md={12} lg={3} xl={3}>
                             <Card className="o-hidden author-box" style={{ minHeight: 300 }}>
                                 <CardBody>
+
+                                    {member ?
                                     <div className="author-box-center mt-3">
                                         <img
-                                            alt={profile.name}
+                                            alt={member.first_name}
                                             src={require("images/1.jpeg")}
                                             className="rounded-circle author-box-picture"
                                         />
                                         <div className="clearfix"></div>
                                         <div className="author-box-name mt-3">
-											<h4 className="text-primary mt-0 mb-1">{profile.name}</h4>
+											<h4 className="text-primary mt-0 mb-1">{member.first_name} {member.last_name}</h4>
                                             <span className="text-success" onClick={e => e.preventDefault()}>
-                                                Balance: {'ZAR 68000.00'}
+                                                Balance: {'KYC 68000.00'}
                                             </span>
                                         </div>
                                         <div className="author-box-job">
-										    Id Number: {profile.id_number}<br />
-											Phone: {profile.phone}<br />
-											Email: {profile.email}<br />
-											Level: {profile.level}
+										    Id Number: {member.id_number}<br />
+											Phone: {member.mobile}<br />
+											Email: {member.email}<br />
+											Level: 0
 											<hr />
 											<strong>Address</strong>
-											{profile.address &&
+											{numRows ?
                                                 <p>
-                                                    {profile.address.streetAddress || ''},&nbsp;
-                                                    {profile.address.suburb || ''}
+                                                    {addresses.streetAddress || ''},&nbsp;
+                                                    {addresses.suburb || ''}
                                                     <br />
-                                                    {profile.address.city || ''},&nbsp;
-                                                    {profile.address.province || ''}&nbsp;
-                                                    {profile.address.postalCode || ''}
-                                                </p>}
+                                                    {addresses.city || ''},&nbsp;
+                                                    {addresses.province || ''}&nbsp;
+                                                    {addresses.postalCode || ''}
+                                                </p>:<p> <br />Address not provided</p>}
                                         </div>
                                     </div>
+                                    : ''}
                                 </CardBody>
                             </Card>
                         </Col>
@@ -142,27 +207,27 @@ const MemberDetails = props => {
                                     <div className="tab-content">
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
                                             <CardBody className="pl-0 pr-0 pb-0">
-												<Members.Referals />
+												<Members.Referals member={member} />
                                             </CardBody>
                                         </div>
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
-                                                    <Products.ProductsByMember />
+                                                    <Products.ProductsByMember member={member} />
                                                 </CardBody>
                                             </div>
                                         </div>
 										<div role="tabpanel" className={`tab-pane show ${activeTab === 'transactions' ? 'active' : ''}`}>
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
-												 <Transactions.TransactionsByMember />
+												 <Transactions.TransactionsByMember member={member} />
                                                 </CardBody>
                                             </div>
                                         </div>
 										<div role="tabpanel" className={`tab-pane show ${activeTab === 'banking-details' ? 'active' : ''}`}>
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
-												<Members.BankDetails />
+												<Members.BankDetails member={member} />
                                                 </CardBody>
                                             </div>
                                         </div>
@@ -172,7 +237,7 @@ const MemberDetails = props => {
                         </Col>
                     </Row>
 			
-		</Layout>
+		</AuthLayout>
 	);
 };
 

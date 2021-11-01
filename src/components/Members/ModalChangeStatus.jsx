@@ -4,24 +4,67 @@ import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
+<<<<<<< HEAD
 import LoadingSpinner from '../../components/utils/LoadingSpinner';
+=======
+import { MemberService } from '../../providers';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 
 const ModalChangeStatus = props => {
     const { show, setShow, member} = props;
     const [statuses, setStatuses] = useState([]);
+<<<<<<< HEAD
     const [loading, setLoading] = useState(false);
+=======
+    const [disabled, setDisabled] = useState(false);
+    const [error, setError] = useState([]);
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
+       // console.log(member)
     }, []);
 
     const statusOptions = [
         { value: 'Active',  label: 'Active' },
-        { value: 'Pending', label: 'Pending' },
-        { value: 'Blocked', label: 'Blocked' }
+        { value: 'Blocked', label: 'Blocked' },
+        { value: 'Archive', label: 'Archive' },
       ];
+      const onSubmit = (event) => {
+        event.preventDefault();
+        setDisabled(true);
+        setError('');
+
+        const form = event.currentTarget;
+
+
+        console.log(selectedStatus);
+        if(selectedStatus){
+            MemberService.updateStatus(member.id, selectedStatus.value).then((response) =>{
+                console.log(response);
+                //  if(response.data.success){
+                //      setShow(false)
+                //      return confirmAlert({
+                //         title: 'Succcess',
+                //         message: 'Member was successfully updated',
+                //         buttons: [
+                //           {
+                //             label: 'Ok',
+                //           }
+                //         ]
+                //       });
+                //  }else{
+                //      setError('Something went wrong while trying to update members status');
+                //  }
+                setDisabled(false);
+             })
+        }
+    
+      }
     const handleClose = () => setShow(false);
 
     const updateMemberStatus = (event) => {
@@ -43,34 +86,26 @@ const ModalChangeStatus = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success"> Update CBI Member Status</h3>
                         <hr />
+<<<<<<< HEAD
                         <Form onSubmit={updateMemberStatus}>
+=======
+                        <form onSubmit={onSubmit}>
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
                                 <div className="form-group">
                                     <label htmlFor="fullname">Full Names</label>
-                                    {member ? 
+                                    {member ?
                                     <input
                                         type="text"
                                         id="fullname"
                                         className="form-control form-control-m"
                                         value={member.first_name+' '+member.last_name}
                                         disabled
-                                    /> 
-                                    : ''}
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="firstname">Id Number</label>
-                                    {member ? 
-                                    <input
-                                        type="text"
-                                        id="firstname"
-                                        className="form-control form-control-m"
-                                        value={member.id_number}
-                                        disabled
                                     />
                                     : ''}
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="email">Email Address</label>
-                                    {member ? 
+                                    {member ?
                                     <input
                                         type="text"
                                         id="email"
@@ -86,6 +121,7 @@ const ModalChangeStatus = props => {
                                     id="status"
                                     name="status"
                                     options={statusOptions}
+                                    defaultValue={statusOptions.filter(option => option.value === member.status)}
                                     onChange={item => setSelectedStatus(item)}
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
@@ -117,6 +153,10 @@ const ModalChangeStatus = props => {
                             <button
                                         type="submit"
                                         className="btn btn-success float-right"
+<<<<<<< HEAD
+=======
+                                        disabled={disabled}
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
                                     >
                                     {processing ? 'Processing...' : 'Update'}
                                 </button>

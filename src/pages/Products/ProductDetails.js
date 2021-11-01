@@ -1,25 +1,45 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Layout } from 'containers';
+import { useParams, useHistory } from 'react-router-dom';
+import { AuthLayout } from 'containers';
 import { Products } from 'components';
 import { EditorState } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Select from 'react-select';
 import { ProductService } from '../../providers';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 
 const ProductDetails = props => {
 	const breadcrumb = { heading: "Product Details" };
+    const [disabled, setDisabled] = useState(false);
     const [activeTab, setActiveTab] = useState('referals');
     const [selectedGroup, setSelectedGroup] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
     const [product, setProduct] = useState({});
     const { processing,confirmButtonDisabled, confirmButton,} = props;
-    const [selectedRebalancingFrequency, setSelectedRebalancingFrequency] = useState('');
+    const [selectedCurrency, setSelectedCurrency] = useState('');
+    const [selectedProductType, setSelectedProductType] = useState('');
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
+    const params = useParams();
+    const { id } = params;
 
+    useMemo(() => {
+        //Get member details
+        ProductService.getProduct(id).then((res) => {
+            console.log(res.data.data);
+            const productDetails = res.data.data;
+            setProduct(productDetails);
+            setSelectedProductType(productDetails.type);
+            setSelectedCurrency(productDetails.currency_code);
+            setSelectedStatus(productDetails.status)
+            setEditorState(productDetails.body)
+        });
 
+<<<<<<< HEAD
     useMemo(() => {
         const product_id = props.match.params.id;
         ProductService.getProduct(product_id).then((response) =>{
@@ -50,6 +70,10 @@ const ProductDetails = props => {
 			province: 'Gauteng',
 			postalCode: '2345'
 		}};
+=======
+ 
+      }, []);
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 		const toggleTab = (e, tab) => {
 			e.preventDefault();
 			setActiveTab(tab);
@@ -59,90 +83,112 @@ const ProductDetails = props => {
             setEditorState(editorState);
             };
 
-            const groupsOptions = [
-                { value: '7563285', label: 'Crypto Bundle' },
-                { value: '2345624', label: 'Bitcoin' },
-                { value: '9843444', label: 'Payment Bundle' },
-                { value: '3645364', label: 'Top 10 Bundle' }
+            const productType = [
+                { value: 'Crypto Bundle', label: 'Crypto Bundle' },
+                { value: 'Bitcoin', label: 'Bitcoin' },
+                { value: 'Payment Bundle', label: 'Payment Bundle' },
+                { value: 'Top 10 Bundle', label: 'Top 10 Bundle' }
               ];
-              const balancingOptions = [
-                { value: 'Monthly',  label: 'Monthly' },
-                { value: 'Annually', label: 'Annually' }
+              const currencies = [
+                { value: 'ZAR',  label: 'ZAR' },
+                { value: 'KYC',  label: 'KYC' },
               ];
 
               const statusOptions = [
-                { value: 'Active',  label: 'Active' },
-                { value: 'In-Active', label: 'In-Active' }
+                { value: 'Published',  label: 'Published' },
+                { value: 'Achived', label: 'Achived' }
               ];
+//====================Update Product===============================
+              const onSubmit = (event) => {
+                event.preventDefault();
+                setDisabled(true);
+                const form = event.currentTarget;
+
+               // const title = form.title.value;
+
+                const productData ={
+                    title: form.title.value,
+                    body: editorState,
+                    type: selectedProductType,
+                    currency_code: selectedCurrency,
+                    price: form.price.value,
+                    status: selectedStatus
+                 }
+
+                //  ProductService.updateProduct(id, productData).then((response) =>{
+                //     console.log(response);
+                //      setDisabled(false);
+                //  })
+
+                console.log(editorState._immutable);
+        }
 
 	return (
-		<Layout {...props} breadcrumb={breadcrumb}>
+		<AuthLayout {...props}
+        breadcrumb={{ active: "Products Details" }}
+        pageHeading={{
+            title: 'Products Details',
+            caption: 'EXPLORE OVERVIEW PRODUCTS DETAILS FOR CRYPTO BASED INNOVATION'
+        }}>
                     <Row>
                         <Col md={6} lg={6} xl={6}>
                             <Card>
                                 <CardBody>
+                                <form onSubmit={onSubmit}>
                                 <Row>
                                 <Col md={12}>
-                                        <label htmlFor="name">product Name</label>
+                                        <label htmlFor="name">product Title</label>
                                         <input
                                             type="text"
-                                            id="name"
+                                            id="title"
+                                            name="title"
                                             className="form-control form-control-m"
+                                            defaultValue={product.title}
                                         /> 
                                 </Col>
                                 <Col md={6}>
-                                        <label htmlFor="rebalancing_frequency">Rebalancing Frequency</label>
+                                        <label htmlFor="product_type">Product Type</label>
                                         <Select
-                                            id="rebalancing_frequency"
-                                            name="rebalancing_frequency"
-                                            options={balancingOptions}
-                                            onChange={item => setSelectedRebalancingFrequency(item)}
+                                            id="product_type"
+                                            name="product_type"
+                                            value={productType.filter(option => option.label === product.type)}
+                                            options={productType}
+                                            onChange={item => setSelectedProductType(item.value)}
                                             className={`basic-multi-select form-control-m`}
                                             classNamePrefix="select"
                                             />
                                 </Col>
                                 <Col md={6}>
-                                        <label htmlFor="next_rebalance">Next Rebalance</label>
-                                        <input
-                                            type="text"
-                                            id="next_rebalance"
-                                            className="form-control form-control-m"
-                                        /> 
+                                        <label htmlFor="currency">Select Currency</label>
+                                        <Select
+                                            id="currency"
+                                            name="currency"
+                                            value={currencies.filter(option => option.label === product.currency_code)}
+                                            options={currencies}
+                                            onChange={item => setSelectedCurrency(item.value)}
+                                            className={`basic-multi-select form-control-m`}
+                                            classNamePrefix="select"
+                                            />
                                 </Col>
+                                
                                 <Col md={6}>
                                         <label htmlFor="name">Price</label>
                                         <input
                                             type="text"
-                                            id="name"
+                                            id="price"
+                                            name="price"
                                             className="form-control form-control-m"
+                                            value={product.price}
                                         /> 
                                 </Col>
                                 <Col md={6}>
-                                        <label htmlFor="target_weight">Target Weight</label>
-                                        <input
-                                            type="text"
-                                            id="target_weight"
-                                            className="form-control form-control-m"
-                                        /> 
-                                </Col>
-                                <Col md={6}>
-                                        <label htmlFor="name">Product Group</label>
-                                        <Select
-                                            id="group"
-                                            name="group"
-                                            options={groupsOptions}
-                                            onChange={item => setSelectedGroup(item)}
-                                            className={`basic-multi-select form-control-m`}
-                                            classNamePrefix="select"
-                                            />
-                                </Col>
-                                <Col md={6}>
-                                        <label htmlFor="name">Status</label>
+                                        <label htmlFor="status">Status</label>
                                         <Select
                                             id="status"
                                             name="status"
+                                            value={statusOptions.filter(option => option.label === product.status)}
                                             options={statusOptions}
-                                            onChange={item => setSelectedStatus(item)}
+                                            onChange={item => setSelectedStatus(item.value)}
                                             className={`basic-multi-select form-control-m`}
                                             classNamePrefix="select"
                                             />
@@ -156,16 +202,19 @@ const ProductDetails = props => {
                                         editorClassName="editorClassName"
                                         onEditorStateChange={onEditorStateChange}
                                     />
+                                    <hr />
                                     </Col>
                                     <Col md={6}>
-                                    <button
+                                        
+                         <button disabled={disabled}
                             className="btn btn-primary"
                             disabled={confirmButtonDisabled || processing}
                         >
-                            {processing ? 'Processing...' : 'Create'}
+                            {processing ? 'Processing...' : 'Update Product'}
                         </button>
                         </Col>
-                            </Row>
+                       </Row>
+                    </form>
                                 </CardBody>
                             </Card>
                         </Col>
@@ -211,7 +260,7 @@ const ProductDetails = props => {
                                     </Col>
                     </Row>
 			
-		</Layout>
+		</AuthLayout>
 	);
 };
 

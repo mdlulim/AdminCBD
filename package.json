@@ -73,7 +73,7 @@
     "react-images-uploader": "^1.2.0-rc1",
     "react-moment": "^1.1.1",
     "react-notifications-component": "^2.2.3",
-    "react-number-format": "^4.4.1",
+    "react-number-format": "^4.7.3",
     "react-paginate": "^6.3.2",
     "react-progress-button": "^5.1.0",
     "react-redux": "^7.2.0",

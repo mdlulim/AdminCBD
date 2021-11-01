@@ -62,33 +62,10 @@ export default function UsersRoles(props) {
 
 
     useMemo(() => {
-      const roleList = [{
-        role_id: '109977041',
-        name: 'Super Administrator',
-        label: 'Super Administrator',
-        description: 'all user access',
-        created: '2021-10-21',
-    }, {
-      role_id: '109977042',
-        name: 'Platform Administrator',
-        label: 'Platform Administrator',
-        description: 'Mid user access',
-        created: '2021-10-21',
-    }, {
-      role_id: '109977043',
-        name: ' System Administrator',
-        label: 'System Administrator',
-        description: 'config access',
-        created: '2021-10-21',
-    }];
-    setRoles(roleList);
-    setFilteredRoles(roleList);
-      UserRolesService.getUserRoles().then((res) => {
-          console.log(res.data.data.results)
-          const userRolesList = res.data.data.results;
-          setRoles(userRolesList);
-          setFilteredRoles(userRolesList);
-        });
+        const rolesList = [];
+     setRoles(rolesList);
+     setFilteredRoles(rolesList);
+
 
       }, []);
     // table headings definition

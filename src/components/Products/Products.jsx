@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody } from 'reactstrap';
+import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
 import { useHistory } from 'react-router-dom';
+import CurrencyFormat from 'react-currency-format';
 import DeleteProductAlert from './DeleteProductAlert';
 import { ProductService } from '../../providers';
 // styles
@@ -36,14 +38,14 @@ const Status = ({ status }) => {
     if (status === 'Pending') {
       badge = 'warning';
     }
-    if (status === 'Active') {
+    if (status === 'Published') {
       badge = 'success';
     }
     if (status === 'Blocked') {
         badge = 'danger';
       }
     return (
-      <span className={`badge badge-${badge}`}>{status}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
     );
   };
 
@@ -71,6 +73,7 @@ export default function Products(props) {
 
 
     useMemo(() => {
+<<<<<<< HEAD
       ProductService.getProducts().then((res) => {
         console.log(res.data.data.results)
         const productlist = res.data.data.results;
@@ -142,69 +145,85 @@ export default function Products(props) {
     ];
      setProducts(productsList);
      setFilteredProducts(productsList);
+=======
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 
+      ProductService.getProducts().then((res) => {
+        //console.log('Products '+res.data.data.results)
+        console.log(res.data)
+        if(res.data.success){
+          const productlist = res.data.data.results;
+          setProducts(productlist);
+          setFilteredProducts(productlist);
+        }
+        
+      });
 
       }, []);
     // table headings definition
 const columns = [{
-    name: 'Product Name',
-    selector: 'name',
+    name: 'Title',
+    selector: 'title',
     sortable: true,
     wrap: true,
 },{
-    name: 'Number Of Constituents',
-    selector: 'no_of_onstituents',
+    name: 'Type',
+    selector: 'type',
     sortable: true,
-},
-{
-    name: 'Rebalancing Frequency',
-    selector: 'rebalancing_frequency',
-    sortable: true,
+}, {
+  name: 'Educator Fee',
+  selector: 'educator_fee',
+  sortable: true,
+  cell: row => <div>{row.currency_code} {row.educator_fee}</div>
 },{
-    name: 'Target Weight',
-    selector: 'target_weight',
-    sortable: true,
-}, {
-    name: 'Last Rebalance',
-    selector: 'last_rebalance',
-    sortable: true,
-}, {
-    name: 'Next Rebalance',
-    selector: 'next_rebalance',
-    sortable: true,
-}, {
-    name: 'Group',
-    selector: 'group',
-    sortable: true,
-}, {
-    name: 'Price',
-    selector: 'price',
-    sortable: true,
+  name: 'Reg Fee',
+  selector: 'registration_fee',
+  sortable: true,
+  cell: row => <div>{row.currency_code} {row.registration_fee}</div>
+},  {
+  name: 'Price',
+  selector: 'price',
+  sortable: true,
+  cell: row => <div>{row.currency_code} <CurrencyFormat value={row.price} displayType={'text'} /></div>
+},{
+  name: 'Total',
+  selector: 'total',
+  sortable: true,
+  cell: row => <div>
+    {row.currency_code} <CurrencyFormat value={parseFloat(row.educator_fee)+parseFloat(row.registration_fee)+parseFloat(row.price)} displayType={'text'} /></div>
 },{
     name: 'Status',
     selector: 'status',
     sortable: true,
     cell: row => <Status {...row} />
 }, {
+    name: 'Created Date',
+    selector: 'created',
+    sortable: true,
+  cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
+},{
     name: 'Actions',
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}>
       <a
-      href={`products/${row.productId}`}
-      className="btn btn-lg btn-info btn-sm"
-    ><Edit width={16} height={16}/>
+      href={`products/${row.id}`}
+      className="btn btn-secondary btn-sm btn-icon"
+    ><span className="fa fa-pencil" />
     </a></spam>
     <spam style={iconPadding}><a
       href={`#`}
-      className="btn btn-lg btn-danger btn-sm"
+      className="btn btn-secondary btn-sm btn-icon"
       onClick={e => {
         e.preventDefault();
     
         onSubmitDeleteProduct(row);
       }}
     >
-      <Trash width={16} height={16}/>
+      <span className="fa fa-trash" />
     </a></spam>
   </div>
 }];
@@ -257,7 +276,7 @@ const onSubmitUpdateProduct= data => {
                       />
                     <div>
                             <a 
-                            href={`add`}
+                            href={`products/add`}
                             className="btn btn-secondary">
                                 Add Product
                             </a>
@@ -273,13 +292,6 @@ const onSubmitUpdateProduct= data => {
                 highlightOnHover
                 pagination
             />
-            <CardBody className="text-center border-top">
-                <HashLinkContainer to="/products">
-                    <a className="card-link font-weight-bold" href="/products">
-                        More Products...
-                    </a>
-                </HashLinkContainer>
-            </CardBody>
         </Card>
     );
 }

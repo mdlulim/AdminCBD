@@ -3,8 +3,9 @@ import { Card, CardBody } from 'reactstrap';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import DeleteProductAlert from './DeleteProductAlert';
+import { ProductService } from '../../providers';
 // styles
 const customStyles = {
    
@@ -42,7 +43,7 @@ const Status = ({ status }) => {
         badge = 'danger';
       }
     return (
-      <span className={`badge badge-${badge}`}>{status}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
     );
   };
 
@@ -67,9 +68,19 @@ export default function Products(props) {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState({});
     const history = useHistory();
+    const params = useParams();
+    const { id } = params;
 
 
     useMemo(() => {
+      ProductService.getProductByMemberId(id).then((res) => {
+        console.log('Product By Member '+res.data.data.results)
+        console.log(res.data.data.results)
+        const productlist = res.data.data.results;
+        setProducts(productlist);
+        setFilteredProducts(productlist);
+      });
+
         const productsList = [{
             productId: '109977001',
             name: 'Smart Contract Bundle',
@@ -147,7 +158,7 @@ const columns = [{
     cell: row => <div>
     <spam style={iconPadding}>
       <a
-      href={`products/${row.productId}`}
+      href={`products/${row.id}`}
       className="btn btn-lg btn-info btn-sm"
     ><Edit width={16} height={16}/>
     </a></spam>

@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
+import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
 import DeleteAlert from './DeleteAlert';
+import { MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -31,6 +33,7 @@ const customStyles = {
 
 const iconPadding ={
     paddingRight: '3px',
+    float: 'Left'
 }
 const inputWith={
   width: '20%'
@@ -60,7 +63,8 @@ const Status = ({ status }) => {
         badge = 'danger';
       }
     return (
-      <span className={`badge badge-${badge}`}>{status}</span>
+      // <span className={`badge badge-${badge}`}>{status}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
     );
   };
 
@@ -73,6 +77,7 @@ export default function Members(props) {
     const history = useHistory();
 
     useMemo(() => {
+<<<<<<< HEAD
       MemberService.getMembers().then((res) => {
         console.log(res.data.data.results)
         const memberslist = res.data.data.results;
@@ -121,6 +126,15 @@ export default function Members(props) {
      setFilteredMembers(membersList);
 
 
+=======
+        MemberService.getMembers().then((res) => {
+          console.log(res.data.data)
+          const memberslist = res.data.data.results;
+          setMembers(memberslist);
+          setFilteredMembers(memberslist);
+        });
+ 
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
       }, []);
     // table headings definition
 const columns = [{
@@ -154,6 +168,10 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     name: 'Date Created',
     selector: 'created',
     sortable: true,
+    cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
 }, {
     name: 'Status',
     selector: 'status',
@@ -163,20 +181,21 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-    <spam style={iconPadding}><a
-      href={`members/${row.memberId}`}
-      className="btn btn-lg btn-primary btn-sm"
+    <div style={iconPadding}><a
+      href={`members/${row.id}`}
+      className="btn btn-secondary btn-sm btn-icon ml-2"
     >
-        <Eye width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}>
+         <span className="fa fa-eye" />
+    </a></div>
+    <div style={iconPadding}>
       <a
       href={`#`}
-      className="btn btn-lg btn-info btn-sm"
+      className="btn btn-light btn-sm btn-icon"
       onClick={e => {
         e.preventDefault();
         onSubmitChangeStatus(row);
       }}
+<<<<<<< HEAD
     ><Edit width={16} height={16}/>
     </a></spam>
     {/* <spam style={iconPadding}><a
@@ -189,14 +208,12 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     >
       <UserMinus width={16} height={16}/>
     </a></spam> */}
+=======
+    > <span className="fa fa-pencil" />
+    </a></div>
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
   </div>
 }];
-
-const handleChangePassword = async data => {
-}
-
-const handleDeleteMember = async data => {
-}
 
 const onSubmitChangeStatus= data => {
   setSelectedMember(data);
@@ -254,6 +271,7 @@ const onSubmitChangeStatus= data => {
                 highlightOnHover
                 pagination
             />
+<<<<<<< HEAD
             <CardBody className="text-center border-top">
                 <HashLinkContainer to="/members">
                     <a className="card-link font-weight-bold" href="/members">
@@ -261,6 +279,9 @@ const onSubmitChangeStatus= data => {
                     </a>
                 </HashLinkContainer>
             </CardBody>
+=======
+          
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
         </Card>
     );
 }

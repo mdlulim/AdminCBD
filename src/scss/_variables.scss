@@ -11,8 +11,10 @@ $gray-800: #707070;
 $gray-900: #484848;
 $white: #FFFFFF;
 $yellow: #FFD700;
+$gold: rgb(200,150,35);
+$gold-lighter: rgba(200,150,35, .8);
 
-$primary: #FFD700;
+$primary: $gold;
 $secondary: #800020;
 $tertiary: #122272;
 $success:       $green !default;

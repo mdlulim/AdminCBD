@@ -1,21 +1,35 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Layout } from 'containers';
-import { Users } from 'components';
+import { Common, Pagination, UserRoles } from 'components';
+import { AuthLayout } from 'containers';
 
-const UserRolesList = props => {
-	const breadcrumb = { heading: "User Roles" };
-	return (
-		<Layout {...props} breadcrumb={breadcrumb}>
-			<Row className="mt-4">
-				<Col lg={8} xl={8}>
-				<Col md={12}>
-                    <Users.UserRoles />
-                </Col>
-				</Col>
-			</Row>
-		</Layout>
-	);
-};
 
-export default UserRolesList;
+export default function UserRolesPage(props) {
+    return (
+        <AuthLayout
+            {...props}
+            breadcrumb={{
+                items: [{ title: 'Dashboard', link: '/dashboard' }],
+                active: "Users"
+            }}
+            pageHeading={{
+                title: 'Manage User Roles',
+                caption: 'EXPLORE USER ROLES FOR CRYPTO BASED INNOVATION',
+            }}
+        >
+            <Card>
+                <Common.Widget
+                    icon="li-cog"
+                    title="User Roles"
+                    subtitle="List of all User Roles"
+                    wrapperClass="widget--items-middle"
+                />
+                <CardBody className="padding-botton-0">
+                <UserRoles.UserRoles />
+                   
+                    
+                </CardBody>
+            </Card>
+        </AuthLayout>
+    );
+} 

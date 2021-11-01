@@ -6,15 +6,43 @@ import moment from 'moment';
 import AutoLogoutTimer from '../nativeClass/AutoLogoutTimer';
 
 const session = Session.get();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 
 export default function Header(props) {
     const { toggleSidebarClass } = props;
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [showAlerts, setShowAlerts] = useState(false);
     const [token, setToken] = useState('');
+<<<<<<< HEAD
 
     const [isTimeout, setIsTimeout] = useState(false);
+=======
+    const [isTimeout, setIsTimeout] = useState(false);
+
+    useEffect(() => {
+        const timer = new AutoLogoutTimer({
+            timeout: 10,
+            onTimeout: () =>{
+                setIsTimeout(true);
+            },
+            onExpired: () =>{
+                setIsTimeout(true)
+            }
+        });
+        return () =>{
+            timer.cleanUp();
+        }
+        if(session.isValid){
+            setToken(session.payload.token);
+        }else{
+        window.location = '/login';
+        }
+
+    },[]);
+>>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 
     useEffect(() => {
         const timer = new AutoLogoutTimer({
