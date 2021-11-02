@@ -104,8 +104,8 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     selector: 'username',
     sortable: true,
 },{
-  name: 'Phone',
-  selector: 'phone',
+  name: 'Mobile',
+  selector: 'mobile',
   sortable: true,
 },
 {

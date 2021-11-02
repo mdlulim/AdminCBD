@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
-import { Common, Dashboard, Overview } from 'components';
+import { Common, Dashboard, Overview, Members } from 'components';
 const Filter = () => {
     return (
         <>
@@ -83,7 +83,8 @@ export default function DashboardPage(props) {
                         <div className="divider-text divider-text--xs">Recent</div>
                         <CardBody className="padding-top-10 padding-bottom-10">
                             <Dashboard.RecentTransactions />
-                            <Dashboard.RecentTransactions />
+                            {/* <Members.Members /> */}
+                            
                         </CardBody>
                         {/* <div className="divider-text divider-text--xs">Canceled</div>
                         <CardBody className="padding-top-10 padding-bottom-0">

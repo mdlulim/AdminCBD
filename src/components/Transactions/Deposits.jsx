@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
+import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
-import { TransactionService } from '../../providers';
+import { TransactionService, MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -67,74 +68,85 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Customers(props) {
-  const [transactions, setTransactions] = useState([]);
-  const [filteredTransactions, setFilteredTransactions] = useState([]);
+export default function Deposits(props) {
+    const [transactions, setTransactions] = useState([]);
+    const [filteredTransactions, setFilteredTransactions] = useState([]);
+    const [temp, setTemp] = useState({});
     const history = useHistory();
 
-    useMemo(() => {
-      TransactionService.getTransactions().then((res) => {
-        console.log(res.data.data)
-        const transaList = res.data.data.results;
-        setTransactions(transaList);
-        setFilteredTransactions(transaList);
+    const GetUserById = ({user_id}) => {
+      const id =user_id;
+     const member = MemberService.getMember(id).then((res) => {
+       setTemp(res.data.data);
+        //return res.data.data;
       });
+      
+      return (<div><div>{temp.first_name} {temp.last_name}</div>
+        <div className="small text-muted">
+          <span>{temp.id_number}</span>
+        </div></div>);
+    }
+
+    useMemo(() => {
+        TransactionService.getTransactions().then((res) => {
+          //let id = res.data.data.results[0].user_id;
+          console.log(res.data.data.results);
+          const transaList = res.data.data.results;
+          setTransactions(transaList);
+          setFilteredTransactions(transaList);
+        });
+        //getUserById('0192c293-fc26-47f0-a764-332b44dd08b1');
 
 
       }, []);
-    // table headings definition
-const columns = [{
-    name: '',
-    sortable: false,
-    width: '80px',
-    cell: () => <Image />
-}, {
-    name: 'Full Names',
-    selector: 'full_names',
-    sortable: true,
-    wrap: true,
-    cell: row => <div><div>{row.user.full_names}</div>
-    <div className="small text-muted">
-      <span>{row.user.id_number}</span>
-    </div></div>
-},{
-    name: 'ID',
-    selector: 'transactionId',
-    sortable: true,
-    cell: row => <div>6293043434</div>
-},{
-    name: 'City',
-    selector: 'city',
-    sortable: true,
-    cell: row => <div>Durban, ZA</div>
-},{
-    name: 'Amount',
-    selector: 'amount',
-    sortable: true,
-    cell: row => <div> <strong className="text-success">+403.22 CBI</strong><br />
-    <span className="text-muted">1,500 ZAR</span></div>
-}, {
-    name: 'Status',
-    selector: 'status',
-    sortable: true,
-    cell: row => <Status {...row} />
-},{
-    name: 'Date Created',
-    selector: 'created',
-    sortable: true,
-    cell: row => <div>
-         <strong>25 March 2018</strong><br />
-                <span className="text-muted">12:23:15 GMT</span>
-    </div>
-}, {
-    name: 'Actions',
-    sortable: true,
-    cell: row => <div>
-        <button className="btn btn-secondary btn-sm btn-icon">
-                    <span className="fa fa-pencil"></span>
-                </button>
-  </div>
-}];
+
+      const columns = [{
+        name: '',
+        sortable: false,
+        width: '80px',
+        cell: () => <Image />
+    }, {
+        name: 'Full Names',
+        selector: 'first_name',
+        sortable: true,
+        wrap: true,
+        cell: row => <GetUserById {...row} />
+    },{
+        name: 'TransactionID',
+        selector: 'txid',
+        sortable: true,
+    },{
+        name: 'Type',
+        selector: 'subtype',
+        sortable: true,
+    },{
+        name: 'Amount',
+        selector: 'amount',
+        sortable: true,
+    cell: row => <div> <strong className="text-success">+{row.amount} CBI</strong><br />
+        <span className="text-muted">{row.balance} CBI</span></div>
+    }, {
+        name: 'Status',
+        selector: 'status',
+        sortable: true,
+        cell: row => <Status {...row} />
+    },{
+        name: 'Date Created',
+        selector: 'created',
+        sortable: true,
+        cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
+    }, {
+        name: 'Actions',
+        sortable: true,
+        cell: row => <div>
+            <button className="btn btn-secondary btn-sm btn-icon">
+                        <span className="fa fa-pencil"></span>
+                    </button>
+      </div>
+    }];
 
 const handleChangePassword = async data => {
 }
@@ -185,7 +197,7 @@ const onSubmitChangeStatus= data => {
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>Transactions</span>
                     <span className="flex-grow-1" />
-                    <div style={selectPadding}>
+                    {/* <div style={selectPadding}>
                             <select class="form-control form-control-m">
                                 <option>All Transactions</option>
                                 <option>Pending</option>
@@ -195,7 +207,7 @@ const onSubmitChangeStatus= data => {
                                 <option>Withdrawals</option>
                                 <option>Completed</option>
                             </select>
-                    </div>
+                    </div> */}
                     <input
                     style={inputWith}
                         type="text"
@@ -215,6 +227,13 @@ const onSubmitChangeStatus= data => {
                 highlightOnHover
                 pagination
             />
+            <CardBody className="text-center border-top">
+                <HashLinkContainer to="/customers">
+                    <a className="card-link font-weight-bold" href="/customers">
+                        More Users...
+                    </a>
+                </HashLinkContainer>
+            </CardBody>
         </Card>
     );
 }

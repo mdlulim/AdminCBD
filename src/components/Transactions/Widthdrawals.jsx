@@ -68,20 +68,35 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Customers(props) {
+export default function Widthdrawals(props) {
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
+    const [temp, setTemp] = useState({});
     const history = useHistory();
+
+    const GetUserById = ({user_id}) => {
+      const id =user_id;
+     const member = MemberService.getMember(id).then((res) => {
+       setTemp(res.data.data);
+        //return res.data.data;
+      });
+      
+      return (<div><div>{temp.first_name} {temp.last_name}</div>
+        <div className="small text-muted">
+          <span>{temp.id_number}</span>
+        </div></div>);
+    }
 
     useMemo(() => {
         TransactionService.getTransactions().then((res) => {
           //let id = res.data.data.results[0].user_id;
+          console.log(res.data.data.results);
           const transaList = res.data.data.results;
           setTransactions(transaList);
           setFilteredTransactions(transaList);
         });
+        //getUserById('0192c293-fc26-47f0-a764-332b44dd08b1');
 
-        console.log(transactions);
 
       }, []);
 
@@ -95,25 +110,21 @@ export default function Customers(props) {
         selector: 'first_name',
         sortable: true,
         wrap: true,
-        cell: row => <div><div>{getUserById(row.user_id).first_name} {getUserById(row.user_id).last_name}</div>
-        <div className="small text-muted">
-          <span>{''}</span>
-        </div></div>
+        cell: row => <GetUserById {...row} />
     },{
         name: 'TransactionID',
         selector: 'txid',
         sortable: true,
     },{
-        name: 'City',
-        selector: 'city',
+        name: 'Type',
+        selector: 'subtype',
         sortable: true,
-        cell: row => <div>Durban, ZA</div>
     },{
         name: 'Amount',
         selector: 'amount',
         sortable: true,
-        cell: row => <div> <strong className="text-success">+403.22 CBI</strong><br />
-        <span className="text-muted">1,500 ZAR</span></div>
+    cell: row => <div> <strong className="text-success">+{row.amount} CBI</strong><br />
+        <span className="text-muted">{row.balance} CBI</span></div>
     }, {
         name: 'Status',
         selector: 'status',
@@ -138,13 +149,6 @@ export default function Customers(props) {
     }];
 
 const handleChangePassword = async data => {
-}
-
-const getUserById = async (id) => {
-  MemberService.getMember(id).then((res) => {
-    const memberDetails = res.data.data;
-    return memberDetails;
-  });
 }
 
 const handleDeleteMember = async data => {

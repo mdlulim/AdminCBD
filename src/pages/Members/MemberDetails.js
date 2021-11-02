@@ -49,6 +49,7 @@ const MemberDetails = props => {
     useMemo(() => {
         //Get member details
         MemberService.getMember(id).then((res) => {
+            console.log(res.data.data)
           const memberDetails = res.data.data;
           setMember(memberDetails);
         });
@@ -117,7 +118,7 @@ const MemberDetails = props => {
                                             </span>
                                         </div>
                                         <div className="author-box-job">
-										    Id Number: {member.id_number}<br />
+										    Id/Passport No: {member.id_number}<br />
 											Phone: {member.mobile}<br />
 											Email: {member.email}<br />
 											Level: 0

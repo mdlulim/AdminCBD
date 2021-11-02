@@ -2,9 +2,23 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Common, Pagination, Members } from 'components';
 import { AuthLayout } from 'containers';
+import { MemberService } from '../../providers';
 
 
 export default function MembersPage(props) {
+    const [members, setMembers] = useState([]);
+    useMemo(() => {
+        MemberService.getMembers().then((res) => {
+          console.log(res.data.data.results)
+          const userslist = res.data.data.results;
+          setMembers(userslist);
+        });
+        }, []);
+
+        const countMembers = (type) =>{
+            const countTypes = members.filter(member => member.status === type);
+            return countTypes.length;
+        }
     return (
         <AuthLayout
             {...props}
@@ -18,30 +32,39 @@ export default function MembersPage(props) {
             }}
         >
             <div className="form-row margin-bottom-20">
-                <Col xs={12} lg={4}>
+            <Col xs={12} lg={3}>
                     <Common.Widget
                         icon="li-user"
-                        title="Active"
-                        subtitle="All active members"
-                        informer={<span className="text-bold text-success">23,500</span>}
+                        title="All Members"
+                        subtitle="All Members"
+                        informer={<span className="text-bold">{members.length}</span>}
                         invert={false}
                     />
                 </Col>
-                <Col xs={12} lg={4}>
+                <Col xs={12} lg={3}>
+                    <Common.Widget
+                        icon="li-user-lock"
+                        title="Active"
+                        subtitle="Active Members"
+                        informer={<><span className="text-bold text-success">{countMembers('Active')}</span></>}
+                        invert={false}
+                    />
+                </Col>
+                <Col xs={12} lg={3}>
                     <Common.Widget
                         icon="li-user-lock"
                         title="Blocked"
-                        subtitle="Blocked members"
-                        informer={<><span className="text-bold">232</span></>}
+                        subtitle="Blocked Members"
+                        informer={<><span className="text-bold text-warning">{countMembers('Blocked')}</span></>}
                         invert={false}
                     />
                 </Col>
-                <Col xs={12} lg={4}>
+                <Col xs={12} lg={3}>
                     <Common.Widget
                         icon="li-user-minus"
                         title="Archived"
-                        subtitle="Archived members"
-                        informer={<span className="text-bold text-danger">21</span>}
+                        subtitle="Archived Members"
+                        informer={<span className="text-bold text-danger">{countMembers('Archived')}</span>}
                         invert={false}
                     />
                 </Col>

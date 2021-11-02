@@ -107,7 +107,7 @@ export default function LoginPage(props) {
             <div className="divider" />
             <div className="form-group text-center">
                 <div className="form-row">
-                    <Col xs={4}>
+                    {/* <Col xs={4}>
                         <a href="/" className="text-muted">About us</a>
                     </Col>
                     <Col xs={4}>
@@ -115,7 +115,7 @@ export default function LoginPage(props) {
                     </Col>
                     <Col xs={4}>
                         <a href="/" className="text-muted">Support</a>
-                    </Col>
+                    </Col> */}
                 </div>
             </div>
         </AuthPages>
