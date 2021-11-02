@@ -17,6 +17,7 @@ import UserRoles from './UserRoles';
 import GroupProducts from './GroupProducts';
 import Countries from './Countries';
 import Currencies from './Currencies';
+import Configurations from './Configurations';
 
 export {
     Breadcrumb,
@@ -37,5 +38,6 @@ export {
     UserRoles,
     GroupProducts,
     Countries,
-    Currencies
+    Currencies,
+    Configurations,
 };

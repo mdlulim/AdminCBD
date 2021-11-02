@@ -11,10 +11,7 @@ class AuthService {
     static async login(username, password, device, geoinfo){
 
         const apiURL = Config.API.BASE_URL_LOGIN;
-<<<<<<< HEAD
-=======
         console.log(apiURL+'/login',{"user":username, "password":password, "device":device, "geoinfo": geoinfo})
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
         const res    = await axios.post(apiURL+'/login',{"user":username, "password":password, "device":device, "geoinfo": geoinfo});
         return res;
     }

@@ -12,7 +12,6 @@ import { MemberService } from '../../providers';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { MemberService } from '../../providers';
 // styles
 const customStyles = {
    
@@ -77,56 +76,6 @@ export default function Members(props) {
     const history = useHistory();
 
     useMemo(() => {
-<<<<<<< HEAD
-      MemberService.getMembers().then((res) => {
-        console.log(res.data.data.results)
-        const memberslist = res.data.data.results;
-        setMembers(memberslist);
-        setFilteredMembers(memberslist);
-      });
-
-        const membersList = [{
-            memberId: '109977041',
-            first_name: 'Mduduzi',
-            last_name: 'Mdluli',
-            username: 'JSmith',
-            phone: '+27845880977',
-            email: 'example1@demo.com',
-            id_number: '9103025869089',
-            country: 'South Africa',
-            level: 'General',
-            created: 'just now',
-            status: 'Active',
-        }, {
-            memberId: '109977042',
-            first_name: 'Msizi',
-            last_name: 'Mpanza',
-            username: 'MsiziM',
-            phone: '+27645880788',
-            email: 'example2@demo.com',
-            id_number: '9103025869084',
-            country: 'Namibia',
-            level: 'Wealth Creator',
-            created: '2 mins ago',
-            status: 'Pending',
-        }, {
-            memberId: '109977043',
-            first_name: 'Zungu',
-            last_name: 'Zungu',
-            username: 'McCallJ',
-            phone: '+27827890844',
-            id_number: '9103025869085',
-            email: 'example3@demo.com',
-            country: 'South Africa',
-            level: 'General',
-            created: '5 mins ago',
-            status: 'Blocked',
-        }];
-     setMembers(membersList);
-     setFilteredMembers(membersList);
-
-
-=======
         MemberService.getMembers().then((res) => {
           console.log(res.data.data)
           const memberslist = res.data.data.results;
@@ -134,7 +83,6 @@ export default function Members(props) {
           setFilteredMembers(memberslist);
         });
  
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
       }, []);
     // table headings definition
 const columns = [{
@@ -195,23 +143,8 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
         e.preventDefault();
         onSubmitChangeStatus(row);
       }}
-<<<<<<< HEAD
-    ><Edit width={16} height={16}/>
-    </a></spam>
-    {/* <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-lg btn-danger btn-sm"
-      onClick={e => {
-        e.preventDefault();
-        onSubmitDeleteMember(row);
-      }}
-    >
-      <UserMinus width={16} height={16}/>
-    </a></spam> */}
-=======
     > <span className="fa fa-pencil" />
     </a></div>
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
   </div>
 }];
 
@@ -271,17 +204,7 @@ const onSubmitChangeStatus= data => {
                 highlightOnHover
                 pagination
             />
-<<<<<<< HEAD
-            <CardBody className="text-center border-top">
-                <HashLinkContainer to="/members">
-                    <a className="card-link font-weight-bold" href="/members">
-                        More Users...
-                    </a>
-                </HashLinkContainer>
-            </CardBody>
-=======
           
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
         </Card>
     );
 }

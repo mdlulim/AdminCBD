@@ -4,23 +4,15 @@ import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
-<<<<<<< HEAD
-import LoadingSpinner from '../../components/utils/LoadingSpinner';
-=======
 import { MemberService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 
 const ModalChangeStatus = props => {
     const { show, setShow, member} = props;
     const [statuses, setStatuses] = useState([]);
-<<<<<<< HEAD
-    const [loading, setLoading] = useState(false);
-=======
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
@@ -46,20 +38,20 @@ const ModalChangeStatus = props => {
         if(selectedStatus){
             MemberService.updateStatus(member.id, selectedStatus.value).then((response) =>{
                 console.log(response);
-                //  if(response.data.success){
-                //      setShow(false)
-                //      return confirmAlert({
-                //         title: 'Succcess',
-                //         message: 'Member was successfully updated',
-                //         buttons: [
-                //           {
-                //             label: 'Ok',
-                //           }
-                //         ]
-                //       });
-                //  }else{
-                //      setError('Something went wrong while trying to update members status');
-                //  }
+                 if(response.data.success){
+                     setShow(false)
+                     return confirmAlert({
+                        title: 'Succcess',
+                        message: 'Member was successfully updated',
+                        buttons: [
+                          {
+                            label: 'Ok',
+                          }
+                        ]
+                      });
+                 }else{
+                     setError('Something went wrong while trying to update members status');
+                 }
                 setDisabled(false);
              })
         }
@@ -76,7 +68,7 @@ const ModalChangeStatus = props => {
     }
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
-            <LoadingSpinner loading={loading} messageColor="primary" />
+            {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
             <Modal.Body>
                 <Row>
                     {showIcon &&
@@ -86,11 +78,7 @@ const ModalChangeStatus = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success"> Update CBI Member Status</h3>
                         <hr />
-<<<<<<< HEAD
-                        <Form onSubmit={updateMemberStatus}>
-=======
                         <form onSubmit={onSubmit}>
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
                                 <div className="form-group">
                                     <label htmlFor="fullname">Full Names</label>
                                     {member ?
@@ -153,16 +141,13 @@ const ModalChangeStatus = props => {
                             <button
                                         type="submit"
                                         className="btn btn-success float-right"
-<<<<<<< HEAD
-=======
                                         disabled={disabled}
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
                                     >
                                     {processing ? 'Processing...' : 'Update'}
                                 </button>
                             </Col>
                             </Row>
-                            </Form>
+                            </form>
                     </Col>
                 </Row>
             </Modal.Body>

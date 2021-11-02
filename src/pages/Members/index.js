@@ -1,113 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-<<<<<<< HEAD
-import { Layout } from 'containers';
-import { Members } from 'components';
-import { MemberService } from '../../providers';
-
-const MembersList = props => {
-    const breadcrumb = { heading: "CBI Members" };
-    const [members, setMembers] = useState([]);
-
-    useMemo(() => {
-        MemberService.getMembers().then((res) => {
-          console.log(res.data.data.results)
-          const memberslist = res.data.data.results;
-          setMembers(memberslist);
-        });
-  
-          const membersList = [{
-              memberId: '109977041',
-              first_name: 'Mduduzi',
-              last_name: 'Mdluli',
-              username: 'JSmith',
-              email: 'example1@demo.com',
-              id_number: '9103025869089',
-              country: 'South Africa',
-              level: 'General',
-              created: 'just now',
-              status: 'Active',
-          }, {
-              memberId: '109977042',
-              first_name: 'Msizi',
-              last_name: 'Mpanza',
-              username: 'MsiziM',
-              email: 'example2@demo.com',
-              id_number: '9103025869084',
-              country: 'Namibia',
-              level: 'Wealth Creator',
-              created: '2 mins ago',
-              status: 'Pending',
-          }, {
-              memberId: '109977043',
-              first_name: 'Zungu',
-              last_name: 'Zungu',
-              last_name: 'ZunguAmanda',
-              username: 'McCallJ',
-              id_number: '9103025869085',
-              email: 'example3@demo.com',
-              country: 'South Africa',
-              level: 'General',
-              created: '5 mins ago',
-              status: 'Blocked',
-          }];
-       setMembers(membersList);
-  
-  
-        }, []);
-
-    const countMembers = (type) =>{
-        const countTypes = members.filter(member => member.status === type);
-        return countTypes.length;
-    };
-
-	return (
-		<Layout {...props} breadcrumb={breadcrumb}>
-			<Row>
-                <Col lg={3} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Business-ManWoman" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">All Members</p>
-                                <p className="text-primary text-24 line-height-1 mb-2">{members.length}</p>
-                            </div>
-                        </CardBody>
-                    </Card>
-                </Col>
-                <Col lg={3} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-success o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Business-ManWoman" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">Active Members</p>
-                                <p className="text-success text-24 line-height-1 mb-2">{countMembers('Active')}</p>
-                            </div>
-                        </CardBody>
-                    </Card>
-                </Col>
-                <Col lg={3} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-warning o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Business-ManWoman" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">Panding  Members</p>
-                                <p className="text-warning text-24 line-height-1 mb-2">{countMembers('Pending')}</p>
-                            </div>
-                        </CardBody>
-                    </Card>
-                </Col>
-                <Col lg={3} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-danger o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Business-ManWoman" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">Blocked Members</p>
-                                <p className="text-danger text-24 line-height-1 mb-2">{countMembers('Blocked')}</p>
-                            </div>
-                        </CardBody>
-                    </Card>
-=======
 import { Common, Pagination, Members } from 'components';
 import { AuthLayout } from 'containers';
 
@@ -143,7 +35,6 @@ export default function MembersPage(props) {
                         informer={<><span className="text-bold">232</span></>}
                         invert={false}
                     />
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
                 </Col>
                 <Col xs={12} lg={4}>
                     <Common.Widget

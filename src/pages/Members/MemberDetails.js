@@ -1,15 +1,9 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-<<<<<<< HEAD
-import { Layout } from 'containers';
-import { Members, Transactions, Products } from 'components';
-import { MemberService } from '../../providers';
-=======
 import { MemberService } from '../../providers';
 import { AuthLayout } from 'containers';
 import { Common, Members, Transactions, Products } from 'components';
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 
 const Image = () => {
     return (
@@ -46,20 +40,6 @@ const Filter = () => {
 
 const MemberDetails = props => {
 	const breadcrumb = { heading: "Member Details" };
-<<<<<<< HEAD
-    const [activeTab, setActiveTab] = useState('referals');
-    const [member, setMember] = useState({});
-
-    useMemo(() => {
-        const member_id = props.match.params.id;
-        MemberService.getMembers(member_id).then((response) =>{
-            if(response.data.data !== null){
-                console.log(response.data.data);
-                setMember(response.data.data);
-            }
-        });
-    },[]);
-=======
 	const [activeTab, setActiveTab] = useState('referals');
     const [member, setMember] = useState({});
     const [addresses, setAddresses] = useState([]);
@@ -82,7 +62,6 @@ const MemberDetails = props => {
  
       }, []);
 
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
 	const profile = {
 		customerId: '109977041',
 		name: 'Mduduzi Mdluli',

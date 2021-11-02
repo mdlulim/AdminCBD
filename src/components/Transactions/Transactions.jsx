@@ -9,7 +9,6 @@ import { TransactionService } from '../../providers';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { TransactionService } from '../../providers';
 // styles
 const customStyles = {
     headCells: {
@@ -75,19 +74,11 @@ export default function Transactions(props) {
     useMemo(() => {
       TransactionService.getTransactions().then((res) => {
         console.log(res.data.data.results)
-<<<<<<< HEAD
-        const transactionlist = res.data.data.results;
-        setTransactions(transactionlist);
-        setFilteredTransactions(transactionlist);
-      });
-=======
         const transaList = res.data.data.results;
         setTransactions(transaList);
         setFilteredTransactions(transaList);
       });
-      
 
->>>>>>> 56a330f8ccd24c9a8d84cd7acc3857e01a462e5a
         const transactionsList = [{
             transactionId: '109977041',
             type:'Withdrawals',
