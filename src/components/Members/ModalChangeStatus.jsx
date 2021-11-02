@@ -103,6 +103,7 @@ const ModalChangeStatus = props => {
                                     />
                                     : ''}
                                 </div>
+                                {member ?
                                 <div>
                                 <label htmlFor="email">Select Status</label>
                                 <Select
@@ -114,7 +115,9 @@ const ModalChangeStatus = props => {
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
                                     />
+
                                 </div>
+                                : ''}
                                 <div className="form-group">
                                     <label htmlFor="reason">Reason</label>
                                     {member ?

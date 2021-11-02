@@ -68,27 +68,7 @@
         }
     ],
     "system": [
-        {
-            "id": "accounts",
-            "title": "Accounts",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-            "link": "/accounts",
-            "icon": "li-drawers2",
-            "childitems": [
-                {
-                    "id": "banks",
-                    "title": "Bank Accounts",
-                    "link": "/banks",
-                    "icon": null
-                },
-                {
-                    "id": "crypto",
-                    "title": "Crypto Accounts",
-                    "link": "/crypto",
-                    "icon": null
-                }
-            ]
-        },
+       
         {
             "id": "configurations",
             "title": "Configurations",

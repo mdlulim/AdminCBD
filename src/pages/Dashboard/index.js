@@ -35,6 +35,92 @@ export default function DashboardPage(props) {
             }}
         >
             <div className="form-row">
+                <Col xs={12} lg={9}>
+                    <div className="form-row margin-bottom-20">
+                        <Col xs={12} lg={4}>
+                            <Common.Widget
+                                icon="li-receipt"
+                                title="Opened payments"
+                                subtitle="Summary amount"
+                                informer={<span className="text-bold">R1,723,500.46</span>}
+                            />
+                        </Col>
+                        <Col xs={12} lg={4}>
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Members"
+                                subtitle="Active members"
+                                informer={<><span className="text-bold">151,232</span>/154,927</>}
+                            />
+                        </Col>
+                        <Col xs={12} lg={4}>
+                            <Common.Widget
+                                icon="li-layers"
+                                title="Products"
+                                subtitle="CBI products"
+                                informer={<span className="text-bold">21</span>}
+                            />
+                        </Col>
+                    </div>
+                    <Card className="margin-bottom-0">
+                        <CardBody>
+                            <Row>
+                                <Col xs={9}>
+                                    <h4>Latest transactions</h4>
+                                    <p className="subtitle margin-bottom-0">
+                                        List of recent orders 01/05/2018 - 02/05/2018
+                                    </p>
+                                </Col>
+                                <Col xs={3}>
+                                    <Common.Dropdown
+                                        actions={[
+                                            { label: 'Update' }
+                                        ]}
+                                    />
+                                </Col>
+                            </Row>
+                        </CardBody>
+                        <div className="divider-text divider-text--xs">Recent</div>
+                        <CardBody className="padding-top-10 padding-bottom-10">
+                            <Dashboard.RecentTransactions />
+                            <Dashboard.RecentTransactions />
+                        </CardBody>
+                        {/* <div className="divider-text divider-text--xs">Canceled</div>
+                        <CardBody className="padding-top-10 padding-bottom-0">
+                            <Dashboard.RecentTransactions />
+                            <Dashboard.RecentTransactions />
+                        </CardBody> */}
+                        <CardBody className="padding-top-10">
+                            <div className="form-row margin-top-0">
+                                <Col xs={12} className="text-center">
+                                    <button className="btn btn-secondary">
+                                        View all transactions
+                                    </button>
+                                </Col>
+                            </div>
+                        </CardBody>
+                    </Card>
+                </Col>
+                <Col xs={12} lg={3}>
+                    <Card>
+                        <Common.Widget
+                            icon="li-bag"
+                            title="Transactions"
+                            subtitle="Latest transctions"
+                            informer={<><span className="text-bold">51</span>/927</>}
+                        />
+                        <CardBody className="padding-left-0">
+                            <Common.Timeline
+                                items={[
+                                    { id: 1 },
+                                    { id: 2 },
+                                    { id: 3 }
+                                ]}
+                            />
+                        </CardBody>
+                    </Card>
+                </Col>
+                <div className="form-row">
                 <Col xs={12} xl={8}>
                     <Card className="card-inner-container--up margin-bottom-20" id="dashboard-orders-card">
                         <CardBody className="card-body">
@@ -138,92 +224,6 @@ export default function DashboardPage(props) {
                     </Card>
                 </Col>
             </div>
-            <div className="form-row">
-                <Col xs={12} lg={9}>
-                    <div className="form-row margin-bottom-20">
-                        <Col xs={12} lg={4}>
-                            <Common.Widget
-                                icon="li-receipt"
-                                title="Opened payments"
-                                subtitle="Summary amount"
-                                informer={<span className="text-bold">R1,723,500.46</span>}
-                            />
-                        </Col>
-                        <Col xs={12} lg={4}>
-                            <Common.Widget
-                                icon="li-users2"
-                                title="Members"
-                                subtitle="Active members"
-                                informer={<><span className="text-bold">151,232</span>/154,927</>}
-                            />
-                        </Col>
-                        <Col xs={12} lg={4}>
-                            <Common.Widget
-                                icon="li-layers"
-                                title="Products"
-                                subtitle="CBI products"
-                                informer={<span className="text-bold">21</span>}
-                            />
-                        </Col>
-                    </div>
-                    <Card className="margin-bottom-0">
-                        <CardBody>
-                            <Row>
-                                <Col xs={9}>
-                                    <h4>Latest transactions</h4>
-                                    <p className="subtitle margin-bottom-0">
-                                        List of recent orders 01/05/2018 - 02/05/2018
-                                    </p>
-                                </Col>
-                                <Col xs={3}>
-                                    <Common.Dropdown
-                                        actions={[
-                                            { label: 'Update' }
-                                        ]}
-                                    />
-                                </Col>
-                            </Row>
-                        </CardBody>
-                        <div className="divider-text divider-text--xs">Recent</div>
-                        <CardBody className="padding-top-10 padding-bottom-10">
-                            <Dashboard.RecentTransactions />
-                            <Dashboard.RecentTransactions />
-                        </CardBody>
-                        {/* <div className="divider-text divider-text--xs">Canceled</div>
-                        <CardBody className="padding-top-10 padding-bottom-0">
-                            <Dashboard.RecentTransactions />
-                            <Dashboard.RecentTransactions />
-                        </CardBody> */}
-                        <CardBody className="padding-top-10">
-                            <div className="form-row margin-top-0">
-                                <Col xs={12} className="text-center">
-                                    <button className="btn btn-secondary">
-                                        View all transactions
-                                    </button>
-                                </Col>
-                            </div>
-                        </CardBody>
-                    </Card>
-                </Col>
-                <Col xs={12} lg={3}>
-                    <Card>
-                        <Common.Widget
-                            icon="li-bag"
-                            title="Transactions"
-                            subtitle="Latest transctions"
-                            informer={<><span className="text-bold">51</span>/927</>}
-                        />
-                        <CardBody className="padding-left-0">
-                            <Common.Timeline
-                                items={[
-                                    { id: 1 },
-                                    { id: 2 },
-                                    { id: 3 }
-                                ]}
-                            />
-                        </CardBody>
-                    </Card>
-                </Col>
             </div>
         </AuthLayout>
     );

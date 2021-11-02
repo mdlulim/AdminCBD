@@ -6,6 +6,7 @@ import { Products } from 'components';
 import { EditorState } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { convertToHTML } from 'draft-convert';
 import Select from 'react-select';
 import { confirmAlert } from 'react-confirm-alert';
 import NumberFormat from 'react-number-format';
@@ -70,9 +71,12 @@ const ProductAddNew = props => {
 				let educator = parseFloat(educatorFee);
 				let regFee = parseFloat(registrationFee);
                // const title = form.title.value;
+               let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+               //console.log(currentContentAsHTML);
+
                 const productData ={
                     title				: form.title.value,
-                    body				: null,
+                    body				: currentContentAsHTML,
                     type				: selectedProductType,
                     currency_code		: selectedCurrency,
 					price				: price,
@@ -83,7 +87,7 @@ const ProductAddNew = props => {
 					total				: price+educator+regFee,
                     status				: selectedStatus
                  }
-				 console.log(productData);
+
                  ProductService.addProduct(productData).then((response) =>{
 					console.log(response);
 					if(response.status){
@@ -234,7 +238,7 @@ const ProductAddNew = props => {
 											onChange={event => {
 												if(!isNaN(+event.target.value)){
 													let value =  event.target.value/100*amountFee
-													setRegistrationFee(parseFloat(value).toFixed(2))
+													setRegistrationFee(value)
 													setErrorReg(true)
 												}else{
 													setErrorReg(false)

@@ -3,10 +3,12 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useParams, useHistory } from 'react-router-dom';
 import { AuthLayout } from 'containers';
 import { Products } from 'components';
-import { EditorState } from 'draft-js';
+import { EditorState, ContentState} from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { convertToHTML } from 'draft-convert';
 import Select from 'react-select';
+import NumberFormat from 'react-number-format';
 import { ProductService } from '../../providers';
 
 const ProductDetails = props => {
@@ -14,6 +16,15 @@ const ProductDetails = props => {
     const [disabled, setDisabled] = useState(false);
     const [activeTab, setActiveTab] = useState('referals');
     const [selectedGroup, setSelectedGroup] = useState('');
+    const [show, setShow] = useState(true);
+    const [showFixedPlan, setShowFixedPlan] = useState(true);
+	const [errorAmount, setErrorAmount] = useState(true);
+	const [errorReg, setErrorReg] = useState(true);
+	const [errorEducator, setErrorEducator] = useState(true);
+	const [amountFee, setAmountFee] = useState(0);
+	const [educatorFee, setEducatorFee] = useState(0);
+	const [registrationFee, setRegistrationFee] = useState(0);
+	const [error, setError] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
     const [product, setProduct] = useState({});
     const { processing,confirmButtonDisabled, confirmButton,} = props;
@@ -31,8 +42,15 @@ const ProductDetails = props => {
             setProduct(productDetails);
             setSelectedProductType(productDetails.type);
             setSelectedCurrency(productDetails.currency_code);
+            setEducatorFee(productDetails.educator_fee);
+            setAmountFee(productDetails.price)
+            setRegistrationFee(productDetails.registration_fee);
             setSelectedStatus(productDetails.status)
-            setEditorState(productDetails.body)
+            if(productDetails.type === "Fraxion"){
+                setShow(false)
+            }
+            //setEditorState(ContentState.convertToHTML(productDetails.body));
+            setEditorState(EditorState.createWithContent(ContentState.createFromText(productDetails.body)));
         });
 
  
@@ -47,14 +65,13 @@ const ProductDetails = props => {
             };
 
             const productType = [
-                { value: 'Crypto Bundle', label: 'Crypto Bundle' },
-                { value: 'Bitcoin', label: 'Bitcoin' },
-                { value: 'Payment Bundle', label: 'Payment Bundle' },
-                { value: 'Top 10 Bundle', label: 'Top 10 Bundle' }
+				{ value: 'Fraxion', label: 'Fraxion' },
+                { value: 'Fixed Plans', label: 'Fixed Plans' },
+                { value: 'CBIx7', label: 'CBIx7' }
               ];
+
               const currencies = [
-                { value: 'ZAR',  label: 'ZAR' },
-                { value: 'KYC',  label: 'KYC' },
+                { value: 'CBI',  label: 'CBI' },
               ];
 
               const statusOptions = [
@@ -66,24 +83,33 @@ const ProductDetails = props => {
                 event.preventDefault();
                 setDisabled(true);
                 const form = event.currentTarget;
-
+                let price = parseFloat(form.price.value);
+				let educator = parseFloat(educatorFee);
+				let regFee = parseFloat(registrationFee);
                // const title = form.title.value;
+               let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+               //console.log(currentContentAsHTML);
 
                 const productData ={
-                    title: form.title.value,
-                    body: editorState,
-                    type: selectedProductType,
-                    currency_code: selectedCurrency,
-                    price: form.price.value,
-                    status: selectedStatus
+                    title				: form.title.value,
+                    body				: currentContentAsHTML,
+                    type				: selectedProductType,
+                    currency_code		: selectedCurrency,
+					price				: price,
+					educator_fee		: educator,
+					educator_persantage	: parseFloat(form.educator_persantage.value),
+					registration_fee	: regFee,
+					registration_persantage: parseFloat(form.registration_persantage.value),
+					total				: price+educator+regFee,
+                    status				: selectedStatus
                  }
-
+               
                 //  ProductService.updateProduct(id, productData).then((response) =>{
                 //     console.log(response);
                 //      setDisabled(false);
                 //  })
 
-                console.log(editorState._immutable);
+                console.log('%'+form.educator_persantage.value);
         }
 
 	return (
@@ -99,7 +125,7 @@ const ProductDetails = props => {
                                 <CardBody>
                                 <form onSubmit={onSubmit}>
                                 <Row>
-                                <Col md={12}>
+                                <Col md={6}>
                                         <label htmlFor="name">product Title</label>
                                         <input
                                             type="text"
@@ -116,7 +142,17 @@ const ProductDetails = props => {
                                             name="product_type"
                                             value={productType.filter(option => option.label === product.type)}
                                             options={productType}
-                                            onChange={item => setSelectedProductType(item.value)}
+                                            onChange={item => {
+												setSelectedProductType(item.value);
+												if(item.value == 'Fraxion'){
+                                                    setShow(false)
+                                                    
+												}else if(item.value == 'Fixed Plans'){
+                                                    setShow(true)
+                                                    setShowFixedPlan(false)
+												}else if(item.value == 'CBIx7'){
+                                                }
+											}}
                                             className={`basic-multi-select form-control-m`}
                                             classNamePrefix="select"
                                             />
@@ -133,7 +169,6 @@ const ProductDetails = props => {
                                             classNamePrefix="select"
                                             />
                                 </Col>
-                                
                                 <Col md={6}>
                                         <label htmlFor="name">Price</label>
                                         <input
@@ -142,7 +177,134 @@ const ProductDetails = props => {
                                             name="price"
                                             className="form-control form-control-m"
                                             value={product.price}
+                                            onChange={event => {
+												if(!isNaN(+event.target.value)){
+													setAmountFee(event.target.value)
+													setErrorAmount(true)
+												}else{
+													setErrorAmount(false)
+												}
+											}}
                                         /> 
+                                        <label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label>
+                                </Col>
+                                <Col md={6} hidden={show}>
+							<label htmlFor="educator_persantage">Educator Persentage Fee (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={educatorFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="educator_persantage"
+                                            name="educator_persantage"
+                                            className="form-control form-control-m"
+                                            value={product.educator_persantage}
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+                                                    let value =  event.target.value/100*amountFee
+                                                    console.log(amountFee);
+													setEducatorFee(value)
+													setErrorEducator(true)
+												}else{
+													setErrorEducator(false)
+													setEducatorFee(0)
+												}
+											}}
+                                        />
+										<label hidden={errorEducator} className="text-danger" htmlFor="name">Please enter a valid amount</label>
+                                </Col>
+								<Col md={6} hidden={show}>
+                                        <label htmlFor="name">Registration Persentage Fee (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="registration_persantage"
+                                            name="registration_persantage"
+                                            className="form-control form-control-m"
+                                            value={product.registration_persantage}
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													let value =  event.target.value/100*amountFee
+													setRegistrationFee(value)
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+													setRegistrationFee(0)
+												}
+											}}
+                                        />
+                                </Col>
+                                <Col md={6} hidden={showFixedPlan}>
+                                        <label htmlFor="name">Estimated daily Interest (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="registration_persantage"
+                                            name="registration_persantage"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													let value =  event.target.value/100*amountFee
+													setRegistrationFee(parseFloat(value).toFixed(2))
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+													setRegistrationFee(0)
+												}
+											}}
+                                        />
+                                </Col>
+                                <Col md={6} hidden={showFixedPlan}>
+                                        <label htmlFor="name">Minimum Gross Return (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="registration_persantage"
+                                            name="registration_persantage"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													let value =  event.target.value/100*amountFee
+													setRegistrationFee(parseFloat(value).toFixed(2))
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+													setRegistrationFee(0)
+												}
+											}}
+                                        />
+                                </Col>
+                                <Col md={6} hidden={showFixedPlan}>
+                                        <label htmlFor="name">Investment Period (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="registration_persantage"
+                                            name="registration_persantage"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													let value =  event.target.value/100*amountFee
+													setRegistrationFee(parseFloat(value).toFixed(2))
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+													setRegistrationFee(0)
+												}
+											}}
+                                        />
+                                </Col>
+                                <Col md={6} hidden={showFixedPlan}>
+                                        <label htmlFor="name">Minimum Investment (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="registration_persantage"
+                                            name="registration_persantage"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													let value =  event.target.value/100*amountFee
+													setRegistrationFee(parseFloat(value).toFixed(2))
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+													setRegistrationFee(0)
+												}
+											}}
+                                        />
                                 </Col>
                                 <Col md={6}>
                                         <label htmlFor="status">Status</label>

@@ -62,7 +62,7 @@ const Status = ({ status }) => {
         badge = 'danger';
       }
     return (
-      <span className={`badge badge-${badge}`}>{status}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
     );
   };
 
@@ -73,68 +73,11 @@ export default function Transactions(props) {
 
     useMemo(() => {
       TransactionService.getTransactions().then((res) => {
-        console.log(res.data.data.results)
+        console.log(res.data.data)
         const transaList = res.data.data.results;
         setTransactions(transaList);
         setFilteredTransactions(transaList);
       });
-
-        const transactionsList = [{
-            transactionId: '109977041',
-            type:'Withdrawals',
-            amount: 3000,
-            fee: 150,
-            total_amount: 3150,
-            balance: 300000,
-            currency: {code: 'ZAR'},
-            user:{
-            full_names: 'Mduduzi Mdluli',
-            username: 'JSmith',
-            email: 'example1@demo.com',
-            id_number: '8503025869089',
-            country: 'South Africa',
-            level: 'General',},
-            created: 'just now',
-            status: 'Completed',
-        }, {
-            transactionId: '109977042',
-            type:'Deposit',
-            amount: 3000,
-            fee: 150,
-            total_amount: 3150,
-            balance: 300000,
-            currency: {code: 'ZAR'},
-            user:{
-            full_names: 'Msizi Mpanza',
-            username: 'MsiziM',
-            email: 'example2@demo.com',
-            id_number: '9103025869084',
-            country: 'Namibia',
-            level: 'Wealth Creator',},
-            created: '2 mins ago',
-            status: 'Pending',
-        }, {
-            transactionId: '109977043',
-            type:'Transfer',
-            amount: 5000,
-            fee: 150,
-            total_amount: 5150,
-            balance: 450000,
-            currency: {code: 'ZAR'},
-            user:{
-            full_names: 'Amanda Zungu',
-            last_name: 'ZunguAmanda',
-            username: 'McCallJ',
-            id_number: '9803025869085',
-            email: 'example3@demo.com',
-            country: 'South Africa',
-            level: 'General',},
-            created: '5 mins ago',
-            status: 'Rejected',
-        }];
-     setTransactions(transactionsList);
-     setFilteredTransactions(transactionsList);
-
 
       }, []);
     // table headings definition
