@@ -69,6 +69,7 @@ const Status = ({ status }) => {
   };
 
 export default function Deposits(props) {
+    const [show, setShow] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [temp, setTemp] = useState({});

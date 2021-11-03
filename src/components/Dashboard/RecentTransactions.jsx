@@ -6,7 +6,7 @@ export default function RecentTransactions(props) {
         <div className="table-responsive">
             <table className="table table-indent-rows margin-bottom-0">
                 <tbody>
-                    <Transactions.TRow />
+                    <Transactions.Widthdrawals />
                 </tbody>
             </table>
         </div>

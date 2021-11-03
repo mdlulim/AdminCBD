@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
+import { useHistory } from 'react-router-dom';
 import { AuthLayout } from 'containers';
 import { Common, Dashboard, Overview, Members } from 'components';
+import { MemberService, ProductService, TransactionService } from '../../providers';
 const Filter = () => {
     return (
         <>
@@ -24,6 +26,45 @@ const Filter = () => {
 }
 
 export default function DashboardPage(props) {
+    const [members, setMembers] = useState([]);
+    const [filteredMembers, setFilteredMembers] = useState([]);
+    const [selectedMember, setSelectedMember] = useState({});
+    const [products, setProducts] = useState([]);
+    const [transactions, setTransactions] = useState([]);
+    const history = useHistory();
+
+    useMemo(() => {
+        MemberService.getMembers().then((res) => {
+          console.log(res.data.data)
+          const memberslist = res.data.data.results;
+          setMembers(memberslist);
+          setFilteredMembers(memberslist);
+        });
+
+        ProductService.getProducts().then((res) => {
+            //console.log('Products '+res.data.data.results)
+            console.log(res.data)
+            if(res.data.success){
+              const productlist = res.data.data.results;
+              setProducts(productlist);
+            }
+          });
+          TransactionService.getTransactions().then((res) => {
+            console.log(res.data.data)
+            const transaList = res.data.data.results;
+            setTransactions(transaList);
+          });
+
+      }, []);
+
+      const countMembers = (type) =>{
+        const countTypes = members.filter(member => member.status === type);
+        return countTypes.length;
+    }
+        const countTransaction = (type) =>{
+        const countTypes = transactions.filter(transaction => transaction.status === type);
+        return countTypes.length;
+    }
     return (
         <AuthLayout
             {...props}
@@ -50,7 +91,7 @@ export default function DashboardPage(props) {
                                 icon="li-users2"
                                 title="Members"
                                 subtitle="Active members"
-                                informer={<><span className="text-bold">151,232</span>/154,927</>}
+                                informer={<><span className="text-bold">{countMembers('Active')}</span>/{countMembers('Pending')}</>}
                             />
                         </Col>
                         <Col xs={12} lg={4}>
@@ -58,7 +99,7 @@ export default function DashboardPage(props) {
                                 icon="li-layers"
                                 title="Products"
                                 subtitle="CBI products"
-                                informer={<span className="text-bold">21</span>}
+                                informer={<span className="text-bold">{products.length}</span>}
                             />
                         </Col>
                     </div>
@@ -94,9 +135,9 @@ export default function DashboardPage(props) {
                         <CardBody className="padding-top-10">
                             <div className="form-row margin-top-0">
                                 <Col xs={12} className="text-center">
-                                    <button className="btn btn-secondary">
+                                    <a href="/transactions" className="btn btn-secondary">
                                         View all transactions
-                                    </button>
+                                    </a>
                                 </Col>
                             </div>
                         </CardBody>
@@ -108,15 +149,11 @@ export default function DashboardPage(props) {
                             icon="li-bag"
                             title="Transactions"
                             subtitle="Latest transctions"
-                            informer={<><span className="text-bold">51</span>/927</>}
+                            informer={<><span className="text-bold">{countTransaction('Completed')}</span>/{countTransaction('Pending')}</>}
                         />
                         <CardBody className="padding-left-0">
                             <Common.Timeline
-                                items={[
-                                    { id: 1 },
-                                    { id: 2 },
-                                    { id: 3 }
-                                ]}
+                                items={transactions}
                             />
                         </CardBody>
                     </Card>

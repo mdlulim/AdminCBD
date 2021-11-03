@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Layout } from 'containers';
-import { Transactions } from 'components';
+import { AuthLayout } from 'containers';
+import { Transactions, Common } from 'components';
 import { TransactionService } from '../../providers';
 
 const TransactionList = props => {
@@ -76,75 +76,68 @@ const TransactionList = props => {
         };
 
 	return (
-		<Layout {...props} breadcrumb={breadcrumb}>
-			<Row>
-                <Col lg={2} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-success o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Money" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">Completed</p>
-                                <p className="text-success text-24 line-height-1 mb-2">{countTransactions('Completed')}</p>
-                            </div>
-                        </CardBody>
-                    </Card>
+		<AuthLayout  {...props}
+        breadcrumb={{ active: "All Transactions" }}
+        pageHeading={{
+            title: 'CBI Transactions',
+            caption: 'EXPLORE OVERVIEW TRANSACTIONS FOR CRYPTO BASED INNOVATION',
+        }}>
+            <div className="form-row margin-bottom-20">
+            <Col xs={12} lg={2}>
+                    <Common.Widget
+                        icon="li-wallet"
+                        title="Completed"
+                        subtitle="Transactions"
+                        informer={<span className="text-bold text-success">{countTransactions('Completed')}</span>}
+                        invert={false}
+                    />
                 </Col>
-                <Col lg={2} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-success o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Money" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">Deposits</p>
-                                <p className="text-success text-24 line-height-1 mb-2">{countTransactions('Deposit')}</p>
-                            </div>
-                        </CardBody>
-                    </Card>
+                <Col xs={12} lg={2}>
+                    <Common.Widget
+                        icon="li-wallet"
+                        title="Deposit"
+                        subtitle="Transactions"
+                        informer={<><span className="text-bold text-info">{countTransactions('deposit')}</span></>}
+                        invert={false}
+                    />
                 </Col>
-                <Col lg={2} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-success o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Money" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">withdrawals</p>
-                                <p className="text-success text-24 line-height-1 mb-2">{countTransactions('Withdrawal')}</p>
-                            </div>
-                        </CardBody>
-                    </Card>
+                <Col xs={12} lg={2}>
+                    <Common.Widget
+                        icon="li-wallet"
+                        title="Widthdrawals"
+                        subtitle="Transactions"
+                        informer={<><span className="text-bold text-info">{countTransactions('Widthdrawals')}</span></>}
+                        invert={false}
+                    />
                 </Col>
-                <Col lg={2} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-warning o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Money" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">Pending</p>
-                                <p className="text-warning text-24 line-height-1 mb-2">{countTransactions('Pending')}</p>
-                            </div>
-                        </CardBody>
-                    </Card>
+                <Col xs={12} lg={2}>
+                    <Common.Widget
+                        icon="li-wallet"
+                        title="Transfers"
+                        subtitle="Transactions"
+                        informer={<span className="text-bold text-info">{countTransactions('Transfers')}</span>}
+                        invert={false}
+                    />
                 </Col>
-                <Col lg={2} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-danger o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Money" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">Failed</p>
-                                <p className="text-danger text-24 line-height-1 mb-2">{countTransactions('Failed')}</p>
-                            </div>
-                        </CardBody>
-                    </Card>
+                <Col xs={12} lg={2}>
+                    <Common.Widget
+                        icon="li-wallet"
+                        title="Pending"
+                        subtitle="Transactions"
+                        informer={<><span className="text-bold text-warning">{countTransactions('Pending')}</span></>}
+                        invert={false}
+                    />
                 </Col>
-                <Col lg={2} md={6} sm={6}>
-                    <Card className="card-icon-bg card-icon-bg-danger o-hidden mb-4">
-                        <CardBody className="card-body text-center">
-                            <i className="i-Money" />
-                            <div className="content">
-                                <p className="text-muted mt-2 mb-0">Rejected</p>
-                                <p className="text-danger text-24 line-height-1 mb-2">{countTransactions('Rejected')}</p>
-                            </div>
-                        </CardBody>
-                    </Card>
+                <Col xs={12} lg={2}>
+                    <Common.Widget
+                        icon="li-wallet"
+                        title="Canceled"
+                        subtitle="Transactions"
+                        informer={<span className="text-bold text-danger">{countTransactions('Canceled')}</span>}
+                        invert={false}
+                    />
                 </Col>
-            </Row>
+            </div>
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
 				<Col md={12}>
@@ -152,7 +145,7 @@ const TransactionList = props => {
                 </Col>
 				</Col>
 			</Row>
-		</Layout>
+		</AuthLayout>
 	);
 };
 

@@ -5,6 +5,7 @@ import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
+import ModalChangeStatus from './ModalChangeStatus';
 import { TransactionService, MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
@@ -12,7 +13,6 @@ import { Icon } from '@material-ui/core';
 import PropTypes from 'prop-types';
 // styles
 const customStyles = {
-   
     headCells: {
         style: {
             color: 'rgba(0,0,0,.54)',
@@ -69,8 +69,10 @@ const Status = ({ status }) => {
   };
 
 export default function Widthdrawals(props) {
+    const [show, setShow] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
+    const [selectedTransaction, setSelectedTransaction] = useState([]);
     const [temp, setTemp] = useState({});
     const history = useHistory();
 
@@ -78,9 +80,7 @@ export default function Widthdrawals(props) {
       const id =user_id;
      const member = MemberService.getMember(id).then((res) => {
        setTemp(res.data.data);
-        //return res.data.data;
       });
-      
       return (<div><div>{temp.first_name} {temp.last_name}</div>
         <div className="small text-muted">
           <span>{temp.id_number}</span>
@@ -95,7 +95,6 @@ export default function Widthdrawals(props) {
           setTransactions(transaList);
           setFilteredTransactions(transaList);
         });
-        //getUserById('0192c293-fc26-47f0-a764-332b44dd08b1');
 
 
       }, []);
@@ -193,6 +192,7 @@ const onSubmitChangeStatus= data => {
 
     return (
         <Card className="o-hidden mb-4">
+          <ModalChangeStatus show={show} setShow={setShow} member={selectedTransaction} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>Transactions</span>
@@ -227,13 +227,6 @@ const onSubmitChangeStatus= data => {
                 highlightOnHover
                 pagination
             />
-            <CardBody className="text-center border-top">
-                <HashLinkContainer to="/customers">
-                    <a className="card-link font-weight-bold" href="/customers">
-                        More Users...
-                    </a>
-                </HashLinkContainer>
-            </CardBody>
         </Card>
     );
 }
