@@ -75,7 +75,7 @@ export default function ConfigLogin(props) {
         id="target_weight"
         name={row.name}
         className="form-control form-control-m"
-        value={row.name}
+        defaultValue={row.name}
         disabled
     /></div>
     },{
@@ -86,7 +86,7 @@ export default function ConfigLogin(props) {
         type="text"
         id="target_weight"
         className="form-control form-control-m"
-        value={row.label}
+        defaultValue={row.label}
     /></div>
     },{
         name: 'Type',
@@ -108,7 +108,7 @@ export default function ConfigLogin(props) {
         type="text"
         id="target_weight"
         className="form-control form-control-m"
-        value={row.placeholder}
+        defaultValue={row.placeholder}
     /></div>
     },{
         name: 'Icon',
@@ -118,7 +118,7 @@ export default function ConfigLogin(props) {
         type="text"
         id="target_weight"
         className="form-control form-control-m"
-        value={row.icon}
+        defaultValue={row.icon}
     /></div>
     },{
         name: 'required',
@@ -146,7 +146,7 @@ export default function ConfigLogin(props) {
                                 type="text"
                                 id="target_weight"
                                 className="form-control form-control-m"
-                                value={data.errors.invalid}
+                                defaultValue={data.errors.invalid}
                             />
                         </div>
                         </Col>
@@ -157,7 +157,7 @@ export default function ConfigLogin(props) {
                                 type="text"
                                 id="target_weight"
                                 className="form-control form-control-m"
-                                value={data.errors.required}
+                                defaultValue={data.errors.required}
                             />
                             </div>
                     </Col>

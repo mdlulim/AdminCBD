@@ -20,6 +20,31 @@ class UserService {
       });
     }
 
+    static async addAdminUser(data){
+        return await axios({
+          mode: 'no-cors',
+          method: 'POST',
+          headers: headers,
+          url: `${Config.API.BASE_URL}//users?group=admin`,
+        }).then((res) =>{
+          const result = res;
+          return result;
+        });
+      }
+
+      static async updateAdminUser(id, data){
+        return await axios({
+          mode: 'no-cors',
+          method: 'PUT',
+          headers: headers,
+          data:data,
+          url: `${Config.API.BASE_URL}//users?group=admin`,
+        }).then((res) =>{
+          const result = res;
+          return result;
+        });
+      }
+
     static async getUser(id) {
       return await axios({
         mode: 'no-cors',

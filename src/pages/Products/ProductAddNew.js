@@ -286,7 +286,7 @@ const ProductAddNew = props => {
                                         />
                                 </Col>
                                 <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Investment Period (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <label htmlFor="name">Investment Period (Weeks) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
                                         <input
                                             type="text"
                                             id="registration_persantage"
@@ -305,7 +305,7 @@ const ProductAddNew = props => {
                                         />
                                 </Col>
                                 <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Minimum Investment (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <label htmlFor="name">Minimum Investment (CBI) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
                                         <input
                                             type="text"
                                             id="registration_persantage"

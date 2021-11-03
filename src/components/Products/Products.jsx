@@ -140,7 +140,7 @@ const columns = [{
       className="btn btn-secondary btn-sm btn-icon"
     ><span className="fa fa-pencil" />
     </a></spam>
-    <spam style={iconPadding}><a
+    {/* <spam style={iconPadding}><a
       href={`#`}
       className="btn btn-secondary btn-sm btn-icon"
       onClick={e => {
@@ -150,7 +150,7 @@ const columns = [{
       }}
     >
       <span className="fa fa-trash" />
-    </a></spam>
+    </a></spam> */}
   </div>
 }];
 

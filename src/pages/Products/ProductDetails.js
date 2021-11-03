@@ -7,6 +7,8 @@ import { EditorState, ContentState} from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
+import { MemberService } from '../../providers';
+import { confirmAlert } from 'react-confirm-alert'; // Import
 import Select from 'react-select';
 import NumberFormat from 'react-number-format';
 import { ProductService } from '../../providers';
@@ -50,7 +52,7 @@ const ProductDetails = props => {
                 setShow(false)
             }
             //setEditorState(ContentState.convertToHTML(productDetails.body));
-            setEditorState(EditorState.createWithContent(ContentState.createFromText(productDetails.body)));
+           // setEditorState(EditorState.createWithContent(ContentState.createFromText(productDetails.body)));
         });
 
  
@@ -103,11 +105,20 @@ const ProductDetails = props => {
 					total				: price+educator+regFee,
                     status				: selectedStatus
                  }
-               
-                //  ProductService.updateProduct(id, productData).then((response) =>{
-                //     console.log(response);
-                //      setDisabled(false);
-                //  })
+
+                 ProductService.updateProduct(id, productData).then((response) =>{
+                    console.log(response);
+                    return confirmAlert({
+                        title: 'Succcess',
+                        message: 'Member was successfully updated',
+                        buttons: [
+                          {
+                            label: 'Ok',
+                          }
+                        ]
+                      });
+                     setDisabled(false);
+                 })
 
                 console.log('%'+form.educator_persantage.value);
         }
@@ -379,7 +390,9 @@ const ProductDetails = props => {
                                             }}
                                             />
                                             <hr />
-                                            <p>The returns displayed do not include the fees and expenses that are charged. Please refer to our fees page and additional important disclaimers and risk disclosures.</p>
+                                            {/* <p>The returns displayed do not include the fees and expenses that are charged. 
+                                                Please refer to our fees page and additional 
+                                                important disclaimers and risk disclosures.</p> */}
                                             </CardBody>
                                         </Card>
                                     </Col>

@@ -121,27 +121,6 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     selector: 'status',
     sortable: true,
     cell: row => <Status {...row} />
-}, {
-    name: 'Actions',
-    sortable: true,
-    cell: row => <div>
-    <spam style={iconPadding}><a
-      href={`wealthCreaters/${row.wealthCreaterId}`}
-      className="btn btn-secondary btn-sm btn-icon ml-2"
-    >
-         <span className="fa fa-eye" />
-    </a></spam>
-    <spam style={iconPadding}>
-      <a
-      href={`#`}
-      className="btn btn-light btn-sm btn-icon"
-      onClick={e => {
-        e.preventDefault();
-        onSubmitChangeStatus(row);
-      }}
-    > <span className="fa fa-pencil" />
-    </a></spam>
-  </div>
 }];
 
 const handleChangePassword = async data => {

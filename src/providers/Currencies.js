@@ -16,7 +16,7 @@ class CurrencyService {
         mode: 'no-cors',
         method: 'GET',
         headers: headers,
-        url: `${Config.API.BASE_URL}/admin/countries`,
+        url: `${Config.API.BASE_URL}/currencies`,
       });
     }
 
@@ -25,7 +25,7 @@ class CurrencyService {
         mode: 'no-cors',
         method: 'GET',
         headers: headers,
-        url: `${Config.API.BASE_URL}/admin/countries/${id}`,
+        url: `${Config.API.BASE_URL}/currencies/${id}`,
       });
     }
 }

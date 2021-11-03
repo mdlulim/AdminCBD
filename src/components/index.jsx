@@ -18,6 +18,7 @@ import GroupProducts from './GroupProducts';
 import Countries from './Countries';
 import Currencies from './Currencies';
 import Configurations from './Configurations';
+import FormsConfig from './FormsConfig';
 
 export {
     Breadcrumb,
@@ -40,4 +41,5 @@ export {
     Countries,
     Currencies,
     Configurations,
+    FormsConfig
 };

@@ -7,7 +7,7 @@ import Select from 'react-select';
 import { CountryService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 
-const ModalUpdateCountry = props => {
+const ModalAdddCountry = props => {
     const { show, setShow, country} = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
@@ -17,7 +17,6 @@ const ModalUpdateCountry = props => {
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
-        console.log(country);
     }, []);
 
     const statusOptions = [
@@ -26,30 +25,36 @@ const ModalUpdateCountry = props => {
         { value: 'Blocked', label: 'Blocked' }
       ];
     const handleClose = () => setShow(false);
+
     const onSubmit = (event) => {
         event.preventDefault();
         setDisabled(true);
         setError('');
 
         const form = event.currentTarget;
-            CountryService.unBlackListCountry(country.id).then((response) =>{
-                console.log(response);
-                 if(response.data.success){
-                     setShow(false)
-                     return confirmAlert({
-                        title: 'Succcess',
-                        message: 'Country was successfully Unblacklisted',
-                        buttons: [
-                          {
-                            label: 'Ok',
-                          }
-                        ]
-                      });
-                 }else{
-                     setError('Something went wrong while trying to update members status');
-                 }
-                setDisabled(false);
-             })
+
+
+        console.log(selectedStatus);
+        if(selectedStatus){
+            // MemberService.updateStatus(member.id, selectedStatus.value).then((response) =>{
+            //     console.log(response);
+            //      if(response.data.success){
+            //          setShow(false)
+            //          return confirmAlert({
+            //             title: 'Succcess',
+            //             message: 'Member was successfully updated',
+            //             buttons: [
+            //               {
+            //                 label: 'Ok',
+            //               }
+            //             ]
+            //           });
+            //      }else{
+            //          setError('Something went wrong while trying to update members status');
+            //      }
+            //     setDisabled(false);
+            //  })
+        }
     
       }
     return (
@@ -61,21 +66,30 @@ const ModalUpdateCountry = props => {
                         <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                     </Col>}
                     <Col xs={showIcon ? 10 : 12}>
-                        <h3 className="text-info"> Unblacklist Country</h3>
+                        <h3 className="text-info"> Update Country</h3>
                         <hr />
-                        <form onSubmit={onSubmit}>
-                            <p>Are you sure you want to  Unblacklist this country {country.nicename}</p>
+                        <form>
+                                <div className="form-group">
+                                    <label htmlFor="name">Role Name</label>
+                                    {country ? 
+                                    <text
+                                        type="text"
+                                        id="name"
+                                        className="form-control form-control-m"
+                                        value={country.name}
+                                    /> 
+                                    : ''}
+                                </div>
                                 <div className="form-group">
                                     <label htmlFor="last_name">Reason</label>
-                                    {country ?
+                                    {country ? 
                                     <textarea
                                         type="text"
-                                        id="reason"
-                                        name="reason"
+                                        id="last_name"
                                         className="form-control form-control-m"
-                                    />
+                                    /> 
                                     : ''}
-                                </div> 
+                                </div>
                                 <hr />
                                 <Row>
                         <Col md={6}>
@@ -89,8 +103,8 @@ const ModalUpdateCountry = props => {
                             </Col>
                             <Col md={6} >
                             <button
-                            type="submit"
                                         className="btn btn-info float-right"
+                                        onClick={confirmButton.onClick}
                                         disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Update'}
@@ -105,7 +119,7 @@ const ModalUpdateCountry = props => {
     );
 };
 
-ModalUpdateCountry.propTypes = {
+ModalAdddCountry.propTypes = {
     show: PropTypes.bool.isRequired,
     setShow: PropTypes.func.isRequired,
     title: PropTypes.string,
@@ -118,7 +132,7 @@ ModalUpdateCountry.propTypes = {
     size: PropTypes.string,
 };
 
-ModalUpdateCountry.defaultProps = {
+ModalAdddCountry.defaultProps = {
     title: 'Confirm',
     body: <p />,
     processing: false,
@@ -132,4 +146,4 @@ ModalUpdateCountry.defaultProps = {
     },
 };
 
-export default ModalUpdateCountry;
+export default ModalAdddCountry;

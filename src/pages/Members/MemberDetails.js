@@ -118,7 +118,7 @@ const MemberDetails = props => {
                                             </span>
                                         </div>
                                         <div className="author-box-job">
-										    Id/Passport No: {member.id_number}<br />
+										    ID/Passport No: {member.id_number}<br />
 											Phone: {member.mobile}<br />
 											Email: {member.email}<br />
 											Level: 0
@@ -150,7 +150,7 @@ const MemberDetails = props => {
                                                 data-toggle="tab"
                                                 href="/"
                                             >
-                                                Referals
+                                                Referrals
                                             </a>
                                         </li>
                                         <li className="nav-item">

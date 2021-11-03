@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import { Layout } from 'containers';
+import { AuthLayout } from 'containers';
 import { FormsConfig } from 'components';
 
 const FormsConfigurations = props => {
@@ -177,7 +177,15 @@ const FormsConfigurations = props => {
 
 
 	return (
-		<Layout {...props} breadcrumb={breadcrumb}>
+		<AuthLayout {...props}
+        breadcrumb={{
+            items: [{ title: 'Dashboard', link: '/dashboard' }],
+            active: "Form Configurations"
+        }}
+        pageHeading={{
+            title: 'Manage Form Configurations',
+            caption: 'EXPLORE FORM CONFIGURATIONS FOR CRYPTO BASED INNOVATION',
+        }}>
 			<Row className="mt-4">
                         <Col md={12} lg={12}>
                             <Card>
@@ -246,7 +254,7 @@ const FormsConfigurations = props => {
                             </Card>
                         </Col>
 			</Row>
-		</Layout>
+		</AuthLayout>
 	);
 };
 

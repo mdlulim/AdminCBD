@@ -84,7 +84,7 @@ export default function Referals(props) {
           status: 'Pending',
         }];
      setBankingDetails(bankingDetailsList);
-     setFilteredBankingDetails(bankingDetailsList);
+     setFilteredBankingDetails([]);
 
 
       }, []);

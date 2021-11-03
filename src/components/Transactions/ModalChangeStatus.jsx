@@ -4,7 +4,7 @@ import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
-import { MemberService } from '../../providers';
+import { TransactionService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
@@ -18,13 +18,12 @@ const ModalChangeStatus = props => {
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
-       // console.log(member)
+       console.log(transaction)
     }, []);
 
     const statusOptions = [
-        { value: 'Active',  label: 'Active' },
-        { value: 'Blocked', label: 'Blocked' },
-        { value: 'Archive', label: 'Archive' },
+        { value: 'Canceled',  label: 'Canceled' },
+        { value: 'Completed', label: 'Completed' }
       ];
       const onSubmit = (event) => {
         event.preventDefault();
@@ -36,24 +35,34 @@ const ModalChangeStatus = props => {
 
         console.log(selectedStatus);
         if(selectedStatus){
-            MemberService.updateStatus(transaction.id, selectedStatus.value).then((response) =>{
-                console.log(response);
-                 if(response.data.success){
-                     setShow(false)
-                     return confirmAlert({
-                        title: 'Succcess',
-                        message: 'Member was successfully updated',
-                        buttons: [
-                          {
-                            label: 'Ok',
-                          }
-                        ]
-                      });
-                 }else{
-                     setError('Something went wrong while trying to update members status');
-                 }
-                setDisabled(false);
-             })
+            setShow(false)
+            return confirmAlert({
+                title: 'Error',
+                message: 'Endpoint not provided',
+                buttons: [
+                  {
+                    label: 'Ok',
+                  }
+                ]
+              });
+            // TransactionService.updateStatus(transaction.id, selectedStatus.value).then((response) =>{
+            //     console.log(response);
+            //      if(response.data.success){
+            //          setShow(false)
+            //          return confirmAlert({
+            //             title: 'Succcess',
+            //             message: 'Member was successfully updated',
+            //             buttons: [
+            //               {
+            //                 label: 'Ok',
+            //               }
+            //             ]
+            //           });
+            //      }else{
+            //          setError('Something went wrong while trying to update members status');
+            //      }
+            //     setDisabled(false);
+            //  })
         }
     
       }
@@ -87,7 +96,7 @@ const ModalChangeStatus = props => {
                                         id="transactionId"
                                         className="form-control form-control-m"
                                         value={transaction.txid}
-                                        disabled
+                                        disabled={true}
                                     />
                                     : ''}
                                 </div>
@@ -99,7 +108,7 @@ const ModalChangeStatus = props => {
                                         id="subtype"
                                         className="form-control form-control-m"
                                         value={transaction.subtype}
-                                        disabled
+                                        disabled={true}
                                     />
                                     : ''}
                                 </div>
@@ -111,7 +120,7 @@ const ModalChangeStatus = props => {
                                         id="amount"
                                         className="form-control form-control-m"
                                         value={transaction.amount}
-                                        disabled
+                                        disabled={true}
                                     />
                                     : ''}
                                 </div>

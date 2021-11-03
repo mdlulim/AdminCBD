@@ -28,13 +28,13 @@ export default function ForgotPassword(props) {
             <div className="form-group text-center">
                 <div className="form-row">
                     <Col xs={4}>
-                        <a href="/" className="text-muted">About us</a>
+                        <a href="" className="text-muted"></a>
                     </Col>
                     <Col xs={4}>
-                        <a href="/" className="text-muted">Contacts</a>
+                        <a href="/login" className="text-muted">Login</a>
                     </Col>
                     <Col xs={4}>
-                        <a href="/" className="text-muted">Support</a>
+                        <a href="" className="text-muted"></a>
                     </Col>
                 </div>
             </div>

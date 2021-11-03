@@ -141,30 +141,41 @@ export default function Widthdrawals(props) {
         name: 'Actions',
         sortable: true,
         cell: row => <div>
-            <button className="btn btn-secondary btn-sm btn-icon">
+            <button 
+            onClick={e => {
+              e.preventDefault();
+              onSubmitChangeStatus(row);
+            }}
+            className="btn btn-secondary btn-sm btn-icon">
                         <span className="fa fa-pencil"></span>
                     </button>
       </div>
     }];
 
+    const onSubmitChangeStatus= data => {
+      setSelectedTransaction(data);
+      setShow(true);
+      console.log(data);
+        //return <Confirm show={show} setShow={setShow} />;
+      };
 const handleChangePassword = async data => {
 }
 
 const handleDeleteMember = async data => {
 }
 
-const onSubmitChangeStatus= data => {
-    return confirmAlert({
-      title: 'Change Customer Status',
-      message: 'Are you sure you want to resend password for ' + data.full_names + '?',
-      buttons: [{
-        label: 'Yes',
-        onClick: () => handleChangePassword(data),
-      }, {
-        label: 'Cancel',
-      }]
-    });
-  };
+// const onSubmitChangeStatus= data => {
+//     return confirmAlert({
+//       title: 'Change Customer Status',
+//       message: 'Are you sure you want to resend password for ' + data.full_names + '?',
+//       buttons: [{
+//         label: 'Yes',
+//         onClick: () => handleChangePassword(data),
+//       }, {
+//         label: 'Cancel',
+//       }]
+//     });
+//   };
 
   const onSubmitDeleteMember= data => {
     return confirmAlert({
@@ -192,7 +203,7 @@ const onSubmitChangeStatus= data => {
 
     return (
         <Card className="o-hidden mb-4">
-          <ModalChangeStatus show={show} setShow={setShow} member={selectedTransaction} />
+          <ModalChangeStatus show={show} setShow={setShow} transaction={selectedTransaction} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>Transactions</span>

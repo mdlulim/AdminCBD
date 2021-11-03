@@ -93,18 +93,6 @@
                     "title": "Countries",
                     "link": "/countries",
                     "icon": null
-                },
-                {
-                    "id": "currencies",
-                    "title": "Currencies",
-                    "link": "/currencies",
-                    "icon": null
-                },
-                {
-                    "id": "tiers",
-                    "title": "Tiers",
-                    "link": "/tiers",
-                    "icon": null
                 },{
                     "id": "settings",
                     "title": "Settings",

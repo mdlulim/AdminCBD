@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
+import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
-import Confirm from './ModalChangeStatus';
+import ModalChangeStatus from '../Members/ModalChangeStatus';
 import { MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
@@ -30,9 +31,10 @@ const customStyles = {
 
 const iconPadding ={
     paddingRight: '3px',
+    float: 'Left'
 }
 const inputWith={
-  width: '30%'
+  width: '20%'
 }
 
 const Image = () => {
@@ -59,66 +61,27 @@ const Status = ({ status }) => {
         badge = 'danger';
       }
     return (
+      // <span className={`badge badge-${badge}`}>{status}</span>
       <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
     );
   };
 
-export default function Referals(props) {
-  const { member } = props;
+export default function Members(props) {
   const [show, setShow] = useState(false);
-    const [referrals, setReferrals] = useState([]);
-    const [filteredReferrals, setFilteredReferrals] = useState([]);
+  const [showDelete, setShowDelete] = useState(false);
+    const [members, setMembers] = useState([]);
+    const [filteredMembers, setFilteredMembers] = useState([]);
+    const [selectedMember, setSelectedMember] = useState({});
     const history = useHistory();
-    const params = useParams();
-    const { id } = params;
 
     useMemo(() => {
-      MemberService.getMemberReferrals(id).then((res) => {
-          console.log(res.data.data.results)
+        MemberService.getMembers().then((res) => {
+          console.log(res.data.data)
           const memberslist = res.data.data.results;
-          setReferrals(memberslist);
-          setFilteredReferrals(memberslist);
+          setMembers(memberslist);
+          setFilteredMembers(memberslist);
         });
-
-        const referralsList = [{
-            referralId: '109977041',
-            first_name: 'Mduduzi',
-            last_name: 'Mdluli',
-            username: 'JSmith',
-            email: 'example1@demo.com',
-            id_number: '9103025869089',
-            country: 'South Africa',
-            level: 'General',
-            created: 'just now',
-            status: 'Active',
-        }, {
-            referralId: '109977042',
-            first_name: 'Msizi',
-            last_name: 'Mpanza',
-            username: 'MsiziM',
-            email: 'example2@demo.com',
-            id_number: '9103025869084',
-            country: 'Namibia',
-            level: 'Wealth Creator',
-            created: '2 mins ago',
-            status: 'Pending',
-        }, {
-            referralId: '109977043',
-            first_name: 'Ayanda',
-            last_name: 'Zungu',
-            last_name: 'ZunguAmanda',
-            username: 'McCallJ',
-            id_number: '9103025869085',
-            email: 'example3@demo.com',
-            country: 'South Africa',
-            level: 'General',
-            created: '5 mins ago',
-            status: 'Blocked',
-        }];
-     setReferrals(referralsList);
-     setFilteredReferrals(referralsList);
-
-
+ 
       }, []);
     // table headings definition
 const columns = [{
@@ -127,15 +90,22 @@ const columns = [{
     width: '80px',
     cell: () => <Image />
 }, {
-  name: 'Full Names',
-  selector: 'first_name',
-  sortable: true,
-  wrap: true,
-cell: row => <div>{row.first_name} {row.last_name}</div>
+    name: 'Full Names',
+    selector: 'full_names',
+    sortable: true,
+    wrap: true,
+cell: row => <div><div>{row.first_name} {row.last_name}</div>
+<div className="small text-muted">
+  <span>{row.id_number}</span>
+</div></div>
 },{
     name: 'Username',
     selector: 'username',
     sortable: true,
+},{
+  name: 'Mobile',
+  selector: 'mobile',
+  sortable: true,
 },
 {
     name: 'Email Address',
@@ -145,6 +115,10 @@ cell: row => <div>{row.first_name} {row.last_name}</div>
     name: 'Date Created',
     selector: 'created',
     sortable: true,
+    cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
 }, {
     name: 'Status',
     selector: 'status',
@@ -154,71 +128,73 @@ cell: row => <div>{row.first_name} {row.last_name}</div>
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-    <spam style={iconPadding}><a
-      href={`members/${row.id}`}
-      className="btn btn-lg btn-primary btn-sm"
+    <div style={iconPadding}><a
+      href={`members/members/${row.id}`}
+      className="btn btn-secondary btn-sm btn-icon ml-2"
     >
-        <Eye width={16} height={16}/>
-    </a></spam>
+         <span className="fa fa-eye" />
+    </a></div>
+    <div style={iconPadding}>
+      <a
+      href={`#`}
+      className="btn btn-light btn-sm btn-icon"
+      onClick={e => {
+        e.preventDefault();
+        onSubmitChangeStatus(row);
+      }}
+    > <span className="fa fa-pencil" />
+    </a></div>
   </div>
 }];
 
-const handleChangePassword = async data => {
-}
-
-const handleDeleteMember = async data => {
-}
-
 const onSubmitChangeStatus= data => {
-  setShow(true)
+  setSelectedMember(data);
+  setShow(true);
   console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 
   const onSubmitDeleteMember= data => {
-    return confirmAlert({
-      title: 'Delete Member',
-      message: 'Are you sure you want to delete ' + data.full_names + '?',
-      buttons: [{
-        label: 'Yes',
-        onClick: () => handleDeleteMember(data),
-      }, {
-        label: 'Cancel',
-      }]
-    });
+    setSelectedMember(data);
+    setShowDelete(true);
   };
 
+  const countMembers = (type) =>{
+    const countTypes = this.props.movies.filter(movie => movie.media_type === type);
+    return countTypes.length;
+};
+
   const onSearchFilter = filterText => {
-    const filteredItems = referrals.filter(item => (
+    const filteredItems = members.filter(item => (
       (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.last_name && item.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.id_number && item.id_number.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredReferrals(filteredItems);
+    setFilteredMembers(filteredItems);
   }
 
 
     return (
         <Card className="o-hidden mb-4">
-          <Confirm show={show} setShow={setShow} />
+          <ModalChangeStatus show={show} setShow={setShow} member={selectedMember} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span className="text-primary">Referrals</span>
+                    <span>Resent Members</span>
                     <span className="flex-grow-1" />
                     <input
                     style={inputWith}
                         type="text"
                         name="search"
-                        className={`form-control form-control-sm`}
+                        className={`form-control form-control-m`}
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
                 </div>
             </CardBody>
             <DataTable
-                data={filteredReferrals}
+                data={filteredMembers}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader

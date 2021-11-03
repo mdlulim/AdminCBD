@@ -62,11 +62,12 @@ export default function UsersRoles(props) {
 
 
     useMemo(() => {
-        const rolesList = [];
-     setRoles(rolesList);
-     setFilteredRoles(rolesList);
-
-
+      UserRolesService.getUserRoles().then((res) => {
+        console.log(res.data.data);
+        const userslist = res.data.data.results;
+        setRoles(userslist);
+        setFilteredRoles(userslist);
+      });
       }, []);
     // table headings definition
 const columns = [ {
@@ -93,7 +94,7 @@ const columns = [ {
     sortable: true,
     cell: row => <div>
       <spam style={iconPadding}><a
-      href={`roles/${row.role_id}`}
+      href={`roles/${row.id}`}
       className="btn btn-lg btn-primary btn-sm"
     >
         <Settings width={16} height={16}/>
@@ -108,7 +109,7 @@ const columns = [ {
       }}
     ><Edit width={16} height={16}/>
     </a></spam>
-    <spam style={iconPadding}><a
+    {/* <spam style={iconPadding}><a
       href={`#`}
       className="btn btn-lg btn-danger btn-sm"
       onClick={e => {
@@ -117,7 +118,7 @@ const columns = [ {
       }}
     >
       <Trash width={16} height={16}/>
-    </a></spam>
+    </a></spam> */}
   </div>
 }];
 

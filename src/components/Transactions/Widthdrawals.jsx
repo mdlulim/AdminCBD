@@ -93,7 +93,7 @@ export default function Widthdrawals(props) {
           console.log(res.data.data.results);
           const transaList = res.data.data.results;
           setTransactions(transaList);
-          setFilteredTransactions(transaList);
+          setFilteredTransactions([]);
         });
 
 

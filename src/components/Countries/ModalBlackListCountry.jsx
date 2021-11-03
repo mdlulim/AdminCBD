@@ -32,13 +32,13 @@ const ModalUpdateCountry = props => {
         setError('');
 
         const form = event.currentTarget;
-            CountryService.unBlackListCountry(country.id).then((response) =>{
+            CountryService.blackListCountry(country.id).then((response) =>{
                 console.log(response);
                  if(response.data.success){
                      setShow(false)
                      return confirmAlert({
                         title: 'Succcess',
-                        message: 'Country was successfully Unblacklisted',
+                        message: 'Country was successfully Blacklisted',
                         buttons: [
                           {
                             label: 'Ok',
@@ -61,10 +61,10 @@ const ModalUpdateCountry = props => {
                         <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                     </Col>}
                     <Col xs={showIcon ? 10 : 12}>
-                        <h3 className="text-info"> Unblacklist Country</h3>
+                        <h3 className="text-danger">blacklist Country</h3>
                         <hr />
                         <form onSubmit={onSubmit}>
-                            <p>Are you sure you want to  Unblacklist this country {country.nicename}</p>
+                            <p>Are you sure you want to  blacklist this country {country.nicename}</p>
                                 <div className="form-group">
                                     <label htmlFor="last_name">Reason</label>
                                     {country ?
@@ -93,7 +93,7 @@ const ModalUpdateCountry = props => {
                                         className="btn btn-info float-right"
                                         disabled={confirmButtonDisabled || processing}
                                     >
-                                    {processing ? 'Processing...' : 'Update'}
+                                    {processing ? 'Processing...' : 'Blacklist'}
                                 </button>
                             </Col>
                             </Row>

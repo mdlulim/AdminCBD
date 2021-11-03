@@ -4,12 +4,14 @@ import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { Trash, Edit, UserMinus} from 'react-feather';
 import { useHistory } from 'react-router-dom';
-import ModalUpdateUserRole from '../UserRoles/ModalUpdateUserRole';
-import ModalAddNewRole from '../UserRoles/ModalAddNewRole';
-import DeleteUserRoleAlert from '../UserRoles/DeleteUserRoleAlert';
+import ModalUpdateCountry from '../Countries/ModalUpdateCountry';
+import ModalBlackListCountry from '../Countries/ModalBlackListCountry';
+import ModalAddCountry from '../Countries/ModalAddCountry';
+// import DeleteUserRoleAlert from '../UserCountries/DeleteUserRoleAlert';
+import { CountryService } from '../../providers';
 // styles
 const customStyles = {
-   
+
     headCells: {
         style: {
             color: 'rgba(0,0,0,.54)',
@@ -32,19 +34,19 @@ const inputWith={
   marginRight: '20px'
 }
 
-const Status = ({ status }) => {
-    let badge = 'primary';
-    if (status === 'Pending') {
-      badge = 'warning';
-    }
-    if (status === 'Active') {
+const Status = ({ blacklisted }) => {
+    let badge = 'success';
+    let myStatus = 'Active';
+    if (blacklisted === false) {
       badge = 'success';
+      myStatus = 'Active';
     }
-    if (status === 'Blocked') {
-        badge = 'danger';
-      }
+    if (blacklisted === true) {
+      badge = 'danger';
+      myStatus = 'Blacklisted';
+    }
     return (
-      <span className={`badge badge-${badge}`}>{status}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{myStatus}</div>
     );
   };
 
@@ -52,36 +54,34 @@ export default function Countries(props) {
     const [show, setShow] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
-    const [roles, setRoles] = useState([]);
-    const [selectedRole, setSelectedRole] = useState({});
-    const [filteredRoles, setFilteredRoles] = useState([]);
+    const [countries, setCountries] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState({});
+    const [filteredCountries, setFilteredCountries] = useState([]);
     const history = useHistory();
 
-
     useMemo(() => {
-        const rolesList = [];
-     setRoles(rolesList);
-     setFilteredRoles(rolesList);
+      CountryService.getCountries().then((res) => {
+        console.log(res.data.data.results);
+        const userslist = res.data.data.results;
+        setCountries(userslist);
+        setFilteredCountries(userslist);
+      });
 
 
       }, []);
     // table headings definition
 const columns = [ {
     name: 'Name',
-    selector: 'name',
+    selector: 'nicename',
     sortable: true,
     wrap: true,
 },{
-    name: 'Description',
-    selector: 'description',
+    name: 'Phone Code',
+    selector: 'phone_code',
     sortable: true,
 },{
-    name: 'Date Created',
-    selector: 'created',
-    sortable: true,
-}, {
     name: 'Status',
-    selector: 'status',
+    selector: 'blacklisted',
     sortable: true,
     cell: row => <Status {...row} />
 }, {
@@ -94,7 +94,7 @@ const columns = [ {
       className="btn btn-lg btn-info btn-sm"
       onClick={e => {
         e.preventDefault();
-        onSubmitUpdateRole(row);
+        onSubmitUnblacklist(row);
       }}
     ><Edit width={16} height={16}/>
     </a></spam>
@@ -103,8 +103,7 @@ const columns = [ {
       className="btn btn-lg btn-danger btn-sm"
       onClick={e => {
         e.preventDefault();
-    
-        onSubmitDeleteRole(row);
+        onSubmitblacklist(row);
       }}
     >
       <Trash width={16} height={16}/>
@@ -113,31 +112,38 @@ const columns = [ {
 }];
 
 
-const onSubmitUpdateRole= data => {
+const onSubmitUnblacklist= data => {
   setShow(true)
-  setSelectedRole(data);
+  setSelectedCountry(data);
   console.log(data);
   };
 
+  const onSubmitblacklist= data => {
+    setShowAddNew(true)
+    setSelectedCountry(data);
+    console.log(data);
+    };
+
   const onSubmitDeleteRole= data => {
     setShowDelete(true);
-    setSelectedRole(data);
+    setSelectedCountry(data);
   };
 
   const onSearchFilter = filterText => {
-    const filteredItems = roles.filter(item => (
+    const filteredItems = countries.filter(item => (
       (item && item.name && item.name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.description && item.description.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredRoles(filteredItems);
+    setFilteredCountries(filteredItems);
   }
 
 
     return (
         <Card className="o-hidden mb-4">
-          <ModalUpdateUserRole show={show} setShow={setShow} role={selectedRole} />
-          <DeleteUserRoleAlert show={showDelete} setShow={setShowDelete} role={selectedRole} />
-          <ModalAddNewRole show={showAddNew} setShow={setShowAddNew} />
+          <ModalUpdateCountry show={show} setShow={setShow} country={selectedCountry} />
+          <ModalBlackListCountry show={showAddNew} setShow={setShowAddNew} country={selectedCountry} />
+          {/* <DeleteUserRoleAlert show={showDelete} setShow={setShowDelete} role={selectedCountry} /> */}
+          {/* <ModalAddCountry show={showAddNew} setShow={setShowAddNew} /> */}
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>Countries</span>
@@ -150,7 +156,7 @@ const onSubmitUpdateRole= data => {
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
                     <div>
-                    <button
+                    {/* <button
                             className="btn btn-secondary"
                             type="button"
                             onClick={e => {
@@ -158,12 +164,12 @@ const onSubmitUpdateRole= data => {
                               setShowAddNew(true);
                             }}>
                                 Add Country
-                            </button>
+                            </button> */}
                     </div>
                 </div>
             </CardBody>
             <DataTable
-                data={filteredRoles}
+                data={filteredCountries}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader

@@ -16,7 +16,7 @@ class CountryService {
         mode: 'no-cors',
         method: 'GET',
         headers: headers,
-        url: `${Config.API.BASE_URL}/admin/users`,
+        url: `${Config.API.BASE_URL}/countries`,
       });
     }
 
@@ -25,7 +25,30 @@ class CountryService {
         mode: 'no-cors',
         method: 'GET',
         headers: headers,
-        url: `${Config.API.BASE_URL}/admin/users/${id}`,
+        url: `${Config.API.BASE_URL}/countries/${id}`,
+      });
+    }
+    static async blackListCountry(id){
+      return await axios({
+        mode: 'no-cors',
+        method: 'PUT',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/countries/${id}/blacklist`,
+      }).then((res) =>{
+        const result = res
+        return result;
+      });
+    }
+
+    static async unBlackListCountry(id){
+      return await axios({
+        mode: 'no-cors',
+        method: 'PUT',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/countries/${id}/unblacklist`,
+      }).then((res) =>{
+        const result = res
+        return result;
       });
     }
 }

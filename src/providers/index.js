@@ -7,7 +7,7 @@ import ProductService from './ProductService';
 import MemberService from './MemberService';
 import TransactionService from './TransactionService';
 import LeadService from './LeadService';
-import Countries from './Countries';
+import CountryService from './CountryService'
 import Currencies from './Currencies';
 
 
@@ -20,7 +20,7 @@ export {
     MemberService,
     TransactionService,
     LeadService,
-    Countries,
+    CountryService,
     Currencies
 
 

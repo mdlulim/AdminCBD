@@ -136,7 +136,7 @@ export default function ConfigRegistration(props) {
                         type="text"
                         id="target_weight"
                         className="form-control form-control-m"
-                        value={data.errors.invalid}
+                        defaultValue={data.errors.invalid}
                     />
                 </div>
                 </Col>
@@ -147,7 +147,7 @@ export default function ConfigRegistration(props) {
                         type="text"
                         id="target_weight"
                         className="form-control form-control-m"
-                        value={data.errors.required}
+                        defaultValue={data.errors.required}
                     />
                     </div>
             </Col>
