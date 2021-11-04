@@ -20,6 +20,7 @@ const ModalChangeStatus = props => {
         { value: 'Pending', label: 'Pending' },
         { value: 'Blocked', label: 'Blocked' }
       ];
+  
     const handleClose = () => setShow(false);
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>

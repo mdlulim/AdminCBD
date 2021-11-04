@@ -25,7 +25,8 @@ class UserService {
           mode: 'no-cors',
           method: 'POST',
           headers: headers,
-          url: `${Config.API.BASE_URL}//users?group=admin`,
+          data:data,
+          url: `${Config.API.BASE_URL}/users?group=admin`,
         }).then((res) =>{
           const result = res;
           return result;
@@ -38,7 +39,7 @@ class UserService {
           method: 'PUT',
           headers: headers,
           data:data,
-          url: `${Config.API.BASE_URL}//users?group=admin`,
+          url: `${Config.API.BASE_URL}/users?group=admin`,
         }).then((res) =>{
           const result = res;
           return result;

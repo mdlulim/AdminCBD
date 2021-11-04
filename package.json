@@ -19,6 +19,7 @@
     "@fortawesome/react-fontawesome": "^0.1.11",
     "@material-ui/core": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.57",
+    "@south-paw/react-vector-maps": "^3.1.0",
     "aws-sdk": "^2.771.0",
     "axios": "^0.23.0",
     "basic-auth-token": "^0.4.2",

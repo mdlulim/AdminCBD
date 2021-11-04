@@ -104,10 +104,9 @@ const MemberDetails = props => {
                                         <div className="clearfix"></div>
                                         <div className="author-box-name mt-3">
 											<h4 className="text-primary mt-0 mb-1">{member.first_name} {member.last_name}</h4>
-                                            
-                                            < span className={wallet.balance > 0 ? 'text-success' :'text-danger'} >
+                                            {/* < span className={wallet.balance > 0 ? 'text-success' :'text-danger'} >
                                                 Balance: {wallet.currency_code} {wallet.balance}
-                                            </span><br />
+                                            </span><br /> */}
                                             < span className={wallet.available_balance > 0 ? 'text-success' :'text-danger'}>
                                                 Avaolable Balance: {wallet.currency_code} {wallet.available_balance}
                                             </span>
