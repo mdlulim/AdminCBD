@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import { HashLinkContainer } from 'components';
+import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
 import { useParams, useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
@@ -74,50 +75,11 @@ export default function Referals(props) {
 
     useMemo(() => {
       MemberService.getMemberReferrals(id).then((res) => {
-          console.log(res.data.data.results)
+         // console.log(res.data.data.results)
           const memberslist = res.data.data.results;
           setReferrals(memberslist);
           setFilteredReferrals(memberslist);
         });
-
-        const referralsList = [{
-            referralId: '109977041',
-            first_name: 'Mduduzi',
-            last_name: 'Mdluli',
-            username: 'JSmith',
-            email: 'example1@demo.com',
-            id_number: '9103025869089',
-            country: 'South Africa',
-            level: 'General',
-            created: 'just now',
-            status: 'Active',
-        }, {
-            referralId: '109977042',
-            first_name: 'Msizi',
-            last_name: 'Mpanza',
-            username: 'MsiziM',
-            email: 'example2@demo.com',
-            id_number: '9103025869084',
-            country: 'Namibia',
-            level: 'Wealth Creator',
-            created: '2 mins ago',
-            status: 'Pending',
-        }, {
-            referralId: '109977043',
-            first_name: 'Ayanda',
-            last_name: 'Zungu',
-            last_name: 'ZunguAmanda',
-            username: 'McCallJ',
-            id_number: '9103025869085',
-            email: 'example3@demo.com',
-            country: 'South Africa',
-            level: 'General',
-            created: '5 mins ago',
-            status: 'Blocked',
-        }];
-     setReferrals(referralsList);
-     setFilteredReferrals(referralsList);
-
 
       }, []);
     // table headings definition
@@ -145,6 +107,10 @@ cell: row => <div>{row.first_name} {row.last_name}</div>
     name: 'Date Created',
     selector: 'created',
     sortable: true,
+    cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
 }, {
     name: 'Status',
     selector: 'status',
@@ -154,12 +120,12 @@ cell: row => <div>{row.first_name} {row.last_name}</div>
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-    <spam style={iconPadding}><a
-      href={`members/${row.id}`}
+    <div style={iconPadding}><a
+      href={`/members/members/${row.id}`}
       className="btn btn-lg btn-primary btn-sm"
     >
         <Eye width={16} height={16}/>
-    </a></spam>
+    </a></div>
   </div>
 }];
 

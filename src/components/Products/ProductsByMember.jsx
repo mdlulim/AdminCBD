@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody } from 'reactstrap';
+import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
@@ -74,113 +75,63 @@ export default function Products(props) {
 
     useMemo(() => {
       ProductService.getProductByMemberId(id).then((res) => {
-        console.log('Product By Member '+res.data.data.results)
-        console.log(res.data.data.results)
+        //console.log('Product By Member '+res.data.data.results)
+        //console.log(res.data.data.results)
         const productlist = res.data.data.results;
         setProducts(productlist);
         setFilteredProducts(productlist);
       });
 
-        const productsList = [{
-            productId: '109977001',
-            name: 'Smart Contract Bundle',
-            description: 'This is a theme-based Bundle that tracks the cryptocurrencies that aim to revolutionise how supply chains and trading networks operate through smart contracts. If you believe in a future that’s interconnected, automated and decentralised then this Bundle is for you.',
-            no_of_onstituents: 5,
-            rebalancing_frequency: 'Monthly',
-            target_weight: 'Equal',
-            last_rebalance: '1 Oct 2021',
-            next_rebalance: '1 Oct 2022',
-            status: 'Active',
-            group: 'Crypto Bundle',
-            price: 'ZAR 680',
-        }, {
-            productId: '109977041',
-            name: 'Top 10 Bundle',
-            description: 'This Bundle is ideal for anyone wanting to effortlessly diversify across the leading cryptocurrencies with just a single investment. The Bundle covers more than 85% of the total crypto market, enabling you to closely track the overall performance of the crypto asset class.',
-            no_of_onstituents: 9,
-            rebalancing_frequency: 'Monthly',
-            target_weight: 'Equal',
-            last_rebalance: '1 Oct 2021',
-            next_rebalance: '1 Oct 2022',
-            status: 'Active',
-            group: 'Crypto Bundle',
-            price: 'ZAR 580',
-        }
-    ];
-     setProducts(productsList);
-     setFilteredProducts(productsList);
-
-
       }, []);
     // table headings definition
 const columns = [{
     name: 'Product Name',
-    selector: 'name',
-    sortable: true,
-    wrap: true,
+    selector: 'title',
+    sortable: true
 },{
-    name: 'Number Of Constituents',
-    selector: 'no_of_onstituents',
+    name: 'Category',
+    selector: 'category_title',
     sortable: true,
 },
 {
-    name: 'Rebalancing Frequency',
+    name: 'Educator Fees',
     selector: 'rebalancing_frequency',
     sortable: true,
+    cell: row => <div><div>{row.currency_code} {row.educator_fee}</div>
+    <div className="small text-muted">
+      <span>{row.educator_percentage}</span>
+    </div></div>
 },{
-    name: 'Target Weight',
-    selector: 'target_weight',
-    sortable: true,
-}, {
-    name: 'Last Rebalance',
-    selector: 'last_rebalance',
-    sortable: true,
-}, {
-    name: 'Next Rebalance',
-    selector: 'next_rebalance',
-    sortable: true,
-}, {
-    name: 'Group',
-    selector: 'group',
-    sortable: true,
+  name: 'Registration Fees',
+  selector: 'rebalancing_frequency',
+  sortable: true,
+  cell: row => <div><div>{row.currency_code} {row.registration_fee}</div>
+  <div className="small text-muted">
+    <span>{row.registration_percentage}</span>
+  </div></div>
 }, {
     name: 'Price',
     selector: 'price',
     sortable: true,
+    cell: row => <div><div>{row.currency_code} {row.price}</div></div>
+},{
+  name: 'Total',
+  selector: 'total',
+  sortable: true,
+  cell: row => <div><div>{row.currency_code} {parseFloat(row.price)+parseFloat(row.registration_fee)+parseFloat(row.educator_fee)}</div></div>
+},{name: 'Created',
+ selector: 'created',
+ sortable: true,
+  cell: row => <div>
+                <strong><Moment date={row.user_product.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.user_product.created} format="hh:mm:ss" /></span>
+             </div>
 },{
     name: 'Status',
     selector: 'status',
     sortable: true,
-    cell: row => <Status {...row} />
-}, {
-    name: 'Actions',
-    sortable: true,
-    cell: row => <div>
-    <spam style={iconPadding}>
-      <a
-      href={`products/${row.id}`}
-      className="btn btn-lg btn-info btn-sm"
-    ><Edit width={16} height={16}/>
-    </a></spam>
-    <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-lg btn-danger btn-sm"
-      onClick={e => {
-        e.preventDefault();
-    
-        onSubmitDeleteProduct(row);
-      }}
-    >
-      <Trash width={16} height={16}/>
-    </a></spam>
-  </div>
+    cell: row => <Status {...row.user_product} />
 }];
-
-const handleChangePassword = async data => {
-}
-
-const handleDeleteProduct = async data => {
-}
 
 const onSubmitUpdateProduct= data => {
   setSelectedProduct(data);

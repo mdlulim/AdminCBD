@@ -57,6 +57,16 @@ class MemberService {
     });
   }
 
+  //Get member referels
+  static async getMemberWallet(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users/${id}/wallet`,
+    });
+  }
+
   static async updateStatus(id,status){
     if(status === 'Blocked'){
       return await axios({

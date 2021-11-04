@@ -31,6 +31,7 @@ const customStyles = {
 
 const iconPadding ={
     paddingRight: '3px',
+    float: 'Left'
 }
 const inputWith={
   width: '20%'
@@ -121,24 +122,34 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
     selector: 'status',
     sortable: true,
     cell: row => <Status {...row} />
+},{
+  name: 'Actions',
+  sortable: true,
+  cell: row => <div>
+  <div style={iconPadding}><a
+    href={`members/${row.id}`}
+    className="btn btn-secondary btn-sm btn-icon ml-2"
+  >
+       <span className="fa fa-eye" />
+  </a></div>
+  <div style={iconPadding}>
+    <a
+    href={`#`}
+    className="btn btn-light btn-sm btn-icon"
+    onClick={e => {
+      e.preventDefault();
+      onSubmitChangeStatus(row);
+    }}
+  > <span className="fa fa-pencil" />
+  </a></div>
+</div>
 }];
 
-const handleChangePassword = async data => {
-}
-
-const handleDeleteWealthCreater = async data => {
-}
-
 const onSubmitChangeStatus= data => {
-  setSelectedWealthCreater(data);
+  setWealthCreaters(data);
   setShow(true);
   console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
-  };
-
-  const onSubmitDeleteWealthCreater= data => {
-    setSelectedWealthCreater(data);
-    setShowDelete(true);
   };
 
   const onSearchFilter = filterText => {
@@ -155,7 +166,7 @@ const onSubmitChangeStatus= data => {
 
     return (
         <Card className="o-hidden mb-4">
-          <ModalChangeStatus show={show} setShow={setShow} wealthCreater={selectedWealthCreater} />
+          <ModalChangeStatus show={show} setShow={setShow} member={selectedWealthCreater} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>CBI WealthCreaters</span>

@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
+import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { useParams, useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
+import ModalChangeStatus from './ModalChangeStatus';
 import { TransactionService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
@@ -68,7 +70,9 @@ const Status = ({ status }) => {
   };
 
 export default function TransactionsByMember(props) {
+    const [show, setShow] = useState(false);
     const [transactions, setTransactions] = useState([]);
+    const [selectedTransaction, setSelectedTransaction] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const history = useHistory();
     const params = useParams();
@@ -76,76 +80,23 @@ export default function TransactionsByMember(props) {
 
     useMemo(() => {
       TransactionService.getMemberTransactions(id).then((res) => {
-        console.log('Transaction by member')
-        console.log(res.data.data.results)
+       // console.log('Transaction by member')
+       // console.log(res.data.data.results)
         const transaList = res.data.data.results;
         setTransactions(transaList);
         setFilteredTransactions(transaList);
       });
 
-        const transactionsList = [{
-            transactionId: '109977041',
-            type:'Withdrawals',
-            amount: 3000,
-            fee: 150,
-            total_amount: 3150,
-            balance: 300000,
-            currency: {code: 'ZAR'},
-            user:{
-            full_names: 'Mduduzi Mdluli',
-            username: 'JSmith',
-            email: 'example1@demo.com',
-            id_number: '8503025869089',
-            country: 'South Africa',
-            level: 'General',},
-            created: 'just now',
-            status: 'Completed',
-        }, {
-            transactionId: '109977042',
-            type:'Deposit',
-            amount: 3000,
-            fee: 150,
-            total_amount: 3150,
-            balance: 300000,
-            currency: {code: 'ZAR'},
-            user:{
-            full_names: 'Msizi Mpanza',
-            username: 'MsiziM',
-            email: 'example2@demo.com',
-            id_number: '9103025869084',
-            country: 'Namibia',
-            level: 'Wealth Creator',},
-            created: '2 mins ago',
-            status: 'Pending',
-        }, {
-            transactionId: '109977043',
-            type:'Transfer',
-            amount: 5000,
-            fee: 150,
-            total_amount: 5150,
-            balance: 450000,
-            currency: {code: 'ZAR'},
-            user:{
-            full_names: 'Amanda Zungu',
-            last_name: 'ZunguAmanda',
-            username: 'McCallJ',
-            id_number: '9803025869085',
-            email: 'example3@demo.com',
-            country: 'South Africa',
-            level: 'General',},
-            created: '5 mins ago',
-            status: 'Rejected',
-        }];
-     setTransactions(transactionsList);
-     setFilteredTransactions(transactionsList);
-
-
       }, []);
     // table headings definition
 const columns = [{
     name: 'Type',
-    selector: 'type',
+    selector: 'subtype',
     sortable: true,
+},{
+  name: 'TransactionID',
+  selector: 'txid',
+  sortable: true,
 },{
     name: 'Amount',
     selector: 'amount',
@@ -170,6 +121,10 @@ cell: row => <div>{row.currency.code} {row.balance}</div>
     name: 'Created',
     selector: 'created',
     sortable: true,
+    cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
 }, {
     name: 'Status',
     selector: 'status',
@@ -179,12 +134,15 @@ cell: row => <div>{row.currency.code} {row.balance}</div>
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-        <select class="form-control form-control-sm">
-            <option>Update Status</option>
-            <option>Completed</option>
-            <option>Rejected</option>
-        </select>
-  </div>
+            <button 
+            onClick={e => {
+              e.preventDefault();
+              onSubmitChangeStatus(row);
+            }}
+            className="btn btn-secondary btn-sm btn-icon">
+                        <span className="fa fa-pencil"></span>
+                    </button>
+      </div>
 }];
 
 const handleChangePassword = async data => {
@@ -194,16 +152,10 @@ const handleDeleteMember = async data => {
 }
 
 const onSubmitChangeStatus= data => {
-    return confirmAlert({
-      title: 'Change Transaction Status',
-      message: 'Are you sure you want to resend password for ' + data.full_names + '?',
-      buttons: [{
-        label: 'Yes',
-        onClick: () => handleChangePassword(data),
-      }, {
-        label: 'Cancel',
-      }]
-    });
+  setSelectedTransaction(data);
+  setShow(true);
+  console.log(data);
+    //return <Confirm show={show} setShow={setShow} />;
   };
 
   const onSubmitDeleteMember= data => {
@@ -232,21 +184,11 @@ const onSubmitChangeStatus= data => {
 
     return (
         <Card className="o-hidden mb-4">
+           <ModalChangeStatus show={show} setShow={setShow} transaction={selectedTransaction} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span className="text-primary">Transactions</span>
                     <span className="flex-grow-1" />
-                    <div style={selectPadding}>
-                            <select class="form-control form-control-sm">
-                                <option>All Transactions</option>
-                                <option>Pending</option>
-                                <option>Failed</option>
-                                <option>Transfers</option>
-                                <option>Deposits</option>
-                                <option>Withdrawals</option>
-                                <option>Completed</option>
-                            </select>
-                    </div>
                     <input
                     style={inputWith}
                         type="text"

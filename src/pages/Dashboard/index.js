@@ -85,7 +85,7 @@ export default function DashboardPage(props) {
                         <Col xs={12} lg={4}>
                             <Common.Widget
                                 icon="li-receipt"
-                                title="Opened payments"
+                                title="Main Account Ballance"
                                 subtitle="Summary amount"
                                 informer={<span className="text-bold">CBI 89000</span>}
                             />
@@ -200,7 +200,7 @@ export default function DashboardPage(props) {
                                         </div>
                                     </div>
                                     <div id="dashboard-ec-radar">
-                                        <canvas data-zr-dom-id="zr_0" width="555" height="270" />
+                                        <canvas data-zr-dom-id="zr_0" width="555"r />
                                         05/18<br />
                                         <span />
                                         Sales: 0<br />
@@ -212,7 +212,6 @@ export default function DashboardPage(props) {
                         </Col>
                     </div>
                     <Card className="margin-bottom-0">
-                    
                         <CardBody className="padding-top-10 padding-bottom-10">
                             {/* <Dashboard.RecentTransactions /> */}
                              <Dashboard.ResentMembers />

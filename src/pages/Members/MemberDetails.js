@@ -42,52 +42,43 @@ const MemberDetails = props => {
 	const breadcrumb = { heading: "Member Details" };
 	const [activeTab, setActiveTab] = useState('referals');
     const [member, setMember] = useState({});
-    const [addresses, setAddresses] = useState([]);
+    const [wallet, setWallet] = useState({});
+    const [address, setAddress] = useState({});
     const params = useParams();
     const { id } = params;
 
     useMemo(() => {
         //Get member details
         MemberService.getMember(id).then((res) => {
-            console.log(res.data.data)
+           // console.log(res.data.data)
           const memberDetails = res.data.data;
           setMember(memberDetails);
         });
 
         //Get member details
+        MemberService.getMemberWallet(id).then((res) => {
+           // console.log(res.data.data)
+          const walletDetails = res.data.data;
+          setWallet(walletDetails);
+        });
+
+
+        //Get member details
         MemberService.getMemberAddress(id).then((res) => {
-            console.log(res.data.data.results)
+           // console.log(res.data.data.results[0])
             const memberAddress = res.data.data.results;
-            setAddresses(memberAddress);
+            setAddress(memberAddress[0]);
           });
  
       }, []);
 
-	const profile = {
-		customerId: '109977041',
-		name: 'Mduduzi Mdluli',
-		username: 'JSmith',
-		phone: '0845880677',
-		email: 'example1@demo.com',
-		id_number: '9103025869089',
-		country: 'South Africa',
-		level: '3',
-		created: 'just now',
-		status: 'Active',
-		bio: 'Im mdu mdluli born and raised in KZN',
-	    address: {
-			streetAddress: '23 Modiseni',
-			suburb: 'Centurion',
-			city: 'Pretoria',
-			province: 'Gauteng',
-			postalCode: '2345'
-		}};
+
 		const toggleTab = (e, tab) => {
 			e.preventDefault();
 			setActiveTab(tab);
 		};
 
-        const numRows = addresses.length
+       // const numRows = address.length
 
 	return (
 		<AuthLayout
@@ -113,25 +104,28 @@ const MemberDetails = props => {
                                         <div className="clearfix"></div>
                                         <div className="author-box-name mt-3">
 											<h4 className="text-primary mt-0 mb-1">{member.first_name} {member.last_name}</h4>
-                                            <span className="text-success" onClick={e => e.preventDefault()}>
-                                                Balance: {'KYC 68000.00'}
+                                            
+                                            < span className={wallet.balance > 0 ? 'text-success' :'text-danger'} >
+                                                Balance: {wallet.currency_code} {wallet.balance}
+                                            </span><br />
+                                            < span className={wallet.available_balance > 0 ? 'text-success' :'text-danger'}>
+                                                Avaolable Balance: {wallet.currency_code} {wallet.available_balance}
                                             </span>
                                         </div>
                                         <div className="author-box-job">
 										    ID/Passport No: {member.id_number}<br />
 											Phone: {member.mobile}<br />
 											Email: {member.email}<br />
-											Level: 0
+											Level: 0<br />
+                                            Type: {member.group ? member.group.label : 'Member'}
 											<hr />
 											<strong>Address</strong>
-											{numRows ?
+											{address ?
                                                 <p>
-                                                    {addresses.streetAddress || ''},&nbsp;
-                                                    {addresses.suburb || ''}
+                                                    {address.city}, {address.country} &nbsp;
                                                     <br />
-                                                    {addresses.city || ''},&nbsp;
-                                                    {addresses.province || ''}&nbsp;
-                                                    {addresses.postalCode || ''}
+                                                    {/* {addresses.province || ''}&nbsp;
+                                                    {addresses.postalCode || ''} */}
                                                 </p>:<p> <br />Address not provided</p>}
                                         </div>
                                     </div>

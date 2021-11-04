@@ -101,7 +101,7 @@ export default function ProductAddNew(props) {
                             type="text"
                             id="name"
                             className="form-control form-control-m"
-                        /> 
+                        />
                 </div>
                 <div className="form-group">
                         <label htmlFor="rebalancing_frequency">Rebalancing Frequency</label>
