@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { MemberService } from '../../providers';
 import { AuthLayout } from 'containers';
-import { Common, Members, Transactions, Products } from 'components';
+import { Common, Members, Transactions, Products, KYC } from 'components';
 
 const Image = () => {
     return (
@@ -176,6 +176,16 @@ const MemberDetails = props => {
                                                 Banking Details
                                             </a>
                                         </li>
+                                        <li className="nav-item">
+                                            <a
+                                                className={`nav-link show ${activeTab === 'kyc' ? 'active' : ''}`}
+                                                onClick={e => toggleTab(e, 'kyc')}
+                                                data-toggle="tab"
+                                                href="/"
+                                            >
+                                                KYC
+                                            </a>
+                                        </li>
                                     </ul>
                                     <div className="tab-content">
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
@@ -201,6 +211,13 @@ const MemberDetails = props => {
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
 												<Members.BankDetails member={member} />
+                                                </CardBody>
+                                            </div>
+                                        </div>
+                                        <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
+                                            <div className="profile-setting__card">
+                                                <CardBody className="pl-0 pr-0 pb-0">
+												<KYC.KYC member={member} />
                                                 </CardBody>
                                             </div>
                                         </div>

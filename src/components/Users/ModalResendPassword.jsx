@@ -7,7 +7,8 @@ import Select from 'react-select';
 
 const ModalChangeStatus = props => {
     const { show, setShow, user} = props;
-    const [statuses, setStatuses] = useState([]);
+    const [statuses, setStatuses] = 
+    useState([]);
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 

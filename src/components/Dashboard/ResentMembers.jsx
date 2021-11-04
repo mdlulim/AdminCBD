@@ -181,7 +181,7 @@ const onSubmitChangeStatus= data => {
           <ModalChangeStatus show={show} setShow={setShow} member={selectedMember} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Resent Members</span>
+                    <span>Recent Members</span>
                     <span className="flex-grow-1" />
                     <input
                     style={inputWith}

@@ -19,6 +19,7 @@ import Countries from './Countries';
 import Currencies from './Currencies';
 import Configurations from './Configurations';
 import FormsConfig from './FormsConfig';
+import KYC from './KYC';
 
 export {
     Breadcrumb,
@@ -41,5 +42,6 @@ export {
     Countries,
     Currencies,
     Configurations,
-    FormsConfig
+    FormsConfig,
+    KYC
 };
