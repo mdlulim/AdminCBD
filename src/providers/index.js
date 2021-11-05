@@ -10,6 +10,7 @@ import LeadService from './LeadService';
 import CountryService from './CountryService'
 import Currencies from './Currencies';
 import KYCService from './KYCService';
+import CompanyAccountService from './CompanyAccountService';
 
 
 export {
@@ -23,7 +24,6 @@ export {
     LeadService,
     CountryService,
     Currencies,
-    KYCService
-
-
+    KYCService,
+    CompanyAccountService
 };

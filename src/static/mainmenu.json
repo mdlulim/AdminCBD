@@ -59,6 +59,14 @@
             ]
         },
         {
+            "id": "main-account",
+            "title": "Main Account",
+            "description": "manage company main account",
+            "link": "/main-account",
+            "icon": "li-cash-dollar",
+            "childitems": []
+        },
+        {
             "id": "reports",
             "title": "Reports",
             "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",

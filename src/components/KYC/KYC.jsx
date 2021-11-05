@@ -55,8 +55,10 @@ const Status = ({ status }) => {
   };
 
 export default function Leads(props) {
+    const { member } = props;
 
     useMemo(() => {
+        
       }, []);
     // table headings definition
 
