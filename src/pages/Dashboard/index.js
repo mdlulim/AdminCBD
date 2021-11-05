@@ -27,6 +27,10 @@ const Filter = () => {
     );
 }
 
+const inputWith={
+    width: '20%'
+  }
+
 export default function DashboardPage(props) {
     const [members, setMembers] = useState([]);
     const [filteredMembers, setFilteredMembers] = useState([]);
@@ -257,14 +261,18 @@ export default function DashboardPage(props) {
                             subtitle="Latest transctions"
                             informer={<><span className="text-bold text-success">{countTransaction('Completed')}</span> / <span className="text-bold text-warning">{countTransaction('Pending')}</span></>}
                         /></a>
-                        <CardBody className="padding-left-0">
+                        <div className="form-group" style={{'padding': 10}}>
                         <input
+                                type={inputWith}
                                 type="text"
                                 name="search"
                                 className={`form-control form-control-m`}
                                 placeholder="Search..."
                                 onKeyUp={e => onSearchFilter(e.target.value)}
                             />
+                            </div>
+                        <CardBody className="padding-left-0">
+                        
                             <Common.Timeline
                                 items={filteredTransactions}
                             />
