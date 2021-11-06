@@ -93,9 +93,9 @@ export default function Leads(props) {
                     <RejectLevelModal show={ showReason } setShow={setShowReason} />
                     <ViewModal show={showImage} setShow={setShowImage} document={clickedDoc} />
                     <LevelZero approveLevel={ approveLevelCB } showImage={ showImageCB }/>
-                    <LevelOne />
-                    <LevelTwo />
-                    <LevelThree />
+                    <LevelOne approveLevel={ approveLevelCB }/>
+                    <LevelTwo approveLevel={ approveLevelCB } showImage={ showImageCB }/>
+                    <LevelThree approveLevel={ approveLevelCB } showImage={ showImageCB }/>
                 </Col>
             </Row>
         </>

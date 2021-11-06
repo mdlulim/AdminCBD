@@ -1,9 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reactstrap';
-import { KYCService } from '../../providers';
-import { Modal } from 'react-bootstrap';
-import ViewModal from './viewModal';
-import RejectLevelModal from './rejectLevelModal'
 
 const Image = () => {
     return (

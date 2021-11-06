@@ -1,7 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reactstrap';
-import { KYCService } from '../../providers';
-import ViewModal from './viewModal';
 
 
 const Image = () => {
@@ -23,6 +21,14 @@ export default function LevelTwo(props) {
     useMemo(() => {
     }, []);
 
+    const approveLevel = (action) => {
+        props.approveLevel(action);
+    }
+
+    const onShowImage = (image) => {
+        props.showImage(image);
+    }
+
     const onSubmit = (event) => {
         event.preventDefault();
         // setDisabled(true);
@@ -32,15 +38,14 @@ export default function LevelTwo(props) {
     return (
         <Row style={{ marginBottom: "20px", borderBottom: "1px solid gainsboro" }}>
             <Col>
-                <ViewModal show={show} setShow={setShow} document={clickedDoc} />
                 <Row>
                     <Col md={6}>
                         <h4>Level 2</h4>
                     </Col>
                     <Col md={6}>
                         <ButtonGroup size="sm" align="right">
-                            <Button color="success">Approve</Button>
-                            <Button color="danger">Decline</Button>
+                            <Button color="success" onClick={() => approveLevel(true)}>Approve</Button>
+                            <Button color="danger" onClick={() => approveLevel(false)}>Decline</Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
@@ -89,7 +94,7 @@ export default function LevelTwo(props) {
                                 <Col xs={6} md={6} >
                                     <div className="form-group">
                                         <label>ID/Passport Document</label>
-                                        <Card onClick={() => setShow(true)}>
+                                        <Card onClick={() => onShowImage("holder.js/171x180")}>
                                             <Image src="holder.js/171x180" roundedCircle />
                                         </Card>
                                     </div>

@@ -11,6 +11,10 @@ export default function LevelOne(props) {
     useMemo(() => {
     }, []);
 
+    const approveLevel = (action) => {
+        props.approveLevel(action);
+    }
+
     const onSubmit = (event) => {
         event.preventDefault();
         // setDisabled(true);
@@ -27,8 +31,8 @@ export default function LevelOne(props) {
                     </Col>
                     <Col md={6}>
                         <ButtonGroup size="sm" align="right">
-                            <Button color="success" >Approve</Button>
-                            <Button color="danger">Decline</Button>
+                            <Button color="success" onClick={() => approveLevel(true)}>Approve</Button>
+                            <Button color="danger" onClick={() => approveLevel(false)}>Decline</Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
