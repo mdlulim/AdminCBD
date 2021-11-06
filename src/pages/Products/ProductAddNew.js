@@ -110,7 +110,7 @@ const ProductAddNew = props => {
                         registration_persantage: parseFloat(form.registration_persantage.value),
                         total				: price+educator+regFee,
                         status				: selectedStatus
-                     }
+                     };
                      ProductService.addProduct(productData).then((response) =>{
                         console.log(response);
                         if(response.status){
@@ -130,22 +130,23 @@ const ProductAddNew = props => {
                         setDisabled(false);
                      })
                 }else if(selectedProductType === 'FP'){
-                    const fpData ={
-                        title				: form.title.value,
-                        body				: currentContentAsHTML,
-                        product_code		: selectedProductType,
-                        category_id         : category.id,
-                        category_title      : category.title,
-                        currency_code		: selectedCurrency,
-                        price				: price,
-                        daily_interest      : parseFloat(form.estimated_daily_interest.value),
-                        gross_return        : parseFloat(form.minimum_gross_return.value),
-                        investment_period   : parseFloat(form.investment_period.value),
-                        minimum_investment  : parseFloat(form.minimum_investment.value),
-                        status				: selectedStatus,
+                    const myData ={
+                            body            : currentContentAsHTML,
+                            category_id     : category.id,
+                            category_title  : category.title,
+                            currency_code   : selectedCurrency,
+                            daily_interes   : parseFloat(form.estimated_daily_interest.value),
+                            gross_return    : parseFloat(form.minimum_gross_return.value),
+                            investment_period: parseFloat(form.investment_period.value),
+                            minimum_investment: parseFloat(form.minimum_investment.value),
+                            price            : price,
+                            product_code     : selectedProductType,
+                            status           : selectedStatus,
+                            title            : form.title.value,
+                            total            : price
                      }
 
-                     ProductService.addProduct(fpData).then((response) =>{
+                     ProductService.addProduct(myData).then((response) =>{
                         console.log(response);
                         if(response.status){
                             setShow(true);
@@ -164,26 +165,26 @@ const ProductAddNew = props => {
                         setDisabled(false);
                      })
 
-                     console.log(fpData)
+                     console.log(myData)
                 }else if(selectedProductType === 'CBIX7'){
 
                     let educator = parseFloat(educatorFee);
 				    let regFee = parseFloat(registrationFee);
-                    const cbiX7 ={
-                        title				: form.title.value,
-                        body				: currentContentAsHTML,
-                        product_code		: selectedProductType,
-                        category_id         : category.id,
-                        category_title      : category.title,
-                        type		        : selectedProductType,
-                        currency_code		: selectedCurrency,
-                        price				: price,
-                        educator_fee		: educator,
-                        educator_persantage	: parseFloat(form.educator_persantage_fee.value),
-                        registration_fee	: parseFloat(form.registration_fee.value),
-                        total				: price+educator+parseFloat(form.registration_fee.value),
-                        status				: selectedStatus
-                     }
+                    const cbiX7 = {
+                                    title				: form.title.value,
+                                    body				: currentContentAsHTML,
+                                    product_code		: selectedProductType,
+                                    category_id         : category.id,
+                                    category_title      : category.title,
+                                    type		        : selectedProductType,
+                                    currency_code		: selectedCurrency,
+                                    price				: price,
+                                    educator_fee		: educator,
+                                    educator_persantage	: parseFloat(form.educator_persantage_fee.value),
+                                    registration_fee	: parseFloat(form.registration_fee.value),
+                                    total				: price+educator+parseFloat(form.registration_fee.value),
+                                    status				: selectedStatus
+                                }
                      console.log(cbiX7);
                      ProductService.addProduct(cbiX7).then((response) =>{
                         console.log(response);
@@ -318,6 +319,7 @@ const ProductAddNew = props => {
                                         />
                                 </Col>
                                 <Col md={6} hidden={show}>
+                                    <div className="form-control">
                                         <label htmlFor="name">Registration Percentage Fee (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
                                         <input
                                             type="text"
@@ -335,6 +337,7 @@ const ProductAddNew = props => {
 												}
 											}}
                                         />
+                                        </div>
                                 </Col>
                                 <Col md={6} hidden={show}>
 							<label htmlFor="educator_persantage">Educator Percentage Fee (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={educatorFee} />: '' }</label>

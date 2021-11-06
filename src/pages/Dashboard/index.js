@@ -45,8 +45,10 @@ export default function DashboardPage(props) {
           console.log(res.data.data)
           //if(res.data.success){
           const memberslist = res.data.data.results;
-          setMembers(memberslist);
-          setFilteredMembers(memberslist);
+        const temp=  memberslist.slice(Math.max(memberslist.length - 5), 0)
+        console.log(temp)
+          setMembers(temp);
+          setFilteredMembers(temp);
           //}
         });
 
@@ -85,7 +87,7 @@ export default function DashboardPage(props) {
           (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase())) ||
           (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
         ));
-        
+
         console.log(filteredItems)
         setFilteredTransactions(filteredItems);
       }
