@@ -31,6 +31,7 @@ const ProductAddNew = props => {
     const [selectedStatus, setSelectedStatus] = useState('');
     const [product, setProduct] = useState({});
     const [productCategories, setProductCategories] = useState([]);
+    const [categories, setCategories] = useState([]);
     const { processing,confirmButtonDisabled, confirmButton,} = props;
     const [selectedCurrency, setSelectedCurrency] = useState('CBI');
     const [selectedProductType, setSelectedProductType] = useState('');
@@ -45,7 +46,7 @@ const ProductAddNew = props => {
            // console.log(res.data.data.results)
             if(res.data.success){
               const productlist = res.data.data.results;
-
+              setCategories(productlist);
               let temp = [];
               productlist.filter(item => (
                     temp.push({ value: item.code, label: item.title })
@@ -76,7 +77,7 @@ const ProductAddNew = props => {
                 { value: 'Published',  label: 'Published' },
                 { value: 'Achived', label: 'Achived' }
               ];
-//====================Update Product===============================
+//====================Add Product===============================
               const onSubmit = (event) => {
                 event.preventDefault();
 				setDisabled(true);
@@ -84,6 +85,9 @@ const ProductAddNew = props => {
 
                 const form = event.currentTarget;
 				let price = parseFloat(form.price.value);
+
+                const category = categories.filter(option => option.code === selectedProductType)[0];
+                console.log(category);
 				
                // const title = form.title.value;
                let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
@@ -96,6 +100,8 @@ const ProductAddNew = props => {
                         title				: form.title.value,
                         body				: currentContentAsHTML,
                         product_code		: selectedProductType,
+                        category_id         : category.id,
+                        category_title      : category.title,
                         currency_code		: selectedCurrency,
                         price				: price,
                         educator_fee		: educator,
@@ -124,21 +130,22 @@ const ProductAddNew = props => {
                         setDisabled(false);
                      })
                 }else if(selectedProductType === 'FP'){
-                    const productData ={
+                    const fpData ={
                         title				: form.title.value,
                         body				: currentContentAsHTML,
                         product_code		: selectedProductType,
-                        type				: selectedProductType,
+                        category_id         : category.id,
+                        category_title      : category.title,
                         currency_code		: selectedCurrency,
                         price				: price,
-                        daily_interest      : form.estimated_daily_interest.value,
-                        gross_return        : form.minimum_gross_return.value,
-                        investment_period   : form.investment_period.value,
-                        minimum_investment  : form.minimum_investment.value,
-                        status				: selectedStatus
+                        daily_interest      : parseFloat(form.estimated_daily_interest.value),
+                        gross_return        : parseFloat(form.minimum_gross_return.value),
+                        investment_period   : parseFloat(form.investment_period.value),
+                        minimum_investment  : parseFloat(form.minimum_investment.value),
+                        status				: selectedStatus,
                      }
 
-                     ProductService.addProduct(productData).then((response) =>{
+                     ProductService.addProduct(fpData).then((response) =>{
                         console.log(response);
                         if(response.status){
                             setShow(true);
@@ -157,7 +164,7 @@ const ProductAddNew = props => {
                         setDisabled(false);
                      })
 
-                     console.log(productData)
+                     console.log(fpData)
                 }else if(selectedProductType === 'CBIX7'){
 
                     let educator = parseFloat(educatorFee);
@@ -166,6 +173,8 @@ const ProductAddNew = props => {
                         title				: form.title.value,
                         body				: currentContentAsHTML,
                         product_code		: selectedProductType,
+                        category_id         : category.id,
+                        category_title      : category.title,
                         type		        : selectedProductType,
                         currency_code		: selectedCurrency,
                         price				: price,
