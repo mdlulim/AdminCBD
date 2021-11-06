@@ -80,10 +80,12 @@ export default function DashboardPage(props) {
 
     const onSearchFilter = filterText => {
         const filteredItems = transactions.filter(item => (
+            (item && item.user_id && item.user_id.toLowerCase().includes(filterText.toLowerCase())) ||
           (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
           (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase())) ||
           (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
         ));
+        
         console.log(filteredItems)
         setFilteredTransactions(filteredItems);
       }
@@ -105,7 +107,7 @@ export default function DashboardPage(props) {
                         <a href={`/main-account`} >
                             <Common.Widget
                                 icon="li-receipt"
-                                title="Main Account Ballance"
+                                title="Main Account Balance"
                                 subtitle="Summary amount"
                                 informer={<span className="text-bold">CBI 89000</span>}
                             /></a>
@@ -126,6 +128,44 @@ export default function DashboardPage(props) {
                                 title="Products"
                                 subtitle="CBI products"
                                 informer={<span className="text-bold">{products.length}</span>}
+                            /></a>
+                        </Col>
+                    </div>
+                    <div className="form-row margin-bottom-20">
+                        <Col xs={12} lg={3}>
+                        <a href={`/members/members`} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Active"
+                                subtitle="Members"
+                                informer={<><span className="text-bold text-success">{countMembers('Active')}</span></>}
+                            /></a>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                        <a href={`/members/members`} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Pending"
+                                subtitle="Members"
+                                informer={<><span className="text-bold text-warning">{countMembers('Pending')}</span> </>}
+                            /></a>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                        <a href={`/members/members`} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Blocked"
+                                subtitle="Members"
+                                informer={<><span className="text-bold text-danger">{countMembers('Blocked')}</span> </>}
+                            /></a>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                        <a href={`/members/members`} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Achieved"
+                                subtitle="Members"
+                                informer={<><span className="text-bold text-danger">{countMembers('Achieved')}</span> </>}
                             /></a>
                         </Col>
                     </div>
@@ -177,6 +217,7 @@ export default function DashboardPage(props) {
                                         <span />
                                         Completed Transactions: 1
                                     </div>
+                                    <canvas data-zr-dom-id="zr_0" height="190" /> 
                                 </CardBody>
                             </Card>
                         </Col>
@@ -199,44 +240,7 @@ export default function DashboardPage(props) {
                             </Card>
                         </Col>
                     </div>
-                    <div className="form-row margin-bottom-20">
-                        <Col xs={12} lg={3}>
-                        <a href={`/members/members`} >
-                            <Common.Widget
-                                icon="li-users2"
-                                title="Active"
-                                subtitle="Members"
-                                informer={<><span className="text-bold text-success">{countMembers('Active')}</span></>}
-                            /></a>
-                        </Col>
-                        <Col xs={12} lg={3}>
-                        <a href={`/members/members`} >
-                            <Common.Widget
-                                icon="li-users2"
-                                title="Pending"
-                                subtitle="Members"
-                                informer={<><span className="text-bold text-warning">{countMembers('Pending')}</span> </>}
-                            /></a>
-                        </Col>
-                        <Col xs={12} lg={3}>
-                        <a href={`/members/members`} >
-                            <Common.Widget
-                                icon="li-users2"
-                                title="Blocked"
-                                subtitle="Members"
-                                informer={<><span className="text-bold text-danger">{countMembers('Blocked')}</span> </>}
-                            /></a>
-                        </Col>
-                        <Col xs={12} lg={3}>
-                        <a href={`/members/members`} >
-                            <Common.Widget
-                                icon="li-users2"
-                                title="Achieved"
-                                subtitle="Members"
-                                informer={<><span className="text-bold text-danger">{countMembers('Achieved')}</span> </>}
-                            /></a>
-                        </Col>
-                    </div>
+                   
                     {/* <Card className="margin-bottom-0">
                         <CardBody className="padding-top-10 padding-bottom-10">
                              <Dashboard.ResentMembers />
@@ -267,7 +271,7 @@ export default function DashboardPage(props) {
                                 type="text"
                                 name="search"
                                 className={`form-control form-control-m`}
-                                placeholder="Search..."
+                                placeholder="Search by User ID, Trans ID, Trans Type"
                                 onKeyUp={e => onSearchFilter(e.target.value)}
                             />
                             </div>
