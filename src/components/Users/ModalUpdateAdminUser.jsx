@@ -4,6 +4,8 @@ import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
+import { UserService } from 'providers';
+import { confirmAlert } from 'react-confirm-alert';
 
 const ModalChangeStatus = props => {
     const { show, setShow, member} = props;
@@ -14,6 +16,41 @@ const ModalChangeStatus = props => {
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
     }, []);
+
+    //====================Add User===============================
+const onSubmit = (e) =>{
+    // e.preventDefault();
+    const form = e.currentTarget;
+    const userData = {
+        first_name: form.first_name.value,
+        last_name: form.last_name.value,
+        group_id: "0eea4708-83ad-4e17-9b4f-de9fd535be09",
+        username: form.username.value,
+        email: form.email.value,
+        status: form.status.value,
+    }
+    console.log(userData);
+
+    UserService.addAdminUser(userData).then((response) =>{
+        console.log(response);
+         if(response.data.success){
+            //  setShow(false)
+             return confirmAlert({
+                title: 'Succcess',
+                message: 'User was successfully updated',
+                buttons: [
+                  {
+                    label: 'Ok',
+                  }
+                ]
+              });
+         }else{
+            //  setError('Something went wrong while trying to update members status');
+         }
+        // setDisabled(false);
+     })
+}
+//
 
     const statusOptions = [
         { value: 'Active',  label: 'Active' },
@@ -33,7 +70,7 @@ const ModalChangeStatus = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-info"> Update Admin User</h3>
                         <hr />
-                        <form>
+                        <form onSubmit={onSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="first_name">First Name</label>
                                     {member ? 
@@ -41,7 +78,7 @@ const ModalChangeStatus = props => {
                                         type="text"
                                         id="first_name"
                                         className="form-control form-control-m"
-                                        value={member.first_name}
+                                        defaultValue={member.first_name}
                                     /> 
                                     : ''}
                                 </div>
@@ -52,7 +89,7 @@ const ModalChangeStatus = props => {
                                         type="text"
                                         id="last_name"
                                         className="form-control form-control-m"
-                                        value={member.last_name}
+                                        defaultValue={member.last_name}
                                     /> 
                                     : ''}
                                 </div>
@@ -63,7 +100,7 @@ const ModalChangeStatus = props => {
                                         type="text"
                                         id="username"
                                         className="form-control form-control-m"
-                                        value={member.username}
+                                        defaultValue={member.username}
                                     />
                                     : ''}
                                 </div>
@@ -74,7 +111,7 @@ const ModalChangeStatus = props => {
                                         type="text"
                                         id="email"
                                         className="form-control form-control-m"
-                                        value={member.email}
+                                        defaultValue={member.email}
                                     />
                                     : ''}
                                 </div>

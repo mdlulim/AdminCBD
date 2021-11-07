@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
+import { UserRolesService } from 'providers';
 import Select from 'react-select';
+import { confirmAlert } from 'react-confirm-alert'; // Import
 
 const ModalChangeStatus = props => {
     const { show, setShow} = props;
@@ -26,6 +28,41 @@ const ModalChangeStatus = props => {
         { value: 'Active',  label: 'Active' },
         { value: 'Blocked', label: 'Blocked' }
       ];
+
+    
+
+     const onSubmit = (e) =>{
+        //  e.preventDefault();
+        const form = e.currentTarget;
+        UserRolesService.addUserRoles({
+            name:form.role_name.value,
+            label:form.role_label.value,
+            description:form.role_description.value,
+            is_default:false,
+            is_public:true,
+            settings:null,
+            archived:false,
+        }).then((response) =>{
+            console.log(response);
+             if(response.data.success){
+                //  setShow(false)
+                 return confirmAlert({
+                    title: 'Succcess',
+                    message: 'Member was successfully updated',
+                    buttons: [
+                      {
+                        label: 'Ok',
+                      }
+                    ]
+                  });
+             }else{
+                //  setError('Something went wrong while trying to update members status');
+             }
+            // setDisabled(false);
+         })
+    }
+       
+
     const handleClose = () => setShow(false);
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
@@ -38,13 +75,13 @@ const ModalChangeStatus = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-info"> Add New User Role</h3>
                         <hr />
-                        <form>
+                        <form onSubmit={onSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="name">Name</label>
                                     <input
                                         type="text"
                                         id="role-name"
-                                        name="role-name"
+                                        name="role_name"
                                         className="form-control form-control-m"
                                     />
                                 </div>
@@ -53,7 +90,7 @@ const ModalChangeStatus = props => {
                                     <input
                                         type="text"
                                         id="label"
-                                        name="label"
+                                        name="role_label"
                                         className="form-control form-control-m"
                                     />
                                 </div>
@@ -62,7 +99,7 @@ const ModalChangeStatus = props => {
                                     <textarea
                                         type="text"
                                         id="description"
-                                        name="description"
+                                        name="role_description"
                                         className="form-control form-control-m"
                                     /> 
                                 </div>
@@ -91,7 +128,7 @@ const ModalChangeStatus = props => {
                             <Col md={6} >
                             <button
                                         className="btn btn-info float-right"
-                                        onClick={confirmButton.onClick}
+                                        type="submit"
                                         disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Add New'}

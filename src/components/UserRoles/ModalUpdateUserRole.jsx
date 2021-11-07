@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
+import { UserRolesService } from 'providers';
+import { confirmAlert } from 'react-confirm-alert';
 
 const AlertModal = props => {
     const {
@@ -28,6 +30,41 @@ const AlertModal = props => {
         icon = 'check';
     }
 
+    const onSubmit = async (e) =>{
+        // e.preventDefault();
+        const form = e.currentTarget;
+
+        // alert(form.role_description.value);
+        UserRolesService.updateUserRoles(role.id,
+             {
+                name:await form.role_name.value,
+                label:await form.role_label.value,
+                description:await form.role_description.value,
+                is_default:false,
+                is_public:true,
+                settings:null,
+                archived:false
+             }
+        ).then((response) =>{
+            console.log(response);
+             if(response.data.success){
+                //  setShow(false)
+                 return confirmAlert({
+                    title: 'Succcess',
+                    message: 'Member was successfully updated',
+                    buttons: [
+                      {
+                        label: 'Ok',
+                      }
+                    ]
+                  });
+             }else{
+                //  setError('Something went wrong while trying to update members status');
+             }
+            // setDisabled(false);
+         })
+        }
+
     const handleClose = () => {
         setShow(false);
         if (callback) callback();
@@ -42,15 +79,17 @@ const AlertModal = props => {
                     </Col>
                     <Col xs={10}>
                         <h3 className="text-info">Update User Role</h3>
+                        <hr />
+                        <form onSubmit={onSubmit}>
                         {role ? 
                              <div className="form-group">
                                     <label htmlFor="role">Name</label>
                                     <input
                                         type="text"
                                         id="role"
+                                        name="role_name"
                                         className="form-control form-control-m"
-                                        value={role.name}
-                                        disabled
+                                        defaultValue={role.name}
                                     />
                                 </div>
                                  : ''}
@@ -60,8 +99,9 @@ const AlertModal = props => {
                                     <input
                                         type="text"
                                         id="role"
+                                        name="role_label"
                                         className="form-control form-control-m"
-                                        value={role.label}
+                                        defaultValue={role.label}
                                         
                                     />
                                 </div>
@@ -72,8 +112,9 @@ const AlertModal = props => {
                                     <textarea
                                         type="text"
                                         id="description"
+                                        name="role_description"
                                         className="form-control form-control-m"
-                                        value={role.description}
+                                        defaultValue={role.description}
                                     />
                                 </div>
                                  : ''}
@@ -92,13 +133,14 @@ const AlertModal = props => {
                             <Col md={6} >
                             <button
                                         className="btn btn-info float-right"
-                                        onClick={''}
+                                        type="submit"
                                         disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Update'}
                                 </button>
                             </Col>
                             </Row>
+                            </form>
                     
                     </Col>
                 </Row>
