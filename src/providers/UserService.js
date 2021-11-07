@@ -6,8 +6,9 @@ const session = Session.get();
 const authToken = (session.name && session.name.payload && session.name.payload.admin) ? session.name.payload.token : null;
 const headers = {
   'Authorization': `Bearer ${authToken}`,
-  'Content-Type': `application/json`
-};
+  'Content-Type': `application/json`,
+  'Access-Control-Max-Age': `600`
+};  
 
 console.log(authToken);
 
@@ -41,7 +42,7 @@ class UserService {
           method: 'PUT',
           headers: headers,
           data:data,
-          url: `${Config.API.BASE_URL}/users?group=admin`,
+          url: `${Config.API.BASE_URL}/users/${id}`,
         }).then((res) =>{
           const result = res;
           return result;

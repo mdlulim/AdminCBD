@@ -16,39 +16,48 @@ const ModalChangeStatus = props => {
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
     }, []);
-
+    
     //====================Add User===============================
-const onSubmit = (e) =>{
-    // e.preventDefault();
+    const onSubmit = (e) =>{
+    e.preventDefault();
+    setShow(false);
     const form = e.currentTarget;
-    const userData = {
-        first_name: form.first_name.value,
-        last_name: form.last_name.value,
-        group_id: "0eea4708-83ad-4e17-9b4f-de9fd535be09",
-        username: form.username.value,
-        email: form.email.value,
-        status: form.status.value,
-    }
-    console.log(userData);
+    // const userData = {
+    //     first_name: document.getElementById('first_name').value,
+    //     last_name: form.last_name.value,
+    //     group_id: "ec2f5ee4-ea3a-4f68-a684-cddd37808978",
+    //     username: form.username.value,
+    //     email: form.email.value,
+    //     status: form.status.value
+    // }
 
-    UserService.addAdminUser(userData).then((response) =>{
-        console.log(response);
-         if(response.data.success){
-            //  setShow(false)
-             return confirmAlert({
-                title: 'Succcess',
-                message: 'User was successfully updated',
-                buttons: [
-                  {
-                    label: 'Ok',
-                  }
-                ]
-              });
-         }else{
-            //  setError('Something went wrong while trying to update members status');
-         }
-        // setDisabled(false);
-     })
+        UserService.updateAdminUser(member.id, 
+            {
+                first_name: document.getElementById('first_name').value,
+                last_name: form.last_name.value,
+                group_id: "ec2f5ee4-ea3a-4f68-a684-cddd37808978",
+                username: form.username.value,
+                email: form.email.value,
+                status: form.status.value
+            }).then((response) =>{
+            
+             if(response.data.success){
+                //  setShow(false)
+                 return confirmAlert({
+                    title: 'Succcess',
+                    message: 'User was successfully updated',
+                    buttons: [
+                      {
+                        label: 'Ok',
+                        onClick:window.location.reload(false)
+                      }
+                    ]
+                  });
+             }else{
+                //  setError('Something went wrong while trying to update members status');
+             }
+            // setDisabled(false);
+         })
 }
 //
 
@@ -70,13 +79,14 @@ const onSubmit = (e) =>{
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-info"> Update Admin User</h3>
                         <hr />
-                        <form onSubmit={onSubmit}>
+                        <form id="user-form" onSubmit={onSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="first_name">First Name</label>
                                     {member ? 
                                     <input
                                         type="text"
                                         id="first_name"
+                                        name="first_name"
                                         className="form-control form-control-m"
                                         defaultValue={member.first_name}
                                     /> 
@@ -88,6 +98,7 @@ const onSubmit = (e) =>{
                                     <input
                                         type="text"
                                         id="last_name"
+                                        name="last_name"
                                         className="form-control form-control-m"
                                         defaultValue={member.last_name}
                                     /> 
@@ -99,6 +110,7 @@ const onSubmit = (e) =>{
                                     <input
                                         type="text"
                                         id="username"
+                                        name="username"
                                         className="form-control form-control-m"
                                         defaultValue={member.username}
                                     />
@@ -110,6 +122,7 @@ const onSubmit = (e) =>{
                                     <input
                                         type="text"
                                         id="email"
+                                        name="email"
                                         className="form-control form-control-m"
                                         defaultValue={member.email}
                                     />
@@ -140,7 +153,7 @@ const onSubmit = (e) =>{
                             <Col md={6} >
                             <button
                                         className="btn btn-info float-right"
-                                        onClick={confirmButton.onClick}
+                                        type="submit"
                                         disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Update'}

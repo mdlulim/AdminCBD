@@ -14,7 +14,7 @@ const onSubmit = (e) =>{
     const userData = {
         first_name: form.first_name.value,
         last_name: form.last_name.value,
-        group_id: "0eea4708-83ad-4e17-9b4f-de9fd535be09",
+        group_id: "ec2f5ee4-ea3a-4f68-a684-cddd37808978",
         username: form.username.value,
         email: form.email.value,
         status: form.status.value,
