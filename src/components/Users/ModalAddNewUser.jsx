@@ -7,9 +7,21 @@ import Select from 'react-select';
 import { UserService } from 'providers';
 import { confirmAlert } from 'react-confirm-alert';
 
-//====================Add User===============================
+const ModalChangeStatus = props => {
+    const { show, setShow} = props;
+    const [statuses, setStatuses] = useState([]);
+    const [selectedRole, setSelectedRole] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState('');
+    const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
+
+    useMemo(() => {
+        //setSelectedStatus({ value: member.status,  label: member.status });
+    }, []);
+
+    //====================Add User===============================
 const onSubmit = (e) =>{
-    // e.preventDefault();
+    e.preventDefault();
+    // setShow(false);
     const form = e.currentTarget;
     const userData = {
         first_name: form.first_name.value,
@@ -24,13 +36,14 @@ const onSubmit = (e) =>{
     UserService.addAdminUser(userData).then((response) =>{
         console.log(response);
          if(response.data.success){
-            //  setShow(false)
+             setShow(false)
              return confirmAlert({
                 title: 'Succcess',
                 message: 'User Role was successfully updated',
                 buttons: [
                   {
                     label: 'Ok',
+                    onClick:window.location.reload(false)
                   }
                 ]
               });
@@ -41,17 +54,6 @@ const onSubmit = (e) =>{
      })
 }
 // 
-
-const ModalChangeStatus = props => {
-    const { show, setShow} = props;
-    const [statuses, setStatuses] = useState([]);
-    const [selectedRole, setSelectedRole] = useState('');
-    const [selectedStatus, setSelectedStatus] = useState('');
-    const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
-
-    useMemo(() => {
-        //setSelectedStatus({ value: member.status,  label: member.status });
-    }, []);
 
     const rolessOptions = [
         { value: '7563285', label: 'Platform Administrator' },

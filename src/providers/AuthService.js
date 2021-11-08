@@ -5,7 +5,7 @@ import { Session } from 'bc-react-session';
 const session   = Session.get();
 const authToken = (session.payload.user) ? session.payload.token: null;
 const headers   = {'Authorization': `Bearer ${authToken}`} ;
-// console.log(authToken);
+console.log(authToken);
 class AuthService {
 
     static async login(username, password, device, geoinfo){
