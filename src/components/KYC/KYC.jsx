@@ -8,51 +8,16 @@ import LevelThree from './levelThree';
 import ViewModal from './viewModal';
 import RejectLevelModal from './rejectLevelModal';
 
-// styles
-const customStyles = {
-
-    headCells: {
-        style: {
-            color: 'rgba(0,0,0,.54)',
-            paddingLeft: '18px', // override the cell padding for head cells
-            paddingRight: '18px',
-        },
-    },
-    cells: {
-        style: {
-            paddingLeft: '18px', // override the cell padding for data cells
-            paddingRight: '18px',
-        },
-    },
-};
-
-const iconPadding = {
-    paddingRight: '3px',
-}
-const inputWith = {
-    width: '20%'
-}
-
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
-
 
 
 export default function Leads(props) {
+    const {member} = props;
     const [kycDetails, setKYC] = useState([]);
     const [showImage, setShowImage] = useState(false);
     const [showReason, setShowReason] = useState(false);
     const [clickedDoc, setDocument] = useState([]);
 
+    console.log(member, "member")
     useMemo(() => {
         KYCService.getKYC("0192c293-fc26-47f0-a764-332b44dd08b1").then((res) => {
             if (!(res.data.success)) {

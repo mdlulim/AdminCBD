@@ -50,7 +50,7 @@ const MemberDetails = props => {
     useMemo(() => {
         //Get member details
         MemberService.getMember(id).then((res) => {
-           // console.log(res.data.data)
+           console.log(res.data.data)
           const memberDetails = res.data.data;
           setMember(memberDetails);
         });
