@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
+import { UserService } from 'providers';
+import { confirmAlert } from 'react-confirm-alert';
 
 const AlertModal = props => {
     const {
@@ -28,6 +30,30 @@ const AlertModal = props => {
         icon = 'check';
     }
 
+    const onSubmit = (e) =>{
+        e.preventDefault();
+       const form = e.currentTarget;
+       UserService.archiveUser(user.id).then((response) =>{
+           console.log(response);
+            if(response.data.success){
+                setShow(false)
+                return confirmAlert({
+                   title: 'Succcess',
+                   message: 'User was successfully Deleted',
+                   buttons: [
+                     {
+                       label: 'Ok',
+                       onClick:window.location.reload(false)
+                     }
+                   ]
+                 });
+            }else{
+               //  setError('Something went wrong while trying to update members status');
+            }
+           // setDisabled(false);
+        })
+   }
+
     const handleClose = () => {
         setShow(false);
         if (callback) callback();
@@ -42,6 +68,7 @@ const AlertModal = props => {
                     </Col>
                     <Col xs={10}>
                         <h3 className="text-danger">Delete Admin User</h3>
+                        <form onSubmit={onSubmit}>
                         {user ? 
                              <div className="form-group">
                                     <label htmlFor="fullname">Full Names</label>
@@ -93,13 +120,14 @@ const AlertModal = props => {
                             <Col md={6} >
                             <button
                                         className="btn btn-danger btn-rounded float-right"
-                                        onClick={''}
+                                        type="submit"
                                         disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Update'}
                                 </button>
                             </Col>
                             </Row>
+                            </form>
                     
                     </Col>
                 </Row>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
+import { UserService } from 'providers';
 
 const AlertModal = props => {
     const {
@@ -27,6 +28,31 @@ const AlertModal = props => {
     if (type === 'success') {
         icon = 'check';
     }
+
+//     const onSubmit = (e) =>{
+//         e.preventDefault();
+//        const form = e.currentTarget;
+//        UserService.archiveUser({
+//        }).then((response) =>{
+//            console.log(response);
+//             if(response.data.success){
+//                 setShow(false)
+//                 return confirmAlert({
+//                    title: 'Succcess',
+//                    message: 'Role was successfully added',
+//                    buttons: [
+//                      {
+//                        label: 'Ok',
+//                        onClick:window.location.reload(false)
+//                      }
+//                    ]
+//                  });
+//             }else{
+//                //  setError('Something went wrong while trying to update members status');
+//             }
+//            // setDisabled(false);
+//         })
+//    }
 
     const handleClose = () => {
         setShow(false);

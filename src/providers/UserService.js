@@ -57,6 +57,15 @@ class UserService {
         url: `${Config.API.BASE_URL}/admin/users/${id}`,
       });
     }
+
+    static async archiveUser(id) {
+      return await axios({
+        mode: 'no-cors',
+        method: 'PUT',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/users/${id}/archive`,
+      });
+    }
 }
 
 export default UserService;

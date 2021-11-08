@@ -31,7 +31,7 @@ const AlertModal = props => {
     }
 
     const onSubmit = async (e) =>{
-        // e.preventDefault();
+        e.preventDefault();
         const form = e.currentTarget;
 
         // alert(form.role_description.value);
@@ -48,13 +48,14 @@ const AlertModal = props => {
         ).then((response) =>{
             console.log(response);
              if(response.data.success){
-                //  setShow(false)
+                 setShow(false)
                  return confirmAlert({
                     title: 'Succcess',
                     message: 'Member was successfully updated',
                     buttons: [
                       {
                         label: 'Ok',
+                        onClick:window.location.reload(false)
                       }
                     ]
                   });

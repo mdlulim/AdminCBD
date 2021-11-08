@@ -32,7 +32,7 @@ const ModalChangeStatus = props => {
     
 
      const onSubmit = (e) =>{
-        //  e.preventDefault();
+         e.preventDefault();
         const form = e.currentTarget;
         UserRolesService.addUserRoles({
             name:form.role_name.value,
@@ -45,13 +45,14 @@ const ModalChangeStatus = props => {
         }).then((response) =>{
             console.log(response);
              if(response.data.success){
-                //  setShow(false)
+                 setShow(false)
                  return confirmAlert({
                     title: 'Succcess',
-                    message: 'Member was successfully updated',
+                    message: 'Role was successfully added',
                     buttons: [
                       {
                         label: 'Ok',
+                        onClick:window.location.reload(false)
                       }
                     ]
                   });
