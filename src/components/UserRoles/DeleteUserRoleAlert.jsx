@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
-import { UserService } from 'providers';
+import { UserRolesService } from 'providers';
+import { confirmAlert } from 'react-confirm-alert';
 
 const AlertModal = props => {
     const {
@@ -29,30 +30,29 @@ const AlertModal = props => {
         icon = 'check';
     }
 
-//     const onSubmit = (e) =>{
-//         e.preventDefault();
-//        const form = e.currentTarget;
-//        UserService.archiveUser({
-//        }).then((response) =>{
-//            console.log(response);
-//             if(response.data.success){
-//                 setShow(false)
-//                 return confirmAlert({
-//                    title: 'Succcess',
-//                    message: 'Role was successfully added',
-//                    buttons: [
-//                      {
-//                        label: 'Ok',
-//                        onClick:window.location.reload(false)
-//                      }
-//                    ]
-//                  });
-//             }else{
-//                //  setError('Something went wrong while trying to update members status');
-//             }
-//            // setDisabled(false);
-//         })
-//    }
+    const onSubmit = (e) =>{
+        e.preventDefault();
+       const form = e.currentTarget;
+       UserRolesService.archiveRole(role.id).then((response) =>{
+           console.log(response);
+            if(response.data.success){
+                setShow(false)
+                return confirmAlert({
+                   title: 'Succcess',
+                   message: 'Role was successfully Archived',
+                   buttons: [
+                     {
+                       label: 'Ok',
+                       onClick:window.location.reload(false)
+                     }
+                   ]
+                 });
+            }else{
+               //  setError('Something went wrong while trying to update members status');
+            }
+           // setDisabled(false);
+        })
+   }
 
     const handleClose = () => {
         setShow(false);
@@ -68,6 +68,7 @@ const AlertModal = props => {
                     </Col>
                     <Col xs={10}>
                         <h3 className="text-danger">Delete User Role</h3>
+                        <form onSubmit={onSubmit}>
                         {role ? 
                              <div className="form-group">
                                     <label htmlFor="role">Name</label>
@@ -99,6 +100,7 @@ const AlertModal = props => {
                         <Col md={6}>
                         <button
                                         className="btn btn-dark"
+                                        type="button"
                                         onClick={handleClose}
                                         disabled={processing}
                                     >
@@ -108,14 +110,14 @@ const AlertModal = props => {
                             <Col md={6} >
                             <button
                                         className="btn btn-danger float-right"
-                                        onClick={''}
+                                        type="submit"
                                         disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Delete'}
                                 </button>
                             </Col>
                             </Row>
-                    
+                    </form>
                     </Col>
                 </Row>
             </Modal.Body>

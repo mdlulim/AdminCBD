@@ -54,6 +54,15 @@ class UserRolesService {
       url: `${Config.API.BASE_URL}/admin/groups/${id}`,
     });
   }
+
+  static async archiveRole(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/groups/${id}/archive`,
+    });
+  }
 }
 
 export default UserRolesService;

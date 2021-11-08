@@ -51,7 +51,7 @@ const AlertModal = props => {
                  setShow(false)
                  return confirmAlert({
                     title: 'Succcess',
-                    message: 'Member was successfully updated',
+                    message: 'Role was successfully updated',
                     buttons: [
                       {
                         label: 'Ok',
