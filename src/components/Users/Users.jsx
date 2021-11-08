@@ -156,7 +156,7 @@ cell: row => <div>{row.group.label}</div>
       }}
     ><span className="fa fa-pencil" />
     </button></div>
-    <div style={iconPadding}><button
+    <div style={iconPadding}><button disabled={(row.archived)}
       className="btn btn-danger btn-sm btn-icon"
       onClick={e => {
         e.preventDefault();
