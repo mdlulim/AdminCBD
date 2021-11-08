@@ -10,6 +10,7 @@ import { confirmAlert } from 'react-confirm-alert';
 const ModalChangeStatus = props => {
     const { show, setShow, member} = props;
     const [statuses, setStatuses] = useState([]);
+    const [checked, setChecked] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
@@ -38,7 +39,8 @@ const ModalChangeStatus = props => {
                 group_id: "ec2f5ee4-ea3a-4f68-a684-cddd37808978",
                 username: form.username.value,
                 email: form.email.value,
-                status: form.status.value
+                status: form.status.value,
+                archived:(form.status.value === 'Active' ? false : true)
             }).then((response) =>{
             
              if(response.data.success){
@@ -129,7 +131,7 @@ const ModalChangeStatus = props => {
                                     : ''}
                                 </div>
                                 <div>
-                                <label htmlFor="email">Select Status</label>
+                                <label htmlFor="status">Select Status</label>
                                 <Select
                                     id="status"
                                     name="status"
@@ -139,12 +141,23 @@ const ModalChangeStatus = props => {
                                     classNamePrefix="select"
                                     />
                                 </div>
+
+{/* <br/>
+                                <div>
+                                    <label className="custom-control custom-checkbox">
+                                        <input type="checkbox" className="custom-control-input" checked={(member.deactivation_date ? true : checked)} 
+                                            onChange={() => setChecked(!checked)} 
+                                        />
+                                        <span className="custom-control-label">Deactivate User</span>
+                                    </label> 
+                                </div> */}
+
+                                
                                 <hr />
                                 <Row>
                         <Col md={6}>
                         <button
                                         className="btn btn-dark"
-                                        // onClick={handleClose}
                                         type="button"
                                         onClick={handleClose}
                                         disabled={processing}

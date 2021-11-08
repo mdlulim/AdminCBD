@@ -120,14 +120,20 @@ cell: row => <div>{row.group.label}</div>
                 <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
                 <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
              </div>
-},{
-  name: 'Updated',
-  selector: 'updated',
-  sortable: true,
-  cell: row => <div>
-              <strong><Moment date={row.ModalUpdateAdminUser} format="D MMM YYYY" /></strong><br />
-              <span className="text-muted"><Moment date={row.updated} format="hh:mm:ss" /></span>
-           </div>
+}
+// ,{
+//   name: 'Updated',
+//   selector: 'updated',
+//   sortable: true,
+//   cell: row => <div>
+//               <strong><Moment date={row.ModalUpdateAdminUser} format="D MMM YYYY" /></strong><br />
+//               <span className="text-muted"><Moment date={row.updated} format="hh:mm:ss" /></span>
+//            </div>
+// }
+,{
+    name: 'Cell Phone No.',
+    selector: 'mobile',
+    sortable: true,
 }, {
     name: 'Status',
     selector: 'status',
