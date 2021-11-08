@@ -144,6 +144,8 @@ const ModalChangeStatus = props => {
                         <Col md={6}>
                         <button
                                         className="btn btn-dark"
+                                        // onClick={handleClose}
+                                        type="button"
                                         onClick={handleClose}
                                         disabled={processing}
                                     >
