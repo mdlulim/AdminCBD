@@ -22,6 +22,7 @@ import Currencies from './pages/Configurations/Currencies';
 import FormsConfigurations from './pages/Configurations/FormsConfigurations';
 import Configurations from './pages/Configurations/Configurations';
 import Members from 'pages/Members';
+import CompanyAccount from 'pages/CompanyAccount';
 import Leads from 'pages/Members/Leads';
 import WealthCreater from 'pages/Members/WealthCreater';
 import MemberDetails from 'pages/Members/MemberDetails';
@@ -61,6 +62,7 @@ const App = () => {
 					<Route exact path="/configurations/forms" component={(props) => <FormsConfigurations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations" component={(props) => <Configurations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/main-account" component={(props) => <CompanyAccount config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/deposits" component={(props) => <Deposits config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/widthdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} />} />

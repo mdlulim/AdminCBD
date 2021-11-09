@@ -7,11 +7,10 @@ import { EditorState, ContentState} from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
-import { MemberService } from '../../providers';
+import { MemberService, ProductService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import Select from 'react-select';
 import NumberFormat from 'react-number-format';
-import { ProductService } from '../../providers';
 
 const ProductDetails = props => {
 	const breadcrumb = { heading: "Product Details" };
@@ -131,271 +130,61 @@ const ProductDetails = props => {
             caption: 'EXPLORE OVERVIEW PRODUCTS DETAILS FOR CRYPTO BASED INNOVATION'
         }}>
                     <Row>
-                        <Col md={6} lg={6} xl={6}>
+                        <Col md={12}>
                             <Card>
                                 <CardBody>
-                                <form onSubmit={onSubmit}>
-                                <Row>
-                                <Col md={6}>
-                                        <label htmlFor="name">product Title</label>
-                                        <input
-                                            type="text"
-                                            id="title"
-                                            name="title"
-                                            className="form-control form-control-m"
-                                            defaultValue={product.title}
-                                        /> 
-                                </Col>
-                                <Col md={6}>
-                                        <label htmlFor="product_type">Product Type</label>
-                                        <Select
-                                            id="product_type"
-                                            name="product_type"
-                                            value={productType.filter(option => option.label === product.type)}
-                                            options={productType}
-                                            onChange={item => {
-												setSelectedProductType(item.value);
-												if(item.value == 'Fraxion'){
-                                                    setShow(false)
-                                                    
-												}else if(item.value == 'Fixed Plans'){
-                                                    setShow(true)
-                                                    setShowFixedPlan(false)
-												}else if(item.value == 'CBIx7'){
-                                                }
-											}}
-                                            className={`basic-multi-select form-control-m`}
-                                            classNamePrefix="select"
-                                            />
-                                </Col>
-                                <Col md={6}>
-                                        <label htmlFor="currency">Select Currency</label>
-                                        <Select
-                                            id="currency"
-                                            name="currency"
-                                            value={currencies.filter(option => option.label === product.currency_code)}
-                                            options={currencies}
-                                            onChange={item => setSelectedCurrency(item.value)}
-                                            className={`basic-multi-select form-control-m`}
-                                            classNamePrefix="select"
-                                            />
-                                </Col>
-                                <Col md={6}>
-                                        <label htmlFor="name">Price</label>
-                                        <input
-                                            type="text"
-                                            id="price"
-                                            name="price"
-                                            className="form-control form-control-m"
-                                            value={product.price}
-                                            onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setAmountFee(event.target.value)
-													setErrorAmount(true)
-												}else{
-													setErrorAmount(false)
-												}
-											}}
-                                        /> 
-                                        <label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label>
-                                </Col>
-                                <Col md={6} hidden={show}>
-							<label htmlFor="educator_persantage">Educator Persentage Fee (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={educatorFee} />: '' }</label>
-                                        <input
-                                            type="text"
-                                            id="educator_persantage"
-                                            name="educator_persantage"
-                                            className="form-control form-control-m"
-                                            value={product.educator_persantage}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-                                                    let value =  event.target.value/100*amountFee
-                                                    console.log(amountFee);
-													setEducatorFee(value)
-													setErrorEducator(true)
-												}else{
-													setErrorEducator(false)
-													setEducatorFee(0)
-												}
-											}}
-                                        />
-										<label hidden={errorEducator} className="text-danger" htmlFor="name">Please enter a valid amount</label>
-                                </Col>
-								<Col md={6} hidden={show}>
-                                        <label htmlFor="name">Registration Persentage Fee (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
-                                        <input
-                                            type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
-                                            className="form-control form-control-m"
-                                            value={product.registration_persantage}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setRegistrationFee(value)
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-													setRegistrationFee(0)
-												}
-											}}
-                                        />
-                                </Col>
-                                <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Estimated daily Interest (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
-                                        <input
-                                            type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
-											className="form-control form-control-m"
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setRegistrationFee(parseFloat(value).toFixed(2))
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-													setRegistrationFee(0)
-												}
-											}}
-                                        />
-                                </Col>
-                                <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Minimum Gross Return (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
-                                        <input
-                                            type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
-											className="form-control form-control-m"
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setRegistrationFee(parseFloat(value).toFixed(2))
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-													setRegistrationFee(0)
-												}
-											}}
-                                        />
-                                </Col>
-                                <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Investment Period (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
-                                        <input
-                                            type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
-											className="form-control form-control-m"
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setRegistrationFee(parseFloat(value).toFixed(2))
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-													setRegistrationFee(0)
-												}
-											}}
-                                        />
-                                </Col>
-                                <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Minimum Investment (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
-                                        <input
-                                            type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
-											className="form-control form-control-m"
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setRegistrationFee(parseFloat(value).toFixed(2))
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-													setRegistrationFee(0)
-												}
-											}}
-                                        />
-                                </Col>
-                                <Col md={6}>
-                                        <label htmlFor="status">Status</label>
-                                        <Select
-                                            id="status"
-                                            name="status"
-                                            value={statusOptions.filter(option => option.label === product.status)}
-                                            options={statusOptions}
-                                            onChange={item => setSelectedStatus(item.value)}
-                                            className={`basic-multi-select form-control-m`}
-                                            classNamePrefix="select"
-                                            />
-                                </Col>
-                                <Col md={12}>
-                                <label htmlFor="name">Description</label>
-                                <Editor
-                                        editorState={editorState}
-                                        toolbarClassName="toolbarClassName"
-                                        wrapperClassName="wrapperClassName"
-                                        editorClassName="editorClassName"
-                                        onEditorStateChange={onEditorStateChange}
-                                    />
-                                    <hr />
-                                    </Col>
-                                    <Col md={6}>
-                                        
-                         <button disabled={disabled}
-                            className="btn btn-primary"
-                            disabled={confirmButtonDisabled || processing}
-                        >
-                            {processing ? 'Processing...' : 'Update Product'}
-                        </button>
-                        </Col>
-                       </Row>
-                    </form>
+                                <ul className="nav nav-tabs nav-tabs__round mt-0">
+                                        <li className="nav-item">
+                                            <a
+                                                className={`nav-link show ${activeTab === 'referals' ? 'active' : ''}`}
+                                                onClick={e => toggleTab(e, 'referals')}
+                                                data-toggle="tab"
+                                                href="/"
+                                            >
+                                                Product Details
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                className={`nav-link show ${activeTab === 'products' ? 'active' : ''}`}
+                                                onClick={e => toggleTab(e, 'products')}
+                                                data-toggle="tab"
+                                                href="/"
+                                            >
+                                                Members
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div className="tab-content">
+                                        <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
+                                            <CardBody className="pl-0 pr-0 pb-0">
+                                                <Products.UpdateProductDetails />
+                                            </CardBody>
+                                        </div>
+                                        <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
+                                            <div className="profile-setting__card">
+                                                <CardBody className="pl-0 pr-0 pb-0">
+                                                    <Products.MembersByProductID />
+                                                </CardBody>
+                                            </div>
+                                        </div>
+										<div role="tabpanel" className={`tab-pane show ${activeTab === 'transactions' ? 'active' : ''}`}>
+                                            <div className="profile-setting__card">
+                                                <CardBody className="pl-0 pr-0 pb-0">
+                                                </CardBody>
+                                            </div>
+                                        </div>
+										<div role="tabpanel" className={`tab-pane show ${activeTab === 'banking-details' ? 'active' : ''}`}>
+                                            <div className="profile-setting__card">
+                                                <CardBody className="pl-0 pr-0 pb-0">
+                                                </CardBody>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col item lg={6} md={6} sm={6}>
-                                        <Card className="mb-3">
-                                            <CardBody>
-                                            <div className="card-title mb-0">Performance</div>
-                                            <Products.LineChart
-                                            chartData={{
-                                                labels: ['Jul 2021', 'Aug 2021', 'Sept 2021', 'Oct 2021'],
-                                                datasets: [
-                                                {
-                                                    label: '# Product Price',
-                                                    data: [509, 590, 480, 767],
-                                                    backgroundColor: [
-                                                    '#86abc9',
-                                                    '#2196f3',
-                                                    '#d22346',
-                                                    'rgba(249, 194, 50, 1)',
-                                                    ],
-                                                    borderColor: [
-                                                    'rgba(249, 194, 50, 1)',
-                                                    '#f8f9fa',
-                                                    '#d22346',
-                                                    'rgba(249, 194, 38, 0.44)',
-                                                    ],
-                                                    borderWidth: 1,
-                                                },
-                                                ],
-                                            }}
-                                            options={{
-                                                plugins: {
-                                                legend: {
-                                                    display: false
-                                                }
-                                                }
-                                            }}
-                                            />
-                                            <hr />
-                                            {/* <p>The returns displayed do not include the fees and expenses that are charged. 
-                                                Please refer to our fees page and additional 
-                                                important disclaimers and risk disclosures.</p> */}
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
+                        
                     </Row>
 			
 		</AuthLayout>

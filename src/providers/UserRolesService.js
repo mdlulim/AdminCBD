@@ -20,12 +20,47 @@ class UserRolesService {
     });
   }
 
+  static async addUserRoles(data){
+    return await axios({
+      mode: 'no-cors',
+      method: 'POST',
+      headers: headers,
+      data:data,
+      url: `${Config.API.BASE_URL}/groups`,
+    }).then((res) =>{
+      const result = res;
+      return result;
+    });
+  }
+
+  static async updateUserRoles(id,data){
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      headers: headers,
+      data:data,
+      url: `${Config.API.BASE_URL}/groups/${id}`,
+    }).then((res) =>{
+      const result = res;
+      return result;
+    });
+  }
+
   static async getUserRole(id) {
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/admin/groups/${id}`,
+    });
+  }
+
+  static async archiveRole(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/groups/${id}/archive`,
     });
   }
 }

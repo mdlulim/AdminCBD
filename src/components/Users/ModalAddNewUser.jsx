@@ -4,6 +4,8 @@ import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
+import { UserService } from 'providers';
+import { confirmAlert } from 'react-confirm-alert';
 
 const ModalChangeStatus = props => {
     const { show, setShow} = props;
@@ -15,6 +17,43 @@ const ModalChangeStatus = props => {
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
     }, []);
+
+    //====================Add User===============================
+const onSubmit = (e) =>{
+    e.preventDefault();
+    // setShow(false);
+    const form = e.currentTarget;
+    const userData = {
+        first_name: form.first_name.value,
+        last_name: form.last_name.value,
+        group_id: "ec2f5ee4-ea3a-4f68-a684-cddd37808978",
+        username: form.username.value,
+        email: form.email.value,
+        status: form.status.value,
+    }
+    console.log(userData);
+
+    UserService.addAdminUser(userData).then((response) =>{
+        console.log(response);
+         if(response.data.success){
+             setShow(false)
+             return confirmAlert({
+                title: 'Succcess',
+                message: 'User Role was successfully updated',
+                buttons: [
+                  {
+                    label: 'Ok',
+                    onClick:window.location.reload(false)
+                  }
+                ]
+              });
+         }else{
+            //  setError('Something went wrong while trying to update members status');
+         }
+        // setDisabled(false);
+     })
+}
+// 
 
     const rolessOptions = [
         { value: '7563285', label: 'Platform Administrator' },
@@ -38,12 +77,13 @@ const ModalChangeStatus = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-info"> Add New Admin User</h3>
                         <hr />
-                        <form>
+                        <form onSubmit={onSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="first_name">First Name</label>
                                     <input
                                         type="text"
                                         id="first_name"
+                                        name="first_name"
                                         className="form-control form-control-m"
                                     />
                                 </div>
@@ -52,6 +92,7 @@ const ModalChangeStatus = props => {
                                     <input
                                         type="text"
                                         id="last_name"
+                                        name="last_name"
                                         className="form-control form-control-m"
                                     /> 
                                 </div>
@@ -60,6 +101,7 @@ const ModalChangeStatus = props => {
                                     <input
                                         type="text"
                                         id="username"
+                                        name="username"
                                         className="form-control form-control-m"
                                     />
                                 </div>
@@ -68,6 +110,7 @@ const ModalChangeStatus = props => {
                                     <input
                                         type="text"
                                         id="email"
+                                        name="email"
                                         className="form-control form-control-m"
                                     />
                                 </div>
@@ -107,7 +150,7 @@ const ModalChangeStatus = props => {
                             <Col md={6} >
                             <button
                                         className="btn btn-info float-right"
-                                        onClick={confirmButton.onClick}
+                                        type="submit"
                                         disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Add New'}

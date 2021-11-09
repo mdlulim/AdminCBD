@@ -27,7 +27,7 @@ export default function UsersPage(props) {
                 active: "Users"
             }}
             pageHeading={{
-                title: 'Manage Users',
+                title: 'Manage Admin Users', 
                 caption: 'EXPLORE MEMBERS DASHBOARD FOR CRYPTO BASED INNOVATION',
             }}
         >

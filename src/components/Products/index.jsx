@@ -3,6 +3,8 @@ import ProductUpdate from './ProductUpdate';
 import ProductAddNew from './ProductAddNew';
 import ProductsByMember from './ProductsByMember';
 import LineChart from './LineChart';
+import UpdateProductDetails from './UpdateProductDetails';
+import MembersByProductID from './MembersByProductID';
 
 export default {
     Products,
@@ -10,4 +12,6 @@ export default {
     ProductAddNew,
     ProductsByMember,
     LineChart,
+    UpdateProductDetails,
+    MembersByProductID
 }

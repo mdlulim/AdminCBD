@@ -4,16 +4,64 @@ import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
+import { UserService } from 'providers';
+import { confirmAlert } from 'react-confirm-alert';
 
 const ModalChangeStatus = props => {
     const { show, setShow, member} = props;
     const [statuses, setStatuses] = useState([]);
+    const [checked, setChecked] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
     }, []);
+    
+    //====================Add User===============================
+    const onSubmit = (e) =>{
+    e.preventDefault();
+    setShow(false);
+    const form = e.currentTarget;
+    // const userData = {
+    //     first_name: document.getElementById('first_name').value,
+    //     last_name: form.last_name.value,
+    //     group_id: "ec2f5ee4-ea3a-4f68-a684-cddd37808978",
+    //     username: form.username.value,
+    //     email: form.email.value,
+    //     status: form.status.value
+    // }
+
+        UserService.updateAdminUser(member.id, 
+            {
+                first_name: document.getElementById('first_name').value,
+                last_name: form.last_name.value,
+                group_id: "ec2f5ee4-ea3a-4f68-a684-cddd37808978",
+                username: form.username.value,
+                email: form.email.value,
+                status: form.status.value,
+                archived:(form.status.value === 'Active' ? false : true)
+            }).then((response) =>{
+            
+             if(response.data.success){
+                //  setShow(false)
+                 return confirmAlert({
+                    title: 'Succcess',
+                    message: 'User was successfully updated',
+                    buttons: [
+                      {
+                        label: 'Ok',
+                        onClick:window.location.reload(false)
+                      }
+                    ]
+                  });
+             }else{
+                //  setError('Something went wrong while trying to update members status');
+             }
+            // setDisabled(false);
+         })
+}
+//
 
     const statusOptions = [
         { value: 'Active',  label: 'Active' },
@@ -33,15 +81,16 @@ const ModalChangeStatus = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-info"> Update Admin User</h3>
                         <hr />
-                        <form>
+                        <form id="user-form" onSubmit={onSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="first_name">First Name</label>
                                     {member ? 
                                     <input
                                         type="text"
                                         id="first_name"
+                                        name="first_name"
                                         className="form-control form-control-m"
-                                        value={member.first_name}
+                                        defaultValue={member.first_name}
                                     /> 
                                     : ''}
                                 </div>
@@ -51,8 +100,9 @@ const ModalChangeStatus = props => {
                                     <input
                                         type="text"
                                         id="last_name"
+                                        name="last_name"
                                         className="form-control form-control-m"
-                                        value={member.last_name}
+                                        defaultValue={member.last_name}
                                     /> 
                                     : ''}
                                 </div>
@@ -62,8 +112,9 @@ const ModalChangeStatus = props => {
                                     <input
                                         type="text"
                                         id="username"
+                                        name="username"
                                         className="form-control form-control-m"
-                                        value={member.username}
+                                        defaultValue={member.username}
                                     />
                                     : ''}
                                 </div>
@@ -73,13 +124,14 @@ const ModalChangeStatus = props => {
                                     <input
                                         type="text"
                                         id="email"
+                                        name="email"
                                         className="form-control form-control-m"
-                                        value={member.email}
+                                        defaultValue={member.email}
                                     />
                                     : ''}
                                 </div>
                                 <div>
-                                <label htmlFor="email">Select Status</label>
+                                <label htmlFor="status">Select Status</label>
                                 <Select
                                     id="status"
                                     name="status"
@@ -89,11 +141,24 @@ const ModalChangeStatus = props => {
                                     classNamePrefix="select"
                                     />
                                 </div>
+
+{/* <br/>
+                                <div>
+                                    <label className="custom-control custom-checkbox">
+                                        <input type="checkbox" className="custom-control-input" checked={(member.deactivation_date ? true : checked)} 
+                                            onChange={() => setChecked(!checked)} 
+                                        />
+                                        <span className="custom-control-label">Deactivate User</span>
+                                    </label> 
+                                </div> */}
+
+                                
                                 <hr />
                                 <Row>
                         <Col md={6}>
                         <button
                                         className="btn btn-dark"
+                                        type="button"
                                         onClick={handleClose}
                                         disabled={processing}
                                     >
@@ -103,7 +168,7 @@ const ModalChangeStatus = props => {
                             <Col md={6} >
                             <button
                                         className="btn btn-info float-right"
-                                        onClick={confirmButton.onClick}
+                                        type="submit"
                                         disabled={confirmButtonDisabled || processing}
                                     >
                                     {processing ? 'Processing...' : 'Update'}

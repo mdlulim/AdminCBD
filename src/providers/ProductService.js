@@ -21,6 +21,16 @@ class ProductService {
     });
   }
 
+  static async getProductCategories() {
+    console.log(authToken)
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/categories`,
+    });
+  }
+
   static async getProduct(id) {
     return await axios({
       mode: 'no-cors',
