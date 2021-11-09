@@ -55,6 +55,11 @@ const MemberDetails = props => {
           setMember(memberDetails);
         });
 
+        MemberService.getMemberKYC(id).then((res)=>{
+           
+            const kyc = res.data.data;
+        });
+
         //Get member details
         MemberService.getMemberWallet(id).then((res) => {
            // console.log(res.data.data)

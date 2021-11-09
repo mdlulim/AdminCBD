@@ -38,6 +38,15 @@ class MemberService {
     });
   }
 
+  static async getMemberKYC(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users/${id}/kyc`,
+    });
+  }
+
   static async getMemberAddress(id) {
     return await axios({
       mode: 'no-cors',
