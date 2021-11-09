@@ -15,10 +15,10 @@ const Filter = () => {
                 ]}
             />
             <button
-                className="btn btn-light d-none d-md-block float-right margin-right-5"
+                className="btn d-none d-md-block float-right margin-right-5"
                 id="dashboard-rp-customrange"
             >
-                September 22, 2021 - October 21, 2021
+                Transfer
             </button>
         </>
     );

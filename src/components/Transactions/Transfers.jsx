@@ -76,7 +76,7 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Deposits(props) {
+export default function Transfers(props) {
     const [show, setShow] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [transactions, setTransactions] = useState([]);
@@ -108,7 +108,7 @@ export default function Deposits(props) {
           //let id = res.data.data.results[0].user_id;
           console.log(res.data.data.results);
           const transaList = res.data.data.results;
-          const completedTransaction = transaList.filter(item => item.subtype === "deposit");
+          const completedTransaction = transaList.filter(item => item.subtype === "transfer");
           setTransactions(completedTransaction);
           setFilteredTransactions(completedTransaction);
         });
@@ -148,12 +148,20 @@ export default function Deposits(props) {
         sortable: true,
         cell: row => <Status {...row} />
     },{
-      name: 'Date Actioned',
-      selector: 'created',
+        name: 'Date Created',
+        selector: 'created',
+        sortable: true,
+        cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
+    },{
+      name: 'Actioned Date',
+      selector: 'updated',
       sortable: true,
       cell: row => <div>
-              <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
-              <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+              <strong><Moment date={row.updated} format="D MMM YYYY" /></strong><br />
+              <span className="text-muted"><Moment date={row.updated} format="hh:mm:ss" /></span>
            </div>
   }, {
         name: 'Actions',

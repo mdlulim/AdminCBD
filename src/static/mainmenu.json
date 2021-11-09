@@ -62,6 +62,11 @@
                     "title": "All Transactions",
                     "link": "/",
                     "icon": null
+                },{
+                    "id": "pending",
+                    "title": "Pending",
+                    "link": "/pending",
+                    "icon": null
                 },
                 {
                     "id": "deposits",

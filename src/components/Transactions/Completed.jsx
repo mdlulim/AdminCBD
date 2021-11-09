@@ -106,9 +106,10 @@ export default function Deposits(props) {
     useMemo(() => {
         TransactionService.getTransactions().then((res) => {
           //let id = res.data.data.results[0].user_id;
-          console.log(res.data.data.results);
+          //console.log(res.data.data.results);
           const transaList = res.data.data.results;
-          const completedTransaction = transaList.filter(item => item.subtype === "deposit");
+          const completedTransaction = transaList.filter(item => item.status === "Completed");
+
           setTransactions(completedTransaction);
           setFilteredTransactions(completedTransaction);
         });
@@ -148,12 +149,20 @@ export default function Deposits(props) {
         sortable: true,
         cell: row => <Status {...row} />
     },{
-      name: 'Date Actioned',
-      selector: 'created',
+        name: 'Date Created',
+        selector: 'created',
+        sortable: true,
+        cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
+    },{
+      name: 'Actioned Date',
+      selector: 'updated',
       sortable: true,
       cell: row => <div>
-              <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
-              <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+              <strong><Moment date={row.updated} format="D MMM YYYY" /></strong><br />
+              <span className="text-muted"><Moment date={row.updated} format="hh:mm:ss" /></span>
            </div>
   }, {
         name: 'Actions',
@@ -161,7 +170,7 @@ export default function Deposits(props) {
         cell: row => <div>
             <button 
             className="btn btn-secondary btn-sm btn-icon"
-            disabled={row.status == "Completed" ? editStatus: ''}
+            disabled={editStatus}
             >
                         <span className="fa fa-pencil"></span>
                     </button>
@@ -189,8 +198,7 @@ const onSubmitChangeStatus= data => {
 
   const onSearchFilter = filterText => {
     const filteredItems = transactions.filter(item => (
-      (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
+      (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredTransactions(filteredItems);
   }
@@ -243,7 +251,7 @@ const onSubmitChangeStatus= data => {
                       />
                       <div>
                             <button 
-                            className="btn btn-secondary"
+                            className="btn btn-secondary" 
                             type="button"
                             onClick={e => {
                               e.preventDefault();

@@ -76,7 +76,7 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Deposits(props) {
+export default function Canceled(props) {
     const [show, setShow] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [transactions, setTransactions] = useState([]);
@@ -87,7 +87,6 @@ export default function Deposits(props) {
     const [endDate, setEndDate] = useState(new Date());
     const [checkCreatedDate, setCheckCreatedDate] = useState(true);
     const [checkActionDate, setCheckActionDate] = useState(false);
-    const [editStatus, setEditStatus] = useState(true);
     const history = useHistory();
 
     const GetUserById = ({user_id}) => {
@@ -108,7 +107,7 @@ export default function Deposits(props) {
           //let id = res.data.data.results[0].user_id;
           console.log(res.data.data.results);
           const transaList = res.data.data.results;
-          const completedTransaction = transaList.filter(item => item.subtype === "deposit");
+          const completedTransaction = transaList.filter(item => item.status === "Cancelled");
           setTransactions(completedTransaction);
           setFilteredTransactions(completedTransaction);
         });
@@ -148,21 +147,26 @@ export default function Deposits(props) {
         sortable: true,
         cell: row => <Status {...row} />
     },{
-      name: 'Date Actioned',
-      selector: 'created',
+        name: 'Date Created',
+        selector: 'created',
+        sortable: true,
+        cell: row => <div>
+                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+             </div>
+    },{
+      name: 'Actioned Date',
+      selector: 'updated',
       sortable: true,
       cell: row => <div>
-              <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
-              <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+              <strong><Moment date={row.updated} format="D MMM YYYY" /></strong><br />
+              <span className="text-muted"><Moment date={row.updated} format="hh:mm:ss" /></span>
            </div>
   }, {
         name: 'Actions',
         sortable: true,
         cell: row => <div>
-            <button 
-            className="btn btn-secondary btn-sm btn-icon"
-            disabled={row.status == "Completed" ? editStatus: ''}
-            >
+            <button className="btn btn-secondary btn-sm btn-icon">
                         <span className="fa fa-pencil"></span>
                     </button>
       </div>
@@ -243,7 +247,7 @@ const onSubmitChangeStatus= data => {
                       />
                       <div>
                             <button 
-                            className="btn btn-secondary"
+                            className="btn btn-secondary" 
                             type="button"
                             onClick={e => {
                               e.preventDefault();

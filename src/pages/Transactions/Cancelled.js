@@ -28,15 +28,15 @@ export default function Canceled(props) {
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "Canceled" }}
+            breadcrumb={{ active: "Cancelled" }}
             pageHeading={{
-                title: 'Canceled Transactions',
-                caption: 'EXPLORE OVERVIEW CANCELED FOR CRYPTO BASED INNOVATION',
+                title: 'Cancelled Transactions',
+                caption: 'EXPLORE OVERVIEW CANCELLED FOR CRYPTO BASED INNOVATION',
             }}
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Deposits />
+                <Transactions.Cancelled />
                 </Col>
             </div>
         </AuthLayout>

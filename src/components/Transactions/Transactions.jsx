@@ -275,42 +275,16 @@ const onSubmitChangeStatus= data => {
                         <hr />
                         <div class="row g-3">
                               <div class="col ">
-                              <div class="form-check form-switch">
-                              <input 
-                                class="form-check-input" 
-                                type="checkbox"
-                                checked={checkCreatedDate}
-                                       onChange={() => {
-                                         setCheckCreatedDate(!checkCreatedDate)
-                                          setCheckActionDate(checkCreatedDate)
-                                        }}
-                                id="flexSwitchCheckDefault" />
+                              <div class="form-control">
                                 <label class="form-check-label" for="flexSwitchCheckDefault">Created Date</label>
                                 </div>
                               </div>
                               <div class="col">
-                              <div class="form-check form-switch">
-                              <input 
-                                class="form-check-input" 
-                                type="checkbox"
-                                checked={checkActionDate}
-                                       onChange={() => {
-                                         setCheckActionDate(!checkActionDate)
-                                           setCheckCreatedDate(checkActionDate)
-                                        }}
-                                id="flexSwitchCheckDefault" />
+                              <div class="form-control">
                                 <label class="form-check-label" for="flexSwitchCheckDefault">Actioned Date</label>
                                 </div>
                               </div>
                         </div>
-                                <div className="form-group">
-                                    <label htmlFor="from">From</label>
-                                    <DatePicker style={inputWithDate}  className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="email">To</label>
-                                    <DatePicker style={inputWithDate}  className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
-                                </div>
                                 <hr />
                                 <Row>
                         <Col md={6}>
