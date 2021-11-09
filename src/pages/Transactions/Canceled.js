@@ -24,14 +24,14 @@ const Filter = () => {
     );
 }
 
-export default function Deposits(props) {
+export default function Canceled(props) {
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "Deposits" }}
+            breadcrumb={{ active: "Canceled" }}
             pageHeading={{
-                title: 'Deposit Transactions',
-                caption: 'EXPLORE OVERVIEW DEPOSITS FOR CRYPTO BASED INNOVATION'
+                title: 'Canceled Transactions',
+                caption: 'EXPLORE OVERVIEW CANCELED FOR CRYPTO BASED INNOVATION',
             }}
         >
             <div className="form-row">

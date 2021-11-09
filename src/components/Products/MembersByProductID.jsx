@@ -5,7 +5,7 @@ import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
 import { useParams, useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
-import { MemberService } from '../../providers';
+import { ProductService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -73,11 +73,14 @@ export default function MemberByProductID(props) {
     const { id } = params;
 
     useMemo(() => {
-      MemberService.getMemberReferrals(id).then((res) => {
-         // console.log(res.data.data.results)
+      ProductService.getMembersByPoducts(id).then((res) => {
+         console.log(res.data)
+         if(res.data.success){
           const memberslist = res.data.data.results;
           setReferrals(memberslist);
           setFilteredReferrals(memberslist);
+         }
+          
         });
 
       }, []);

@@ -30,9 +30,8 @@ export default function Width(props) {
             {...props}
             breadcrumb={{ active: "Widthdrawals" }}
             pageHeading={{
-                title: 'CBI Widthdrawals',
-                caption: 'EXPLORE OVERVIEW WIDTHDRAWALS FOR CRYPTO BASED INNOVATION',
-                actions: <Filter />
+                title: 'Widthdrawal Transactions',
+                caption: 'EXPLORE OVERVIEW WIDTHDRAWALS FOR CRYPTO BASED INNOVATION'
             }}
         >
             <div className="form-row">

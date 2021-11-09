@@ -49,6 +49,15 @@ class ProductService {
     });
   }
 
+  static async getMembersByPoducts(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/${id}/users`,
+    });
+  }
+
   static async getProductByMemberId(id) {
     return await axios({
       mode: 'no-cors',
@@ -58,16 +67,14 @@ class ProductService {
     });
   }
 
-  static async addProduct(product){
-    console.log(product)
+  static async addProduct(data){
     return await axios({
       mode: 'no-cors',
       method: 'POST',
-      data: product,
       headers: headers,
+      data:data,
       url: `${Config.API.BASE_URL}/products`,
     }).then((res) =>{
-      //const result = {status: res.data.status, message: res.data.message}
       const result = res;
       return result;
     });

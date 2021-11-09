@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default function TRow(props) {
-    // const { product } = props;
+export default function RecentProduct(props) {
+    const { product } = props;
     return (
         <tr>
             <td width="200">

@@ -29,7 +29,11 @@ import MemberDetails from 'pages/Members/MemberDetails';
 import Transactions from 'pages/Transactions';
 import Deposits from 'pages/Transactions/Deposits';
 import Widthdrawals from 'pages/Transactions/Widthdrawals';
+import Canceled from 'pages/Transactions/Canceled';
+import Completed from 'pages/Transactions/Completed';
+import Transfers from 'pages/Transactions/Transfers';
 import Products from 'pages/Products';
+import ProductCategories from 'pages/Products/ProductCategories';
 import ProductAddNew from 'pages/Products/ProductAddNew';
 import ProductDetails from 'pages/Products/ProductDetails';
 const App = () => {
@@ -63,8 +67,12 @@ const App = () => {
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/main-account" component={(props) => <CompanyAccount config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/deposits" component={(props) => <Deposits config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/transactions/canceled" component={(props) => <Canceled config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/transactions/transfers" component={(props) => <Transfers config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/transactions/Completed" component={(props) => <Completed config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/widthdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/categories" component={(props) => <ProductCategories config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/add" component={(props) => <ProductAddNew config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />

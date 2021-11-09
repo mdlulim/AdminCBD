@@ -108,7 +108,7 @@ const MemberDetails = props => {
                                                 Balance: {wallet.currency_code} {wallet.balance}
                                             </span><br /> */}
                                             < span className={wallet.available_balance > 0 ? 'text-success' :'text-danger'}>
-                                                Avaolable Balance: {wallet.currency_code} {wallet.available_balance}
+                                                Available Balance: {wallet.currency_code} {wallet.available_balance}
                                             </span>
                                         </div>
                                         <div className="author-box-job">
@@ -226,7 +226,6 @@ const MemberDetails = props => {
                             </Card>
                         </Col>
                     </Row>
-			
 		</AuthLayout>
 	);
 };

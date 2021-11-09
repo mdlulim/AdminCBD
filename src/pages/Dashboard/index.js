@@ -280,7 +280,7 @@ export default function DashboardPage(props) {
                         <CardBody className="padding-left-0">
                         
                             <Common.Timeline
-                                items={filteredTransactions}
+                                items={filteredTransactions.slice(0, 5)}
                             />
                         </CardBody>
                     </Card>

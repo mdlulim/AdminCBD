@@ -3,16 +3,20 @@ import { Card, CardBody, Row, Col } from 'reactstrap';
 import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
+import { Modal } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
-import ModalChangeStatus from './ModalChangeStatus';
 import { TransactionService, MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 // styles
 const customStyles = {
+   
     headCells: {
         style: {
             color: 'rgba(0,0,0,.54)',
@@ -38,6 +42,10 @@ const selectPadding ={
 
 const inputWith={
   width: '20%'
+}
+
+const inputWithDate={
+  width: '25%'
 }
 
 const Image = () => {
@@ -68,19 +76,26 @@ const Status = ({ status }) => {
     );
   };
 
-export default function Widthdrawals(props) {
+export default function Transactions(props) {
     const [show, setShow] = useState(false);
+    const [disabled, setDisabled] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
-    const [selectedTransaction, setSelectedTransaction] = useState([]);
     const [temp, setTemp] = useState({});
+    const handleClose = () => setShow(false);
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [checkCreatedDate, setCheckCreatedDate] = useState(true);
+    const [checkActionDate, setCheckActionDate] = useState(false);
     const history = useHistory();
 
     const GetUserById = ({user_id}) => {
       const id =user_id;
      const member = MemberService.getMember(id).then((res) => {
        setTemp(res.data.data);
+        //return res.data.data;
       });
+
       return (<div><div>{temp.first_name} {temp.last_name}</div>
         <div className="small text-muted">
           <span>{temp.id_number}</span>
@@ -95,6 +110,7 @@ export default function Widthdrawals(props) {
           setTransactions(transaList);
           setFilteredTransactions(transaList);
         });
+        //getUserById('0192c293-fc26-47f0-a764-332b44dd08b1');
 
 
       }, []);
@@ -109,7 +125,7 @@ export default function Widthdrawals(props) {
         selector: 'first_name',
         sortable: true,
         wrap: true,
-        cell: row => <GetUserById {...row} />
+        cell: row => <div></div>
     },{
         name: 'TransactionID',
         selector: 'txid',
@@ -137,53 +153,37 @@ export default function Widthdrawals(props) {
                 <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
                 <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
              </div>
-    }, {
+    },{
+      name: 'Actioned Date',
+      selector: 'updated',
+      sortable: true,
+      cell: row => <div>
+              <strong><Moment date={row.updated} format="D MMM YYYY" /></strong><br />
+              <span className="text-muted"><Moment date={row.updated} format="hh:mm:ss" /></span>
+           </div>
+  }, {
         name: 'Actions',
         sortable: true,
         cell: row => <div>
-            <button 
-            onClick={e => {
-              e.preventDefault();
-              onSubmitChangeStatus(row);
-            }}
-            className="btn btn-secondary btn-sm btn-icon">
+            <button className="btn btn-secondary btn-sm btn-icon">
                         <span className="fa fa-pencil"></span>
                     </button>
       </div>
     }];
 
-    const onSubmitChangeStatus= data => {
-      setSelectedTransaction(data);
-      setShow(true);
-      console.log(data);
-        //return <Confirm show={show} setShow={setShow} />;
-      };
 const handleChangePassword = async data => {
 }
 
 const handleDeleteMember = async data => {
 }
 
-// const onSubmitChangeStatus= data => {
-//     return confirmAlert({
-//       title: 'Change Customer Status',
-//       message: 'Are you sure you want to resend password for ' + data.full_names + '?',
-//       buttons: [{
-//         label: 'Yes',
-//         onClick: () => handleChangePassword(data),
-//       }, {
-//         label: 'Cancel',
-//       }]
-//     });
-//   };
-
-  const onSubmitDeleteMember= data => {
+const onSubmitChangeStatus= data => {
     return confirmAlert({
-      title: 'Delete Member',
-      message: 'Are you sure you want to delete ' + data.full_names + '?',
+      title: 'Change Customer Status',
+      message: 'Are you sure you want to resend password for ' + data.full_names + '?',
       buttons: [{
         label: 'Yes',
-        onClick: () => handleDeleteMember(data),
+        onClick: () => handleChangePassword(data),
       }, {
         label: 'Cancel',
       }]
@@ -192,33 +192,50 @@ const handleDeleteMember = async data => {
 
   const onSearchFilter = filterText => {
     const filteredItems = transactions.filter(item => (
-      (item && item.user.full_names && item.user.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase()))
+      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredTransactions(filteredItems);
   }
 
+  const handleSelectDateRange = (data) =>{
+    console.log(data);
+  }
 
+  const selectionRange = {
+    startDate: new Date(),
+    endDate: new Date(),
+    key: 'selection',
+  }
+
+  const selectDataRange = (data) =>{
+    setDisabled(true);
+    const start = Date.parse(startDate);
+    const end = Date.parse(endDate);
+    
+          if(checkCreatedDate === true){
+            const searchByDate = transactions.filter(
+              transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
+              console.log('Created date');
+              console.log(searchByDate);
+              setFilteredTransactions(searchByDate);
+          }else{
+            const searchByDate = transactions.filter(
+              transaction => (Date.parse(transaction.updated)) >= start && (Date.parse(transaction.updated)) <= end);
+              console.log('Actioned date');
+              console.log(searchByDate);
+              setFilteredTransactions(searchByDate);
+          }
+          
+          setDisabled(false);
+          setShow(false)
+      }
     return (
         <Card className="o-hidden mb-4">
-          <ModalChangeStatus show={show} setShow={setShow} transaction={selectedTransaction} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>Transactions</span>
                     <span className="flex-grow-1" />
-                    {/* <div style={selectPadding}>
-                            <select class="form-control form-control-m">
-                                <option>All Transactions</option>
-                                <option>Pending</option>
-                                <option>Failed</option>
-                                <option>Transfers</option>
-                                <option>Deposits</option>
-                                <option>Withdrawals</option>
-                                <option>Completed</option>
-                            </select>
-                    </div> */}
                     <input
                     style={inputWith}
                         type="text"
@@ -227,6 +244,17 @@ const handleDeleteMember = async data => {
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
+                      <div>
+                            <button 
+                            className="btn btn-secondary" 
+                            type="button"
+                            onClick={e => {
+                              e.preventDefault();
+                              setShow(true);
+                            }}>
+                                Search By DateRange
+                            </button>
+                    </div>
                 </div>
             </CardBody>
             <DataTable
@@ -238,6 +266,78 @@ const handleDeleteMember = async data => {
                 highlightOnHover
                 pagination
             />
+            <Modal show={show} onHide={handleClose} centered className="confirm-modal">
+            {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
+            <Modal.Body>
+                <Row>
+                    <Col>
+                        <h3 className="text-success">Search by date range </h3>
+                        <hr />
+                        <div class="row g-3">
+                              <div class="col ">
+                              <div class="form-check form-switch">
+                              <input 
+                                class="form-check-input" 
+                                type="checkbox"
+                                checked={checkCreatedDate}
+                                       onChange={() => {
+                                         setCheckCreatedDate(!checkCreatedDate)
+                                          setCheckActionDate(checkCreatedDate)
+                                        }}
+                                id="flexSwitchCheckDefault" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Created Date</label>
+                                </div>
+                              </div>
+                              <div class="col">
+                              <div class="form-check form-switch">
+                              <input 
+                                class="form-check-input" 
+                                type="checkbox"
+                                checked={checkActionDate}
+                                       onChange={() => {
+                                         setCheckActionDate(!checkActionDate)
+                                           setCheckCreatedDate(checkActionDate)
+                                        }}
+                                id="flexSwitchCheckDefault" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Actioned Date</label>
+                                </div>
+                              </div>
+                        </div>
+                                <div className="form-group">
+                                    <label htmlFor="from">From</label>
+                                    <DatePicker style={inputWithDate}  className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="email">To</label>
+                                    <DatePicker style={inputWithDate}  className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
+                                </div>
+                                <hr />
+                                <Row>
+                        <Col md={6}>
+                        <button
+                                        className="btn btn-dark"
+                                        onClick={e => {
+                                          e.preventDefault();
+                                          setShow(false);
+                                        }}
+                                    >
+                                    {'Cancel'}
+                                </button>
+                            </Col>
+                            <Col md={6} >
+                            <button
+                                        className="btn btn-success float-right"
+                                        onClick={selectDataRange}
+                                        disabled={disabled}
+                                    >
+                                    {'Search'}
+                                </button>
+                            </Col>
+                            </Row>
+                    </Col>
+                </Row>
+            </Modal.Body>
+        </Modal>
         </Card>
     );
 }

@@ -24,14 +24,15 @@ const Filter = () => {
     );
 }
 
-export default function Deposits(props) {
+export default function Completed(props) {
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "Deposits" }}
+            breadcrumb={{ active: "Transfers" }}
             pageHeading={{
-                title: 'Deposit Transactions',
-                caption: 'EXPLORE OVERVIEW DEPOSITS FOR CRYPTO BASED INNOVATION'
+                title: 'Transfers Transactions',
+                caption: 'EXPLORE OVERVIEW TRANSFERS FOR CRYPTO BASED INNOVATION',
+                actions: <Filter />
             }}
         >
             <div className="form-row">

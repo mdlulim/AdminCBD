@@ -7,6 +7,7 @@ import { Unlock,  Edit, Trash} from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
 import DeleteProductAlert from './DeleteProductAlert';
+import ModalUpdateCategories from './ModalUpdateCategories';
 import { ProductService } from '../../providers';
 // styles
 const customStyles = {
@@ -66,25 +67,22 @@ export default function Products(props) {
     const [showDelete, setShowDelete] = useState(false);
     const [showResend, setShowResend] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
-    const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState({});
+    const [categories, setCategories] = useState([]);
+    const [filteredCategories, setFilteredCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState({});
     const history = useHistory();
 
 
     useMemo(() => {
 
-      ProductService.getProducts().then((res) => {
-        //console.log('Products '+res.data.data.results)
-        console.log(res.data.data.results)
-        if(res.data.success){
-          const productlist = res.data.data.results;
-          console.log(productlist)
-          setProducts(productlist);
-          setFilteredProducts(productlist);
-        }
-        
-      });
+        ProductService.getProductCategories().then((res) => {
+             console.log(res.data.data.results)
+                if(res.data.success){
+                    const productlist = res.data.data.results;
+                    setCategories(productlist);
+                    setFilteredCategories(productlist);
+                }
+           });
 
       }, []);
     // table headings definition
@@ -95,29 +93,13 @@ const columns = [
     sortable: true,
     wrap: true,
 },{
-    name: 'Type',
-    selector: 'type',
+    name: 'Description',
+    selector: 'description',
     sortable: true,
-}, {
-  name: 'Educator Fee',
-  selector: 'educator_fee',
-  sortable: true,
-  cell: row => <div>{row.educator_fee? row.currency_code+' '+row.educator_fee: ''} {row.educator_percentage ? row.educator_percentage+' %': ''}</div>
 },{
-  name: 'Registration Fee',
-  selector: 'registration_fee',
-  sortable: true, 
-  cell: row => <div>{row.registration_fee? row.currency_code+' '+row.registration_fee: ''} {row.educator_percentage ? row.educator_percentage+' %': ''}</div>
-},  {
-  name: 'Product Amount',
-  selector: 'price',
-  sortable: true,
-  cell: row => <div>{row.currency_code}  {row.price}</div>
-},{
-    name: 'Status',
-    selector: 'status',
+    name: 'Code',
+    selector: 'code',
     sortable: true,
-    cell: row => <Status {...row} />
 }, {
     name: 'Created Date',
     selector: 'created',
@@ -131,63 +113,40 @@ const columns = [
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}>
-      <a
-      href={`products/${row.id}`}
-      className="btn btn-secondary btn-sm btn-icon"
-    ><span className="fa fa-pencil" />
-    </a></spam>
-    {/* <spam style={iconPadding}><a
+    <a
       href={`#`}
-      className="btn btn-secondary btn-sm btn-icon"
+      className="btn btn-light btn-sm btn-icon"
       onClick={e => {
         e.preventDefault();
-    
-        onSubmitDeleteProduct(row);
+        onSubmitUpdateCategory(row);
       }}
-    >
-      <span className="fa fa-trash" />
-    </a></spam> */}
+    > <span className="fa fa-pencil" />
+    </a></spam>
   </div>
 }];
 
-const handleChangePassword = async data => {
-}
-
-const handleDeleteProduct = async data => {
-}
-
-const onSubmitUpdateProduct= data => {
-  setSelectedProduct(data);
-  setShow(true);
-  };
-
-  const onSubmitResendPassword= data => {
-    setSelectedProduct(data);
-    setShowResend(true);
+const onSubmitUpdateCategory= data => {
+    setSelectedCategory(data);
+    setShow(true);
     };
 
-  const onSubmitDeleteProduct= data => {
-    setSelectedProduct(data);
-    setShowDelete(true)
-  };
-
   const onSearchFilter = filterText => {
-    const filteredItems = products.filter(item => (
-      (item && item.full_names && item.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.productname && item.productname.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase()))
+    const filteredItems = categories.filter(item => (
+      (item && item.title && item.title.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.description && item.description.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.code && item.code.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredProducts(filteredItems);
+    setFilteredCategories(filteredItems);
   }
 
 
     return (
         <Card className="o-hidden mb-4">
-          <DeleteProductAlert show={showDelete} setShow={setShowDelete} product={selectedProduct} />
+          <ModalUpdateCategories show={show} setShow={setShow} category={selectedCategory} />
           
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Products</span>
+                    <span>Product Categories</span>
                     <span className="flex-grow-1" /><input
                         style={inputWith}
                         type="text"
@@ -198,7 +157,7 @@ const onSubmitUpdateProduct= data => {
                       />
                     <div>
                             <a 
-                            href={`products/add`}
+                            href={`categories/add`}
                             className="btn btn-secondary">
                                 Add Product
                             </a>
@@ -206,7 +165,7 @@ const onSubmitUpdateProduct= data => {
                 </div>
             </CardBody>
             <DataTable
-                data={filteredProducts}
+                data={filteredCategories}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader

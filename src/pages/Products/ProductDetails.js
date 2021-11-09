@@ -38,7 +38,7 @@ const ProductDetails = props => {
     useMemo(() => {
         //Get member details
         ProductService.getProduct(id).then((res) => {
-           // console.log(res.data.data);
+           console.log(res.data.data);
             const productDetails = res.data.data;
             setProduct(productDetails);
             setSelectedProductType(productDetails.type);
