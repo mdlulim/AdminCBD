@@ -106,7 +106,7 @@ export default function Deposits(props) {
 
     useMemo(() => {
         TransactionService.getTransactions().then((res) => {
-          //let id = res.data.data.results[0].user_id;
+          
           console.log(res.data.data.results);
           const transaList = res.data.data.results;
           const completedTransaction = transaList.filter(item => item.subtype === "deposit");
