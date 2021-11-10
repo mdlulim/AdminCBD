@@ -80,7 +80,7 @@ export default function LevelTwo(props) {
                                 <Col xs={6} md={6} >
                                     <div className="form-group">
                                         <label>ID/Passport Document</label>
-                                        <Card onClick={() => onShowImage("holder.js/171x180")}>
+                                        <Card onClick={() => onShowImage([{uri:"https://res.cloudinary.com/demo/image/upload/example_pdf.pdf"}])}>
                                             <Image src="holder.js/171x180" roundedCircle />
                                         </Card>
                                     </div>

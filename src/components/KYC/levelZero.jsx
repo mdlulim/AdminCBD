@@ -39,8 +39,8 @@ export default function LevelZero(props) {
                             <Col xs={6} md={6}>
                                 <div className="form-group">
                                     <label>Selfie</label>
-                                    <Card onClick={() => onShowImage("holder.js/171x180")}>
-                                        <Image src="holder.js/171x180" roundedCircle />
+                                    <Card onClick={() => onShowImage([{uri:"https://upload.wikimedia.org/wikipedia/commons/1/13/Benedict_Cumberbatch_2011.png"}])}>
+                                       <img src="https://upload.wikimedia.org/wikipedia/commons/1/13/Benedict_Cumberbatch_2011.png" alt="prof" />
                                     </Card>
                                 </div>
                             </Col>

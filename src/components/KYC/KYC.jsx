@@ -14,7 +14,7 @@ export default function Leads(props) {
     const { member, kycDetails } = props;
     const [showImage, setShowImage] = useState(false);
     const [showReason, setShowReason] = useState(false);
-    const [clickedDoc, setDocument] = useState([]);
+    const [kycDocuments, setDocument] = useState([]);
     const [approvalList, setApprovalList] = useState({});
     const [rejectObj, setRejectedObj] = useState({});
     const [sumbitting, setSubmitting] = useState(false);
@@ -86,7 +86,7 @@ export default function Leads(props) {
     }
 
     const showImageCB = (image) => {
-        console.log(kycDetails)
+        console.log("image", image)
         setDocument(image)
         setShowImage(true);
     }
@@ -97,7 +97,7 @@ export default function Leads(props) {
             <Row>
                 <Col md={8}>
                     <RejectLevelModal show={showReason} setShow={setShowReason} approvalList={approvalList} setApprovalList={setApprovalList} rejectObj={rejectObj} setRejectedObj={setRejectedObj} />
-                    <ViewModal show={showImage} setShow={setShowImage} document={clickedDoc} kycDetails={kycDetails} />
+                    <ViewModal show={showImage} setShow={setShowImage} kycDocuments={kycDocuments} kycDetails={kycDetails} />
                     <LevelZero approveLevel={approveLevelCB} showImage={showImageCB} member={member} />
                     <LevelOne approveLevel={approveLevelCB} kycDetails={kycDetails[1]} member={member} />
                     <LevelTwo approveLevel={approveLevelCB} showImage={showImageCB} kycDetails={kycDetails} />

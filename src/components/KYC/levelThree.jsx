@@ -41,19 +41,19 @@ export default function Levelhree(props) {
                     <Col xs={6} md={6} >
                         <div className="form-group">
                             <label>Proof of Address</label>
-                            <Card onClick={() => onShowImage("holder.js/171x180")}>
+                            <Card onClick={() => onShowImage([{uri: "https://res.cloudinary.com/demo/image/upload/example_pdf.pdf"}])}>
                                 <Image src="holder.js/171x180" roundedCircle />
                             </Card>
                         </div>
                     </Col>
-                    <Col xs={6} md={6}>
+                    {/* <Col xs={6} md={6}>
                         <div className="form-group">
                             <label>Certificate of Incorporation</label>
                             <Card onClick={() => onShowImage("holder.js/171x180")}>
                                 <Image src="holder.js/171x180" roundedCircle />
                             </Card>
                         </div>
-                    </Col>
+                    </Col> */}
                 </Row>
             </Col>
         </Row>
