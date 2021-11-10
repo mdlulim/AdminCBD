@@ -77,7 +77,7 @@ export default function Members(props) {
 
     useMemo(() => {
         MemberService.getMembers().then((res) => {
-          console.log(res.data.data)
+          //console.log(res.data.data)
           const memberslist = res.data.data.results;
           setMembers(memberslist);
           setFilteredMembers(memberslist);

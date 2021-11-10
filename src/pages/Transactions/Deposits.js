@@ -30,14 +30,13 @@ export default function Deposits(props) {
             {...props}
             breadcrumb={{ active: "Deposits" }}
             pageHeading={{
-                title: 'CBI Deposits',
-                caption: 'EXPLORE OVERVIEW DEPOSITS FOR CRYPTO BASED INNOVATION',
-                actions: <Filter />
+                title: 'Deposit Transactions',
+                caption: 'EXPLORE OVERVIEW DEPOSITS FOR CRYPTO BASED INNOVATION'
             }}
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Deposits />
+                <Transactions.Transactions transactionType={'deposit'} />
                 </Col>
             </div>
         </AuthLayout>

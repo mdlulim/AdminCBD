@@ -36,7 +36,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}/products/${id}`,
+      url: `http://localhost:8090/products/${id}`,
     });
   }
 
@@ -49,25 +49,32 @@ class ProductService {
     });
   }
 
+  static async getMembersByPoducts(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `http://localhost:8090/products/${id}/users`,
+    });
+  }
+
   static async getProductByMemberId(id) {
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}/users/${id}/products`,
+      url: `http://localhost:8090/users/${id}/products`,
     });
   }
 
-  static async addProduct(product){
-    console.log(product)
+  static async addProduct(data){
     return await axios({
       mode: 'no-cors',
       method: 'POST',
-      data: product,
       headers: headers,
-      url: `${Config.API.BASE_URL}/products`,
+      data:data,
+      url: `http://localhost:8090/products`,
     }).then((res) =>{
-      //const result = {status: res.data.status, message: res.data.message}
       const result = res;
       return result;
     });
@@ -79,7 +86,7 @@ class ProductService {
       method: 'PUT',
       data: product,
       headers: headers,
-      url: `${Config.API.BASE_URL}/products/${id}`,
+      url: `http://localhost:8090/products/${id}`,
     }).then((res) =>{
       const result = {status: res.data.status, message: res.data.message}
       return result;

@@ -11,6 +11,8 @@ import Select from 'react-select';
 import { confirmAlert } from 'react-confirm-alert';
 import NumberFormat from 'react-number-format';
 import { ProductService } from '../../providers';
+import RecentProduct from './RecentProduct';
+import Moment from 'react-moment';
 
 const ProductAddNew = props => {
 	const breadcrumb = { heading: "New Product" };
@@ -32,15 +34,28 @@ const ProductAddNew = props => {
     const [product, setProduct] = useState({});
     const [productCategories, setProductCategories] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [products, setProducts] = useState([]);
     const { processing,confirmButtonDisabled, confirmButton,} = props;
     const [selectedCurrency, setSelectedCurrency] = useState('CBI');
     const [selectedProductType, setSelectedProductType] = useState('');
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
+    const [resetProduct, setRecentProduct] = useState({});
+    const [ postData, setPostData ] = useState({});
     const params = useParams();
     const { id } = params;
 
     useMemo(() => {
-		//Get member details
+        //Get member details
+        
+        ProductService.getProducts().then((res) => {
+            if(res.data.success){
+              const productlist = res.data.data.results;
+              //console.log(productlist)
+              setProducts(productlist);
+              setRecentProduct(productlist[0]);
+            }
+            
+          });
 
         ProductService.getProductCategories().then((res) => {
            // console.log(res.data.data.results)
@@ -64,7 +79,7 @@ const ProductAddNew = props => {
 			e.preventDefault();
 			setActiveTab(tab);
         };
-        
+
         const onEditorStateChange = editorState => {
             setEditorState(editorState);
             };
@@ -77,40 +92,83 @@ const ProductAddNew = props => {
                 { value: 'Published',  label: 'Published' },
                 { value: 'Achived', label: 'Achived' }
               ];
-//====================Add Product===============================
-              const onSubmit = (event) => {
+
+        const onSubmitCBI = (event) => {
+            event.preventDefault();
+            setDisabled(true);
+            setError('');
+            const form = event.currentTarget;
+
+            const category = categories.filter(option => option.code === selectedProductType)[0];
+           // const title = form.title.value;
+           let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+           const productData ={
+                        body: currentContentAsHTML,
+                        category_id: category.id,
+                        category_title: category.title,
+                        currency_code: selectedCurrency,
+                        product_code: "KJHYAS",
+                        status: selectedStatus,
+                        title: form.title.value,
+                        type: selectedProductType,
+                        price: 0,
+                        fees: {
+                        educator_percentage: parseFloat(form.educator_persantage_fee.value),
+                        registration_fee: parseFloat(form.registration_fee.value),
+                        slippage_percentage_buy: parseFloat(form.slippage_persantage_buy.value),
+                        slippage_percentage_sell: parseFloat(form.slippage_persantage_sell.value),
+                     }
+                    }
+                    console.log(productData);
+                 ProductService.addProduct(productData).then((response) =>{
+                    console.log(response);
+                    if(response.status){
+                        setShow(true);
+                        confirmAlert({
+                            title: 'Confirm submit',
+                            message: 'Product was added successfully',
+                            buttons: [
+                              {
+                                label: 'Yes',
+                                onClick: () => {
+                                    window.location = '/products/add';
+                                }
+                              }
+                            ]
+                          })
+                    }else{
+                        setError('Something went wrong please make you submited correct values');
+                    }
+                    setDisabled(false);
+                 })
+            }
+
+            const onSubmitProduct = (event) => {
                 event.preventDefault();
-				setDisabled(true);
-				setError('');
-
+                setDisabled(true);
+                setError('');
                 const form = event.currentTarget;
-				let price = parseFloat(form.price.value);
-
+    
                 const category = categories.filter(option => option.code === selectedProductType)[0];
-                console.log(category);
-				
                // const title = form.title.value;
                let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-               //console.log(currentContentAsHTML);
-
-                if(selectedProductType === 'FX'){
-                    let educator = parseFloat(educatorFee);
-				    let regFee = parseFloat(registrationFee);
-                    const productData ={
-                        title				: form.title.value,
-                        body				: currentContentAsHTML,
-                        product_code		: selectedProductType,
-                        category_id         : category.id,
-                        category_title      : category.title,
-                        currency_code		: selectedCurrency,
-                        price				: price,
-                        educator_fee		: educator,
-                        educator_persantage	: parseFloat(form.educator_persantage.value),
-                        registration_fee	: regFee,
-                        registration_persantage: parseFloat(form.registration_persantage.value),
-                        total				: price+educator+regFee,
-                        status				: selectedStatus
-                     };
+               const productData ={
+                            body: currentContentAsHTML,
+                            category_id: category.id,
+                            category_title: category.title,
+                            currency_code: selectedCurrency,
+                            educator_percentage: 4,
+                            product_code: "JGJHGDSD",
+                            fees: {
+                                educator_percentage: parseFloat(form.registration_persantage.value),
+                                registration_percentage: parseFloat(form.educator_persantage.value),
+                            },
+                            status: selectedStatus,
+                            title: form.title.value,
+                            type: selectedProductType,
+                            price: parseFloat(form.price.value),
+                        }
+                        console.log(productData);
                      ProductService.addProduct(productData).then((response) =>{
                         console.log(response);
                         if(response.status){
@@ -120,7 +178,10 @@ const ProductAddNew = props => {
                                 message: 'Product was added successfully',
                                 buttons: [
                                   {
-                                    label: 'Yes'
+                                    label: 'Yes',
+                                    onClick: () => {
+                                        window.location = '/products/add';
+                                    }
                                   }
                                 ]
                               })
@@ -129,88 +190,127 @@ const ProductAddNew = props => {
                         }
                         setDisabled(false);
                      })
-                }else if(selectedProductType === 'FP'){
-                    const myData ={
-                            body            : currentContentAsHTML,
-                            category_id     : category.id,
-                            category_title  : category.title,
-                            currency_code   : selectedCurrency,
-                            daily_interes   : parseFloat(form.estimated_daily_interest.value),
-                            gross_return    : parseFloat(form.minimum_gross_return.value),
-                            investment_period: parseFloat(form.investment_period.value),
-                            minimum_investment: parseFloat(form.minimum_investment.value),
-                            price            : price,
-                            product_code     : selectedProductType,
-                            status           : selectedStatus,
-                            title            : form.title.value,
-                            total            : price
-                     }
+    }
 
-                     ProductService.addProduct(myData).then((response) =>{
-                        console.log(response);
-                        if(response.status){
-                            setShow(true);
-                            confirmAlert({
-                                title: 'Confirm submit',
-                                message: 'Product was added successfully',
-                                buttons: [
-                                  {
-                                    label: 'Yes'
-                                  }
-                                ]
-                              })
-                        }else{
-                            setError('error message');
-                        }
-                        setDisabled(false);
-                     })
+    const generateUniqueCode = (length) => {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
 
-                     console.log(myData)
-                }else if(selectedProductType === 'CBIX7'){
+   
 
-                    let educator = parseFloat(educatorFee);
-				    let regFee = parseFloat(registrationFee);
-                    const cbiX7 = {
-                                    title				: form.title.value,
-                                    body				: currentContentAsHTML,
-                                    product_code		: selectedProductType,
-                                    category_id         : category.id,
-                                    category_title      : category.title,
-                                    type		        : selectedProductType,
-                                    currency_code		: selectedCurrency,
-                                    price				: price,
-                                    educator_fee		: educator,
-                                    educator_persantage	: parseFloat(form.educator_persantage_fee.value),
-                                    registration_fee	: parseFloat(form.registration_fee.value),
-                                    total				: price+educator+parseFloat(form.registration_fee.value),
-                                    status				: selectedStatus
-                                }
-                     console.log(cbiX7);
-                     ProductService.addProduct(cbiX7).then((response) =>{
-                        console.log(response);
-                        if(response.status){
-                            setShow(true);
-                            confirmAlert({
-                                title: 'Confirm submit',
-                                message: 'Product was added successfully',
-                                buttons: [
-                                  {
-                                    label: 'Yes'
-                                  }
-                                ]
-                              })
-                        }else{
-                            setError('error message');
-                        }
-                        setDisabled(false);
-                     })
+    const onSubmit = (event) =>{
+        event.preventDefault();
+        setDisabled(true);
+        setError('');
+        const form = event.currentTarget;
+         const category = categories.filter(option => option.code === selectedProductType)[0];
+        // const title = form.title.value;
+        let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+        const productCode = generateUniqueCode(5);
+        if(selectedProductType === 'CBIX7'){
+            const data ={
+                body: currentContentAsHTML,
+                category_id: category.id,
+                category_title: category.title,
+                currency_code: selectedCurrency,
+                product_code: productCode,
+                status: selectedStatus,
+                title: form.title.value,
+                type: selectedProductType,
+                price: 0,
+                bbt_value: parseFloat(form.bbt_value.value),
+                fees: {
+                educator_percentage: parseFloat(form.educator_persantage_fee.value),
+                registration_fee: parseFloat(form.registration_fee.value),
+                slippage_percentage_buy: parseFloat(form.slippage_persantage_buy.value),
+                slippage_percentage_sell: parseFloat(form.slippage_persantage_sell.value),
+             }
+            }
+            console.log(data);
+            create(data)
 
+        }else if(selectedProductType === 'FX'){
+            const data ={
+                body: currentContentAsHTML,
+                category_id: category.id,
+                category_title: category.title,
+                currency_code: selectedCurrency,
+                educator_percentage: 4,
+                product_code: productCode,
+                fees: {
+                    educator_percentage: parseFloat(form.educator_percentage.value),
+                    registration_percentage: parseFloat(form.registration_percentage.value),
+                },
+                status: selectedStatus,
+                title: form.title.value,
+                type: selectedProductType,
+                price: parseFloat(form.price.value),
+            }
+            console.log(data);
+            create(data)
+
+        }else if(selectedProductType === 'FP'){
+            const data ={
+                    body            : currentContentAsHTML,
+                    category_id     : category.id,
+                    category_title  : category.title,
+                    currency_code   : selectedCurrency,
+                    daily_interes   : parseFloat(form.estimated_daily_interest.value),
+                    gross_return    : parseFloat(form.minimum_gross_return.value),
+                    investment_period: parseFloat(form.investment_period.value),
+                    minimum_investment: parseFloat(form.minimum_investment.value),
+                    price            : parseFloat(form.price.value),
+                    product_code     : productCode,
+                    type             : selectedProductType,
+                    status           : selectedStatus,
+                    title            : form.title.value
                 }
+                console.log(data);
+                create(data)
+        }
 
+    }
 
-		}
+    
+    const create = (data) =>{
+        const title = data.title;
+        let permakey =title.split(' ').join('-').trim().toLowerCase();
+         let productExist = products.filter(product => product.permakey === permakey);
+         console.log(productExist.length)
+        if(!productExist.length){
+            ProductService.addProduct(data).then((response) =>{
+                console.log(response);
+                if(response.status){
+                    setShow(true);
+                    confirmAlert({
+                        title: 'Confirm submit',
+                        message: 'Product was added successfully',
+                        buttons: [
+                          {
+                            label: 'Yes',
+                            onClick: () => {
+                                window.location = '/products/add';
+                            }
+                          }
+                        ]
+                      })
+                }else{
+                    setError('Something went wrong please make you submited correct values');
+                }
+                setDisabled(false);
+             })
 
-
+        }else{
+            setError('This product is already exist')
+        }
+       
+    }
 	return (
 		<AuthLayout {...props}
         breadcrumb={{ active: "Add New Product" }}
@@ -226,7 +326,7 @@ const ProductAddNew = props => {
 				<div className="alert alert-warning" role="alert">
 				{error}
 				</div> : ''}
-				<Col lg={6} xl={6}>
+				<Col lg={8}>
                                 <Row >
                                 <Col md={12}>
                             <label htmlFor="product_type">Product Type</label>
@@ -278,82 +378,69 @@ const ProductAddNew = props => {
                                             required
                                             />
                                 </Col>
+                                {selectedProductType === "CBIX7" ?
                                 <Col md={6}>
-                                        <label htmlFor="name">Product Amount (CBI)</label>
+                                        <label htmlFor="name">BBT Value (CBI)</label>
                                         <input
                                             type="text"
-                                            id="price"
-                                            name="price"
+                                            id="bbt_value"
+                                            name="bbt_value"
 											className="form-control form-control-m"
 											onChange={event => {
 												if(!isNaN(+event.target.value)){
-													setAmountFee(event.target.value)
 													setErrorAmount(true)
 												}else{
 													setErrorAmount(false)
 												}
                                             }}
-                                            required
                                         />
 										<label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label>
-                                </Col>
-
-							
+                                </Col>:
+                                <Col md={6}>
+                                <label htmlFor="name">Product Amount (CBI)</label>
+                                <input
+                                    type="text"
+                                    id="price"
+                                    name="price"
+                                    className="form-control form-control-m"
+                                    onChange={event => {
+                                        if(!isNaN(+event.target.value)){
+                                            setErrorAmount(true)
+                                        }else{
+                                            setErrorAmount(false)
+                                        }
+                                    }}
+                                />
+                                <label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label>
+                        </Col>}
 								<Col md={6} hidden={show}>
-                                        <label htmlFor="name">Registration Percentage Fee (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <label htmlFor="name">Registration Percentage Fee (%) </label>
                                         <input
                                             type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
+                                            id="registration_percentage"
+                                            name="registration_percentage"
 											className="form-control form-control-m"
 											onChange={event => {
 												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setRegistrationFee(value)
 													setErrorReg(true)
 												}else{
 													setErrorReg(false)
-													setRegistrationFee(0)
 												}
 											}}
                                         />
                                 </Col>
                                 <Col md={6} hidden={show}>
-                                    <div className="form-control">
-                                        <label htmlFor="name">Registration Percentage Fee (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+							<label htmlFor="educator_percentage">Educator Percentage Fee (%) </label>
                                         <input
                                             type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
+                                            id="educator_percentage"
+                                            name="educator_percentage"
 											className="form-control form-control-m"
 											onChange={event => {
 												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setRegistrationFee(value)
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-													setRegistrationFee(0)
-												}
-											}}
-                                        />
-                                        </div>
-                                </Col>
-                                <Col md={6} hidden={show}>
-							<label htmlFor="educator_persantage">Educator Percentage Fee (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={educatorFee} />: '' }</label>
-                                        <input
-                                            type="text"
-                                            id="educator_persantage"
-                                            name="educator_persantage"
-											className="form-control form-control-m"
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setEducatorFee(value)
 													setErrorEducator(true)
 												}else{
 													setErrorEducator(false)
-													setEducatorFee(0)
 												}
 											}}
                                         />
@@ -400,20 +487,35 @@ const ProductAddNew = props => {
 										<label hidden={errorEducator} className="text-danger" htmlFor="name">Please enter a valid percentage</label>
                                 </Col>
                                 <Col md={6} hidden={showCBIx7}>
-							<label htmlFor="educator_persantage">Slippage Percentage Fee (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={sleppageFee} />: '' }</label>
+							<label htmlFor="educator_persantage">Slippage Percentage Sell (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={sleppageFee} />: '' }</label>
                                         <input
                                             type="text"
-                                            id="educator_persantage"
-                                            name="slippage_persantage"
+                                            id="educator_persantage_sell"
+                                            name="slippage_persantage_sell"
 											className="form-control form-control-m"
 											onChange={event => {
 												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setSlippageFee(value)
 													setErrorSlippage(true)
 												}else{
 													setErrorSlippage(false)
-													setSlippageFee(0)
+												}
+											}}
+                                        />
+										<label hidden={errorSlippage} className="text-danger" htmlFor="name">Please enter a valid percentage</label>
+                                </Col>
+                                <Col md={6} hidden={showCBIx7}>
+							<label htmlFor="educator_persantage">Slippage Percentage Buy (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={sleppageFee} />: '' }</label>
+                                        <input
+                                            type="text"
+                                            id="educator_persantage_buy"
+                                            name="slippage_persantage_buy"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+												
+													setErrorSlippage(true)
+												}else{
+													setErrorSlippage(false)
 												}
 											}}
                                         />
@@ -512,6 +614,7 @@ const ProductAddNew = props => {
                                         wrapperClassName="wrapperClassName"
                                         editorClassName="editorClassName"
                                         onEditorStateChange={onEditorStateChange}
+                                        defaultContentState={product.body}
                                     />
                                     <hr />
                                     </Col>
@@ -529,6 +632,39 @@ const ProductAddNew = props => {
 			</CardBody>
 			  </Card>
 			</Row>
+            <Row>
+            <Card>
+                  <CardBody>
+                    <table className="table-responsive">
+                  <tr>
+                    <td width="200">
+                        <div className="user user--rounded user--bordered user--lg margin-bottom-0">
+                            <div className="user__name">
+                                <strong>Product: {resetProduct.title}</strong><br />
+                                <span className="text-muted">Type: {resetProduct.type}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                    </td>
+                    <td width="130">
+            <div className="btn btn-outline-success btn-block disabled btn-sm">{resetProduct.status}</div>
+                    </td>
+                    <td width="180"><center>
+                        <strong><Moment date={resetProduct.created} format="D MMM YYYY" /></strong><br />
+                        <span className="text-muted"><Moment date={resetProduct.created} format="hh:mm:ss" /></span>
+                        </center>
+                    </td>
+                    <td width="40">
+                        <a href={'products/'+resetProduct.id} className="btn btn-secondary btn-sm btn-icon">
+                            <span className="fa fa-eye"></span>
+                        </a>
+                    </td>
+        </tr>
+        </table>
+                  </CardBody>
+              </Card>
+            </Row>
 		</AuthLayout>
 	);
 };

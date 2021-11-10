@@ -38,18 +38,22 @@ const ProductDetails = props => {
     useMemo(() => {
         //Get member details
         ProductService.getProduct(id).then((res) => {
-           // console.log(res.data.data);
+           console.log(res.data);
+           
             const productDetails = res.data.data;
-            setProduct(productDetails);
-            setSelectedProductType(productDetails.type);
-            setSelectedCurrency(productDetails.currency_code);
-            setEducatorFee(productDetails.educator_fee);
-            setAmountFee(productDetails.price)
-            setRegistrationFee(productDetails.registration_fee);
-            setSelectedStatus(productDetails.status)
-            if(productDetails.type === "Fraxion"){
-                setShow(false)
+            if(productDetails){
+                setProduct(productDetails);
+                setSelectedProductType(productDetails.type);
+                setSelectedCurrency(productDetails.currency_code);
+                setEducatorFee(productDetails.educator_fee);
+                setAmountFee(productDetails.price)
+                setRegistrationFee(productDetails.registration_fee);
+                setSelectedStatus(productDetails.status)
+                if(productDetails.type === "Fraxion"){
+                    setShow(false)
+                }
             }
+            return 'Mdu';
             //setEditorState(ContentState.convertToHTML(productDetails.body));
            // setEditorState(EditorState.createWithContent(ContentState.createFromText(productDetails.body)));
         });

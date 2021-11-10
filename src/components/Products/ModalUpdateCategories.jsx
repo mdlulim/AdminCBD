@@ -4,12 +4,12 @@ import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
-import { TransactionService, UserService } from '../../providers';
+import { MemberService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const ModalChangeStatus = props => {
-    const { show, setShow, transaction} = props;
+    const { show, setShow, category} = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
@@ -18,17 +18,15 @@ const ModalChangeStatus = props => {
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
-       console.log(transaction)
+       // console.log(member)
     }, []);
 
     const statusOptions = [
-        { value: 'Canceled',  label: 'Cancel' },
-        { value: 'Completed', label: 'Complete' }
+        { value: 'Active',  label: 'Active' },
+        { value: 'Blocked', label: 'Blocked' },
+        { value: 'Archive', label: 'Archive' },
       ];
-
-
-
-    const onSubmit = (event) => {
+      const onSubmit = (event) => {
         event.preventDefault();
         setDisabled(true);
         setError('');
@@ -36,29 +34,15 @@ const ModalChangeStatus = props => {
         const form = event.currentTarget;
 
 
-
-        console.log(transaction)
-        console.log(selectedStatus.value);
-        const data = { status: selectedStatus.value} ;
-
+        console.log(selectedStatus);
         if(selectedStatus){
-            setShow(false)
-            // return confirmAlert({
-            //     title: 'Error',
-            //     message: 'Endpoint not provided',
-            //     buttons: [
-            //       {
-            //         label: 'Ok',
-            //       }
-            //     ]
-            //   });
-            TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
+            MemberService.updateStatus(category.id, selectedStatus.value).then((response) =>{
                 console.log(response);
                  if(response.data.success){
                      setShow(false)
                      return confirmAlert({
                         title: 'Succcess',
-                        message: 'Transaction was successfully updated',
+                        message: 'Member was successfully updated',
                         buttons: [
                           {
                             label: 'Ok',
@@ -75,7 +59,7 @@ const ModalChangeStatus = props => {
       }
     const handleClose = () => setShow(false);
 
-    const updateTransactionStatus = (event) => {
+    const updateMemberStatus = (event) => {
         event.preventDefault();
         const form = event.currentTarget;
         const reason = form.reason.value;
@@ -92,68 +76,42 @@ const ModalChangeStatus = props => {
                         <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                     </Col>}
                     <Col xs={showIcon ? 10 : 12}>
-                        <h3 className="text-success"> Update Transaction Status</h3>
+                        <h3 className="text-success"> Update Category</h3>
                         <hr />
                         <form onSubmit={onSubmit}>
                                 <div className="form-group">
-                                    <label htmlFor="transactionId">Transaction ID</label>
-                                    {transaction ?
+                                    <label htmlFor="title">Title</label>
+                                    {category ?
                                     <input
                                         type="text"
-                                        id="transactionId"
+                                        id="title"
+                                        name="title"
                                         className="form-control form-control-m"
-                                        value={transaction.txid}
-                                        disabled={true}
+                                        defaultValue={category.title}
                                     />
                                     : ''}
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="email">Transaction Type</label>
-                                    {transaction ?
+                                    <label htmlFor="description">Description</label>
+                                    {category ?
                                     <input
                                         type="text"
-                                        id="subtype"
+                                        id="description"
                                         className="form-control form-control-m"
-                                        value={transaction.subtype}
-                                        disabled={true}
+                                        defaultValue={category.description}
                                     />
                                     : ''}
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="email">Amount</label>
-                                    {transaction ?
+                                    <label htmlFor="email">Category Code</label>
+                                    {category ?
                                     <input
                                         type="text"
-                                        id="amount"
+                                        id="text"
+                                        name="code"
                                         className="form-control form-control-m"
-                                        value={transaction.amount}
-                                        disabled={true}
-                                    />
-                                    : ''}
-                                </div>
-                                {transaction ?
-                                <div>
-                                <label htmlFor="email">Select Status</label>
-                                <Select
-                                    id="status"
-                                    name="status"
-                                    options={statusOptions}
-                                    defaultValue={statusOptions.filter(option => option.value === transaction.status)}
-                                    onChange={item => setSelectedStatus(item)}
-                                    className={`basic-multi-select form-control-m`}
-                                    classNamePrefix="select"
-                                    />
-
-                                </div>
-                                : ''}
-                                <div className="form-group">
-                                    <label htmlFor="reason">Reason</label>
-                                    {transaction ?
-                                    <textarea
-                                        type="text"
-                                        id="reason"
-                                        name="reason"
-                                        className="form-control form-control-m"
+                                        defaultValue={category.code}
+                                        disabled
                                     />
                                     : ''}
                                 </div>

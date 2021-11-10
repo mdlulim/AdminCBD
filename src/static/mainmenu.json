@@ -32,18 +32,42 @@
         {
             "id": "products",
             "title": "Products",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-            "link": "/products",
+            "description": "Product Overview.",
+            "link": "",
             "icon": "li-layers",
-            "childitems": []
+            "childitems": [
+                {
+                    "id": "products",
+                    "title": "Products",
+                    "link": "/products",
+                    "icon": null
+                },
+                {
+                    "id": "categories",
+                    "title": "Categories",
+                    "link": "/categories",
+                    "icon": null
+                }
+            ]
         },
         {
             "id": "transactions",
             "title": "Transactions",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "description": "Transactions Overview.",
             "link": "/transactions",
             "icon": "li-cash-dollar",
             "childitems": [
+                {
+                    "id": "transactions",
+                    "title": "All Transactions",
+                    "link": "/",
+                    "icon": null
+                },{
+                    "id": "pending",
+                    "title": "Pending",
+                    "link": "/pending",
+                    "icon": null
+                },
                 {
                     "id": "deposits",
                     "title": "Deposits",
@@ -54,6 +78,24 @@
                     "id": "withdrawals",
                     "title": "Withdrawals",
                     "link": "/widthdrawals",
+                    "icon": null
+                },
+                {
+                    "id": "transfers",
+                    "title": "Transfers",
+                    "link": "/transfers",
+                    "icon": null
+                },
+                {
+                    "id": "completed",
+                    "title": "Completed",
+                    "link": "/completed",
+                    "icon": null
+                },
+                {
+                    "id": "canceled",
+                    "title": "Canceled",
+                    "link": "/canceled",
                     "icon": null
                 }
             ]
