@@ -5,15 +5,13 @@ import ViewModal from './viewModal';
 
 
 export default function LevelOne(props) {
+    const { approveLevel, kycDetails, member } = props;
     const [show, setShow] = useState(false);
     const [clickedDoc, setDocument] = useState({});
+    const [activeButton, setActiveButton]  = useState(null);
 
     useMemo(() => {
     }, []);
-
-    const approveLevel = (action) => {
-        props.approveLevel(action);
-    }
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -30,9 +28,9 @@ export default function LevelOne(props) {
                         <h4>Level 1</h4>
                     </Col>
                     <Col md={6}>
-                        <ButtonGroup size="sm" align="right">
-                            <Button color="success" onClick={() => approveLevel(true)}>Approve</Button>
-                            <Button color="danger" onClick={() => approveLevel(false)}>Decline</Button>
+                        <ButtonGroup size="sm">
+                            <Button color="success" onClick={() => approveLevel({level: 1, status: true})}>Approve</Button>
+                            <Button color="danger" onClick={() => approveLevel({level: 1, status: false})}>Decline</Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
@@ -47,7 +45,7 @@ export default function LevelOne(props) {
                                             type="text"
                                             id="fullname"
                                             className="form-control form-control-m"
-                                            value={"John Doe"}
+                                            value={member.last_name + " "+ member.first_name}
                                             disabled
                                         />
                                     </div>
@@ -73,7 +71,7 @@ export default function LevelOne(props) {
                                             type="text"
                                             id="contact"
                                             className="form-control form-control-m"
-                                            value={"+264 81 034 9752"}
+                                            value={member.mobile}
                                             disabled
                                         />
                                     </div>

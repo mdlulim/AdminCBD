@@ -14,13 +14,7 @@ const Image = () => {
 };
 
 export default function LevelZero(props) {
-    useMemo(() => {
-    }, []);
-
-    const approveLevel = (action) => {
-        props.approveLevel(action);
-    }
-
+    const { approveLevel, member, kycDetails } = props;
     const onShowImage = (image) => {
         props.showImage(image);
     }
@@ -34,8 +28,8 @@ export default function LevelZero(props) {
                     </Col>
                     <Col md={6}>
                         <ButtonGroup size="sm" align="right">
-                            <Button color="success" onClick={() => approveLevel(true)}>Approve</Button>
-                            <Button color="danger" onClick={() => approveLevel(false)}>Decline</Button>
+                            <Button color="success" onClick={() => approveLevel({level: 0, status: true})}>Approve</Button>
+                            <Button color="danger" onClick={() => approveLevel({level: 0, status: false})}>Decline</Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
@@ -57,7 +51,7 @@ export default function LevelZero(props) {
                                         type="text"
                                         id="fullname"
                                         className="form-control form-control-m"
-                                        value={"John Doe"}
+                                        value={member.email}
                                         disabled
                                     />
                                 </div>

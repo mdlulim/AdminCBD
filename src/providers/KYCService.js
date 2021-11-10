@@ -29,13 +29,13 @@ class KYCService {
     });
   }
 
-  static async updateKYC(id, data) {
+  static async updateKYC(data) {
     return await axios({
       mode: 'no-cors',
       method: 'PUT',
       headers: headers,
       data: data,
-      url: `${Config.API.BASE_URL}/kyc?id=${id}`,
+      url: `${Config.API.BASE_URL}/kyc`,
     }).then((res) => {
       const result = res;
       return result;

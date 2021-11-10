@@ -47,6 +47,15 @@ class MemberService {
     });
   }
 
+  static async updateMemberKYC(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users/${id}/kyc`,
+    });
+  }
+
   static async getMemberAddress(id) {
     return await axios({
       mode: 'no-cors',

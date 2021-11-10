@@ -1,25 +1,21 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reactstrap';
-import { KYCService } from '../../providers';
+import React, { useState, useRef } from 'react';
+import { Button } from 'reactstrap';
+import useForm from 'react-hook-form';
 import { Modal } from 'react-bootstrap';
 
+
 export default function RejectLevelModal(props) {
-    const { show, setShow, levelData } = props;
-    useMemo(() => {
-    }, []);
+    const { show, setShow, approvalList, setApprovalList, rejectObj } = props;
+    const { register, handleSubmit, errors } = useForm();
 
-    //calls kyc service to reject level
-    function rejectLevel() {
-        // KYCService.updateKYC(levelData).then((res)=>{
-
-        // })
+    const onSubmit = (data) => {
+        const prevApprovalList = approvalList;
+        rejectObj.reason = data.rejectionReason;
+        const level = rejectObj.level
+        delete rejectObj.level
+        prevApprovalList[level] = rejectObj;
+        setApprovalList(prevApprovalList)
         handleClose();
-    }
-    
-    const onSubmit = (event) => {
-        event.preventDefault();
-        // setDisabled(true);
-        // setError('');
     }
 
     const handleClose = () => setShow(false);
@@ -27,18 +23,19 @@ export default function RejectLevelModal(props) {
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Body>
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-group">
                         <label htmlFor="rejectionReason">Provide reason</label>
                         <textarea
-                            id="rejectionReason"
+                            ref={register({ required: true })}
+                            name="rejectionReason"
                             className="form-control form-control-m"
                         ></textarea>
                     </div>
 
-                    <div className="form-group" style={{display: 'flex', justifyContent:'space-between'}}>
+                    <div className="form-group" style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Button color="danger" onClick={handleClose}>Cancel</Button>
-                        <Button color="success" onClick={rejectLevel}>Submit</Button>
+                        <input type="submit" className="btn btn-success" />
                     </div>
 
                 </form>

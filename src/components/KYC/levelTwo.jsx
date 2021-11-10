@@ -15,17 +15,15 @@ const Image = () => {
 };
 
 export default function LevelTwo(props) {
+    const { approveLevel, kycDetails } = props;
     const [show, setShow] = useState(false);
     const [clickedDoc, setDocument] = useState({});
 
     useMemo(() => {
     }, []);
 
-    const approveLevel = (action) => {
-        props.approveLevel(action);
-    }
-
     const onShowImage = (image) => {
+        console.log(kycDetails['2'].data)
         props.showImage(image);
     }
 
@@ -43,9 +41,9 @@ export default function LevelTwo(props) {
                         <h4>Level 2</h4>
                     </Col>
                     <Col md={6}>
-                        <ButtonGroup size="sm" align="right">
-                            <Button color="success" onClick={() => approveLevel(true)}>Approve</Button>
-                            <Button color="danger" onClick={() => approveLevel(false)}>Decline</Button>
+                        <ButtonGroup size="sm">
+                            <Button color="success" onClick={() => approveLevel({ level: 2, status: true })}>Approve</Button>
+                            <Button color="danger" onClick={() => approveLevel({ level: 2, status: false })}>Decline</Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
@@ -60,7 +58,7 @@ export default function LevelTwo(props) {
                                             type="text"
                                             id="natureBusiness"
                                             className="form-control form-control-m"
-                                            value={"Speculative"}
+                                            value={"kycDetails['2'].data.businessNature"}
                                             disabled
                                         />
                                     </div>
@@ -72,14 +70,22 @@ export default function LevelTwo(props) {
                                             type="text"
                                             id="srcFunds"
                                             className="form-control form-control-m"
-                                            value={"Savings"}
+                                            value={"kycDetails['2'].data.srcFunds"}
                                             disabled
                                         />
                                     </div>
                                 </Col>
                             </Row>
                             <Row>
-                                <Col xs={6} md={6}>
+                                <Col xs={6} md={6} >
+                                    <div className="form-group">
+                                        <label>ID/Passport Document</label>
+                                        <Card onClick={() => onShowImage("holder.js/171x180")}>
+                                            <Image src="holder.js/171x180" roundedCircle />
+                                        </Card>
+                                    </div>
+                                </Col>
+                                {/* <Col xs={6} md={6}>
                                     <div className="form-group">
                                         <label htmlFor="registrationNumber">Registration Number</label>
                                         <input
@@ -90,15 +96,7 @@ export default function LevelTwo(props) {
                                             disabled
                                         />
                                     </div>
-                                </Col>
-                                <Col xs={6} md={6} >
-                                    <div className="form-group">
-                                        <label>ID/Passport Document</label>
-                                        <Card onClick={() => onShowImage("holder.js/171x180")}>
-                                            <Image src="holder.js/171x180" roundedCircle />
-                                        </Card>
-                                    </div>
-                                </Col>
+                                </Col> */}
                             </Row>
                         </form>
                     </Col>

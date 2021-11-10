@@ -16,23 +16,12 @@ const Image = () => {
 export default function Levelhree(props) {
     const [show, setShow] = useState(false);
     const [clickedDoc, setDocument] = useState({});
-
-    useMemo(() => {
-    }, []);
-
-    const approveLevel = (action) => {
-        props.approveLevel(action);
-    }
+    const { approveLevel } = props;
 
     const onShowImage = (image) => {
         props.showImage(image);
     }
 
-    const onSubmit = (event) => {
-        event.preventDefault();
-        // setDisabled(true);
-        // setError('');
-    }
 
     return (
         <Row style={{ marginBottom: "20px", borderBottom: "1px solid gainsboro" }}>
@@ -43,8 +32,8 @@ export default function Levelhree(props) {
                     </Col>
                     <Col md={6}>
                         <ButtonGroup size="sm" align="right">
-                            <Button color="success" onClick={() => approveLevel(true)}>Approve</Button>
-                            <Button color="danger" onClick={() => approveLevel(false)}>Decline</Button>
+                            <Button color="success" onClick={() => approveLevel({level: 3, status: true})}>Approve</Button>
+                            <Button color="danger" onClick={() => approveLevel({level: 3, status: false})}>Decline</Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
