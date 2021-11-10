@@ -122,33 +122,34 @@ export default function UpdateProductDetails(props) {
          console.log(res.data.data);
          const productDetails = res.data.data;
          setProduct(productDetails);
-         setSelectedProductType(productDetails.type);
-         setSelectedCurrency(productDetails.currency_code);
-         setEducatorFee(productDetails.educator_fee);
-         setAmountFee(productDetails.price)
-         setRegistrationFee(productDetails.registration_fee);
-         setSelectedStatus(productDetails.status)
-         if(productDetails.type === "FX"){
-             setShow(false)
-             setShowCBIx7(true)
-             if(productDetails.fees){
-             setFees({
-                    educator_percentage: parseFloat(productDetails.fees.educator_percentage),
-                    registration_percentage: parseFloat(productDetails.fees.registration_percentage),
+            setSelectedProductType(productDetails.type);
+            setSelectedCurrency(productDetails.currency_code);
+            setEducatorFee(productDetails.educator_fee);
+            setAmountFee(productDetails.price)
+            setRegistrationFee(productDetails.registration_fee);
+            setSelectedStatus(productDetails.status)
+            
+            if(productDetails.type === "FX"){
+                setShow(false)
+                setShowCBIx7(true)
+                if(productDetails.fees){
+                setFees({
+                        educator_percentage: parseFloat(productDetails.fees.educator_percentage),
+                        registration_percentage: parseFloat(productDetails.fees.registration_percentage),
+                        })
+                    }
+            }else if (productDetails.type === "CBIX7"){
+                setShow(true)
+                setShowCBIx7(false)
+                if(productDetails.fees){
+                setFees({
+                    educator_percentage:  parseFloat(productDetails.fees.educator_percentage),
+                    registration_fee: parseFloat(productDetails.fees.registration_fee),
+                    slippage_percentage_buy: parseFloat(productDetails.fees.slippage_percentage_buy),
+                    slippage_percentage_sell: parseFloat(productDetails.fees.slippage_percentage_sell),
                     })
-                }
-         }else if (productDetails.type === "CBIX7"){
-            setShow(true)
-            setShowCBIx7(false)
-            if(productDetails.fees){
-            setFees({
-                   educator_percentage:  parseFloat(productDetails.fees.educator_percentage),
-                   registration_fee: parseFloat(productDetails.fees.registration_fee),
-                   slippage_percentage_buy: parseFloat(productDetails.fees.slippage_percentage_buy),
-                   slippage_percentage_sell: parseFloat(productDetails.fees.slippage_percentage_sell),
-                   })
-         }
-        }
+            }
+            }
          //setEditorState(ContentState.convertToHTML(productDetails.body));
         // setEditorState(EditorState.createWithContent(ContentState.createFromText(productDetails.body)));
      });
@@ -250,6 +251,11 @@ export default function UpdateProductDetails(props) {
             update(data)
 
         }else if(selectedProductType === 'FX'){
+            const myFees = {
+                                educator_percentage: parseFloat(form.educator_percentage_fx.value),
+                                registration_percentage: parseFloat(form.registration_percentage.value),
+                            }
+                            console.log(myFees);
             const data ={
                 body: currentContentAsHTML,
                 currency_code: selectedCurrency,
@@ -309,7 +315,7 @@ export default function UpdateProductDetails(props) {
                                         <Select
                                             id="product_type"
                                             name="product_type"
-                                            value={productCategories.filter(option => option.value === product.type)}
+                                            value={product ? productCategories.filter(option => option.value === product.type): ''}
                                             options={productCategories}
                                             onChange={item => {
 												//setSelectedProductType(item.value);
@@ -333,7 +339,7 @@ export default function UpdateProductDetails(props) {
                                             id="title"
                                             name="title"
                                             className="form-control form-control-m"
-                                            defaultValue={product.title}
+                                            defaultValue={ product ? product.title: ''}
                                         /> 
                                 </Col>
                                 <Col md={6}>
@@ -341,7 +347,7 @@ export default function UpdateProductDetails(props) {
                                         <Select
                                             id="currency"
                                             name="currency"
-                                            defaultValue={currencies.filter(option => option.label === product.currency_code)}
+                                            defaultValue={product ? currencies.filter(option => option.label === product.currency_code): 'CBI'}
                                             options={currencies}
                                             onChange={item => setSelectedCurrency(item.value)}
                                             className={`basic-multi-select form-control-m`}
@@ -356,7 +362,7 @@ export default function UpdateProductDetails(props) {
                                             id="bbt_value"
                                             name="bbt_value"
                                             className="form-control form-control-m"
-                                            defaultValue={product.bbt_value}
+                                            defaultValue={product ? product.bbt_value: ''}
 											onChange={event => {
 												if(!isNaN(+event.target.value)){
 													setErrorAmount(true)
@@ -374,7 +380,7 @@ export default function UpdateProductDetails(props) {
                                             id="price"
                                             name="price"
                                             className="form-control form-control-m"
-                                            defaultValue={product.price}
+                                            defaultValue={product ? product.price : ''}
                                             onChange={event => {
 												if(!isNaN(+event.target.value)){
 													setErrorAmount(true)
@@ -386,11 +392,11 @@ export default function UpdateProductDetails(props) {
                                         <label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label>
                                 </Col>}
                                 <Col md={6} hidden={show}>
-							<label htmlFor="educator_persantage">Educator Persentage Fee (%) </label>
+							<label htmlFor="educator_persantage">Educator Persentage Fee (%)FX </label>
                                         <input
                                             type="text"
-                                            id="educator_percantage"
-                                            name="educator_percantage"
+                                            id="educator_percentage_fx"
+                                            name="educator_percentage_fx"
                                             className="form-control form-control-m"
                                             defaultValue={ fees.educator_percentage ? fees.educator_percentage : null}
 											onChange={event => {
@@ -571,7 +577,7 @@ export default function UpdateProductDetails(props) {
                                         <Select
                                             id="status"
                                             name="status"
-                                            value={statusOptions.filter(option => option.label === product.status)}
+                                            value={product ? statusOptions.filter(option => option.label === product.status): ''}
                                             options={statusOptions}
                                             onChange={item => setSelectedStatus(item.value)}
                                             className={`basic-multi-select form-control-m`}

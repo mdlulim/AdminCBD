@@ -6,6 +6,7 @@ import DataTable from 'react-data-table-component';
 import { Modal } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
+import ModalChangeStatus from './ModalChangeStatus';
 import { TransactionService, MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
@@ -78,6 +79,7 @@ const Status = ({ status }) => {
 
 export default function Pending(props) {
     const [show, setShow] = useState(false);
+    const [showUpdate, setShowUpdate] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
@@ -87,6 +89,7 @@ export default function Pending(props) {
     const [endDate, setEndDate] = useState(new Date());
     const [checkCreatedDate, setCheckCreatedDate] = useState(true);
     const [checkActionDate, setCheckActionDate] = useState(false);
+    const [selectedTransaction, setSelectedTransaction] = useState(false);
     const history = useHistory();
 
     const GetUserById = ({user_id}) => {
@@ -166,9 +169,18 @@ export default function Pending(props) {
         name: 'Actions',
         sortable: true,
         cell: row => <div>
-            <button className="btn btn-secondary btn-sm btn-icon">
+            {/* <button className="btn btn-secondary btn-sm btn-icon">
                         <span className="fa fa-pencil"></span>
-                    </button>
+                    </button> */}
+                    <button
+      className="btn btn-secondary btn-sm btn-icon"
+      onClick={e => {
+        e.preventDefault();
+        setSelectedTransaction(row)
+        setShowUpdate(true)
+      }}
+    > <span className="fa fa-pencil" />
+    </button>
       </div>
     }];
 
@@ -194,6 +206,7 @@ const onSubmitChangeStatus= data => {
   const onSearchFilter = filterText => {
     const filteredItems = transactions.filter(item => (
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredTransactions(filteredItems);
@@ -233,6 +246,7 @@ const onSubmitChangeStatus= data => {
       }
     return (
         <Card className="o-hidden mb-4">
+           <ModalChangeStatus show={showUpdate} setShow={setShowUpdate} transaction={selectedTransaction} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>Transactions</span>

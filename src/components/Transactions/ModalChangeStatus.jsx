@@ -4,7 +4,7 @@ import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
-import { TransactionService } from '../../providers';
+import { TransactionService, UserService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
@@ -22,10 +22,13 @@ const ModalChangeStatus = props => {
     }, []);
 
     const statusOptions = [
-        { value: 'Canceled',  label: 'Canceled' },
-        { value: 'Completed', label: 'Completed' }
+        { value: 'Canceled',  label: 'Cancel' },
+        { value: 'Completed', label: 'Complete' }
       ];
-      const onSubmit = (event) => {
+
+
+
+    const onSubmit = (event) => {
         event.preventDefault();
         setDisabled(true);
         setError('');
@@ -33,42 +36,46 @@ const ModalChangeStatus = props => {
         const form = event.currentTarget;
 
 
-        console.log(selectedStatus);
+
+        console.log(transaction)
+        console.log(selectedStatus.value);
+        const data = { status: "Complete" } ;
+
         if(selectedStatus){
             setShow(false)
-            return confirmAlert({
-                title: 'Error',
-                message: 'Endpoint not provided',
-                buttons: [
-                  {
-                    label: 'Ok',
-                  }
-                ]
-              });
-            // TransactionService.updateStatus(transaction.id, selectedStatus.value).then((response) =>{
-            //     console.log(response);
-            //      if(response.data.success){
-            //          setShow(false)
-            //          return confirmAlert({
-            //             title: 'Succcess',
-            //             message: 'Member was successfully updated',
-            //             buttons: [
-            //               {
-            //                 label: 'Ok',
-            //               }
-            //             ]
-            //           });
-            //      }else{
-            //          setError('Something went wrong while trying to update members status');
-            //      }
-            //     setDisabled(false);
-            //  })
+            // return confirmAlert({
+            //     title: 'Error',
+            //     message: 'Endpoint not provided',
+            //     buttons: [
+            //       {
+            //         label: 'Ok',
+            //       }
+            //     ]
+            //   });
+            TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
+                console.log(response);
+                 if(response.data.success){
+                     setShow(false)
+                     return confirmAlert({
+                        title: 'Succcess',
+                        message: 'Member was successfully updated',
+                        buttons: [
+                          {
+                            label: 'Ok',
+                          }
+                        ]
+                      });
+                 }else{
+                     setError('Something went wrong while trying to update members status');
+                 }
+                setDisabled(false);
+             })
         }
     
       }
     const handleClose = () => setShow(false);
 
-    const updateMemberStatus = (event) => {
+    const updateTransactionStatus = (event) => {
         event.preventDefault();
         const form = event.currentTarget;
         const reason = form.reason.value;

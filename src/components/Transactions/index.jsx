@@ -7,6 +7,7 @@ import Cancelled from './Cancelled';
 import Completed from './Completed';
 import Transfers from './Transfers';
 import Pending from './Pending';
+import MakeTransfer from './MakeTransfer';
 
 export default {
     Transactions,
@@ -17,5 +18,6 @@ export default {
     Cancelled,
     Completed,
     Transfers,
-    Pending
+    Pending,
+    MakeTransfer
 }

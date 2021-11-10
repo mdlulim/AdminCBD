@@ -5,6 +5,7 @@ import MakeTransfer from '../../components/Transactions/MakeTransfer';
 import { Common, Transactions } from 'components';
 
 const Filter = () => {
+    const [show, setShow]= useState(false);
     return (
         <>
             <Common.Dropdown
@@ -15,18 +16,18 @@ const Filter = () => {
                     { label: 'Filter Year' }
                 ]}
             />
-            <button
+            <a href="transfers/transfer"
                 className="btn d-none d-md-block float-right margin-right-5"
                 id="dashboard-rp-customrange"
+               
             >
                 Transfer
-            </button>
+            </a>
         </>
     );
 }
 
 export default function Completed(props) {
-    const [show, setShow]= useState(false);
     
     return (
         <AuthLayout
@@ -39,7 +40,6 @@ export default function Completed(props) {
             }}
         >
             <div className="form-row">
-                <MakeTransfer show={show} setShow={setShow} />
                 <Col xs={12} lg={12}>
                 <Transactions.Transfers />
                 </Col>

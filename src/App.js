@@ -33,6 +33,7 @@ import Canceled from 'pages/Transactions/Cancelled';
 import Completed from 'pages/Transactions/Completed';
 import Transfers from 'pages/Transactions/Transfers';
 import Pending from 'pages/Transactions/Pending';
+import MakeTransferPage from 'pages/Transactions/MakeTransferPage';
 import Products from 'pages/Products';
 import ProductCategories from 'pages/Products/ProductCategories';
 import ProductAddNew from 'pages/Products/ProductAddNew';
@@ -73,6 +74,7 @@ const App = () => {
 					<Route exact path="/transactions/completed" component={(props) => <Completed config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/pending" component={(props) => <Pending config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/widthdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/transactions/transfers/transfer" component={(props) => <MakeTransferPage config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/categories" component={(props) => <ProductCategories config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/add" component={(props) => <ProductAddNew config={settings} {...props} setMenu={setMenu} />} />

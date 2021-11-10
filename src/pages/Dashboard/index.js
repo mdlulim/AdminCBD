@@ -42,15 +42,14 @@ export default function DashboardPage(props) {
 
     useMemo(() => {
         MemberService.getMembers().then((res) => {
-          console.log(res.data.data)
-          //if(res.data.success){
-          const memberslist = res.data.data.results;
-        const temp=  memberslist.slice(Math.max(memberslist.length - 5), 0)
-        console.log(temp)
-          setMembers(temp);
-          setFilteredMembers(temp);
-          //}
-        });
+            console.log(res.data.data.results)
+            const userslist = res.data.data.results;
+            const memberslist = res.data.data.results;
+            const temp=  memberslist.slice(Math.max(memberslist.length - 5), 0)
+            setMembers(memberslist);
+            setFilteredMembers(temp);
+          });
+
 
         ProductService.getProducts().then((res) => {
             console.log(res.data)

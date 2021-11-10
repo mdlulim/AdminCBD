@@ -16,7 +16,7 @@ class MemberService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}/users?group=member`,
+      url: `http://localhost:8080/users?group=member`,
     });
   }
 
