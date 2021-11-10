@@ -12,12 +12,18 @@ const ModalChangeStatus = props => {
     const [statuses, setStatuses] = useState([]);
     const [checked, setChecked] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('');
+    const [selectedLevel, setSelectedLevel] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
     }, []);
     
+    // const handleChange = selectedOption => {
+    //     setState({ selectedOption });
+    //     // console.log(`Option selected:`, selectedOption);
+    //   };
+
     //====================Add User===============================
     const onSubmit = (e) =>{
     e.preventDefault();
@@ -40,7 +46,8 @@ const ModalChangeStatus = props => {
                 username: form.username.value,
                 email: form.email.value,
                 status: form.status.value,
-                archived:(form.status.value === 'Active' ? false : true)
+                archived:(form.status.value === 'Active' ? false : true),
+                permission_level: form.perm_level.value,
             }).then((response) =>{
             
              if(response.data.success){
@@ -62,6 +69,13 @@ const ModalChangeStatus = props => {
          })
 }
 //
+
+    const levelOptions = [
+        { value: '1', label: 'Low' },
+        { value: '2', label: 'Basic' },
+        { value: '3', label: 'Medium' },
+        { value: '4', label: 'High' }
+    ];
 
     const statusOptions = [
         { value: 'Active',  label: 'Active' },
@@ -142,16 +156,18 @@ const ModalChangeStatus = props => {
                                     />
                                 </div>
 
-{/* <br/>
                                 <div>
-                                    <label className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" checked={(member.deactivation_date ? true : checked)} 
-                                            onChange={() => setChecked(!checked)} 
-                                        />
-                                        <span className="custom-control-label">Deactivate User</span>
-                                    </label> 
-                                </div> */}
-
+                                    
+                                <label htmlFor="email">Permission Level</label>
+                                <Select
+                                    id="perm_level"
+                                    name="perm_level"
+                                    options={levelOptions}
+                                    onChange={item => setSelectedStatus(item)}
+                                    className={`basic-multi-select form-control-m`}
+                                    classNamePrefix="select"
+                                    />
+                                </div>
                                 
                                 <hr />
                                 <Row>

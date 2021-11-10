@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
+import { UserRolesService } from 'providers';
 import Select from 'react-select';
-import { UserService ,PermissionLevelService} from 'providers';
-import { confirmAlert } from 'react-confirm-alert';
+import { confirmAlert } from 'react-confirm-alert'; // Import
 
 const ModalChangeStatus = props => {
     const { show, setShow} = props;
@@ -18,70 +18,6 @@ const ModalChangeStatus = props => {
         //setSelectedStatus({ value: member.status,  label: member.status });
     }, []);
 
-    //====================Add User===============================
-const onSubmit = (e) =>{
-    e.preventDefault();
-    // setShow(false);
-    const form = e.currentTarget;
-    const userData = {
-        first_name: form.first_name.value,
-        last_name: form.last_name.value,
-        group_id: "ec2f5ee4-ea3a-4f68-a684-cddd37808978",
-        username: form.username.value,
-        email: form.email.value,
-        status: form.status.value,
-        permission_level: form.perm_level.value,
-    }
-    console.log(userData);
-
-    UserService.addAdminUser(userData).then((response) =>{
-        console.log(response);
-         if(response.data.success){
-             setShow(false)
-             return confirmAlert({
-                title: 'Succcess',
-                message: 'User Role was successfully updated',
-                buttons: [
-                  {
-                    label: 'Ok',
-                    onClick:window.location.reload(false)
-                  }
-                ]
-              });
-         }else{
-            //  setError('Something went wrong while trying to update members status');
-         }
-        // setDisabled(false);
-     })
-}
-// 
-
-    // const levelOptions = PermissionLevelService.getLevels().then((response) =>{
-        // console.log(response);
-        //  if(response.data.success){
-        //      setShow(false)
-        //      return confirmAlert({
-        //         title: 'Succcess',
-        //         message: 'User Role was successfully updated',
-        //         buttons: [
-        //           {
-        //             label: 'Ok',
-        //             onClick:window.location.reload(false)
-        //           }
-        //         ]
-        //       });
-        //  }else{
-        //     //  setError('Something went wrong while trying to update members status');
-        //  }
-    //  });
-
-     const levelOptions = [
-        { value: '1', label: 'Low' },
-        { value: '2', label: 'Basic' },
-        { value: '3', label: 'Medium' },
-        { value: '4', label: 'High' }
-      ];
-
     const rolessOptions = [
         { value: '7563285', label: 'Platform Administrator' },
         { value: '2345624', label: 'Training Administrator' },
@@ -92,6 +28,42 @@ const onSubmit = (e) =>{
         { value: 'Active',  label: 'Active' },
         { value: 'Blocked', label: 'Blocked' }
       ];
+
+    
+
+     const onSubmit = (e) =>{
+         e.preventDefault();
+        const form = e.currentTarget;
+        UserRolesService.addUserRoles({
+            name:form.role_name.value,
+            label:form.role_label.value,
+            description:form.role_description.value,
+            is_default:false,
+            is_public:true,
+            settings:null,
+            archived:false,
+        }).then((response) =>{
+            console.log(response);
+             if(response.data.success){
+                 setShow(false)
+                 return confirmAlert({
+                    title: 'Succcess',
+                    message: 'Role was successfully added',
+                    buttons: [
+                      {
+                        label: 'Ok',
+                        onClick:window.location.reload(false)
+                      }
+                    ]
+                  });
+             }else{
+                //  setError('Something went wrong while trying to update members status');
+             }
+            // setDisabled(false);
+         })
+    }
+       
+
     const handleClose = () => setShow(false);
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
@@ -102,57 +74,37 @@ const onSubmit = (e) =>{
                         <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                     </Col>}
                     <Col xs={showIcon ? 10 : 12}>
-                        <h3 className="text-info"> Add New Admin User</h3>
+                        <h3 className="text-info"> Add New User Role</h3>
                         <hr />
                         <form onSubmit={onSubmit}>
                                 <div className="form-group">
-                                    <label htmlFor="first_name">First Name</label>
+                                    <label htmlFor="name">Name</label>
                                     <input
                                         type="text"
-                                        id="first_name"
-                                        name="first_name"
+                                        id="role-name"
+                                        name="role_name"
                                         className="form-control form-control-m"
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="last_name">Last Name</label>
+                                    <label htmlFor="name">Label</label>
                                     <input
                                         type="text"
-                                        id="last_name"
-                                        name="last_name"
+                                        id="label"
+                                        name="role_label"
+                                        className="form-control form-control-m"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="description">Description</label>
+                                    <textarea
+                                        type="text"
+                                        id="description"
+                                        name="role_description"
                                         className="form-control form-control-m"
                                     /> 
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="username">Username</label>
-                                    <input
-                                        type="text"
-                                        id="username"
-                                        name="username"
-                                        className="form-control form-control-m"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="email">Email Address</label>
-                                    <input
-                                        type="text"
-                                        id="email"
-                                        name="email"
-                                        className="form-control form-control-m"
-                                    />
-                                </div>
-                                <div>
-                                <label htmlFor="email">Select User Role</label>
-                                <Select
-                                    id="role"
-                                    name="role"
-                                    options={rolessOptions}
-                                    onChange={item => setSelectedRole(item)}
-                                    className={`basic-multi-select form-control-m`}
-                                    classNamePrefix="select"
-                                    />
-                                </div>
-                                <div>
+                                {/* <div>
                                 <label htmlFor="email">Select Status</label>
                                 <Select
                                     id="status"
@@ -162,19 +114,7 @@ const onSubmit = (e) =>{
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
                                     />
-                                </div>
-
-                                <div>
-                                <label htmlFor="email">Permission Level</label>
-                                <Select
-                                    id="perm_level"
-                                    name="perm_level"
-                                    options={levelOptions}
-                                    onChange={item => setSelectedStatus(item)}
-                                    className={`basic-multi-select form-control-m`}
-                                    classNamePrefix="select"
-                                    />
-                                </div>
+                                </div> */}
                                 <hr />
                                 <Row>
                         <Col md={6}>

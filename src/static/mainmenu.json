@@ -95,6 +95,11 @@
                     "title": "User Roles",
                     "link": "/roles",
                     "icon": null
+                },{
+                    "id": "permissions",
+                    "title": "User Permissions",
+                    "link": "/permissions",
+                    "icon": null
                 },
                 {
                     "id": "countries",

@@ -101,7 +101,7 @@ export default function AuthSidenav(props) {
             id="page-aside"
         >
             <div className="navigation navigation--condensed" id="navigation-default">
-                <div className="user user--bordered user--lg user--w-lineunder user--controls">
+                <div className="user user--bordered user--lg user--w-lineunder user--controls"> 
                     <img src="/assets/img/users/user_1.jpeg" className="mCS_img_loaded" />
                     <div className="user__name">
                         <strong>Mduduzi Mdluli</strong><br />

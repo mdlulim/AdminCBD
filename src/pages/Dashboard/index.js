@@ -5,7 +5,7 @@ import { AuthLayout } from 'containers';
 import { Common, Dashboard, Overview, Members } from 'components';
 import { MemberService, ProductService, TransactionService } from '../../providers';
 import { VectorMap } from '@south-paw/react-vector-maps';
-import world from '../../components/Dashboard/africa.json';
+import world from '../../components/Dashboard/world.json';
 const Filter = () => {
     return (
         <>
@@ -229,7 +229,7 @@ export default function DashboardPage(props) {
                                     <div className="card-inner-container card-inner-container card-inner-container--light" >
                                         <div className="form-row">
                                             <Col xs={8} md={6}>
-                                                <h4>Africa</h4>
+                                                <h4>World</h4>
                                             </Col>
                                             <Col xs={4} md={6}>
                                             </Col>

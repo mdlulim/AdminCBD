@@ -11,6 +11,7 @@ import CountryService from './CountryService'
 import Currencies from './Currencies';
 import KYCService from './KYCService';
 import CompanyAccountService from './CompanyAccountService';
+import PermissionLevelService from './PermissionLevelService';
 
 
 export {
@@ -25,5 +26,6 @@ export {
     CountryService,
     Currencies,
     KYCService,
-    CompanyAccountService
+    CompanyAccountService,
+    PermissionLevelService
 };

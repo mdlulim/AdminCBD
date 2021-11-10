@@ -83,7 +83,7 @@ export default function LoginPage(props) {
                             <label className="custom-control custom-checkbox">
                                 <input type="checkbox" className="custom-control-input" checked="" />
                                 <span className="custom-control-label">Remember me</span>
-                            </label>
+                            </label> 
                         </div>
                         <div className="col-6 text-right">
                             <a href="/forgot-password">Forgot password?</a>
