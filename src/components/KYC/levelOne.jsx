@@ -28,7 +28,7 @@ export default function LevelOne(props) {
                         <h4>Level 1</h4>
                     </Col>
                     <Col md={6}>
-                        <ButtonGroup size="sm">
+                        <ButtonGroup size="sm" style={{display: "flex",justifyContent: "end"}}>
                             <Button color="success" onClick={() => approveLevel({level: 1, status: true})}>Approve</Button>
                             <Button color="danger" onClick={() => approveLevel({level: 1, status: false})}>Decline</Button>
                         </ButtonGroup>

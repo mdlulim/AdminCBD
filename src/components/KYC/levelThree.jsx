@@ -31,7 +31,7 @@ export default function Levelhree(props) {
                         <h4>Level 3</h4>
                     </Col>
                     <Col md={6}>
-                        <ButtonGroup size="sm" align="right">
+                        <ButtonGroup size="sm" align="right" style={{display: "flex",justifyContent: "end"}}>
                             <Button color="success" onClick={() => approveLevel({level: 3, status: true})}>Approve</Button>
                             <Button color="danger" onClick={() => approveLevel({level: 3, status: false})}>Decline</Button>
                         </ButtonGroup>
@@ -42,7 +42,8 @@ export default function Levelhree(props) {
                         <div className="form-group">
                             <label>Proof of Address</label>
                             <Card onClick={() => onShowImage([{uri: "https://res.cloudinary.com/demo/image/upload/example_pdf.pdf"}])}>
-                                <Image src="holder.js/171x180" roundedCircle />
+                                {/* <Image src="holder.js/171x180" roundedCircle /> */}
+                                <div className="fa fa-file" style={{fontSize: "100px", textAlign: "center", padding: "15px"}}></div>
                             </Card>
                         </div>
                     </Col>

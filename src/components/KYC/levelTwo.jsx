@@ -41,7 +41,7 @@ export default function LevelTwo(props) {
                         <h4>Level 2</h4>
                     </Col>
                     <Col md={6}>
-                        <ButtonGroup size="sm">
+                        <ButtonGroup size="sm" style={{display: "flex",justifyContent: "end"}}>
                             <Button color="success" onClick={() => approveLevel({ level: 2, status: true })}>Approve</Button>
                             <Button color="danger" onClick={() => approveLevel({ level: 2, status: false })}>Decline</Button>
                         </ButtonGroup>
@@ -58,7 +58,7 @@ export default function LevelTwo(props) {
                                             type="text"
                                             id="natureBusiness"
                                             className="form-control form-control-m"
-                                            value={"kycDetails['2'].data.businessNature"}
+                                            value={"Speculative"}
                                             disabled
                                         />
                                     </div>
@@ -70,7 +70,7 @@ export default function LevelTwo(props) {
                                             type="text"
                                             id="srcFunds"
                                             className="form-control form-control-m"
-                                            value={"kycDetails['2'].data.srcFunds"}
+                                            value={"Savings"}
                                             disabled
                                         />
                                     </div>
@@ -81,7 +81,8 @@ export default function LevelTwo(props) {
                                     <div className="form-group">
                                         <label>ID/Passport Document</label>
                                         <Card onClick={() => onShowImage([{uri:"https://res.cloudinary.com/demo/image/upload/example_pdf.pdf"}])}>
-                                            <Image src="holder.js/171x180" roundedCircle />
+                                            {/* <Image src="holder.js/171x180" roundedCircle /> */}
+                                            <div className="fa fa-file" style={{fontSize: "100px", textAlign: "center", padding: "15px"}}></div>
                                         </Card>
                                     </div>
                                 </Col>
