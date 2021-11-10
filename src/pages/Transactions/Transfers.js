@@ -41,7 +41,7 @@ export default function Completed(props) {
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Transfers />
+                <Transactions.Transactions transactionType={'transfers'} />
                 </Col>
             </div>
         </AuthLayout>

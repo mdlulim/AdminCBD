@@ -39,7 +39,7 @@ const ModalChangeStatus = props => {
 
         console.log(transaction)
         console.log(selectedStatus.value);
-        const data = { status: "Complete" } ;
+        const data = { status: selectedStatus.value} ;
 
         if(selectedStatus){
             setShow(false)
@@ -58,7 +58,7 @@ const ModalChangeStatus = props => {
                      setShow(false)
                      return confirmAlert({
                         title: 'Succcess',
-                        message: 'Member was successfully updated',
+                        message: 'Transaction was successfully updated',
                         buttons: [
                           {
                             label: 'Ok',

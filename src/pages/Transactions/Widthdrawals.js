@@ -30,13 +30,13 @@ export default function Width(props) {
             {...props}
             breadcrumb={{ active: "Widthdrawals" }}
             pageHeading={{
-                title: 'Widthdrawal Transactions',
-                caption: 'EXPLORE OVERVIEW WIDTHDRAWALS FOR CRYPTO BASED INNOVATION'
+                title: 'Withdrawal Transactions',
+                caption: 'EXPLORE OVERVIEW WITHDRAWALS FOR CRYPTO BASED INNOVATION'
             }}
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Widthdrawals />
+                <Transactions.Transactions transactionType={'withdrawals'} />
                 </Col>
             </div>
         </AuthLayout>

@@ -36,7 +36,7 @@ export default function Canceled(props) {
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Cancelled />
+                <Transactions.Transactions transactionType={'cancelled'} />
                 </Col>
             </div>
         </AuthLayout>

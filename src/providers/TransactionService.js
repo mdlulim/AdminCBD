@@ -58,7 +58,7 @@ class TransactionService {
           method: 'PUT',
           data: data,
           headers: headers,
-          url: `http://localhost:8080/transactions/${id}`,
+          url: `http://localhost:8090/transactions/${id}`,
         }).then((res) =>{
           const result = res;
           return result;

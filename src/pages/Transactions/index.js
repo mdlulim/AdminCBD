@@ -162,7 +162,7 @@ const TransactionList = props => {
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
 				<Col md={12}>
-                    <Transactions.Transactions />
+                    <Transactions.Transactions transactionType={'all'} />
                 </Col>
 				</Col>
 			</Row>

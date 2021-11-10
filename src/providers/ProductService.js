@@ -36,7 +36,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `http://localhost:8080/products/${id}`,
+      url: `http://localhost:8090/products/${id}`,
     });
   }
 
@@ -54,7 +54,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `http://localhost:8080/products/${id}/users`,
+      url: `http://localhost:8090/products/${id}/users`,
     });
   }
 
@@ -63,7 +63,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `http://localhost:8080/users/${id}/products`,
+      url: `http://localhost:8090/users/${id}/products`,
     });
   }
 
@@ -73,7 +73,7 @@ class ProductService {
       method: 'POST',
       headers: headers,
       data:data,
-      url: `http://localhost:8080/products`,
+      url: `http://localhost:8090/products`,
     }).then((res) =>{
       const result = res;
       return result;
@@ -86,7 +86,7 @@ class ProductService {
       method: 'PUT',
       data: product,
       headers: headers,
-      url: `http://localhost:8080/products/${id}`,
+      url: `http://localhost:8090/products/${id}`,
     }).then((res) =>{
       const result = {status: res.data.status, message: res.data.message}
       return result;

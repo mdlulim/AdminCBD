@@ -28,15 +28,15 @@ export default function pending(props) {
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "Cancelled" }}
+            breadcrumb={{ active: "Pending" }}
             pageHeading={{
-                title: 'Cancelled Transactions',
-                caption: 'EXPLORE OVERVIEW CANCELLED FOR CRYPTO BASED INNOVATION',
+                title: 'Pending Transactions',
+                caption: 'EXPLORE OVERVIEW PENDING FOR CRYPTO BASED INNOVATION',
             }}
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Pending />
+                <Transactions.Transactions transactionType={'pending'} />
                 </Col>
             </div>
         </AuthLayout>

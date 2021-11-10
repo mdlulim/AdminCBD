@@ -78,6 +78,7 @@ const Status = ({ status }) => {
   };
 
 export default function Transactions(props) {
+  const { transactionType} = props;
     const [show, setShow] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
     const [disabled, setDisabled] = useState(false);
@@ -91,34 +92,79 @@ export default function Transactions(props) {
     const [checkActionDate, setCheckActionDate] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState(false);
     const [editStatus, setEditStatus] = useState(true);
+    const [members, setMembers] = useState([]);
+    const [wealthCreaters, setWealthCreaters] = useState([]);
     const history = useHistory();
 
-    const GetUserById = ({user_id}) => {
-      const id =user_id;
-     const member = MemberService.getMember(id).then((res) => {
-       setTemp(res.data.data);
-        //return res.data.data;
-      });
-
-      return (<div><div>{temp.first_name} {temp.last_name}</div>
-        <div className="small text-muted">
-          <span>{temp.id_number}</span>
-        </div></div>);
-    }
 
     useMemo(() => {
-        TransactionService.getTransactions().then((res) => {
-          //let id = res.data.data.results[0].user_id;
-          console.log(res.data.data.results);
-          const transaList = res.data.data.results;
-          setTransactions(transaList);
-          setFilteredTransactions(transaList);
-        });
+
+            TransactionService.getTransactions().then((res) => {
+              //let id = res.data.data.results[0].user_id;
+              console.log(res.data.data.results);
+              const transaList = res.data.data.results;
+              if(transactionType === 'all'){
+                setTransactions(transaList);
+                setFilteredTransactions(transaList);
+              }else if(transactionType === 'pending'){
+                const results = transaList.filter(item => item.status === "Pending");
+                setTransactions(results);
+                setFilteredTransactions(results);
+              }
+              else if(transactionType === 'cancelled'){
+                const results = transaList.filter(item => item.status === "Cancelled");
+                setTransactions(results);
+                setFilteredTransactions(results);
+              }else if(transactionType === 'completed'){
+                const results = transaList.filter(item => item.status === "Completed");
+                setTransactions(results);
+                setFilteredTransactions(results);
+              }else if(transactionType === 'deposit'){
+                const results = transaList.filter(item => item.subtype === "deposit");
+                setTransactions(results);
+                setFilteredTransactions(results);
+              }else if(transactionType === 'withdrawals'){
+                const results = transaList.filter(item => item.subtype === "withdrawal");
+                setTransactions(results);
+                setFilteredTransactions(results);
+              }else if(transactionType === 'transfars'){
+                const results = transaList.filter(item => item.subtype === "transfer");
+                setTransactions(results);
+                setFilteredTransactions(results);
+              }
+              
+            });
         //getUserById('0192c293-fc26-47f0-a764-332b44dd08b1');
 
+        MemberService.getMembers().then((res) => {
+          //console.log(res.data.data)
+          const memberslist = res.data.data.results;
+          setMembers(memberslist);
+        });
+
+        MemberService.getWealthCreaters().then((res) => {
+          console.log(res.data.data.results)
+          const wealthCreaterslist = res.data.data.results;
+          setWealthCreaters(wealthCreaterslist);
+        });
+  
 
       }, []);
 
+      const GetUserById = (user_id) => {
+        console.log(user_id)
+        let member = members.filter(member => member.id === user_id)[0];
+        let member2 = wealthCreaters.filter(wealthCreater => wealthCreater.id === user_id)[0];
+        
+        
+        if(member){
+          return member;
+        }else{
+          return member2;
+        }
+        
+
+      }
       const columns = [{
         name: '',
         sortable: false,
@@ -126,10 +172,13 @@ export default function Transactions(props) {
         cell: () => <Image />
     }, {
         name: 'Full Names',
-        selector: 'first_name',
+        selector: 'id',
         sortable: true,
         wrap: true,
-        cell: row => <div></div>
+        cell: (row) => <div><div>{GetUserById(row.user_id)? GetUserById(row.user_id).first_name: ''} {GetUserById(row.user_id)? GetUserById(row.user_id).last_name: ''}</div>
+        <div className="small text-muted">
+        <span>{GetUserById(row.user_id)? GetUserById(row.user_id).id_number: ''}</span>
+        </div></div>
     },{
         name: 'TransactionID',
         selector: 'txid',
@@ -150,15 +199,7 @@ export default function Transactions(props) {
         sortable: true,
         cell: row => <Status {...row} />
     },{
-        name: 'Date Created',
-        selector: 'created',
-        sortable: true,
-        cell: row => <div>
-                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
-                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
-             </div>
-    },{
-      name: 'Actioned Date',
+      name: 'Date Actioned',
       selector: 'updated',
       sortable: true,
       cell: row => <div>
@@ -224,7 +265,7 @@ const onSubmitChangeStatus= data => {
     setDisabled(true);
     const start = Date.parse(startDate);
     const end = Date.parse(endDate);
-    
+
           if(checkCreatedDate === true){
             const searchByDate = transactions.filter(
               transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
@@ -238,7 +279,7 @@ const onSubmitChangeStatus= data => {
               console.log(searchByDate);
               setFilteredTransactions(searchByDate);
           }
-          
+
           setDisabled(false);
           setShow(false)
       }
