@@ -58,7 +58,7 @@ class TransactionService {
           method: 'PUT',
           data: data,
           headers: headers,
-          url: `http://localhost:8090/transactions/${id}`,
+          url: `${Config.API.BASE_URL}/transactions/${id}`,
         }).then((res) =>{
           const result = res;
           return result;
