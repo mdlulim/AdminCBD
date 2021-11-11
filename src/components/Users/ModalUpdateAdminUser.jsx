@@ -144,7 +144,7 @@ const ModalChangeStatus = props => {
                                     />
                                     : ''}
                                 </div>
-                                <div>
+                                <div className="form-group">
                                 <label htmlFor="status">Select Status</label>
                                 <Select
                                     id="status"
@@ -156,13 +156,13 @@ const ModalChangeStatus = props => {
                                     />
                                 </div>
 
-                                <div>
-                                    
-                                <label htmlFor="email">Permission Level</label>
+                                <div className="form-group"> 
+                                <label htmlFor="perm_level">Permission Level</label>
                                 <Select
                                     id="perm_level"
                                     name="perm_level"
                                     options={levelOptions}
+                                    // key = {item => setSelectedLevel(member.permission_level)}
                                     onChange={item => setSelectedStatus(item)}
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
