@@ -3,6 +3,26 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
 import { Transactions, Common } from 'components';
 import { TransactionService } from '../../providers';
+const Filter = () => {
+    return (
+        <>
+            <Common.Dropdown
+                actions={[
+                    { label: 'Filter by Date Range' },
+                    { label: 'Filter by Date' },
+                    { label: 'Filter Month' },
+                    { label: 'Filter Year' }
+                ]}
+            />
+            <button
+                className="btn d-none d-md-block float-right margin-right-5"
+                id="dashboard-rp-customrange"
+            >
+                Transfer
+            </button>
+        </>
+    );
+}
 
 const TransactionList = props => {
     const breadcrumb = { heading: "Transactions" };
@@ -81,6 +101,7 @@ const TransactionList = props => {
         pageHeading={{
             title: 'CBI Transactions',
             caption: 'EXPLORE OVERVIEW TRANSACTIONS FOR CRYPTO BASED INNOVATION',
+            actions: <Filter />
         }}>
             <div className="form-row margin-bottom-20">
             <Col xs={12} lg={2}>
@@ -141,7 +162,7 @@ const TransactionList = props => {
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
 				<Col md={12}>
-                    <Transactions.Transactions />
+                    <Transactions.Transactions transactionType={'all'} />
                 </Col>
 				</Col>
 			</Row>

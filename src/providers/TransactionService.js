@@ -52,6 +52,18 @@ class TransactionService {
       }
     }
 
+    static async updateTransactionStatus(id,data){
+        return await axios({
+          mode: 'no-cors',
+          method: 'PUT',
+          data: data,
+          headers: headers,
+          url: `${Config.API.BASE_URL}/transactions/${id}`,
+        }).then((res) =>{
+          const result = res;
+          return result;
+        });
+    }
     static async getMemberTransactions(id) {
       return await axios({
         mode: 'no-cors',

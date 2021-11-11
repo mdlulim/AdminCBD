@@ -24,19 +24,19 @@ const Filter = () => {
     );
 }
 
-export default function Width(props) {
+export default function pending(props) {
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "Widthdrawals" }}
+            breadcrumb={{ active: "Pending" }}
             pageHeading={{
-                title: 'Withdrawal Transactions',
-                caption: 'EXPLORE OVERVIEW WITHDRAWALS FOR CRYPTO BASED INNOVATION'
+                title: 'Pending Transactions',
+                caption: 'EXPLORE OVERVIEW PENDING FOR CRYPTO BASED INNOVATION',
             }}
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Transactions transactionType={'withdrawals'} />
+                <Transactions.Transactions transactionType={'pending'} />
                 </Col>
             </div>
         </AuthLayout>

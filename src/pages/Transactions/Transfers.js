@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState} from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
+import MakeTransfer from '../../components/Transactions/MakeTransfer';
 import { Common, Transactions } from 'components';
 
 const Filter = () => {
+    const [show, setShow]= useState(false);
     return (
         <>
             <Common.Dropdown
@@ -14,29 +16,32 @@ const Filter = () => {
                     { label: 'Filter Year' }
                 ]}
             />
-            <button
-                className="btn btn-light d-none d-md-block float-right margin-right-5"
+            <a href="transfers/transfer"
+                className="btn d-none d-md-block float-right margin-right-5"
                 id="dashboard-rp-customrange"
+               
             >
-                September 22, 2021 - October 21, 2021
-            </button>
+                Transfer
+            </a>
         </>
     );
 }
 
-export default function Width(props) {
+export default function Completed(props) {
+    
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "Widthdrawals" }}
+            breadcrumb={{ active: "Transfers" }}
             pageHeading={{
-                title: 'Withdrawal Transactions',
-                caption: 'EXPLORE OVERVIEW WITHDRAWALS FOR CRYPTO BASED INNOVATION'
+                title: 'Transfers Transactions',
+                caption: 'EXPLORE OVERVIEW TRANSFERS FOR CRYPTO BASED INNOVATION',
+                actions: <Filter />
             }}
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Transactions transactionType={'withdrawals'} />
+                <Transactions.Transactions transactionType={'transfers'} />
                 </Col>
             </div>
         </AuthLayout>

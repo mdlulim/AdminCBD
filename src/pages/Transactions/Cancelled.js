@@ -24,19 +24,19 @@ const Filter = () => {
     );
 }
 
-export default function Width(props) {
+export default function Canceled(props) {
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "Widthdrawals" }}
+            breadcrumb={{ active: "Cancelled" }}
             pageHeading={{
-                title: 'Withdrawal Transactions',
-                caption: 'EXPLORE OVERVIEW WITHDRAWALS FOR CRYPTO BASED INNOVATION'
+                title: 'Cancelled Transactions',
+                caption: 'EXPLORE OVERVIEW CANCELLED FOR CRYPTO BASED INNOVATION',
             }}
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Transactions transactionType={'withdrawals'} />
+                <Transactions.Transactions transactionType={'cancelled'} />
                 </Col>
             </div>
         </AuthLayout>
