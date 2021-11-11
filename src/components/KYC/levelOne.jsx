@@ -9,6 +9,8 @@ export default function LevelOne(props) {
     const [show, setShow] = useState(false);
     const [clickedDoc, setDocument] = useState({});
     const [activeButton, setActiveButton]  = useState(null);
+    const [active, setActiveState] = useState(null);
+
 
     useMemo(() => {
     }, []);
@@ -28,10 +30,24 @@ export default function LevelOne(props) {
                         <h4>Level 1</h4>
                     </Col>
                     <Col md={6}>
-                        <ButtonGroup size="sm" style={{display: "flex",justifyContent: "end"}}>
-                            <Button color="success" onClick={() => approveLevel({level: 1, status: true})}>Approve</Button>
-                            <Button color="danger" onClick={() => approveLevel({level: 1, status: false})}>Decline</Button>
+                    <form>
+                       <ButtonGroup size="sm" style={{ display: "flex", justifyContent: "end" }}>
+                            <Button
+                                color="primary"
+                                onClick={()=>{setActiveState(0); approveLevel({ level: 1, status: true })}}
+                                className={`${active === 0?'active':''}`}
+                            >
+                                Approve
+                            </Button>
+                            <Button
+                                color="primary"
+                                onClick={()=>{setActiveState(1); approveLevel({ level: 1, status: false })}}
+                                className={`${active === 1?'active':''}`}
+                            >
+                                Decline
+                            </Button>
                         </ButtonGroup>
+                       </form>
                     </Col>
                 </Row>
                 <Row>

@@ -18,6 +18,8 @@ export default function LevelTwo(props) {
     const { approveLevel, kycDetails } = props;
     const [show, setShow] = useState(false);
     const [clickedDoc, setDocument] = useState({});
+    const [active, setActiveState] = useState(null);
+
 
     useMemo(() => {
     }, []);
@@ -41,10 +43,24 @@ export default function LevelTwo(props) {
                         <h4>Level 2</h4>
                     </Col>
                     <Col md={6}>
-                        <ButtonGroup size="sm" style={{display: "flex",justifyContent: "end"}}>
-                            <Button color="success" onClick={() => approveLevel({ level: 2, status: true })}>Approve</Button>
-                            <Button color="danger" onClick={() => approveLevel({ level: 2, status: false })}>Decline</Button>
+                    <form>
+                       <ButtonGroup size="sm" style={{ display: "flex", justifyContent: "end" }}>
+                            <Button
+                                color="primary"
+                                onClick={()=>{setActiveState(0); approveLevel({ level: 2, status: true })}}
+                                className={`${active === 0?'active':''}`}
+                            >
+                                Approve
+                            </Button>
+                            <Button
+                                color="primary"
+                                onClick={()=>{setActiveState(1); approveLevel({ level: 2, status: false })}}
+                                className={`${active === 1?'active':''}`}
+                            >
+                                Decline
+                            </Button>
                         </ButtonGroup>
+                       </form>
                     </Col>
                 </Row>
                 <Row>
@@ -81,8 +97,7 @@ export default function LevelTwo(props) {
                                     <div className="form-group">
                                         <label>ID/Passport Document</label>
                                         <Card onClick={() => onShowImage([{uri:"https://res.cloudinary.com/demo/image/upload/example_pdf.pdf"}])}>
-                                            {/* <Image src="holder.js/171x180" roundedCircle /> */}
-                                            <div className="fa fa-file" style={{fontSize: "100px", textAlign: "center", padding: "15px"}}></div>
+                                            <div className="fa fa-file" style={{fontSize: "100px", textAlign: "center", padding: "15px", cursor: "pointer"}}></div>
                                         </Card>
                                     </div>
                                 </Col>

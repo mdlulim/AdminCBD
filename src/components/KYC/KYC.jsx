@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { KYCService } from '../../providers';
 import LevelZero from './levelZero';
@@ -47,7 +47,6 @@ export default function Leads(props) {
             email: member.email
         }
 
-        console.log(data_to_send)
 
         const res = await KYCService.updateKYC(data_to_send)
         setSubmitting(false)
@@ -64,8 +63,6 @@ export default function Leads(props) {
             title: 'Failed',
             message: 'Something went wrong, retry later!',
         });
-
-
     }
 
     //appends each level decision to approval list
@@ -80,13 +77,14 @@ export default function Leads(props) {
             setApprovalList(prevApprovalList)
         } else {
             setRejectedObj({ ...approvalObj })
-            console.log(rejectObj, " res ")
             setShowReason(true)
         }
+
+        console.log(kycDetails)
+
     }
 
     const showImageCB = (image) => {
-        console.log("image", image)
         setDocument(image)
         setShowImage(true);
     }
@@ -103,7 +101,7 @@ export default function Leads(props) {
                     <LevelTwo approveLevel={approveLevelCB} showImage={showImageCB} kycDetails={kycDetails} />
                     <LevelThree approveLevel={approveLevelCB} showImage={showImageCB} kycDetails={kycDetails} />
                     <div style={{ textAlign: "right" }}>
-                        <Button color="success" disabled={sumbitting} onClick={() => saveChanges()}>Approve</Button>
+                        <Button color="success" disabled={sumbitting} onClick={() => saveChanges()}>Save</Button>
                     </div>
                 </Col>
             </Row>

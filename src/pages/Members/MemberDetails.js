@@ -120,7 +120,7 @@ const MemberDetails = props => {
                                         ID/Passport No: {member.id_number}<br />
                                         Phone: {member.mobile}<br />
                                         Email: {member.email}<br />
-                                        Level: 0<br />
+                                        KYC Level: 0<br />
                                         Type: {member.group ? member.group.label : 'Member'}
                                         <hr />
                                         <strong>Address</strong>
