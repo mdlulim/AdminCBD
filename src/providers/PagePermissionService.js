@@ -23,13 +23,13 @@ class PagePermissionService {
       });
     }
 
-    static async addAdminUser(data){
+    static async addPagePermission(data){
         return await axios({
           mode: 'no-cors',
           method: 'POST',
           headers: headers,
           data:data,
-          url: `${Config.API.BASE_URL}/users?group=admin`,
+          url: `${Config.API.BASE_URL}/page_permission`,
         }).then((res) =>{
           const result = res;
           return result;
@@ -37,15 +37,17 @@ class PagePermissionService {
       }
 
       static async updatePagePermission(id, data){
+        // console.log(id);
         return await axios({
           mode: 'no-cors',
           method: 'PUT',
           headers: headers,
           data:data,
-          url: `${Config.API.BASE_URL}/page_permission/${id}`,
+          url: `${Config.API.BASE_URL}/page_permissions/${id}`,
         }).then((res) =>{
-          const result = res;
-          return result;
+          console.log(res);
+          // const result = res;
+          // return result;
         });
       }
 

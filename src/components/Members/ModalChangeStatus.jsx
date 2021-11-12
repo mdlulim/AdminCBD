@@ -9,24 +9,24 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const ModalChangeStatus = props => {
-    const { show, setShow, member} = props;
+    const { show, setShow, member } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
-    const [selectedStatus, setSelectedStatus] = useState(null);
-    const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
+    const [selectedStatus, setSelectedStatus] = useState('');
+    const { title, body, processing, confirmButtonDisabled, confirmButton, cancelButton, showIcon, size, } = props;
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
-       // console.log(member)
+        // console.log(member)
     }, []);
 
     const statusOptions = [
-        { value: 'Active',  label: 'Active' },
+        { value: 'Active', label: 'Active' },
         { value: 'Blocked', label: 'Blocked' },
         { value: 'Archive', label: 'Archive' },
-      ];
-      const onSubmit = (event) => {
+    ];
+    const onSubmit = (event) => {
         event.preventDefault();
         setDisabled(true);
         setError('');
@@ -35,12 +35,12 @@ const ModalChangeStatus = props => {
 
         console.log(selectedStatus)
         console.log(selectedStatus);
-        if(selectedStatus){
-            MemberService.updateStatus(member.id, selectedStatus.value).then((response) =>{
+        if (selectedStatus) {
+            MemberService.updateStatus(member.id, selectedStatus.value).then((response) => {
                 console.log(response);
-                 if(response.data.success){
-                     setShow(false)
-                     return confirmAlert({
+                if (response.data.success) {
+                    setShow(false)
+                    return confirmAlert({
                         title: 'Succcess',
                         message: 'Member was successfully updated',
                         buttons: [
@@ -51,12 +51,12 @@ const ModalChangeStatus = props => {
                             }
                           }
                         ]
-                      });
-                 }else{
-                     setError('Something went wrong while trying to update members status');
-                 }
+                    });
+                } else {
+                    setError('Something went wrong while trying to update members status');
+                }
                 setDisabled(false);
-             })
+            })
         }
         setDisabled(false);
     
@@ -76,9 +76,9 @@ const ModalChangeStatus = props => {
             <Modal.Body>
                 <Row>
                     {showIcon &&
-                    <Col xs={2} className="text-right mg-t-10 text-warning">
-                        <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
-                    </Col>}
+                        <Col xs={2} className="text-right mg-t-10 text-warning">
+                            <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
+                        </Col>}
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success"> Update CBI Member Status</h3>
                         <hr />
@@ -90,14 +90,14 @@ const ModalChangeStatus = props => {
                                         type="text"
                                         id="fullname"
                                         className="form-control form-control-m"
-                                        value={member.first_name+' '+member.last_name}
+                                        value={member.first_name + ' ' + member.last_name}
                                         disabled
                                     />
                                     : ''}
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="email">Email Address</label>
-                                    {member ?
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="email">Email Address</label>
+                                {member ?
                                     <input
                                         type="text"
                                         id="email"
@@ -106,25 +106,25 @@ const ModalChangeStatus = props => {
                                         disabled
                                     />
                                     : ''}
-                                </div>
-                                {member ?
+                            </div>
+                            {member ?
                                 <div>
-                                <label htmlFor="email">Select Status</label>
-                                <Select
-                                    id="status"
-                                    name="status"
-                                    options={statusOptions}
-                                    defaultValue={statusOptions.filter(option => option.value === member.status)}
-                                    onChange={item => setSelectedStatus(item)}
-                                    className={`basic-multi-select form-control-m`}
-                                    classNamePrefix="select"
+                                    <label htmlFor="email">Select Status</label>
+                                    <Select
+                                        id="status"
+                                        name="status"
+                                        options={statusOptions}
+                                        defaultValue={statusOptions.filter(option => option.value === member.status)}
+                                        onChange={item => setSelectedStatus(item)}
+                                        className={`basic-multi-select form-control-m`}
+                                        classNamePrefix="select"
                                     />
 
                                 </div>
                                 : ''}
-                                <div className="form-group">
-                                    <label htmlFor="reason">Reason</label>
-                                    {member ?
+                            <div className="form-group">
+                                <label htmlFor="reason">Reason</label>
+                                {member ?
                                     <textarea
                                         type="text"
                                         id="reason"
@@ -132,11 +132,11 @@ const ModalChangeStatus = props => {
                                         className="form-control form-control-m"
                                     />
                                     : ''}
-                                </div>
-                                <hr />
-                                <Row>
-                        <Col md={6}>
-                        <button
+                            </div>
+                            <hr />
+                            <Row>
+                                <Col md={6}>
+                                    <button
                                         className="btn btn-dark"
                                         onClick={handleClose}
                                         disabled={processing}
@@ -150,9 +150,9 @@ const ModalChangeStatus = props => {
                                         className="btn btn-success float-right"
                                         disabled={disabled}
                                     >
-                                    {processing ? 'Processing...' : 'Update'}
-                                </button>
-                            </Col>
+                                        {processing ? 'Processing...' : 'Update'}
+                                    </button>
+                                </Col>
                             </Row>
                             {/* </form> */}
                     </Col>

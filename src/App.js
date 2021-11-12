@@ -40,6 +40,7 @@ import ProductCategories from 'pages/Products/ProductCategories';
 import ProductAddNew from 'pages/Products/ProductAddNew';
 import ProductDetails from 'pages/Products/ProductDetails';
 import UserPermissions from 'pages/UserPermissions';
+import KYC from 'pages/KYC';
 const App = () => {
 	const settings = config;
 	const [authTokens, setAuthTokens] = useState();
@@ -83,6 +84,7 @@ const App = () => {
 					<Route exact path="/products/add" component={(props) => <ProductAddNew config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/permissions" component={(props) => <UserPermissions config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/kyc" component={(props) => <KYC config={settings} {...props} setMenu={setMenu} />} />
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
 				</Switch>
 			</Router>
