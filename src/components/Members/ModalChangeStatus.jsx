@@ -13,7 +13,7 @@ const ModalChangeStatus = props => {
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
-    const [selectedStatus, setSelectedStatus] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState(null);
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
     useMemo(() => {
@@ -33,7 +33,7 @@ const ModalChangeStatus = props => {
 
         const form = event.currentTarget;
 
-
+        console.log(selectedStatus)
         console.log(selectedStatus);
         if(selectedStatus){
             MemberService.updateStatus(member.id, selectedStatus.value).then((response) =>{
@@ -46,6 +46,9 @@ const ModalChangeStatus = props => {
                         buttons: [
                           {
                             label: 'Ok',
+                            onClick: () => {
+                                window.location = '/members/members';
+                            }
                           }
                         ]
                       });
@@ -55,6 +58,7 @@ const ModalChangeStatus = props => {
                 setDisabled(false);
              })
         }
+        setDisabled(false);
     
       }
     const handleClose = () => setShow(false);
@@ -78,7 +82,7 @@ const ModalChangeStatus = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success"> Update CBI Member Status</h3>
                         <hr />
-                        <form onSubmit={onSubmit}>
+                        {/* <form onSubmit={onSubmit}> */}
                                 <div className="form-group">
                                     <label htmlFor="fullname">Full Names</label>
                                     {member ?
@@ -142,7 +146,7 @@ const ModalChangeStatus = props => {
                             </Col>
                             <Col md={6} >
                             <button
-                                        type="submit"
+                            onClick={onSubmit}
                                         className="btn btn-success float-right"
                                         disabled={disabled}
                                     >
@@ -150,7 +154,7 @@ const ModalChangeStatus = props => {
                                 </button>
                             </Col>
                             </Row>
-                            </form>
+                            {/* </form> */}
                     </Col>
                 </Row>
             </Modal.Body>

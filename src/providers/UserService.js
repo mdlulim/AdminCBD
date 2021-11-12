@@ -6,11 +6,8 @@ const session = Session.get();
 const authToken = (session.name && session.name.payload && session.name.payload.admin) ? session.name.payload.token : null;
 const headers = {
   'Authorization': `Bearer ${authToken}`,
-  'Content-Type': `application/json`,
-  'Access-Control-Max-Age': `600`
-};  
-
-console.log(authToken);
+  'Content-Type': `application/json`
+};
 
 class UserService {
 
@@ -42,7 +39,7 @@ class UserService {
           method: 'PUT',
           headers: headers,
           data:data,
-          url: `${Config.API.BASE_URL}/users/${id}`,
+          url: `${Config.API.BASE_URL}/users?group=admin`,
         }).then((res) =>{
           const result = res;
           return result;
@@ -55,15 +52,6 @@ class UserService {
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/admin/users/${id}`,
-      });
-    }
-
-    static async archiveUser(id) {
-      return await axios({
-        mode: 'no-cors',
-        method: 'PUT',
-        headers: headers,
-        url: `${Config.API.BASE_URL}/users/${id}/archive`,
       });
     }
 }

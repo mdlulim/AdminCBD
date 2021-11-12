@@ -3,17 +3,19 @@ import { Card, CardBody, Row, Col } from 'reactstrap';
 import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
+import DataTableExtensions from 'react-data-table-component-extensions';
 import { Modal } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
+import ModalBulkUpdate from './ModalBulkUpdate';
 import { TransactionService, MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import DatePicker from "react-datepicker";
-
+import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
 // styles
 const customStyles = {
@@ -77,10 +79,39 @@ const Status = ({ status }) => {
     );
   };
 
+  const Money = (row) => {
+    let badge = 'pending';
+    let simbol = '+';
+    if(row.subtype === 'withdrawal' || row.subtype === 'Withdrawal' ){
+      simbol = '-';
+      if(row.status === 'Pending'){
+         badge = 'warning';
+      }else{
+        badge = 'danger'
+      }
+    }else{
+      if(row.status === 'Pending'){
+        badge = 'warning';
+      }else if(row.status === 'Completed'){
+          badge = 'success';
+      }else{
+        badge = 'danger';
+      }
+    }
+    return <strong className={'text-'+badge}>{simbol+''+row.amount} CBI</strong>
+  };
+
+  // Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
+
+
+
+
+
 export default function Transactions(props) {
   const { transactionType} = props;
     const [show, setShow] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
+    const [showBulk, setShowBulk] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
@@ -94,6 +125,8 @@ export default function Transactions(props) {
     const [editStatus, setEditStatus] = useState(true);
     const [members, setMembers] = useState([]);
     const [wealthCreaters, setWealthCreaters] = useState([]);
+    const [selectedRows, setSelectedRows] = React.useState([]);
+      const [toggleCleared, setToggleCleared] = React.useState(false);
     const history = useHistory();
 
 
@@ -101,7 +134,7 @@ export default function Transactions(props) {
 
             TransactionService.getTransactions().then((res) => {
               //let id = res.data.data.results[0].user_id;
-              console.log(res.data.data.results);
+              //.log(res.data.data.results);
               const transaList = res.data.data.results;
               if(transactionType === 'all'){
                 setTransactions(transaList);
@@ -132,45 +165,34 @@ export default function Transactions(props) {
                 setTransactions(results);
                 setFilteredTransactions(results);
               }
-              
             });
         //getUserById('0192c293-fc26-47f0-a764-332b44dd08b1');
 
         MemberService.getMembers().then((res) => {
-          //console.log(res.data.data)
           const memberslist = res.data.data.results;
           setMembers(memberslist);
         });
 
         MemberService.getWealthCreaters().then((res) => {
-          console.log(res.data.data.results)
+          //.log(res.data.data.results)
           const wealthCreaterslist = res.data.data.results;
           setWealthCreaters(wealthCreaterslist);
         });
-  
 
       }, []);
 
       const GetUserById = (user_id) => {
-        console.log(user_id)
         let member = members.filter(member => member.id === user_id)[0];
         let member2 = wealthCreaters.filter(wealthCreater => wealthCreater.id === user_id)[0];
-        
-        
+
         if(member){
           return member;
         }else{
           return member2;
         }
-        
 
       }
       const columns = [{
-        name: '',
-        sortable: false,
-        width: '80px',
-        cell: () => <Image />
-    }, {
         name: 'Full Names',
         selector: 'id',
         sortable: true,
@@ -188,10 +210,14 @@ export default function Transactions(props) {
         selector: 'subtype',
         sortable: true,
     },{
+      name: 'Fees',
+      selector: 'fee',
+      sortable: true,
+  },{
         name: 'Amount',
         selector: 'amount',
         sortable: true,
-    cell: row => <div> <strong className="text-success">+{row.amount} CBI</strong><br />
+    cell: row => <div> {Money(row)}<br />
         <span className="text-muted">{row.balance} CBI</span></div>
     }, {
         name: 'Status',
@@ -223,24 +249,49 @@ export default function Transactions(props) {
       </div>
     }];
 
-const handleChangePassword = async data => {
-}
+    // Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
+    const downloadCSV = (filteredTransactions) =>{
+      const link = document.createElement('a');
+      let csv = convertArrayOfObjectsToCSV(filteredTransactions);
+      if (csv == null) return;
 
-const handleDeleteMember = async data => {
-}
+      const filename = 'export.csv';
 
-const onSubmitChangeStatus= data => {
-    return confirmAlert({
-      title: 'Change Customer Status',
-      message: 'Are you sure you want to resend password for ' + data.full_names + '?',
-      buttons: [{
-        label: 'Yes',
-        onClick: () => handleChangePassword(data),
-      }, {
-        label: 'Cancel',
-      }]
-    });
-  };
+      if (!csv.match(/^data:text\/csv/i)) {
+        csv = `data:text/csv;charset=utf-8,${csv}`;
+      }
+
+      link.setAttribute('href', encodeURI(csv));
+      link.setAttribute('download', filename);
+      link.click();
+    }
+
+
+    const convertArrayOfObjectsToCSV = (filteredTransactions) =>{
+
+      let result;
+
+      const columnDelimiter = ',';
+      const lineDelimiter = '\n';
+      const keys = Object.keys(filteredTransactions[0]);
+
+      result = '';
+      result += keys.join(columnDelimiter);
+      result += lineDelimiter;
+
+      filteredTransactions.forEach(item => {
+        let ctr = 0;
+        keys.forEach(key => {
+          if (ctr > 0) result += columnDelimiter;
+
+          result += item[key];
+          ctr++;
+        });
+        result += lineDelimiter;
+      });
+      return result;
+    }
+
 
   const onSearchFilter = filterText => {
     const filteredItems = transactions.filter(item => (
@@ -265,26 +316,65 @@ const onSubmitChangeStatus= data => {
     setDisabled(true);
     const start = Date.parse(startDate);
     const end = Date.parse(endDate);
-
+    
           if(checkCreatedDate === true){
             const searchByDate = transactions.filter(
               transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
-              console.log('Created date');
-              console.log(searchByDate);
+              //console.log('Created date');
+              //console.log(searchByDate);
               setFilteredTransactions(searchByDate);
           }else{
             const searchByDate = transactions.filter(
               transaction => (Date.parse(transaction.updated)) >= start && (Date.parse(transaction.updated)) <= end);
-              console.log('Actioned date');
-              console.log(searchByDate);
+              //console.log('Actioned date');
+              //console.log(searchByDate);
               setFilteredTransactions(searchByDate);
           }
-
           setDisabled(false);
           setShow(false)
       }
+
+      const rowSelectCritera = row => row.fat > 6;
+
+      const handleRowSelected = React.useCallback(state => {
+        setSelectedRows(state.selectedRows);
+        //console.log(state.selectedRows)
+      }, []);
+
+      const contextActions = React.useMemo(() => {
+        const handleBulkUpdate = () => {
+               console.log(selectedRows)
+                    setShowBulk(true)
+              //  return confirmAlert({
+              //   title: 'Update Transaction',
+              //   message: 'Are you sure you want to update bulk transactions?',
+              //   buttons: [{
+              //     label: 'Yes',
+              //     onClick: () => {
+              //       setSelectedTransaction(row)
+              //       setShowUpdate(true)
+              //     },
+              //   }, {
+              //     label: 'Cancel',
+              //   }]
+              // });
+        };
+
+        return (
+          <button
+          className="btn btn-secondary"
+          type="button"
+          onClick={handleBulkUpdate}>
+              <span className="fa fa-pencil" /> Bulk Update
+          </button>
+        );
+      }, [filteredTransactions, selectedRows, toggleCleared]);
+
+    const Export = ({ onExport }) => <button onClick={e => onExport(e.target.value)}>Export</button>;
+    const actionsMemo = React.useMemo(() => <Export onExport={() => downloadCSV(filteredTransactions)} />, []);
     return (
         <Card className="o-hidden mb-4">
+          <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows}/>
           <ModalChangeStatus show={showUpdate} setShow={setShowUpdate} transaction={selectedTransaction} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
@@ -312,13 +402,15 @@ const onSubmitChangeStatus= data => {
                 </div>
             </CardBody>
             <DataTable
-                data={filteredTransactions}
-                columns={columns}
-                customStyles={customStyles}
-                noHeader
-                selectableRowsHighlight
-                highlightOnHover
-                pagination
+              title="Desserts"
+              columns={columns}
+              data={filteredTransactions}
+              selectableRows
+              contextActions={contextActions}
+              onSelectedRowsChange={handleRowSelected}
+              clearSelectedRows={toggleCleared}
+              actions={actionsMemo}
+              pagination
             />
             <Modal show={show} onHide={handleClose} centered className="confirm-modal">
             {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
@@ -327,18 +419,44 @@ const onSubmitChangeStatus= data => {
                     <Col>
                         <h3 className="text-success">Search by date range </h3>
                         <hr />
-                        <div class="row g-3">
+                        {/* <div class="row g-3">
                               <div class="col ">
-                              <div class="form-control">
+                              <div class="form-check form-switch">
+                              <input 
+                                class="form-check-input" 
+                                type="checkbox"
+                                checked={checkCreatedDate}
+                                       onChange={() => {
+                                         setCheckCreatedDate(!checkCreatedDate)
+                                          setCheckActionDate(checkCreatedDate)
+                                        }}
+                                id="flexSwitchCheckDefault" />
                                 <label class="form-check-label" for="flexSwitchCheckDefault">Created Date</label>
                                 </div>
                               </div>
                               <div class="col">
-                              <div class="form-control">
+                              <div class="form-check form-switch">
+                              <input 
+                                class="form-check-input" 
+                                type="checkbox"
+                                checked={checkActionDate}
+                                       onChange={() => {
+                                         setCheckActionDate(!checkActionDate)
+                                           setCheckCreatedDate(checkActionDate)
+                                        }}
+                                id="flexSwitchCheckDefault" />
                                 <label class="form-check-label" for="flexSwitchCheckDefault">Actioned Date</label>
                                 </div>
                               </div>
-                        </div>
+                        </div> */}
+                                <div className="form-group">
+                                    <label htmlFor="from">From</label>
+                                    <DatePicker style={inputWithDate}  className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="email">To</label>
+                                    <DatePicker style={inputWithDate}  className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
+                                </div>
                                 <hr />
                                 <Row>
                         <Col md={6}>

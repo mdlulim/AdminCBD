@@ -656,7 +656,7 @@ const ProductAddNew = props => {
                         </center>
                     </td>
                     <td width="40">
-                        <a href={'products/'+resetProduct.id} className="btn btn-secondary btn-sm btn-icon">
+                        <a href={'/products/'+resetProduct.id} className="btn btn-secondary btn-sm btn-icon">
                             <span className="fa fa-eye"></span>
                         </a>
                     </td>

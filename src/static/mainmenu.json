@@ -93,9 +93,9 @@
                     "icon": null
                 },
                 {
-                    "id": "canceled",
-                    "title": "Canceled",
-                    "link": "/canceled",
+                    "id": "cancelled",
+                    "title": "Cancelled",
+                    "link": "/cancelled",
                     "icon": null
                 }
             ]
