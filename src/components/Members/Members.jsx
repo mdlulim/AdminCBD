@@ -75,17 +75,17 @@ export default function Members(props) {
   const [selectedMember, setSelectedMember] = useState({});
   const history = useHistory();
 
-  useMemo(() => {
-    MemberService.getMembers().then((res) => {
-      console.log(res.data.data)
-      const memberslist = res.data.data.results;
-      setMembers(memberslist);
-      setFilteredMembers(memberslist);
-    });
-
-  }, []);
-  // table headings definition
-  const columns = [{
+    useMemo(() => {
+        MemberService.getMembers().then((res) => {
+          //console.log(res.data.data)
+          const memberslist = res.data.data.results;
+          setMembers(memberslist);
+          setFilteredMembers(memberslist);
+        });
+ 
+      }, []);
+    // table headings definition
+const columns = [{
     name: '',
     sortable: false,
     width: '80px',
