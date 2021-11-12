@@ -9,16 +9,16 @@ export default function MembersPage(props) {
     const [members, setMembers] = useState([]);
     useMemo(() => {
         MemberService.getMembers().then((res) => {
-          console.log(res.data.data.results)
-          const userslist = res.data.data.results;
-          setMembers(userslist);
+            console.log(res.data.data.results)
+            const userslist = res.data.data.results;
+            setMembers(userslist);
         });
-        }, []);
+    }, []);
 
-        const countMembers = (type) =>{
-            const countTypes = members.filter(member => member.status === type);
-            return countTypes.length;
-        }
+    const countMembers = (type) => {
+        const countTypes = members.filter(member => member.status === type);
+        return countTypes.length;
+    }
     return (
         <AuthLayout
             {...props}
@@ -32,7 +32,7 @@ export default function MembersPage(props) {
             }}
         >
             <div className="form-row margin-bottom-20">
-            <Col xs={12} lg={3}>
+                <Col xs={12} lg={3}>
                     <Common.Widget
                         icon="li-user"
                         title="All Members"
@@ -77,7 +77,7 @@ export default function MembersPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                <Members.Members />
+                    <Members.Members />
                     {/* <div className="table-responsive">
                         <table className="table table-indent-rows margin-bottom-0">
                             <thead>
@@ -160,7 +160,7 @@ export default function MembersPage(props) {
                             </tbody>
                         </table>
                     </div> */}
-                    
+
                 </CardBody>
             </Card>
         </AuthLayout>
