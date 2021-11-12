@@ -18,10 +18,6 @@ export default function LevelZero(props) {
                         <h4>Level 0</h4>
                     </Col>
                     <Col md={6}>
-                        {/* <ButtonGroup size="sm" align="right" style={{ display: "flex", justifyContent: "end" }}>
-                            <Button color="success" onClick={() => approveLevel({ level: 0, status: true })}>Approve</Button>
-                            <Button color="danger" onClick={() => approveLevel({ level: 0, status: false })}>Decline</Button>
-                        </ButtonGroup> */}
                         <form>
                             <ButtonGroup size="sm" style={{ display: "flex", justifyContent: "end" }}>
                                 <Button
@@ -60,7 +56,7 @@ export default function LevelZero(props) {
                                         type="text"
                                         id="fullname"
                                         className="form-control form-control-m"
-                                        value={member.email}
+                                        value={member.email?member.email:''}
                                         disabled
                                     />
                                 </div>

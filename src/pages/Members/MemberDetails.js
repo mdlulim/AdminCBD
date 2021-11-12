@@ -44,21 +44,15 @@ const MemberDetails = props => {
     const [member, setMember] = useState({});
     const [wallet, setWallet] = useState({});
     const [address, setAddress] = useState({});
-    const [kycDetails, setKYC] = useState({});
     const params = useParams();
     const { id } = params;
 
     useMemo(() => {
         //Get member details
         MemberService.getMember(id).then((res) => {
-            console.log(res.data.data)
             const memberDetails = res.data.data;
             setMember(memberDetails)
         })
-
-        MemberService.getMemberKYC(id).then((res) => {
-            setKYC(res.data.data)
-        });
 
         //Get member details
         MemberService.getMemberWallet(id).then((res) => {
@@ -67,13 +61,13 @@ const MemberDetails = props => {
             setWallet(walletDetails);
         });
 
-
         //Get member details
         MemberService.getMemberAddress(id).then((res) => {
             // console.log(res.data.data.results[0])
             const memberAddress = res.data.data.results;
             setAddress(memberAddress[0]);
         });
+
 
     }, []);
 
@@ -222,7 +216,7 @@ const MemberDetails = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <KYC.KYC member={member} kycDetails={kycDetails}/>
+                                            <KYC.KYC member={member} />
                                         </CardBody>
                                     </div>
                                 </div>

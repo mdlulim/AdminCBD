@@ -61,7 +61,7 @@ export default function LevelOne(props) {
                                             type="text"
                                             id="fullname"
                                             className="form-control form-control-m"
-                                            value={member.last_name + " "+ member.first_name}
+                                            value={(member.last_name && member.last_name)?member.last_name + " "+ member.first_name: ''}
                                             disabled
                                         />
                                     </div>
@@ -87,7 +87,7 @@ export default function LevelOne(props) {
                                             type="text"
                                             id="contact"
                                             className="form-control form-control-m"
-                                            value={member.mobile}
+                                            value={member.mobile?member.mobile:''}
                                             disabled
                                         />
                                     </div>

@@ -85,6 +85,16 @@ class MemberService {
     });
   }
 
+  //Get member bank details
+  static async getMemberBankDetails(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users/${id}/bank_accounts`,
+    });
+  }
+
   static async updateStatus(id,status){
     if(status === 'Blocked'){
       return await axios({

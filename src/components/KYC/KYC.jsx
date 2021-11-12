@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { KYCService } from '../../providers';
 import LevelZero from './levelZero';
@@ -8,6 +8,7 @@ import LevelThree from './levelThree';
 import ViewModal from './viewModal';
 import RejectLevelModal from './rejectLevelModal';
 import { confirmAlert } from 'react-confirm-alert';
+import { MemberService } from '../../providers';
 
 
 export default function Leads(props) {
@@ -18,6 +19,26 @@ export default function Leads(props) {
     const [approvalList, setApprovalList] = useState({});
     const [rejectObj, setRejectedObj] = useState({});
     const [sumbitting, setSubmitting] = useState(false);
+    const [kycApplication, setKycApplication] = useState({
+        level_0: {
+            selfie: '',
+            email: ''
+        },
+        level_1: {
+            fullname: '',
+            contact: '',
+            address: '',
+            id_number: ''
+        },
+        level_2: {
+            businessNature: '',
+            srcFunds: '',
+            id_document: ''
+        },
+        level_3: {
+            poa: ''
+        }
+    })
 
 
     const saveChanges = async () => {
@@ -41,7 +62,7 @@ export default function Leads(props) {
 
         const data_to_send = {
             levels: approvalList,
-            kyc: (kyc_level_rejected === 99)? '3': (kyc_level_rejected === '0' )? '0':levels_to_update[levels_to_update.indexOf(kyc_level_rejected) - 1],
+            kyc: (kyc_level_rejected === 99) ? '3' : (kyc_level_rejected === '0') ? '0' : levels_to_update[levels_to_update.indexOf(kyc_level_rejected) - 1],
             rejected_docs,
             last_name: member.last_name,
             email: member.email
@@ -69,6 +90,7 @@ export default function Leads(props) {
     const approveLevelCB = (approvalObj) => {
         const prevApprovalList = approvalList;
         approvalObj["verified"] = true;
+
         if (approvalObj.status) {
             const level = approvalObj.level
             delete approvalObj.level
@@ -80,10 +102,36 @@ export default function Leads(props) {
             setShowReason(true)
         }
 
-        console.log(kycDetails)
-
     }
 
+    useMemo(() => {
+        const getKYC = async () => {
+            const kyc = await MemberService.getMemberKYC(member.id)
+            const data = kyc.data.data
+            console.log(data)
+            if(data){
+                data.map((row)=>{
+                    if(row.level === '0'){
+                        
+                    }else if(row.level === '0'){
+
+                    }else if(row.level === '0'){
+                        
+                    }else{
+
+                    }
+                })
+            }
+            // kyc.data.data.map(item => {
+            //     // const { level, status, verified } = item;
+            //     console.log(item, " --->")
+            // })
+        }
+
+        getKYC()
+    }, [member])
+
+    console.log(member.id, ' kk')
     const showImageCB = (image) => {
         setDocument(image)
         setShowImage(true);
@@ -97,7 +145,7 @@ export default function Leads(props) {
                     <RejectLevelModal show={showReason} setShow={setShowReason} approvalList={approvalList} setApprovalList={setApprovalList} rejectObj={rejectObj} setRejectedObj={setRejectedObj} />
                     <ViewModal show={showImage} setShow={setShowImage} kycDocuments={kycDocuments} kycDetails={kycDetails} />
                     <LevelZero approveLevel={approveLevelCB} showImage={showImageCB} member={member} />
-                    <LevelOne approveLevel={approveLevelCB} kycDetails={kycDetails[1]} member={member} />
+                    <LevelOne approveLevel={approveLevelCB} member={member} />
                     <LevelTwo approveLevel={approveLevelCB} showImage={showImageCB} kycDetails={kycDetails} />
                     <LevelThree approveLevel={approveLevelCB} showImage={showImageCB} kycDetails={kycDetails} />
                     <div style={{ textAlign: "right" }}>
