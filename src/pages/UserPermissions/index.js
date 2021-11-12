@@ -4,17 +4,21 @@ import { AuthLayout } from 'containers';
 import { UserPermissions, Common } from 'components';
 import { UserService } from '../../providers';
 import Select from 'react-select';
+import PagePermissionService from 'providers/PagePermissionService';
 
 const PermissionsList = props => {
     const breadcrumb = { heading: "UserPermissions" };
-    // const [transactions, setCompanyAccounts] = useState([]);
 
-    
-    const userslist = UserService.getUsers().then((res) => {
-        //   console.log(res.data.data.results)
-          return res.data.data.results;
+    const [users, setUsers] = useState([]);
+    useMemo(() => {
+        PagePermissionService.getPagePermissions().then((res) => {
+          console.log(res.data.data.results)
+          const userslist = res.data.data.results;
+        setUsers(userslist);
         });
+    }, []);
 
+        
         // const countCompanyAccounts = (type) =>{
         //     const countTypes = transactions.filter(transaction => transaction.status === type);
         //     return countTypes.length;
@@ -35,15 +39,6 @@ const PermissionsList = props => {
                 <div class="container-fluid">
                     <div class="box box-primary">
                     <div class="box-body">
-                        <div>
-                        <label htmlFor="status">Select User</label>
-                                <Select
-                                    id="status"
-                                    name="status"
-                                    options={userslist}
-                                    classNamePrefix="select"
-                                    />
-                                </div>
                             <form accept-charset="utf-8">
                                 <div class="row col-sm-12" >
                                 <div class="col-sm-6" >
@@ -58,32 +53,18 @@ const PermissionsList = props => {
                                             <th scope="col">Low</th>
                                             <th scope="col">Medium</th>
                                             <th scope="col">High</th>
-                                            </tr>
+                                            </tr> 
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <th scope="row">Transactions Page</th>
+                                                <th scope="row">Transactions</th>
                                                 <td><input type="checkbox" /></td>
                                                 <td><input type="checkbox" /></td>
                                                 <td><input type="checkbox" /></td>
                                                 <td><input type="checkbox" /></td>
                                             </tr>
                                             <tr>
-                                                <th scope="row">Withdrawals Page</th>
-                                                <td><input type="checkbox" /></td>
-                                                <td><input type="checkbox" /></td>
-                                                <td><input type="checkbox" /></td>
-                                                <td><input type="checkbox" /></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Deposits Page</th>
-                                                <td><input type="checkbox" /></td>
-                                                <td><input type="checkbox" /></td>
-                                                <td><input type="checkbox" /></td>
-                                                <td><input type="checkbox" /></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Deposits Page</th>
+                                                <th scope="row">Withdrawals</th>
                                                 <td><input type="checkbox" /></td>
                                                 <td><input type="checkbox" /></td>
                                                 <td><input type="checkbox" /></td>
