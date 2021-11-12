@@ -43,6 +43,12 @@
                     "icon": null
                 },
                 {
+                    "id": "history",
+                    "title": "Product History",
+                    "link": "/products/history",
+                    "icon": null
+                },
+                {
                     "id": "categories",
                     "title": "Categories",
                     "link": "/categories",

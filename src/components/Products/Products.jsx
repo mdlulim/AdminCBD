@@ -108,7 +108,7 @@ const columns = [
   selector: 'registration_fee',
   sortable: true, 
   cell: row => <div>{row.registration_fee? row.currency_code+' '+row.registration_fee: ''} {row.educator_percentage ? row.educator_percentage+' %': ''}</div>
-},  {
+},{
   name: 'Product Amount',
   selector: 'price',
   sortable: true,

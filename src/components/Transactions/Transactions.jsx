@@ -126,6 +126,8 @@ export default function Transactions(props) {
     const [members, setMembers] = useState([]);
     const [wealthCreaters, setWealthCreaters] = useState([]);
     const [selectedRows, setSelectedRows] = React.useState([]);
+    const [users, setUsers] = React.useState([]);
+
       const [toggleCleared, setToggleCleared] = React.useState(false);
     const history = useHistory();
 
@@ -136,6 +138,11 @@ export default function Transactions(props) {
               //let id = res.data.data.results[0].user_id;
               //.log(res.data.data.results);
               const transaList = res.data.data.results;
+              let transTemp =[];
+              transactions.map((transaction,num) =>{
+
+              });
+
               if(transactionType === 'all'){
                 setTransactions(transaList);
                 setFilteredTransactions(transaList);
@@ -171,6 +178,7 @@ export default function Transactions(props) {
         MemberService.getMembers().then((res) => {
           const memberslist = res.data.data.results;
           setMembers(memberslist);
+          setUsers(memberslist);
         });
 
         MemberService.getWealthCreaters().then((res) => {
@@ -178,6 +186,9 @@ export default function Transactions(props) {
           const wealthCreaterslist = res.data.data.results;
           setWealthCreaters(wealthCreaterslist);
         });
+
+
+
 
       }, []);
 
@@ -291,6 +302,7 @@ export default function Transactions(props) {
       });
       return result;
     }
+
 
 
   const onSearchFilter = filterText => {

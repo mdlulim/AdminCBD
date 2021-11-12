@@ -35,6 +35,7 @@ import Transfers from 'pages/Transactions/Transfers';
 import Pending from 'pages/Transactions/Pending';
 import MakeTransferPage from 'pages/Transactions/MakeTransferPage';
 import Products from 'pages/Products';
+import ProductHistory from 'pages/Products/ProductHistory';
 import ProductCategories from 'pages/Products/ProductCategories';
 import ProductAddNew from 'pages/Products/ProductAddNew';
 import ProductDetails from 'pages/Products/ProductDetails';
@@ -77,6 +78,7 @@ const App = () => {
 					<Route exact path="/transactions/widthdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/transfers/transfer" component={(props) => <MakeTransferPage config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products/history" component={(props) => <ProductHistory config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/categories" component={(props) => <ProductCategories config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/add" component={(props) => <ProductAddNew config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
