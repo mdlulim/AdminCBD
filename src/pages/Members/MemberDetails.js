@@ -106,7 +106,6 @@ const MemberDetails = props => {
                                         {/* < span className={wallet.balance > 0 ? 'text-success' :'text-danger'} >
                                                 Balance: {wallet.currency_code} {wallet.balance}
                                             </span><br /> */}
-<<<<<<< HEAD
                                             < span className={wallet.available_balance > 0 ? 'text-success' :'text-danger'}>
                                                 Available Balance: {wallet.currency_code} {wallet.available_balance}
                                             </span>
@@ -124,25 +123,6 @@ const MemberDetails = props => {
                                                     {address.city}, {address.country} &nbsp;
                                                     <br />
                                                     {/* {addresses.province || ''}&nbsp;
-=======
-                                        < span className={wallet.available_balance > 0 ? 'text-success' : 'text-danger'}>
-                                            Available Balance: {wallet.currency_code} {wallet.available_balance}
-                                        </span>
-                                    </div>
-                                    <div className="author-box-job">
-                                        ID/Passport No: {member.id_number}<br />
-                                        Phone: {member.mobile}<br />
-                                        Email: {member.email}<br />
-                                        KYC Level: 0<br />
-                                        Type: {member.group ? member.group.label : 'Member'}
-                                        <hr />
-                                        <strong>Address</strong>
-                                        {address ?
-                                            <p>
-                                                {address.city}, {address.country} &nbsp;
-                                                <br />
-                                                {/* {addresses.province || ''}&nbsp;
->>>>>>> feature/2451-kyc
                                                     {addresses.postalCode || ''} */}
                                             </p> : <p> <br />Address not provided</p>}
                                     </div>
@@ -232,14 +212,6 @@ const MemberDetails = props => {
                                             <Members.BankDetails member={member} />
                                         </CardBody>
                                     </div>
-<<<<<<< HEAD
-                                </CardBody>
-                            </Card>
-                        </Col>
-                    </Row>
-		</AuthLayout>
-	);
-=======
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
@@ -256,7 +228,6 @@ const MemberDetails = props => {
 
         </AuthLayout>
     );
->>>>>>> feature/2451-kyc
 };
 
 export default MemberDetails;
