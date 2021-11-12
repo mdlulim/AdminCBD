@@ -73,17 +73,17 @@ class MemberService {
         mode: 'no-cors',
         method: 'PUT',
         headers: headers,
-        url: `${Config.API.BASE_URL}/users/${id}/block`,
+        url: `http://localhost:8090/users/${id}/block`,
       }).then((res) =>{
         const result = res;
         return result;
       });
-    }else if(status === 'Archived'){
+    }else if(status === 'Archive'){
       return await axios({
         mode: 'no-cors',
         method: 'PUT',
         headers: headers,
-        url: `${Config.API.BASE_URL}/users/${id}/archive`,
+        url: `http://localhost:8090/users/${id}/archive`,
       }).then((res) =>{
         console.log(res);
         //const result = {status: res.data.status, message: res.data.message}
@@ -94,7 +94,7 @@ class MemberService {
         mode: 'no-cors',
         method: 'PUT',
         headers: headers,
-        url: `${Config.API.BASE_URL}/users/${id}/unblock`,
+        url: `http://localhost:8090/users/${id}/unblock`,
       }).then((res) =>{
         const result = res; //{status: res.data.status, message: res.data.message}
         return result;

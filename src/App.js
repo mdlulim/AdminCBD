@@ -70,7 +70,7 @@ const App = () => {
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/main-account" component={(props) => <CompanyAccount config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/deposits" component={(props) => <Deposits config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/transactions/canceled" component={(props) => <Canceled config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/transactions/cancelled" component={(props) => <Canceled config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/transfers" component={(props) => <Transfers config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/completed" component={(props) => <Completed config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/pending" component={(props) => <Pending config={settings} {...props} setMenu={setMenu} />} />
@@ -82,7 +82,6 @@ const App = () => {
 					<Route exact path="/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/permissions" component={(props) => <UserPermissions config={settings} {...props} setMenu={setMenu} />} />
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
-					
 				</Switch>
 			</Router>
 		</AuthContext.Provider>
