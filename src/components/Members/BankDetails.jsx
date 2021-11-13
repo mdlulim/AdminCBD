@@ -3,6 +3,8 @@ import { Card, CardBody, Row, Col } from 'reactstrap';
 import Confirm from './ModalChangeStatus';
 import { MemberService } from '../../providers';
 import useForm from 'react-hook-form';
+import { confirmAlert } from 'react-confirm-alert';
+
 
 
 export default function Referals(props) {
@@ -16,33 +18,50 @@ export default function Referals(props) {
   useMemo(() => {
     const getBank = async () => {
       //Get member bank details
-      const bank = await MemberService.getMemberBankDetails(member.id);
-      const bank_results = bank.data.data.results;
 
-      if (bank_results) {
-        const data = bankingDetails;
-        bank_results.map(item => {
-          data.push(item);
-        })
-        setBankingDetails(data);
+      if (member.id) {
+        const bank = await MemberService.getMemberBankDetails(member.id);
+        const bank_results = bank.data.data.results;
+
+        if (bank_results) {
+          const data = bankingDetails;
+          bank_results.map(item => {
+            data.push(item);
+          })
+          setBankingDetails(data);
+        }
       }
 
     }
 
     getBank();
 
-  }, [member]);
+  }, [member, bankingDetails]);
+
 
   const isEdited = () => {
     console.log()
   }
 
-  const onSubmit = async(data) => {
+  const onSubmit = async (data) => {
     delete data.status;
-    console.log(member.id, " mebmer id ", data)
-    const result = await MemberService.updateMemberBankDetails(member.id, data) 
-    console.log(result)
+    const result = await MemberService.updateMemberBankDetails(member.id, data)
+
+    if (result.data.success) {
+      confirmAlert({
+        title: 'Success',
+        message: 'Bank Details updated'
+      });
+      window.location = '/members/members';
+      return
+    }
+
+    confirmAlert({
+      title: 'Failed',
+      message: 'Could not update',
+  });
     
+
   }
 
 
@@ -71,7 +90,6 @@ export default function Referals(props) {
                       disabled={editState}
                     >
                       Save
-                      <i className="fa fa-chevron-right ms-2" />
                     </button>
 
                     <button
@@ -92,7 +110,7 @@ export default function Referals(props) {
                           <input
                             type="text"
                             className="form-control form-control-m"
-                            value={item.name ? item.name : ''}
+                            defaultValue={item.name ? item.name : ''}
                             name="name"
                             ref={register}
                             disabled={editState}
@@ -109,7 +127,7 @@ export default function Referals(props) {
                             name="bank_name"
                             ref={register}
                             className="form-control form-control-m"
-                            value={item.bank_name ? item.bank_name : ''}
+                            defaultValue={item.bank_name ? item.bank_name : ''}
                             disabled={editState}
                           />
                         </div>
@@ -124,7 +142,7 @@ export default function Referals(props) {
                             name="number"
                             ref={register}
                             className="form-control form-control-m"
-                            value={item.number ? item.number : ''}
+                            defaultValue={item.number ? item.number : ''}
                             disabled={editState}
                           />
                         </div>
@@ -139,27 +157,29 @@ export default function Referals(props) {
                             name="branch_code"
                             ref={register}
                             className="form-control form-control-m"
-                            value={item.branch_code ? item.branch_code : ''}
+                            defaultValue={item.branch_code ? item.branch_code : ''}
                             disabled={editState}
                           />
                         </div>
                       </td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                       <td><span className="mb-2 text-xs">Status</span></td>
                       <td>
                         <div className="form-group">
-                          <input
-                            type="text"
-                            name="status"
-                            ref={register}
-                            className="form-control form-control-m"
-                            value={item.status ? 'active' : 'inActive'}
-                            disabled={editState}
-                          />
+                        <select
+                            name="businessNature"
+                            className="multisteps-form__input form-control"
+                            ref={register({ required: true })}
+                            defaultValue={item.status}
+                        >
+                            <option value="">{item}</option>
+                            <option value="Active">Active</option>
+                            <option value="Pending">Pending</option>
+                        </select>
                         </div>
                       </td>
-                    </tr>
+                    </tr> */}
                   </tbody>
                 </table>
               </form>
