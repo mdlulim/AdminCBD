@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
+import { CSVLink, CSVDownload } from "react-csv";
 import DataTable from 'react-data-table-component';
 import DataTableExtensions from 'react-data-table-component-extensions';
 import { Modal } from 'react-bootstrap';
@@ -45,6 +46,10 @@ const selectPadding ={
 
 const inputWith={
   width: '20%'
+}
+
+const myButtons={
+  padding: '2px'
 }
 
 const inputWithDate={
@@ -308,6 +313,7 @@ export default function Transactions(props) {
   const onSearchFilter = filterText => {
     const filteredItems = transactions.filter(item => (
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.subtype && item.subtype.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
     ));
@@ -382,8 +388,8 @@ export default function Transactions(props) {
         );
       }, [filteredTransactions, selectedRows, toggleCleared]);
 
-    const Export = ({ onExport }) => <button onClick={e => onExport(e.target.value)}>Export</button>;
-    const actionsMemo = React.useMemo(() => <Export onExport={() => downloadCSV(filteredTransactions)} />, []);
+    // const Export = ({ onExport }) => <button onClick={e => onExport(e.target.value)}>Export</button>;
+    // const actionsMemo = React.useMemo(() => <Export onExport={() => downloadCSV(filteredTransactions)} />, []);
     return (
         <Card className="o-hidden mb-4">
           <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows}/>
@@ -401,6 +407,7 @@ export default function Transactions(props) {
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
                       <div>
+                      <div style={myButtons}>
                             <button 
                             className="btn btn-secondary" 
                             type="button"
@@ -408,20 +415,20 @@ export default function Transactions(props) {
                               e.preventDefault();
                               setShow(true);
                             }}>
-                                Search By DateRange
+                                Search By Date
                             </button>
+                            <CSVLink className="btn btn-info btn-icon" data={filteredTransactions}><span className="fa fa-download" /></CSVLink>
+                            </div>
                     </div>
                 </div>
             </CardBody>
             <DataTable
-              title="Desserts"
               columns={columns}
               data={filteredTransactions}
               selectableRows
               contextActions={contextActions}
               onSelectedRowsChange={handleRowSelected}
               clearSelectedRows={toggleCleared}
-              actions={actionsMemo}
               pagination
             />
             <Modal show={show} onHide={handleClose} centered className="confirm-modal">

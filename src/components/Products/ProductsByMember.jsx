@@ -37,7 +37,7 @@ const Status = ({ status }) => {
     if (status === 'Pending') {
       badge = 'warning';
     }
-    if (status === 'Active') {
+    if (status === 'Active' || status === 'Published') {
       badge = 'success';
     }
     if (status === 'Blocked') {

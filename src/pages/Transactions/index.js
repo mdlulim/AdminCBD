@@ -95,6 +95,11 @@ const TransactionList = props => {
             return countTypes.length;
         };
 
+        const countTransactionType = (type) =>{
+            const countTypes = transactions.filter(transaction => transaction.subtype === type);
+            return countTypes.length;
+        };
+
 	return (
 		<AuthLayout  {...props}
         breadcrumb={{ active: "All Transactions" }}
@@ -118,7 +123,7 @@ const TransactionList = props => {
                         icon="li-wallet"
                         title="Deposit"
                         subtitle="Transactions"
-                        informer={<><span className="text-bold text-info">{countTransactions('deposit')}</span></>}
+                        informer={<><span className="text-bold text-info">{countTransactionType('deposit')}</span></>}
                         invert={false}
                     />
                 </Col>
@@ -127,7 +132,7 @@ const TransactionList = props => {
                         icon="li-wallet"
                         title="Widthdrawals"
                         subtitle="Transactions"
-                        informer={<><span className="text-bold text-info">{countTransactions('Widthdrawals')}</span></>}
+                        informer={<><span className="text-bold text-info">{countTransactionType('withdrawal')}</span></>}
                         invert={false}
                     />
                 </Col>
@@ -136,7 +141,7 @@ const TransactionList = props => {
                         icon="li-wallet"
                         title="Transfers"
                         subtitle="Transactions"
-                        informer={<span className="text-bold text-info">{countTransactions('Transfers')}</span>}
+                        informer={<span className="text-bold text-info">{countTransactionType('Transfer')}</span>}
                         invert={false}
                     />
                 </Col>
