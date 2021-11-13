@@ -9,11 +9,12 @@ import { confirmAlert } from 'react-confirm-alert';
 
 export default function Referals(props) {
   const { member } = props;
-  const [show, setShow] = useState(false);
-  const [bankingDetails, setBankingDetails] = useState([]);
-  const [editState, setEditState] = useState(true);
   const { register, handleSubmit, errors } = useForm();
 
+  const [show, setShow] = useState(false);
+  const [bankingDetails, setBankingDetails] = useState([]);
+  const [editDisabledState, setEditDisabledState] = useState(true);
+  const [submitting, setSubmitting] = useState(false)
 
   useMemo(() => {
     const getBank = async () => {
@@ -44,7 +45,8 @@ export default function Referals(props) {
   }
 
   const onSubmit = async (data) => {
-    delete data.status;
+    
+    setSubmitting(true)
     const result = await MemberService.updateMemberBankDetails(member.id, data)
 
     if (result.data.success) {
@@ -52,15 +54,15 @@ export default function Referals(props) {
         title: 'Success',
         message: 'Bank Details updated'
       });
-      window.location = '/members/members';
       return
     }
-
+    setEditDisabledState(true)
+    setSubmitting(false)
     confirmAlert({
       title: 'Failed',
       message: 'Could not update',
-  });
-    
+    });
+
 
   }
 
@@ -87,14 +89,14 @@ export default function Referals(props) {
                       className="btn bg-gradient-dark ms-auto mb-0 js-btn-next"
                       type="submit"
                       title="Next"
-                      disabled={editState}
+                      disabled={editDisabledState || submitting}
                     >
                       Save
                     </button>
 
                     <button
                       type="button" className="btn btn-link text-dark px-3 mb-0"
-                      onClick={() => { setEditState(!editState) }}
+                      onClick={() => { setEditDisabledState(!editDisabledState) }}
                     >
                       <i className="fa fa-pencil-alt text-dark me-2" aria-hidden="true" />
                       Edit
@@ -113,7 +115,7 @@ export default function Referals(props) {
                             defaultValue={item.name ? item.name : ''}
                             name="name"
                             ref={register}
-                            disabled={editState}
+                            disabled={editDisabledState}
                           />
                         </div>
                       </td>
@@ -128,7 +130,7 @@ export default function Referals(props) {
                             ref={register}
                             className="form-control form-control-m"
                             defaultValue={item.bank_name ? item.bank_name : ''}
-                            disabled={editState}
+                            disabled={editDisabledState}
                           />
                         </div>
                       </td>
@@ -143,7 +145,7 @@ export default function Referals(props) {
                             ref={register}
                             className="form-control form-control-m"
                             defaultValue={item.number ? item.number : ''}
-                            disabled={editState}
+                            disabled={editDisabledState}
                           />
                         </div>
                       </td>
@@ -158,7 +160,7 @@ export default function Referals(props) {
                             ref={register}
                             className="form-control form-control-m"
                             defaultValue={item.branch_code ? item.branch_code : ''}
-                            disabled={editState}
+                            disabled={editDisabledState}
                           />
                         </div>
                       </td>
