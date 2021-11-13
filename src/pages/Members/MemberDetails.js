@@ -3,40 +3,9 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { MemberService } from '../../providers';
 import { AuthLayout } from 'containers';
-import { Common, Members, Transactions, Products, KYC } from 'components';
+import { Members, Transactions, Products, KYC } from 'components';
+import { KYCService } from '../../providers';
 
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
-
-const Filter = () => {
-    return (
-        <>
-            <Common.Dropdown
-                actions={[
-                    { label: 'Filter by Date Range' },
-                    { label: 'Filter by Date' },
-                    { label: 'Filter Month' },
-                    { label: 'Filter Year' }
-                ]}
-            />
-            <button
-                className="btn btn-light d-none d-md-block float-right margin-right-5"
-                id="dashboard-rp-customrange"
-            >
-                September 22, 2021 - October 21, 2021
-            </button>
-        </>
-    );
-}
 
 const MemberDetails = props => {
     const breadcrumb = { heading: "Member Details" };
@@ -44,8 +13,10 @@ const MemberDetails = props => {
     const [member, setMember] = useState({});
     const [wallet, setWallet] = useState({});
     const [address, setAddress] = useState({});
+    const [kycDetails, setkycDetails] = useState({})
     const params = useParams();
     const { id } = params;
+    const [ kycLevel, setKycLevel] = useState(null)
 
     useMemo(() => {
         //Get member details
@@ -67,6 +38,16 @@ const MemberDetails = props => {
             const memberAddress = res.data.data.results;
             setAddress(memberAddress[0]);
         });
+
+        
+         //Get member details
+         KYCService.getkycLlevel(id).then((res) => {
+            setKycLevel(res.data.data.kyc_level)
+        })
+
+       MemberService.getMemberKYC(id).then(res=>{
+            setkycDetails(res.data.data)
+       })
 
 
     }, []);
@@ -114,7 +95,7 @@ const MemberDetails = props => {
 										    ID/Passport No: {member.id_number}<br />
 											Phone: {member.mobile}<br />
 											Email: {member.email}<br />
-											Level: 0<br />
+											Level: {kycLevel === -1?'unAssigned':kycLevel}<br />
                                             Type: {member.group ? member.group.label : 'Member'}
 											<hr />
 											<strong>Address</strong>
@@ -216,7 +197,7 @@ const MemberDetails = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <KYC.KYC member={member} />
+                                            <KYC.KYC member={member} kycDetails={kycDetails} />
                                         </CardBody>
                                     </div>
                                 </div>

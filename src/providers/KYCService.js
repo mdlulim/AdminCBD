@@ -42,6 +42,18 @@ class KYCService {
     });
   }
 
+  static async getkycLlevel(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/kyc-level/${id}`,
+    }).then((res) => {
+      const result = res;
+      return result;
+    });
+  }
+
 }
 
 export default KYCService;

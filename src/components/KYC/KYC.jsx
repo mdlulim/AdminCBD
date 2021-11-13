@@ -131,7 +131,6 @@ export default function Leads(props) {
         getKYC()
     }, [member])
 
-    console.log(member.id, ' kk')
     const showImageCB = (image) => {
         setDocument(image)
         setShowImage(true);
