@@ -173,9 +173,9 @@ const onSubmitUpdateProduct= data => {
 
   const onSearchFilter = filterText => {
     const filteredItems = products.filter(item => (
-      (item && item.full_names && item.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.productname && item.productname.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase()))
+      (item && item.title && item.title.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredProducts(filteredItems);
   }

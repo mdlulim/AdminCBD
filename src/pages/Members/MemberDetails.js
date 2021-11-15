@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Card, CardBody, Col, Row } from 'reactstrap';
+import { Rating, RatingView } from 'react-simple-star-rating'
 import { MemberService } from '../../providers';
 import { AuthLayout } from 'containers';
 import { Members, Transactions, Products, KYC } from 'components';
@@ -14,6 +15,7 @@ const MemberDetails = props => {
     const [wallet, setWallet] = useState({});
     const [address, setAddress] = useState({});
     const [kycDetails, setkycDetails] = useState({})
+    const [rating, setRating] = useState(0)
     const params = useParams();
     const { id } = params;
     const [ kycLevel, setKycLevel] = useState(null)
@@ -43,6 +45,9 @@ const MemberDetails = props => {
          //Get member details
          KYCService.getkycLlevel(id).then((res) => {
             setKycLevel(res.data.data.kyc_level)
+            if(res.data.data.kyc_level != -1){
+                setRating(res.data.data.kyc_level);
+            }
         })
 
        MemberService.getMemberKYC(id).then(res=>{
@@ -95,9 +100,11 @@ const MemberDetails = props => {
 										    ID/Passport No: {member.id_number}<br />
 											Phone: {member.mobile}<br />
 											Email: {member.email}<br />
-											Level: {kycLevel === -1?'unAssigned':kycLevel}<br />
+											KYC Level: {kycLevel === -1?'unAssigned':kycLevel}<br />
                                             Type: {member.group ? member.group.label : 'Member'}
 											<hr />
+                                            <Rating ratingValue={rating} />
+                                            <hr />
 											<strong>Address</strong>
 											{address ?
                                                 <p>

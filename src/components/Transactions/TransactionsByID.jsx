@@ -163,7 +163,7 @@ export default function Transactions(props) {
                 setFilteredTransactions(results);
               }
               else if(transactionType === 'cancelled'){
-                const results = transaList.filter(item => item.status === "Rejected");
+                const results = transaList.filter(item => item.status === "Cancelled");
                 setTransactions(results);
                 setFilteredTransactions(results);
               }else if(transactionType === 'completed'){

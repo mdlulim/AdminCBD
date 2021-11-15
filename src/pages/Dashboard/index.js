@@ -164,7 +164,7 @@ export default function DashboardPage(props) {
                         <a href={`/members/members`} >
                             <Common.Widget
                                 icon="li-users2"
-                                title="Achieved"
+                                title="Achived"
                                 subtitle="Members"
                                 informer={<><span className="text-bold text-danger">{countMembers('Achieved')}</span> </>}
                             /></a>
@@ -185,7 +185,7 @@ export default function DashboardPage(props) {
                                     <div id="dashboard-ec-line" data-zr-dom-id="zr_0" height="300">
                                     <Overview.BarChart
                                 chartData={{
-                                    labels: ['Deposit', 'Withdrawals', 'Canceled', 'Pending', 'Completed','Transfers', 'Products'],
+                                    labels: ['Deposit', 'Withdrawals', 'Rejected', 'Pending', 'Completed','Transfers', 'Products'],
                                     datasets: [
                                     {
                                         label: '# Transactions',

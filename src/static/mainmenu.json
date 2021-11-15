@@ -43,12 +43,6 @@
                     "icon": null
                 },
                 {
-                    "id": "history",
-                    "title": "Product History",
-                    "link": "/products/history",
-                    "icon": null
-                },
-                {
                     "id": "categories",
                     "title": "Categories",
                     "link": "/categories",
@@ -99,9 +93,9 @@
                     "icon": null
                 },
                 {
-                    "id": "cancelled",
-                    "title": "Cancelled",
-                    "link": "/cancelled",
+                    "id": "rejected",
+                    "title": "Rejected",
+                    "link": "/rejected",
                     "icon": null
                 }
             ]
@@ -112,14 +106,6 @@
             "description": "manage company main account",
             "link": "/main-account",
             "icon": "li-cash-dollar",
-            "childitems": []
-        },
-        {
-            "id": "reports",
-            "title": "Reports",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-            "link": "/reports",
-            "icon": "li-chart-growth",
             "childitems": []
         },
         {

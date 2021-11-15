@@ -1,12 +1,16 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody } from 'reactstrap';
+import { Card, CardBody, Row, Col } from 'reactstrap';
 import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
+import { Modal } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
 import { useParams, useHistory } from 'react-router-dom';
 import DeleteProductAlert from './DeleteProductAlert';
 import { ProductService } from '../../providers';
+import DatePicker from "react-datepicker";
+import 'react-data-table-component-extensions/dist/index.css';
+import "react-datepicker/dist/react-datepicker.css";
 // styles
 const customStyles = {
    
@@ -30,6 +34,9 @@ const iconPadding ={
 const inputWith={
   width: '30%',
   marginRight: '20px'
+}
+const inputWithDate={
+  width: '25%'
 }
 
 const Status = ({ status }) => {
@@ -66,8 +73,13 @@ export default function Products(props) {
     const [showResend, setShowResend] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
     const [products, setProducts] = useState([]);
+    const [disabled, setDisabled] = useState(false);
+    const [checkCreatedDate, setCheckCreatedDate] = useState(true);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState({});
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const handleClose = () => setShow(false);
     const history = useHistory();
     const params = useParams();
     const { id } = params;
@@ -148,6 +160,19 @@ const onSubmitUpdateProduct= data => {
     setShowDelete(true)
   };
 
+  const selectDataRange = (data) =>{
+    setDisabled(true);
+    const start = Date.parse(startDate);
+    const end = Date.parse(endDate);
+            const searchByDate = products.filter(
+              product => (Date.parse(product.created)) >= start && (Date.parse(product.created)) <= end);
+              //console.log('Created date');
+              //console.log(searchByDate);
+              setFilteredProducts(searchByDate);
+          setDisabled(false);
+          setShow(false)
+      }
+
   const onSearchFilter = filterText => {
     const filteredItems = products.filter(item => (
       (item && item.full_names && item.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -173,6 +198,16 @@ const onSubmitUpdateProduct= data => {
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
+                            <button 
+                            className="btn btn-secondary" 
+                            type="button"
+                            onClick={e => {
+                              e.preventDefault();
+                              setShow(true);
+                            }}>
+                                Search By Date
+                            </button>
+                      
                 </div>
             </CardBody>
             <DataTable
@@ -191,6 +226,78 @@ const onSubmitUpdateProduct= data => {
                     </a>
                 </HashLinkContainer>
             </CardBody>
+            <Modal show={show} onHide={handleClose} centered className="confirm-modal">
+            {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
+            <Modal.Body>
+                <Row>
+                    <Col>
+                        <h3 className="text-success">Search by date range </h3>
+                        <hr />
+                        {/* <div class="row g-3">
+                              <div class="col ">
+                              <div class="form-check form-switch">
+                              <input 
+                                class="form-check-input" 
+                                type="checkbox"
+                                checked={checkCreatedDate}
+                                       onChange={() => {
+                                         setCheckCreatedDate(!checkCreatedDate)
+                                          setCheckActionDate(checkCreatedDate)
+                                        }}
+                                id="flexSwitchCheckDefault" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Created Date</label>
+                                </div>
+                              </div>
+                              <div class="col">
+                              <div class="form-check form-switch">
+                              <input 
+                                class="form-check-input" 
+                                type="checkbox"
+                                checked={checkActionDate}
+                                       onChange={() => {
+                                         setCheckActionDate(!checkActionDate)
+                                           setCheckCreatedDate(checkActionDate)
+                                        }}
+                                id="flexSwitchCheckDefault" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Actioned Date</label>
+                                </div>
+                              </div>
+                        </div> */}
+                                <div className="form-group">
+                                    <label htmlFor="from">From</label>
+                                    <DatePicker style={inputWithDate}  className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="email">To</label>
+                                    <DatePicker style={inputWithDate}  className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
+                                </div>
+                                <hr />
+                                <Row>
+                        <Col md={6}>
+                        <button
+                                        className="btn btn-dark"
+                                        onClick={e => {
+                                          e.preventDefault();
+                                          setShow(false);
+                                        }}
+                                    >
+                                    {'Cancel'}
+                                </button>
+                            </Col>
+                            <Col md={6} >
+                            <button
+                                        className="btn btn-success float-right"
+                                        onClick={selectDataRange}
+                                        disabled={disabled}
+                                    >
+                                    {'Search'}
+                                </button>
+                            </Col>
+                            </Row>
+                    </Col>
+                </Row>
+            </Modal.Body>
+        </Modal>
         </Card>
     );
 }
