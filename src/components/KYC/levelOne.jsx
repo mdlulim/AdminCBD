@@ -12,8 +12,6 @@ export default function LevelOne(props) {
 
     useEffect(()=>{},[kycApplication])
 
-    console.log(kycApplication, ' Application&&&&&&&&')
-
     return (
         <Row style={{ marginBottom: "20px", borderBottom: "1px solid gainsboro" }}>
             <Col>

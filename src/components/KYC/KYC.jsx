@@ -10,7 +10,6 @@ import RejectLevelModal from './rejectLevelModal';
 import { confirmAlert } from 'react-confirm-alert';
 import { MemberService } from '../../providers';
 
-
 export default function Leads(props) {
     const { member, kycDetails } = props;
     const [showImage, setShowImage] = useState(false);
@@ -107,30 +106,29 @@ export default function Leads(props) {
         }
 
     }
-
     useMemo(() => {
         const getKYC = async () => {
             const kyc = await MemberService.getMemberKYC(member.id)
             const data = kyc.data.data
-            if(data){
-                data.map((row)=>{
+            if (data) {
+                data.map((row) => {
                     const data_to_update = kycApplication;
-                    if(row.level === '0'){
+                    if (row.level === '0') {
                         data_to_update.level_0.selfie = row.data.path;
                         data_to_update.level_0.email = member.email;
                         data_to_update.level_0.status = row.status
-                    }else if(row.level === '1'){
+                    } else if (row.level === '1') {
                         data_to_update.level_1.fullname = member.first_name + " " + member.last_name;
                         data_to_update.level_1.address = ''
                         data_to_update.level_1.contact = member.mobile;
                         data_to_update.level_1.id_number = row.data.identityNumber;
                         data_to_update.level_1.status = row.status
-                    }else if(row.level === '2'){
+                    } else if (row.level === '2') {
                         data_to_update.level_2.businessNature = row.data.businessNature;
                         data_to_update.level_2.srcFunds = row.data.srcFunds;
                         data_to_update.level_2.id_document = row.data.path;
                         data_to_update.level_2.status = row.status;
-                    }else if(row.level === '3'){
+                    } else if (row.level === '3') {
                         data_to_update.level_3.poa = row.data.path;
                         data_to_update.level_3.status = row.status;
                     }
@@ -142,7 +140,7 @@ export default function Leads(props) {
         getKYC()
     }, [member])
 
-
+    console.log(kycApplication.level_0, "############\n", { ...kycApplication.level_0 }, 'ksafkljl \n', kycApplication)
     const showImageCB = (image) => {
         setDocument(image)
         setShowImage(true);
