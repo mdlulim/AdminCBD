@@ -6,6 +6,7 @@ import DataTable from 'react-data-table-component';
 import { useParams, useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
+import TransactionDetails from './TransactionDetails';
 import { TransactionService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
@@ -71,6 +72,7 @@ const Status = ({ status }) => {
 
 export default function TransactionsByMember(props) {
     const [show, setShow] = useState(false);
+    const [showTransaction, setShowTransaction] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
@@ -142,6 +144,14 @@ cell: row => <div>{row.currency.code} {row.balance}</div>
             className="btn btn-secondary btn-sm btn-icon">
                         <span className="fa fa-pencil"></span>
                     </button>
+                    <button 
+            onClick={e => {
+              e.preventDefault();
+              onSubmitTransactionDetails(row);
+            }}
+            className="btn btn-secondary btn-sm btn-icon">
+                        <span className="fa fa-eye"></span>
+                    </button>
       </div>
 }];
 
@@ -157,6 +167,12 @@ const onSubmitChangeStatus= data => {
   console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
+  const onSubmitTransactionDetails= data => {
+    setSelectedTransaction(data);
+    setShowTransaction(true);
+    console.log(data);
+      //return <Confirm show={show} setShow={setShow} />;
+    };
 
   const onSubmitDeleteMember= data => {
     return confirmAlert({
@@ -173,10 +189,9 @@ const onSubmitChangeStatus= data => {
 
   const onSearchFilter = filterText => {
     const filteredItems = transactions.filter(item => (
-      (item && item.user.full_names && item.user.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase()))
+      (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.subtype && item.subtype.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredTransactions(filteredItems);
   }
@@ -185,6 +200,7 @@ const onSubmitChangeStatus= data => {
     return (
         <Card className="o-hidden mb-4">
            <ModalChangeStatus show={show} setShow={setShow} transaction={selectedTransaction} />
+           <TransactionDetails show={showTransaction} setShow={setShowTransaction} transaction={selectedTransaction} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span className="text-primary">Transactions</span>
@@ -208,13 +224,6 @@ const onSubmitChangeStatus= data => {
                 highlightOnHover
                 pagination
             />
-            <CardBody className="text-center border-top">
-                <HashLinkContainer to="/transactions">
-                    <a className="card-link font-weight-bold" href="/transactions">
-                        More Users...
-                    </a>
-                </HashLinkContainer>
-            </CardBody>
         </Card>
     );
 }

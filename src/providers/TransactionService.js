@@ -81,6 +81,15 @@ class TransactionService {
       });
     }
 
+    static async getTransactionPOP(id) {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL_POP}/${id}`,
+      });
+    }
+
 }
 
 export default TransactionService;

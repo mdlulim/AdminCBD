@@ -15,7 +15,8 @@ const MemberDetails = props => {
     const [wallet, setWallet] = useState({});
     const [address, setAddress] = useState({});
     const [kycDetails, setkycDetails] = useState({})
-    const [rating, setRating] = useState(0)
+    const [rating, setRating] = useState(2)
+    const [walletID, setWalletID] = useState(null)
     const params = useParams();
     const { id } = params;
     const [ kycLevel, setKycLevel] = useState(null)
@@ -31,20 +32,22 @@ const MemberDetails = props => {
         MemberService.getMemberWallet(id).then((res) => {
             // console.log(res.data.data)
             const walletDetails = res.data.data;
+            console.log(res.data.data)
             setWallet(walletDetails);
+            setWalletID(walletDetails.id)
         });
 
         //Get member details
         MemberService.getMemberAddress(id).then((res) => {
-            // console.log(res.data.data.results[0])
-            const memberAddress = res.data.data.results;
-            setAddress(memberAddress[0]);
+                const memberAddress = res.data.data.results;
+                setAddress(memberAddress[0]);
         });
 
-        
+
          //Get member details
          KYCService.getkycLlevel(id).then((res) => {
             setKycLevel(res.data.data.kyc_level)
+            console.log(res.data.data)
             if(res.data.data.kyc_level != -1){
                 setRating(res.data.data.kyc_level);
             }
@@ -52,6 +55,7 @@ const MemberDetails = props => {
 
        MemberService.getMemberKYC(id).then(res=>{
             setkycDetails(res.data.data)
+            console.log(res.data.data)
        })
 
 
@@ -97,6 +101,7 @@ const MemberDetails = props => {
                                             </span>
                                         </div>
                                         <div className="author-box-job">
+                                            Wallet ID: {walletID ? '...............'+walletID.slice(walletID.length - 5): ''}<br />
 										    ID/Passport No: {member.id_number}<br />
 											Phone: {member.mobile}<br />
 											Email: {member.email}<br />
