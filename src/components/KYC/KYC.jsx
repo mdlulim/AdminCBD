@@ -10,7 +10,6 @@ import RejectLevelModal from './rejectLevelModal';
 import { confirmAlert } from 'react-confirm-alert';
 import { MemberService } from '../../providers';
 
-
 export default function Leads(props) {
     const { member, kycDetails } = props;
     const [showImage, setShowImage] = useState(false);
@@ -22,21 +21,25 @@ export default function Leads(props) {
     const [kycApplication, setKycApplication] = useState({
         level_0: {
             selfie: '',
-            email: ''
+            email: '',
+            status: ''
         },
         level_1: {
             fullname: '',
             contact: '',
             address: '',
-            id_number: ''
+            id_number: '',
+            status: ''
         },
         level_2: {
             businessNature: '',
             srcFunds: '',
-            id_document: ''
+            id_document: '',
+            status: ''
         },
         level_3: {
-            poa: ''
+            poa: '',
+            status: ''
         }
     })
 
@@ -103,34 +106,41 @@ export default function Leads(props) {
         }
 
     }
-
     useMemo(() => {
         const getKYC = async () => {
             const kyc = await MemberService.getMemberKYC(member.id)
             const data = kyc.data.data
-            console.log(data)
-            if(data){
-                data.map((row)=>{
-                    if(row.level === '0'){
-                        
-                    }else if(row.level === '0'){
-
-                    }else if(row.level === '0'){
-                        
-                    }else{
-
+            if (data) {
+                data.map((row) => {
+                    const data_to_update = kycApplication;
+                    if (row.level === '0') {
+                        data_to_update.level_0.selfie = row.data.path;
+                        data_to_update.level_0.email = member.email;
+                        data_to_update.level_0.status = row.status
+                    } else if (row.level === '1') {
+                        data_to_update.level_1.fullname = member.first_name + " " + member.last_name;
+                        data_to_update.level_1.address = ''
+                        data_to_update.level_1.contact = member.mobile;
+                        data_to_update.level_1.id_number = row.data.identityNumber;
+                        data_to_update.level_1.status = row.status
+                    } else if (row.level === '2') {
+                        data_to_update.level_2.businessNature = row.data.businessNature;
+                        data_to_update.level_2.srcFunds = row.data.srcFunds;
+                        data_to_update.level_2.id_document = row.data.path;
+                        data_to_update.level_2.status = row.status;
+                    } else if (row.level === '3') {
+                        data_to_update.level_3.poa = row.data.path;
+                        data_to_update.level_3.status = row.status;
                     }
+                    setKycApplication(data_to_update)
                 })
             }
-            // kyc.data.data.map(item => {
-            //     // const { level, status, verified } = item;
-            //     console.log(item, " --->")
-            // })
         }
 
         getKYC()
     }, [member])
 
+    console.log(kycApplication.level_0, "############\n", { ...kycApplication.level_0 }, 'ksafkljl \n', kycApplication)
     const showImageCB = (image) => {
         setDocument(image)
         setShowImage(true);
@@ -143,10 +153,10 @@ export default function Leads(props) {
                 <Col md={8}>
                     <RejectLevelModal show={showReason} setShow={setShowReason} approvalList={approvalList} setApprovalList={setApprovalList} rejectObj={rejectObj} setRejectedObj={setRejectedObj} />
                     <ViewModal show={showImage} setShow={setShowImage} kycDocuments={kycDocuments} kycDetails={kycDetails} />
-                    <LevelZero approveLevel={approveLevelCB} showImage={showImageCB} member={member} />
-                    <LevelOne approveLevel={approveLevelCB} member={member} />
-                    <LevelTwo approveLevel={approveLevelCB} showImage={showImageCB} kycDetails={kycDetails} />
-                    <LevelThree approveLevel={approveLevelCB} showImage={showImageCB} kycDetails={kycDetails} />
+                    <LevelZero approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={kycApplication.level_0} />
+                    <LevelOne approveLevel={approveLevelCB} kycApplication={kycApplication.level_1} />
+                    <LevelTwo approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={kycApplication.level_2} />
+                    <LevelThree approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={kycApplication.level_3} />
                     <div style={{ textAlign: "right" }}>
                         <Button color="success" disabled={sumbitting} onClick={() => saveChanges()}>Save</Button>
                     </div>

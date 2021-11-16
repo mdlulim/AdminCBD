@@ -3,7 +3,7 @@ import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reacts
 
 
 export default function LevelZero(props) {
-    const { approveLevel, member, kycDetails } = props;
+    const { approveLevel, kycApplication } = props;
     const [active, setActiveState] = useState(null);
     const onShowImage = (image) => {
         props.showImage(image);
@@ -56,7 +56,7 @@ export default function LevelZero(props) {
                                         type="text"
                                         id="fullname"
                                         className="form-control form-control-m"
-                                        value={member.email?member.email:''}
+                                        value={kycApplication.email?kycApplication.email:''}
                                         disabled
                                     />
                                 </div>

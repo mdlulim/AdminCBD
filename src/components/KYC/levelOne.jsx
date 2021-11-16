@@ -1,25 +1,16 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reactstrap';
 import { KYCService } from '../../providers';
 import ViewModal from './viewModal';
 
 
 export default function LevelOne(props) {
-    const { approveLevel, kycDetails, member } = props;
+    const { approveLevel, kycApplication } = props;
     const [show, setShow] = useState(false);
     const [clickedDoc, setDocument] = useState({});
-    const [activeButton, setActiveButton]  = useState(null);
     const [active, setActiveState] = useState(null);
 
-
-    useMemo(() => {
-    }, []);
-
-    const onSubmit = (event) => {
-        event.preventDefault();
-        // setDisabled(true);
-        // setError('');
-    }
+    useEffect(()=>{},[kycApplication])
 
     return (
         <Row style={{ marginBottom: "20px", borderBottom: "1px solid gainsboro" }}>
@@ -52,7 +43,7 @@ export default function LevelOne(props) {
                 </Row>
                 <Row>
                     <Col xs={6} md={12} >
-                        <form onSubmit={onSubmit}>
+                        <form>
                             <Row>
                                 <Col md={6}>
                                     <div className="form-group">
@@ -61,7 +52,7 @@ export default function LevelOne(props) {
                                             type="text"
                                             id="fullname"
                                             className="form-control form-control-m"
-                                            value={(member.last_name && member.last_name)?member.last_name + " "+ member.first_name: ''}
+                                            value={kycApplication.fullname?kycApplication.fullname:''}
                                             disabled
                                         />
                                     </div>
@@ -73,7 +64,7 @@ export default function LevelOne(props) {
                                             type="text"
                                             id="id_passport"
                                             className="form-control form-control-m"
-                                            value={"980712 5509 8"}
+                                            value={kycApplication.id_number?kycApplication.id_number:''}
                                             disabled
                                         />
                                     </div>
@@ -87,7 +78,7 @@ export default function LevelOne(props) {
                                             type="text"
                                             id="contact"
                                             className="form-control form-control-m"
-                                            value={member.mobile?member.mobile:''}
+                                            value={kycApplication.contact?kycApplication.contact:''}
                                             disabled
                                         />
                                     </div>
