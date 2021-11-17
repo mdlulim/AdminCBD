@@ -8,12 +8,13 @@ import { TransactionService, UserService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import defaultImage from '../../assets/img/default.png'
+import Config from '../../config';
 
 const imageWidth = {
     width: '60%'
 }
-const ModalChangeStatus = props => {
-    const { show, setShow, transaction} = props;
+const TransactionDetails = props => {
+    const { show, setShow, transaction, pop} = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
@@ -21,15 +22,10 @@ const ModalChangeStatus = props => {
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
     useMemo(() => {
-        TransactionService.getTransactionPOP(transaction.id).then((res) => {
-            // console.log('Transaction by member')
-            // console.log(res.data.data.results)
-             const pop = res;
-             console.log("Proof of payment")
-             console.log(pop)
-           });
-       console.log(transaction)
-    }, []);
+
+           console.log(transaction);
+
+  }, []);
 
     const statusOptions = [
         { value: 'Rejected',  label: 'Reject' },
@@ -83,6 +79,8 @@ const ModalChangeStatus = props => {
         }
         setDisabled(false);
       }
+
+    
     const handleClose = () => setShow(false);
 
     const updateTransactionStatus = (event) => {
@@ -107,7 +105,7 @@ const ModalChangeStatus = props => {
                         <form onSubmit={onSubmit}>
                             <div className="form-row">
                                 <div className="col">
-                                    <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Transaction ID</label>
+                                    <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Transaction ID Test</label>
                                     <input type="text" className="form-control"  value={transaction.txid} disabled={true}/>
                                 </div>
                                 <div className="col">
@@ -137,7 +135,7 @@ const ModalChangeStatus = props => {
                                 <div className="col">
                                 <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Proof of payment</label>
                                 <hr />
-                                    <img src={defaultImage} style={imageWidth} className="rounded mx-auto d-block" alt="..." />
+                                    <img src={ pop ? `${Config.API.BASE_URL_POP}?filename=${pop.file}`: defaultImage} style={imageWidth} className="rounded mx-auto d-block" alt="..." />
                                     </div>
                                     </div>
                                 <div className="form-group">
@@ -180,7 +178,7 @@ const ModalChangeStatus = props => {
     );
 };
 
-ModalChangeStatus.propTypes = {
+TransactionDetails.propTypes = {
     show: PropTypes.bool.isRequired,
     setShow: PropTypes.func.isRequired,
     title: PropTypes.string,
@@ -193,7 +191,7 @@ ModalChangeStatus.propTypes = {
     size: PropTypes.string,
 };
 
-ModalChangeStatus.defaultProps = {
+TransactionDetails.defaultProps = {
     title: 'Confirm',
     body: <p />,
     processing: false,
@@ -207,4 +205,7 @@ ModalChangeStatus.defaultProps = {
     },
 };
 
-export default ModalChangeStatus;
+export default TransactionDetails;
+
+// https://dev.cbiglobal.io/v1/file-storage/file?filename=pop/deposit/0192c293-fc26-47f0-a764-332b44dd08b1/1636800473170.png
+// https://dev.cbiglobal.io/v1/file-storage/file?filename=pop/deposits/e6e95c89-aa91-4b94-bb51-f6fca1737275/20211113-1036.png

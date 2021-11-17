@@ -171,15 +171,15 @@ export default function Transactions(props) {
                 setTransactions(results);
                 setFilteredTransactions(results);
               }else if(transactionType === 'deposit'){
-                const results = transaList.filter(item => item.subtype === "deposit");
+                const results = transaList.filter(item => item.subtype.toLowerCase() === "deposit");
                 setTransactions(results);
                 setFilteredTransactions(results);
               }else if(transactionType === 'withdrawals'){
-                const results = transaList.filter(item => item.subtype === "withdrawal");
+                const results = transaList.filter(item => item.subtype.toLowerCase() === "withdrawal");
                 setTransactions(results);
                 setFilteredTransactions(results);
               }else if(transactionType === 'transfars'){
-                const results = transaList.filter(item => item.subtype === "transfer");
+                const results = transaList.filter(item => item.subtype.toLowerCase() === "transfer");
                 setTransactions(results);
                 setFilteredTransactions(results);
               }

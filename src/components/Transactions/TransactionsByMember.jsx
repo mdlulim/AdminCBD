@@ -75,6 +75,7 @@ export default function TransactionsByMember(props) {
     const [showTransaction, setShowTransaction] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState([]);
+    const [selectedTransPOP, setSelectedTransPOP] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const history = useHistory();
     const params = useParams();
@@ -144,14 +145,15 @@ cell: row => <div>{row.currency.code} {row.balance}</div>
             className="btn btn-secondary btn-sm btn-icon">
                         <span className="fa fa-pencil"></span>
                     </button>
-                    <button 
+                    {row.subtype.toLowerCase() === 'deposit' ?
+                    <button
             onClick={e => {
               e.preventDefault();
               onSubmitTransactionDetails(row);
             }}
             className="btn btn-secondary btn-sm btn-icon">
                         <span className="fa fa-eye"></span>
-                    </button>
+                    </button>: ''}
       </div>
 }];
 
@@ -168,9 +170,15 @@ const onSubmitChangeStatus= data => {
     //return <Confirm show={show} setShow={setShow} />;
   };
   const onSubmitTransactionDetails= data => {
+    TransactionService.getTransactionPOP(data.txid).then((res) => {
+      // console.log('Transaction by member')
+      console.log(res.data.data.rows[0])
+       const pop = res.data.data.rows;
+       setSelectedTransPOP(pop[0]);
+     });
     setSelectedTransaction(data);
     setShowTransaction(true);
-    console.log(data);
+        // console.log(data);
       //return <Confirm show={show} setShow={setShow} />;
     };
 
@@ -200,7 +208,7 @@ const onSubmitChangeStatus= data => {
     return (
         <Card className="o-hidden mb-4">
            <ModalChangeStatus show={show} setShow={setShow} transaction={selectedTransaction} />
-           <TransactionDetails show={showTransaction} setShow={setShowTransaction} transaction={selectedTransaction} />
+           <TransactionDetails show={showTransaction} setShow={setShowTransaction} transaction={selectedTransaction} pop={selectedTransPOP} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span className="text-primary">Transactions</span>

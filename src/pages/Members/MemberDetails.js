@@ -97,7 +97,7 @@ const MemberDetails = props => {
                                                 Balance: {wallet.currency_code} {wallet.balance}
                                             </span><br /> */}
                                             < span className={wallet.available_balance > 0 ? 'text-success' :'text-danger'}>
-                                                Available Balance: {wallet.currency_code} {wallet.available_balance}
+                                                Available Balance: {wallet.currency_code} {parseFloat(wallet.available_balance).toFixed(4)}
                                             </span>
                                         </div>
                                         <div className="author-box-job">

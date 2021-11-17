@@ -81,12 +81,12 @@ class TransactionService {
       });
     }
 
-    static async getTransactionPOP(id) {
+    static async getTransactionPOP(txid) {
       return await axios({
         mode: 'no-cors',
         method: 'GET',
         headers: headers,
-        url: `${Config.API.BASE_URL_POP}/${id}`,
+        url: `${Config.API.BASE_URL}/pop/deposits/${txid}`,
       });
     }
 

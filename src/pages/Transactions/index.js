@@ -95,6 +95,14 @@ const TransactionList = props => {
             return countTypes.length;
         };
 
+        const countTransType = (type) =>{
+            const countTypes = transactions.filter(item => ((item && item.subtype && item.subtype.toLowerCase().includes(type.toLowerCase())) ));
+            return countTypes.length;
+        };
+        const countWithdrawal = () =>{
+            const countTypes = transactions.filter(transaction => transaction.subtype === 'withdrawal' || transaction.subtype === 'Withdrawal');
+            return countTypes.length;
+        };
         const countTransactionType = (type) =>{
             const countTypes = transactions.filter(transaction => transaction.subtype === type);
             return countTypes.length;
@@ -123,7 +131,7 @@ const TransactionList = props => {
                         icon="li-wallet"
                         title="Deposit"
                         subtitle="Transactions"
-                        informer={<><span className="text-bold text-info">{countTransactionType('deposit')}</span></>}
+                        informer={<><span className="text-bold text-info">{countTransType('deposit')}</span></>}
                         invert={false}
                     />
                 </Col>
@@ -132,7 +140,7 @@ const TransactionList = props => {
                         icon="li-wallet"
                         title="Widthdrawals"
                         subtitle="Transactions"
-                        informer={<><span className="text-bold text-info">{countTransactionType('withdrawal')}</span></>}
+                        informer={<><span className="text-bold text-info">{countTransType('withdrawal')}</span></>}
                         invert={false}
                     />
                 </Col>
@@ -141,7 +149,7 @@ const TransactionList = props => {
                         icon="li-wallet"
                         title="Transfers"
                         subtitle="Transactions"
-                        informer={<span className="text-bold text-info">{countTransactionType('Transfer')}</span>}
+                        informer={<span className="text-bold text-info">{countTransType('Transfer')}</span>}
                         invert={false}
                     />
                 </Col>
