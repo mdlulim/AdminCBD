@@ -6,6 +6,7 @@ import { UserPermissions, Common } from 'components';
 import { UserService } from '../../providers';
 import Select from 'react-select';
 import PagePermissionService from 'providers/PagePermissionService';
+import ModalAddPermission from '../../components/UserPermissions/ModalAddPermission';
 
 $(document).ready(function() {
     $('body').on('click','.check', function(){
@@ -23,36 +24,23 @@ $(document).ready(function() {
 });
 const PermissionsList = props => {
     const breadcrumb = { heading: "UserPermissions" };
+    const [showAddNew, setShowAddNew] = useState(false);
+    const [showReports, setShowReports] = useState(false);
 
     const [users, setUsers] = useState([]);
-    // const usersList = () => {
-    //     alert(4);
-        // PagePermissionService.updatePagePermission().then((res) => {
-        //   alert(res.data.data.results);
-        //   const userslist = res.data.results;
-
-        //   const myArr = userslist;
-
-        //   myArr.forEach((item, i) => alert(1));
-        // const myList = (
-        // <ul>{myArr.map((item, i) => <li key={item + i}>{item}</li>)}</ul> 
-        // )
-
-        //   
-        // setUsers(userslist);
-        // })};
-
+    
         
         useMemo(() => {
             
             PagePermissionService.getPagePermissions().then((res) => {
                 var arr = [];
                 Object(res.data.data.results).forEach(function(value) {
+                    (value.page === 'Reports' ? $('#reports-div').attr('display:true') : setShowReports(false))
                     $(".table > tbody > tr#"+value.page+"").append(
                     '<td><input id="low'+value.page+'" class="check" data-val="'+value.low+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.low ? 'checked' :'')+'/></td>'+
-                    '<td><input id="low'+value.page+'" class="check" data-val="'+value.basic+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.basic ? 'checked' :'')+'/></td>'+
-                    '<td><input id="low'+value.page+'" class="check" data-val="'+value.medium+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.medium ? 'checked' :'')+'/></td>'+
-                    '<td><input id="low'+value.page+'" class="check" data-val="'+value.high+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.high ? 'checked' :'')+'/></td>');
+                    '<td><input id="basic'+value.page+'" class="check" data-val="'+value.basic+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.basic ? 'checked' :'')+'/></td>'+
+                    '<td><input id="medium'+value.page+'" class="check" data-val="'+value.medium+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.medium ? 'checked' :'')+'/></td>'+
+                    '<td><input id="high'+value.page+'" class="check" data-val="'+value.high+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.high ? 'checked' :'')+'/></td>');
                     
                   });
             })
@@ -61,17 +49,27 @@ const PermissionsList = props => {
 
 	return (
 		<AuthLayout  {...props}
-        breadcrumb={{ active: "User Permissions" }}
+        breadcrumb={{ active: "Page Permissions" }}
         pageHeading={{
-            title: 'User Permissions',
+            title: 'Page Permissions',
             caption: 'EXPLORE OVERVIEW TRANSACTIONS FOR CRYPTO BASED INNOVATION',
         }}>
         
         <Card>
-          
+        <ModalAddPermission  show={showAddNew} setShow={setShowAddNew}>...</ModalAddPermission>
             <CardBody className="p-0">
+            
             <div class="content">
                 <div class="container-fluid">
+                <button 
+                            className="btn btn-secondary float-right" 
+                            type="button"
+                            onClick={e => {
+                              e.preventDefault();
+                              setShowAddNew(true);
+                            }}>
+                                Add Page Permission
+                            </button>
                     <div class="box box-primary">
                     <div class="box-body">
                             <form accept-charset="utf-8">
@@ -102,9 +100,6 @@ const PermissionsList = props => {
                                         </div>
                                     </div>                                    
                                 </div>
-
-
-
 
 
                                 <div class="row col-sm-12" >
@@ -158,6 +153,32 @@ const PermissionsList = props => {
                                             </tr>
                                             <tr id="categories">
                                                 <th scope="row">Categories</th>
+                                            </tr>
+                                        </tbody>
+                                        </table>
+                                        </div>
+                                    </div>                                    
+                                </div>
+
+
+                                <div class="row col-sm-12" id="reports-div">
+                                <div class="col-sm-6" >
+                                        <div class="form-group">
+                                        <h2>REPORTS</h2>
+                                        <hr/>
+                                        <table class="table">
+                                        <thead>
+                                            <tr>
+                                            <th scope="col">Pages</th>
+                                            <th scope="col">Basic</th>
+                                            <th scope="col">Low</th>
+                                            <th scope="col">Medium</th>
+                                            <th scope="col">High</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr id="Reports">
+                                                <th scope="row">All Reports</th>
                                             </tr>
                                         </tbody>
                                         </table>

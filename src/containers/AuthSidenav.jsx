@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import menu from 'static/mainmenu.json';
 
 const SubNavItem = props => {
+    var t='';
     const {
         link,
         title,
         parentLink,
     } = props;
     return (
-        <li>
+         t = (title === 'Members' ? 'none' : 2),
+        <li style={(1 ? {display:t} : 1)}>
             <a
                 href={`${parentLink + link}`}
                 className="no-icon"
