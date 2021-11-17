@@ -16,7 +16,7 @@ class KYCService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}/users?group=member`,
+      url: `${Config.API.BASE_URL}/users/all-kyc/`,
     });
   }
 
@@ -36,6 +36,18 @@ class KYCService {
       headers: headers,
       data: data,
       url: `${Config.API.BASE_URL}/kyc`,
+    }).then((res) => {
+      const result = res;
+      return result;
+    });
+  }
+
+  static async getkycLlevel(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/kyc-level/${id}`,
     }).then((res) => {
       const result = res;
       return result;

@@ -20,6 +20,14 @@ class TransactionService {
       });
     }
 
+    static async getUsers() {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/users`,
+      });
+    }
     static async getTransaction(id) {
       return await axios({
         mode: 'no-cors',
@@ -58,7 +66,7 @@ class TransactionService {
           method: 'PUT',
           data: data,
           headers: headers,
-          url: `http://localhost:8090/transactions/${id}`,
+          url: `${Config.API.BASE_URL}/transactions/${id}`,
         }).then((res) =>{
           const result = res;
           return result;
@@ -70,6 +78,15 @@ class TransactionService {
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/users/${id}/transactions`,
+      });
+    }
+
+    static async getTransactionPOP(txid) {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/pop/deposits/${txid}`,
       });
     }
 

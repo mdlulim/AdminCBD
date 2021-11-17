@@ -72,10 +72,10 @@ export default function KYCList(props) {
 
     useMemo(() => {
         KYCService.getKYCApplicants().then((res) => {
-            console.log(res.data.data)
-            const memberslist = res.data.data.results;
-            setMembers(memberslist);
-            setFilteredMembers(memberslist);
+            console.log(res)
+            // const memberslist = res.data.data.results;
+            // setMembers(memberslist);
+            // setFilteredMembers(memberslist);
         });
 
     }, []);

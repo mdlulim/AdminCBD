@@ -163,7 +163,7 @@ export default function Transactions(props) {
                 setFilteredTransactions(results);
               }
               else if(transactionType === 'cancelled'){
-                const results = transaList.filter(item => item.status === "Rejected");
+                const results = transaList.filter(item => item.status === "Cancelled");
                 setTransactions(results);
                 setFilteredTransactions(results);
               }else if(transactionType === 'completed'){
@@ -171,15 +171,15 @@ export default function Transactions(props) {
                 setTransactions(results);
                 setFilteredTransactions(results);
               }else if(transactionType === 'deposit'){
-                const results = transaList.filter(item => item.subtype.toLowerCase() === "deposit");
+                const results = transaList.filter(item => item.subtype === "deposit");
                 setTransactions(results);
                 setFilteredTransactions(results);
               }else if(transactionType === 'withdrawals'){
-                const results = transaList.filter(item => item.subtype.toLowerCase() === "withdrawal");
+                const results = transaList.filter(item => item.subtype === "withdrawal");
                 setTransactions(results);
                 setFilteredTransactions(results);
               }else if(transactionType === 'transfars'){
-                const results = transaList.filter(item => item.subtype.toLowerCase() === "transfer");
+                const results = transaList.filter(item => item.subtype === "transfer");
                 setTransactions(results);
                 setFilteredTransactions(results);
               }

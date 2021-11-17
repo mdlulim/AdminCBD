@@ -17,7 +17,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `http://localhost:8090/products`,
+      url: `${Config.API.BASE_URL}/products`,
     });
   }
 
@@ -27,7 +27,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `http://localhost:8090/products/categories`,
+      url: `${Config.API.BASE_URL}/products/categories`,
     });
   }
 
@@ -36,7 +36,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `http://localhost:8090/products/${id}`,
+      url: `${Config.API.BASE_URL}/products/${id}`,
     });
   }
 
@@ -45,7 +45,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `http://localhost:8090/users/${id}/products`,
+      url: `${Config.API.BASE_URL}/users/${id}/products`,
     });
   }
 
@@ -54,7 +54,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `http://localhost:8090/products/${id}/users`,
+      url: `${Config.API.BASE_URL}/products/${id}/users`,
     });
   }
 
@@ -63,7 +63,7 @@ class ProductService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `http://localhost:8090/users/${id}/products`,
+      url: `${Config.API.BASE_URL}/users/${id}/products`,
     });
   }
 
@@ -73,7 +73,7 @@ class ProductService {
       method: 'POST',
       headers: headers,
       data:data,
-      url: `http://localhost:8090/products`,
+      url: `${Config.API.BASE_URL}/products`,
     }).then((res) =>{
       const result = res;
       return result;
@@ -86,7 +86,7 @@ class ProductService {
       method: 'PUT',
       data: product,
       headers: headers,
-      url: `http://localhost:8090/products/${id}`,
+      url: `${Config.API.BASE_URL}/products/${id}`,
     }).then((res) =>{
       const result = {status: res.data.status, message: res.data.message}
       return result;

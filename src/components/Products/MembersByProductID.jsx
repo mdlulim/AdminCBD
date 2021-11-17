@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import { HashLinkContainer } from 'components';
 import Moment from 'react-moment';
+import { Modal } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import { useParams, useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
@@ -10,6 +11,9 @@ import { ProductService } from '../../providers';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import DatePicker from "react-datepicker";
+import 'react-data-table-component-extensions/dist/index.css';
+import "react-datepicker/dist/react-datepicker.css";
 // styles
 const customStyles = {
    
@@ -33,6 +37,10 @@ const iconPadding ={
 }
 const inputWith={
   width: '30%'
+}
+
+const inputWithDate={
+  width: '25%'
 }
 
 const Image = () => {
@@ -66,8 +74,12 @@ const Status = ({ status }) => {
 export default function MemberByProductID(props) {
   const { member } = props;
   const [show, setShow] = useState(false);
-    const [referrals, setReferrals] = useState([]);
-    const [filteredReferrals, setFilteredReferrals] = useState([]);
+  const [disabled, setDisabled] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const handleClose = () => setShow(false);
     const history = useHistory();
     const params = useParams();
     const { id } = params;
@@ -77,8 +89,8 @@ export default function MemberByProductID(props) {
          console.log(res.data)
          if(res.data.success){
           const memberslist = res.data.data.results;
-          setReferrals(memberslist);
-          setFilteredReferrals(memberslist);
+          setProducts(memberslist);
+          setFilteredProducts(memberslist);
          }
           
         });
@@ -156,15 +168,29 @@ const onSubmitChangeStatus= data => {
     });
   };
 
+  const selectDataRange = (data) =>{
+    setDisabled(true);
+    const start = Date.parse(startDate);
+    const end = Date.parse(endDate);
+            const searchByDate = products.filter(
+              product => (Date.parse(product.created)) >= start && (Date.parse(product.created)) <= end);
+              //console.log('Created date');
+              //console.log(searchByDate);
+              setFilteredProducts(searchByDate);
+          setDisabled(false);
+          setShow(false)
+      }
+
+
   const onSearchFilter = filterText => {
-    const filteredItems = referrals.filter(item => (
+    const filteredItems = products.filter(item => (
       (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.last_name && item.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.id_number && item.id_number.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredReferrals(filteredItems);
+    setFilteredProducts(filteredItems);
   }
 
 
@@ -183,10 +209,19 @@ const onSubmitChangeStatus= data => {
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
+                      <button 
+                            className="btn btn-secondary form-control-sm" 
+                            type="button"
+                            onClick={e => {
+                              e.preventDefault();
+                              setShow(true);
+                            }}>
+                                Search By Date
+                            </button>
                 </div>
             </CardBody>
             <DataTable
-                data={filteredReferrals}
+                data={filteredProducts}
                 columns={columns}
                 customStyles={customStyles}
                 noHeader
@@ -194,7 +229,78 @@ const onSubmitChangeStatus= data => {
                 highlightOnHover
                 pagination
             />
-          
+            <Modal show={show} onHide={handleClose} centered className="confirm-modal">
+            {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
+            <Modal.Body>
+                <Row>
+                    <Col>
+                        <h3 className="text-success">Search by date range </h3>
+                        <hr />
+                        {/* <div class="row g-3">
+                              <div class="col ">
+                              <div class="form-check form-switch">
+                              <input 
+                                class="form-check-input" 
+                                type="checkbox"
+                                checked={checkCreatedDate}
+                                       onChange={() => {
+                                         setCheckCreatedDate(!checkCreatedDate)
+                                          setCheckActionDate(checkCreatedDate)
+                                        }}
+                                id="flexSwitchCheckDefault" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Created Date</label>
+                                </div>
+                              </div>
+                              <div class="col">
+                              <div class="form-check form-switch">
+                              <input 
+                                class="form-check-input" 
+                                type="checkbox"
+                                checked={checkActionDate}
+                                       onChange={() => {
+                                         setCheckActionDate(!checkActionDate)
+                                           setCheckCreatedDate(checkActionDate)
+                                        }}
+                                id="flexSwitchCheckDefault" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Actioned Date</label>
+                                </div>
+                              </div>
+                        </div> */}
+                                <div className="form-group">
+                                    <label htmlFor="from">From</label>
+                                    <DatePicker style={inputWithDate}  className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="email">To</label>
+                                    <DatePicker style={inputWithDate}  className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
+                                </div>
+                                <hr />
+                                <Row>
+                        <Col md={6}>
+                        <button
+                                        className="btn btn-dark"
+                                        onClick={e => {
+                                          e.preventDefault();
+                                          setShow(false);
+                                        }}
+                                    >
+                                    {'Cancel'}
+                                </button>
+                            </Col>
+                            <Col md={6} >
+                            <button
+                                        className="btn btn-success float-right"
+                                        onClick={selectDataRange}
+                                        disabled={disabled}
+                                    >
+                                    {'Search'}
+                                </button>
+                            </Col>
+                            </Row>
+                    </Col>
+                </Row>
+            </Modal.Body>
+        </Modal>
         </Card>
     );
 }
