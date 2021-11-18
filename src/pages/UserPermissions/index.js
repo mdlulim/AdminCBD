@@ -19,6 +19,7 @@ $(document).ready(function() {
                 basic: $('#basic'+$(this).attr('data-content')).attr('data-val'),
                 medium: $('#medium'+$(this).attr('data-content')).attr('data-val'),
                 high: $('#high'+$(this).attr('data-content')).attr('data-val'),
+                veryhigh: $('#veryhigh'+$(this).attr('data-content')).attr('data-val'),
             });
     })
 });
@@ -35,12 +36,12 @@ const PermissionsList = props => {
             PagePermissionService.getPagePermissions().then((res) => {
                 var arr = [];
                 Object(res.data.data.results).forEach(function(value) {
-                    (value.page === 'Reports' ? $('#reports-div').attr('display:true') : setShowReports(false))
                     $(".table > tbody > tr#"+value.page+"").append(
                     '<td><input id="low'+value.page+'" class="check" data-val="'+value.low+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.low ? 'checked' :'')+'/></td>'+
                     '<td><input id="basic'+value.page+'" class="check" data-val="'+value.basic+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.basic ? 'checked' :'')+'/></td>'+
                     '<td><input id="medium'+value.page+'" class="check" data-val="'+value.medium+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.medium ? 'checked' :'')+'/></td>'+
-                    '<td><input id="high'+value.page+'" class="check" data-val="'+value.high+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.high ? 'checked' :'')+'/></td>');
+                    '<td><input id="high'+value.page+'" class="check" data-val="'+value.high+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.high ? 'checked' :'')+'/></td>'+
+                    '<td><input id="veryhigh'+value.page+'" class="check" data-val="'+value.veryhigh+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.veryhigh ? 'checked' :'')+'/></td>');
                     
                   });
             })
@@ -86,14 +87,30 @@ const PermissionsList = props => {
                                             <th scope="col">Basic</th>
                                             <th scope="col">Medium</th>
                                             <th scope="col">High</th>
+                                            <th scope="col">Very High</th>
                                             </tr> 
                                         </thead>
                                         <tbody>
-                                            <tr id="transactions">
+                                            <tr id="alltransactions">
                                                 <th scope="row">Transactions</th>
                                             </tr>
-                                            <tr id="deposits">
+                                            <tr id="pending">
+                                                <th scope="row">Pending</th>
+                                            </tr>
+                                            <tr id="withdrawals">
                                                 <th scope="row">Withdrawals</th>
+                                            </tr>
+                                            <tr id="deposits">
+                                                <th scope="row">Deposits</th>
+                                            </tr>
+                                            <tr id="transfers">
+                                                <th scope="row">Transfers</th>
+                                            </tr>
+                                            <tr id="completed">
+                                                <th scope="row">Completed</th>
+                                            </tr>
+                                            <tr id="cancelled">
+                                                <th scope="row">Cancelled</th>
                                             </tr>
                                         </tbody>
                                         </table>
@@ -115,6 +132,7 @@ const PermissionsList = props => {
                                             <th scope="col">Basic</th>
                                             <th scope="col">Medium</th>
                                             <th scope="col">High</th>
+                                            <th scope="col">Very High</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -141,10 +159,11 @@ const PermissionsList = props => {
                                         <thead>
                                             <tr>
                                             <th scope="col">Pages</th>
-                                            <th scope="col">Basic</th>
                                             <th scope="col">Low</th>
+                                            <th scope="col">Basic</th>
                                             <th scope="col">Medium</th>
                                             <th scope="col">High</th>
+                                            <th scope="col">Very High</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -170,10 +189,11 @@ const PermissionsList = props => {
                                         <thead>
                                             <tr>
                                             <th scope="col">Pages</th>
-                                            <th scope="col">Basic</th>
                                             <th scope="col">Low</th>
+                                            <th scope="col">Basic</th>
                                             <th scope="col">Medium</th>
                                             <th scope="col">High</th>
+                                            <th scope="col">Very High</th>
                                             </tr>
                                         </thead>
                                         <tbody>

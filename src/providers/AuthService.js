@@ -10,7 +10,7 @@ class AuthService {
   
 
     static async login(username, password, device, geoinfo){
-
+        
         const apiURL = Config.API.BASE_URL_LOGIN;
         console.log(apiURL+'/login',{"user":username, "password":password, "device":device, "geoinfo": geoinfo})
         const res    = await axios.post(apiURL+'/login',{"user":username, "password":password, "device":device, "geoinfo": geoinfo});
@@ -18,6 +18,7 @@ class AuthService {
         return res;
     }
 
+    console
     static async addUser(user){
         return await axios({
           mode: 'no-cors',
@@ -44,9 +45,15 @@ class AuthService {
         });
       }
 
-    static async getUsers(){
+      static async getUsers() {
+        return await axios({
+          mode: 'no-cors',
+          method: 'GET',
+          headers: headers,
+          url: `${Config.API.BASE_URL}/users?group=admin`,
+        });
+      }
 
-    }
     static async logout() {
         // remove user from local storage to log user out bPDg2i
         Session.destroy();

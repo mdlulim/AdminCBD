@@ -20,6 +20,17 @@ class UserService {
       });
     }
 
+    static async getUserByEmail(email) {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/users/email/${email}`,
+      });
+    }
+
+    
+
     static async addAdminUser(data){
         return await axios({
           mode: 'no-cors',

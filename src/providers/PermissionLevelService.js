@@ -16,7 +16,7 @@ class PermissionLevelService {
 
     static async getLevels() {
       return await axios({
-        mode: 'no-cors',
+        mode: 'no-cors',  
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/levels`,
