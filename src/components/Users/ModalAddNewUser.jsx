@@ -79,7 +79,8 @@ const onSubmit = (e) =>{
         { value: '1', label: 'Low' },
         { value: '2', label: 'Basic' },
         { value: '3', label: 'Medium' },
-        { value: '4', label: 'High' }
+        { value: '4', label: 'High' },
+        { value: '5', label: 'Very High' }
       ];
 
     const rolessOptions = [

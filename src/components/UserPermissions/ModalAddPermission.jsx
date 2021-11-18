@@ -36,13 +36,15 @@ const AlertModal = props => {
         const form = e.currentTarget;
 
         // alert(form.role_description.value);
+        var pageName = await form.page_name.value;
         PagePermissionService.addPagePermission(
              {
-                page:await form.page_name.value,
+                page: (pageName.toLowerCase()).replace(/\s/g, ""),
                 low: $('#low').is(':checked') ? true : false,
                 basic: $('#basic').is(':checked') ? true : false,
                 medium: $('#medium').is(':checked') ? true : false,
-                high: $('#high').is(':checked') ? true : false
+                high: $('#high').is(':checked') ? true : false,
+                veryhigh: $('#veryhigh').is(':checked') ? true : false
              }
         ).then((response) =>{
             console.log(response);
@@ -95,10 +97,11 @@ const AlertModal = props => {
                                 <table class="table">
                                         <thead>
                                             <tr>
-                                            <th scope="col">Basic</th>
                                             <th scope="col">Low</th>
+                                            <th scope="col">Basic</th>
                                             <th scope="col">Medium</th>
                                             <th scope="col">High</th>
+                                            <th scope="col">Very High</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -107,6 +110,7 @@ const AlertModal = props => {
                                             <td><input id="basic" name="basic" type="checkbox" /></td>
                                             <td><input id="medium" name="medium" type="checkbox" /></td>
                                             <td><input id="high" name="high" type="checkbox" /></td>
+                                            <td><input id="veryhigh" name="veryhigh" type="checkbox" /></td>
                                         </tr>
                                         </tbody>
                                 </table>

@@ -23,6 +23,15 @@ class PagePermissionService {
       });
     }
 
+    static async getPagePermissionsByPage(page) {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/page_permissions/page_name/${page}`,
+      });
+    }
+
     static async addPagePermission(data){
         return await axios({
           mode: 'no-cors',
