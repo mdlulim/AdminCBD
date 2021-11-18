@@ -5,7 +5,7 @@ import ViewModal from './viewModal';
 
 
 export default function LevelOne(props) {
-    const { approveLevel, kycApplication } = props;
+    const { approveLevel, kycApplication, setKycApplication } = props;
     const [show, setShow] = useState(false);
     const [clickedDoc, setDocument] = useState({});
     const [active, setActiveState] = useState(null);
@@ -26,14 +26,14 @@ export default function LevelOne(props) {
                             <Button
                                 color="primary"
                                 onClick={()=>{setActiveState(0); approveLevel({ level: 1, status: true })}}
-                                className={`${active === 0?'active':''}`}
+                                className={`${kycApplication.status === 'Approved'?'active':''}`}
                             >
                                 Approve
                             </Button>
                             <Button
                                 color="primary"
-                                onClick={()=>{setActiveState(1); approveLevel({ level: 1, status: false })}}
-                                className={`${active === 1?'active':''}`}
+                                onClick={()=>{setActiveState(1); approveLevel({ level: 1, status: false, setLevel: setKycApplication, levelData: kycApplication })}}
+                                className={`${kycApplication.status === 'Rejected'?'active':''}`}
                             >
                                 Decline
                             </Button>

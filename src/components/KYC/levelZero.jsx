@@ -3,12 +3,10 @@ import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reacts
 
 
 export default function LevelZero(props) {
-    const { approveLevel, kycApplication } = props;
-    const [active, setActiveState] = useState(null);
+    const { approveLevel, kycApplication, setKycApplication } = props;
     const onShowImage = (image) => {
         props.showImage(image);
     }
-
 
     return (
         <Row style={{ marginBottom: "20px", borderBottom: "1px solid gainsboro" }}>
@@ -22,15 +20,15 @@ export default function LevelZero(props) {
                             <ButtonGroup size="sm" style={{ display: "flex", justifyContent: "end" }}>
                                 <Button
                                     color="primary"
-                                    onClick={() => { setActiveState(0); approveLevel({ level: 0, status: true }) }}
-                                    className={`${active === 0 ? 'active' : ''}`}
+                                    onClick={() => { setKycApplication({...kycApplication, status: 'Approved'}); approveLevel({ level: 0, status: true }) }}
+                                    className={`${kycApplication.status === 'Approved' ? 'active' : ''}`}
                                 >
                                     Approve
                                 </Button>
                                 <Button
                                     color="primary"
-                                    onClick={() => { setActiveState(1); approveLevel({ level: 0, status: false }) }}
-                                    className={`${active === 1 ? 'active' : ''}`}
+                                    onClick={() => { approveLevel({ level: 0, status: false, setLevel: setKycApplication, levelData: kycApplication }) }}
+                                    className={`${kycApplication.status === 'Rejected' ? 'active' : ''}`}
                                 >
                                     Decline
                                 </Button>

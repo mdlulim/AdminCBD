@@ -1,24 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reactstrap';
 
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
 
 export default function Levelhree(props) {
+    const { approveLevel, kycApplication, setKycApplication } = props;
     const [show, setShow] = useState(false);
     const [clickedDoc, setDocument] = useState({});
     const [active, setActiveState] = useState(null);
 
-    const { approveLevel } = props;
 
     const onShowImage = (image) => {
         props.showImage(image);
@@ -38,14 +27,14 @@ export default function Levelhree(props) {
                             <Button
                                 color="primary"
                                 onClick={()=>{setActiveState(0); approveLevel({ level: 3, status: true })}}
-                                className={`${active === 0?'active':''}`}
+                                className={`${kycApplication.status === 'Approved'?'active':''}`}
                             >
                                 Approve
                             </Button>
                             <Button
                                 color="primary"
-                                onClick={()=>{setActiveState(1); approveLevel({ level: 3, status: false })}}
-                                className={`${active === 1?'active':''}`}
+                                onClick={()=>{setActiveState(1); approveLevel({ level: 3, status: false, setLevel: setKycApplication, levelData: kycApplication })}}
+                                className={`${kycApplication.status === 'Rejected'?'active':''}`}
                             >
                                 Decline
                             </Button>
