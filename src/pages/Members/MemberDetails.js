@@ -30,9 +30,7 @@ const MemberDetails = props => {
 
         //Get member details
         MemberService.getMemberWallet(id).then((res) => {
-            // console.log(res.data.data)
             const walletDetails = res.data.data;
-            console.log(res.data.data)
             setWallet(walletDetails);
             setWalletID(walletDetails.id)
         });
@@ -47,7 +45,6 @@ const MemberDetails = props => {
          //Get member details
          KYCService.getkycLlevel(id).then((res) => {
             setKycLevel(res.data.data.kyc_level)
-            console.log(res.data.data)
             if(res.data.data.kyc_level != -1){
                 setRating(res.data.data.kyc_level);
             }
