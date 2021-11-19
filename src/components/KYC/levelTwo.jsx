@@ -1,10 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reactstrap';
+import React, { useState } from 'react';
+import { Card, Row, Col, Button, ButtonGroup } from 'reactstrap';
 
 export default function LevelTwo(props) {
     const { approveLevel, kycApplication, setKycApplication } = props;
-    const [show, setShow] = useState(false);
-    const [clickedDoc, setDocument] = useState({});
     const [active, setActiveState] = useState(null);
 
     const onShowImage = (image) => {
@@ -54,7 +52,7 @@ export default function LevelTwo(props) {
                                             type="text"
                                             id="natureBusiness"
                                             className="form-control form-control-m"
-                                            value={kycApplication.natureBusiness?kycApplication.natureBusiness:''}
+                                            value={kycApplication.businessNature?kycApplication.businessNature:''}
                                             disabled
                                         />
                                     </div>

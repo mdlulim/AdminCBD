@@ -1,11 +1,9 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reactstrap';
+import React, { useState } from 'react';
+import { Card, Row, Col, Button, ButtonGroup } from 'reactstrap';
 
 
 export default function Levelhree(props) {
     const { approveLevel, kycApplication, setKycApplication } = props;
-    const [show, setShow] = useState(false);
-    const [clickedDoc, setDocument] = useState({});
     const [active, setActiveState] = useState(null);
 
 
