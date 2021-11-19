@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { Button } from 'reactstrap';
 import useForm from 'react-hook-form';
 import { Modal } from 'react-bootstrap';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { KYCService } from '../../providers';
 import LevelZero from './levelZero';
