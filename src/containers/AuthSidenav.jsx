@@ -18,7 +18,7 @@ const SubNavItem = props => {
 
     useMemo(() => {
         PagePermissionService.getPagePermissionsByPage((title.toLowerCase()).replace(/\s/g, "")).then((res) => {
-            
+            // alert(ul);
             if(ul == 1){
                 setHasAccess(res.data.low);
             }else if(ul == 2){

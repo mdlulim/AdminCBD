@@ -7,6 +7,8 @@ import { PagePermissionService } from 'providers';
 import { confirmAlert } from 'react-confirm-alert';
 import $ from 'jquery';
 
+
+
 const AlertModal = props => {
     const {
         title,
@@ -33,6 +35,11 @@ const AlertModal = props => {
 
     const onSubmit = async (e) =>{
         e.preventDefault();
+
+        if($('#role').val() === ''){
+            $('#role').css('border-color','red').attr("placeholder", "Please type in your page");;
+            return;
+        }
         const form = e.currentTarget;
 
         // alert(form.role_description.value);

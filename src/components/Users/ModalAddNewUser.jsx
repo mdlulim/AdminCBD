@@ -142,7 +142,7 @@ const onSubmit = (e) =>{
                                         className="form-control form-control-m"
                                     />
                                 </div>
-                                <div>
+                                {/* <div>
                                 <label htmlFor="email">Select User Role</label>
                                 <Select
                                     id="role"
@@ -152,7 +152,7 @@ const onSubmit = (e) =>{
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
                                     />
-                                </div>
+                                </div> */}
                                 <div>
                                 <label htmlFor="email">Select Status</label>
                                 <Select
@@ -164,9 +164,9 @@ const onSubmit = (e) =>{
                                     classNamePrefix="select"
                                     />
                                 </div>
-
+                                    <br/>
                                 <div>
-                                <label htmlFor="email">Permission Level</label>
+                                <label htmlFor="perm_level">Permission Level</label>
                                 <Select
                                     id="perm_level"
                                     name="perm_level"
