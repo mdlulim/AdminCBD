@@ -24,7 +24,7 @@ export default function Levelhree(props) {
                        <ButtonGroup size="sm" style={{ display: "flex", justifyContent: "end" }}>
                             <Button
                                 color="primary"
-                                onClick={()=>{setActiveState(0); approveLevel({ level: 3, status: true })}}
+                                onClick={()=>{setKycApplication({...kycApplication, status: 'Approved'}); approveLevel({ level: 3, status: true })}}
                                 className={`${kycApplication.status === 'Approved'?'active':''}`}
                             >
                                 Approve

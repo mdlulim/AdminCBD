@@ -25,7 +25,7 @@ export default function LevelTwo(props) {
                        <ButtonGroup size="sm" style={{ display: "flex", justifyContent: "end" }}>
                             <Button
                                 color="primary"
-                                onClick={()=>{setActiveState(0); approveLevel({ level: 2, status: true })}}
+                                onClick={()=>{setKycApplication({...kycApplication, status: 'Approved'}); approveLevel({ level: 2, status: true })}}
                                 className={`${kycApplication.status === 'Approved'?'active':''}`}
                             >
                                 Approve

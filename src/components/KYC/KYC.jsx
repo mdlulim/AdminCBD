@@ -46,11 +46,12 @@ export default function Leads(props) {
 
         const data_to_send = {
             levels: approvalList,
-            kyc: (kyc_level_rejected === 99) ? '3' : (kyc_level_rejected === '0') ? '-1' : levels_to_update[levels_to_update.indexOf(kyc_level_rejected) - 1],
             rejected_docs,
             last_name: member.last_name,
-            email: member.email
+            email: member.email,
+            user_id: kycDetails[0].user_id
         }
+
 
         const res = await KYCService.updateKYC(data_to_send)
         setSubmitting(false)
