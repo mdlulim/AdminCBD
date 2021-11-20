@@ -80,18 +80,6 @@ export default function LevelTwo(props) {
                                         </Card>
                                     </div>
                                 </Col>
-                                {/* <Col xs={6} md={6}>
-                                    <div className="form-group">
-                                        <label htmlFor="registrationNumber">Registration Number</label>
-                                        <input
-                                            type="text"
-                                            id="registrationNumber"
-                                            className="form-control form-control-m"
-                                            value={"N100P900"}
-                                            disabled
-                                        />
-                                    </div>
-                                </Col> */}
                             </Row>
                         </form>
                     </Col>

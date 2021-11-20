@@ -4,7 +4,7 @@ import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
-import { TransactionService, UserService, AccountService } from '../../providers';
+import { TransactionService, UserService, AccountService,MemberService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import defaultImage from '../../assets/img/default.png'
@@ -58,7 +58,7 @@ const TransactionDetails = props => {
         console.log(sponsorWallet);
         const data = { status: selectedStatus.value} ;
 
-        let mainBalance =parseFloat(mainWallet.available_balance)+ parseFloat(transaction.amount) * 50/100;
+        let mainBalance = parseFloat(mainWallet.available_balance)+ parseFloat(transaction.amount) * 50/100;
         let userBalance = parseFloat(userWallet.available_balance) + parseFloat(transaction.amount) * 25/100;
         let sponsorBalance = parseFloat(sponsorWallet.available_balance) + parseFloat(transaction.amount) * 25/100;
 
@@ -84,6 +84,9 @@ const TransactionDetails = props => {
             TransactionService.approveDeposit(transaction.id, data2).then((response) =>{
                 console.log(response);
                  if(response.data.success){
+                    MemberService.updateStatus(transaction.user_id, 'Active').then((response) => {
+                        console.log(response);
+                    })
                      setShow(false)
                      return confirmAlert({
                         title: 'Succcess',
