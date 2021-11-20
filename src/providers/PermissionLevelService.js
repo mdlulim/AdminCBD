@@ -8,9 +8,7 @@ const headers = {
   'Authorization': `Bearer ${authToken}`,
   'Content-Type': `application/json`,
   'Access-Control-Max-Age': `600`
-};  
-
-console.log(authToken);
+};
 
 class PermissionLevelService {
 

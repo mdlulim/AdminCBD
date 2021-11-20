@@ -14,11 +14,16 @@ const Filter = () => {
                     { label: 'Filter Year' }
                 ]}
             />
+
             <button
                 className="btn d-none d-md-block float-right margin-right-5"
                 id="dashboard-rp-customrange"
+                onClick={e => {
+                    e.preventDefault();
+                    window.location = '/transactions/import';
+                  }}
             >
-                Transfer
+                Import Transactions
             </button>
         </>
     );

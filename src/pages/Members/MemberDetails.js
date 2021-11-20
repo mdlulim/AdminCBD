@@ -14,17 +14,18 @@ const MemberDetails = props => {
     const [member, setMember] = useState({});
     const [wallet, setWallet] = useState({});
     const [address, setAddress] = useState({});
-    const [kycDetails, setkycDetails] = useState({})
-    const [rating, setRating] = useState(2)
-    const [walletID, setWalletID] = useState(null)
+    const [kycDetails, setkycDetails] = useState({});
+    const [rating, setRating] = useState(0);
+    const [walletID, setWalletID] = useState(null);
     const params = useParams();
     const { id } = params;
-    const [ kycLevel, setKycLevel] = useState(null)
+    const [ kycLevel, setKycLevel] = useState(null);
 
     useMemo(() => {
         //Get member details
         MemberService.getMember(id).then((res) => {
             const memberDetails = res.data.data;
+            //console.log(memberDetails)
             setMember(memberDetails)
         })
 
@@ -32,7 +33,7 @@ const MemberDetails = props => {
         MemberService.getMemberWallet(id).then((res) => {
             // console.log(res.data.data)
             const walletDetails = res.data.data;
-            console.log(res.data.data)
+           // console.log(res.data.data)
             setWallet(walletDetails);
             setWalletID(walletDetails.id)
         });
@@ -47,7 +48,7 @@ const MemberDetails = props => {
          //Get member details
          KYCService.getkycLlevel(id).then((res) => {
             setKycLevel(res.data.data.kyc_level)
-            console.log(res.data.data)
+            //console.log(res.data.data)
             if(res.data.data.kyc_level != -1){
                 setRating(res.data.data.kyc_level);
             }
@@ -55,7 +56,7 @@ const MemberDetails = props => {
 
        MemberService.getMemberKYC(id).then(res=>{
             setkycDetails(res.data.data)
-            console.log(res.data.data)
+           // console.log(res.data.data)
        })
 
 
@@ -195,7 +196,7 @@ const MemberDetails = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'transactions' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <Transactions.TransactionsByMember member={member} />
+                                            <Transactions.TransactionsByMember member={member} userWallet={wallet}/>
                                         </CardBody>
                                     </div>
                                 </div>

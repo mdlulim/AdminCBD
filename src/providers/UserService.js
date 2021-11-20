@@ -20,6 +20,15 @@ class UserService {
       });
     }
 
+    static async getUsersall() {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/users`,
+      });
+    }
+
     static async addAdminUser(data){
         return await axios({
           mode: 'no-cors',

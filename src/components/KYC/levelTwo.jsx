@@ -25,7 +25,7 @@ export default function LevelTwo(props) {
     }, []);
 
     const onShowImage = (image) => {
-        console.log(kycDetails['2'].data)
+      //  console.log(kycDetails['2'].data)
         props.showImage(image);
     }
 
