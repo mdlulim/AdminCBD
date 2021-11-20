@@ -31,7 +31,6 @@ const MemberDetails = props => {
 
         //Get member details
         MemberService.getMemberWallet(id).then((res) => {
-            // console.log(res.data.data)
             const walletDetails = res.data.data;
            // console.log(res.data.data)
             setWallet(walletDetails);

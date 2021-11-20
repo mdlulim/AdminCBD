@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { Button } from 'reactstrap';
 import useForm from 'react-hook-form';
 import { Modal } from 'react-bootstrap';
@@ -9,12 +9,21 @@ export default function RejectLevelModal(props) {
     const { register, handleSubmit, errors } = useForm();
 
     const onSubmit = (data) => {
+        //controls color of rejected button after submission
+        const buttonCB = rejectObj.setLevel;
+        const levelData = rejectObj.levelData;
+        delete rejectObj.setLevel;
+        delete rejectObj.levelData;
+        buttonCB({...levelData, status: 'Rejected'});
+
         const prevApprovalList = approvalList;
         rejectObj.reason = data.rejectionReason;
         const level = rejectObj.level
         delete rejectObj.level
         prevApprovalList[level] = rejectObj;
         setApprovalList(prevApprovalList)
+
+
         handleClose();
     }
 
