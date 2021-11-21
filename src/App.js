@@ -27,6 +27,7 @@ import Leads from 'pages/Members/Leads';
 import WealthCreater from 'pages/Members/WealthCreater';
 import MemberDetails from 'pages/Members/MemberDetails';
 import Transactions from 'pages/Transactions';
+import TransactionImport from 'pages/Transactions/TransactionImport';
 import Deposits from 'pages/Transactions/Deposits';
 import Widthdrawals from 'pages/Transactions/Widthdrawals';
 import Canceled from 'pages/Transactions/Cancelled';
@@ -74,6 +75,7 @@ const App = () => {
 					<Route exact path="/main-account" component={(props) => <CompanyAccount config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/deposits" component={(props) => <Deposits config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/rejected" component={(props) => <Canceled config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/transactions/import" component={(props) => <TransactionImport config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/transfers" component={(props) => <Transfers config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/completed" component={(props) => <Completed config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/pending" component={(props) => <Pending config={settings} {...props} setMenu={setMenu} />} />

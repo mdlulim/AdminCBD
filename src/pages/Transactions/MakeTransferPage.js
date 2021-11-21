@@ -1,7 +1,8 @@
-import React, { useState} from 'react';
+import React, { useState, useMemo} from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
 import { Common, Transactions } from 'components';
+import { AccountService } from '../../providers'
 
 const Filter = () => {
     const [show, setShow]= useState(false);
@@ -29,7 +30,16 @@ const Filter = () => {
 }
 
 export default function Completed(props) {
-    
+    const [mainAccount, setMainAccount] = useState({});
+
+    useMemo(() => {
+          AccountService.getMainAccount().then((res) => {
+            // console.log(res.data.data)
+             const memberslist = res.data.data;
+             setMainAccount(memberslist);
+           });
+
+      }, []);
     return (
         <AuthLayout
             {...props}
@@ -46,7 +56,7 @@ export default function Completed(props) {
                         icon="li-wallet"
                         title="Main Account"
                         subtitle="Main Account Balance"
-                        informer={<span className="text-bold text-success">2 890 000.0000 CBI</span>}
+                        informer={<span className="text-bold text-success">{mainAccount ? mainAccount.currency_code+' '+ parseFloat(mainAccount.available_balance).toFixed(4): ''}</span>}
                         invert={false}
                     />
                 </Col>

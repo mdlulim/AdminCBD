@@ -104,6 +104,10 @@ const columns = [{
     selector: 'username',
     sortable: true,
   }, {
+    name: 'Referral',
+    selector: 'referral_id',
+    sortable: true,
+  },{
     name: 'Mobile',
     selector: 'mobile',
     sortable: true,
@@ -169,6 +173,7 @@ const columns = [{
     const filteredItems = members.filter(item => (
       (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.last_name && item.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.referral_id && item.referral_id.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.mobile && item.mobile.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||

@@ -12,7 +12,7 @@ import Currencies from './Currencies';
 import KYCService from './KYCService';
 import CompanyAccountService from './CompanyAccountService';
 import PermissionLevelService from './PermissionLevelService';
-import PagePermissionService from './PagePermissionService';
+import AccountService from './AccountService';
 
 
 export {
@@ -29,5 +29,5 @@ export {
     KYCService,
     CompanyAccountService,
     PermissionLevelService,
-    PagePermissionService
+    AccountService
 };
