@@ -88,7 +88,7 @@ export default function Products(props) {
     useMemo(() => {
       ProductService.getProductByMemberId(id).then((res) => {
         //console.log('Product By Member '+res.data.data.results)
-        //console.log(res.data.data.results)
+        console.log(res.data.data.results)
         const productlist = res.data.data.results;
         setProducts(productlist);
         setFilteredProducts(productlist);
@@ -138,6 +138,13 @@ const columns = [{
                 <strong><Moment date={row.user_product.created} format="D MMM YYYY" /></strong><br />
                 <span className="text-muted"><Moment date={row.user_product.created} format="hh:mm:ss" /></span>
              </div>
+},{name: 'End Date',
+selector: 'end_date',
+sortable: true,
+ cell: row => <div>
+               {row.end_date ? <><strong><Moment date={row.user_product.created} format="D MMM YYYY" /></strong><br />
+               <span className="text-muted"><Moment date={row.user_product.created} format="hh:mm:ss" /></span></>: ''}
+            </div>
 },{
     name: 'Status',
     selector: 'status',
