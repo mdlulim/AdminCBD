@@ -5,6 +5,7 @@ import LineChart from './LineChart';
 import UpdateProductDetails from './UpdateProductDetails';
 import MembersByProductID from './MembersByProductID';
 import Categories from './Categories';
+import ProductHistory from './ProductHistory'
 
 export default {
     Products,
@@ -14,4 +15,5 @@ export default {
     UpdateProductDetails,
     MembersByProductID,
     Categories,
+    ProductHistory,
 }
