@@ -206,7 +206,7 @@ const MemberDetails = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <KYC.KYC member={member} kycDetails={kycDetails} />
+                                            <KYC.KYC member={member} address={address} kycDetails={kycDetails} />
                                         </CardBody>
                                     </div>
                                 </div>
