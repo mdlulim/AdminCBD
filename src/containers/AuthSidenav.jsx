@@ -6,10 +6,8 @@ const SubNavItem = props => {
     const [hasAccess, setHasAccess] = useState(false);
     const [perm, setPerm] = useState('');
     var t='';
-    var ul = localStorage.getItem('userLevel');
-    
+    //var ul = localStorage.getItem('userLevel');
 
-    
     const {
         link,
         title,
@@ -17,8 +15,9 @@ const SubNavItem = props => {
     } = props;
 
     useMemo(() => {
+        let ul =localStorage.getItem('userLevel');
         PagePermissionService.getPagePermissionsByPage((title.toLowerCase()).replace(/\s/g, "")).then((res) => {
-            // alert(ul);
+            console.log(ul);
             if(ul == 1){
                 setHasAccess(res.data.low);
             }else if(ul == 2){
