@@ -4,6 +4,7 @@ import { browserName, osName, osVersion } from 'react-device-detect';
 import { Session } from 'bc-react-session';
 import AuthAervice from '../../providers/AuthService';
 import { AuthPages } from 'containers';
+import { UserService } from 'providers';
 
 export default function LoginPage(props) {
     const [error, setError] = useState('');
@@ -28,8 +29,16 @@ export default function LoginPage(props) {
                 IPv4: "123456"
             };
             AuthAervice.login(user, password, device,geoLocation).then((response) =>{
-                console.log(response);
+                // console.log(response);
             if(response.data.success === true){
+                const logLevel = () => {
+                    UserService.getUserByEmail(user).then((res) => {
+                        // console.log(res.data.permission_level);
+                        localStorage.setItem('userLevel',res.data.permission_level);
+                    })};
+
+                logLevel();
+                
                 console.log(response.data.data.token)
                 let sessionDuration = 864000;
                 Session.start({
@@ -39,6 +48,7 @@ export default function LoginPage(props) {
                     },
                     expiration: sessionDuration 
                 });
+                
             window.location = '/dashboard';
             }else{
                 setLoading(false);

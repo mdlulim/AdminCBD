@@ -123,7 +123,7 @@ const AlertModal = props => {
                                         type="submit"
                                         disabled={confirmButtonDisabled || processing}
                                     >
-                                    {processing ? 'Processing...' : 'Update'}
+                                    {processing ? 'Processing...' : 'Delete'}
                                 </button>
                             </Col>
                             </Row>

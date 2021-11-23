@@ -27,6 +27,13 @@ pipeline {
   }
   agent any
   stages {
+    stage('SonarQube Analysis') {
+      steps {
+        withSonarQubeEnv(installationName: 'cbiglobal-sonarqube') {
+          sh '/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonar-scanner/bin/sonar-scanner'
+        }
+      }
+    }    
     stage('Docker Build') {
       agent any
       steps {

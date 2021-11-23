@@ -1,14 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import { PagePermissionService } from 'providers';
+import React, { useEffect, useState, useMemo } from 'react';
 import menu from 'static/mainmenu.json';
-
+// var ;
 const SubNavItem = props => {
+    const [hasAccess, setHasAccess] = useState(false);
+    const [perm, setPerm] = useState('');
+    var t='';
+    var ul = localStorage.getItem('userLevel');
+    
+
+    
     const {
         link,
         title,
         parentLink,
     } = props;
+
+    useMemo(() => {
+        PagePermissionService.getPagePermissionsByPage((title.toLowerCase()).replace(/\s/g, "")).then((res) => {
+            // alert(ul);
+            if(ul == 1){
+                setHasAccess(res.data.low);
+            }else if(ul == 2){
+                setHasAccess(res.data.basic);
+            }else if(ul == 3){
+                setHasAccess(res.data.medium);
+            }else if(ul == 4){
+                setHasAccess(res.data.high);
+            }else if(ul == 5){
+                setHasAccess(res.data.veryhigh);
+            }
+            
+            if(title === 'User Permissions' || title === 'Users' || title === 'User Roles'  || title === 'Countries'  || title === 'Settings'  || title === 'Forms Configuration'){
+                setHasAccess(true);
+            }
+        });
+
+        }, []);
     return (
-        <li>
+        <li style={{display:(hasAccess !== true ? 'none' : true)}}>
             <a
                 href={`${parentLink + link}`}
                 className="no-icon"

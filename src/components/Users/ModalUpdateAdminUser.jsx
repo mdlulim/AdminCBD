@@ -29,6 +29,7 @@ const ModalChangeStatus = props => {
     e.preventDefault();
     setShow(false);
     const form = e.currentTarget;
+    alert(form.perm_level.value);
     // const userData = {
     //     first_name: document.getElementById('first_name').value,
     //     last_name: form.last_name.value,
@@ -74,7 +75,8 @@ const ModalChangeStatus = props => {
         { value: '1', label: 'Low' },
         { value: '2', label: 'Basic' },
         { value: '3', label: 'Medium' },
-        { value: '4', label: 'High' }
+        { value: '4', label: 'High' },
+        { value: '5', label: 'Very High' }
     ];
 
     const statusOptions = [
