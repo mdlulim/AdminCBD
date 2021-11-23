@@ -33,7 +33,7 @@ export default function LoginPage(props) {
             if(response.data.success === true){
                 const logLevel = () => {
                     UserService.getUserByEmail(user).then((res) => {
-                        // console.log(res.data.permission_level);
+                        console.log(res.data.permission_level);
                         localStorage.setItem('userLevel',res.data.permission_level);
                     })};
 
