@@ -44,7 +44,7 @@ export default function LevelOne(props) {
                     <Col xs={6} md={12} >
                         <form>
                             <Row>
-                                <Col md={6}>
+                                <Col>
                                     <div className="form-group">
                                         <label htmlFor="fullname">Full Names</label>
                                         <input
@@ -56,6 +56,8 @@ export default function LevelOne(props) {
                                         />
                                     </div>
                                 </Col>
+                            </Row>
+                            <Row>
                                 <Col md={6}>
                                     <div className="form-group">
                                         <label htmlFor="id_passport">ID/Passport number</label>
@@ -68,8 +70,6 @@ export default function LevelOne(props) {
                                         />
                                     </div>
                                 </Col>
-                            </Row>
-                            <Row>
                                 <Col md={6}>
                                     <div className="form-group">
                                         <label htmlFor="contact">Contact Number</label>
@@ -82,28 +82,93 @@ export default function LevelOne(props) {
                                         />
                                     </div>
                                 </Col>
-                                <Col md={6}>
+                            </Row>
+                            <Row>
+                                <Col>
                                     <div className="form-group">
                                         <label>Physical Address</label>
                                         <Row>
                                             <Col md={6}>
-                                                <input
-                                                    type="text"
-                                                    id="address"
-                                                    
-                                                    className="form-control form-control-m"
-                                                    value={"Klein Windhoek, Namibia"}
-                                                    disabled
-                                                />
+                                                <div className="form-group">
+                                                    <label htmlFor="contact">Line 1</label>
+                                                    <input
+                                                        type="text"
+                                                        id="address"
+
+                                                        className="form-control form-control-m"
+                                                        value={address.line_1?address.line_1:''}
+                                                        disabled
+                                                    />
+                                                </div>
                                             </Col>
                                             <Col md={6}>
-                                                <input
-                                                    type="text"
-                                                    id="address"
-                                                    className="form-control form-control-m"
-                                                    value={"Klein Windhoek, Namibia"}
-                                                    disabled
-                                                />
+                                                <div className="form-group">
+                                                    <label htmlFor="contact">Line 2</label>
+                                                    <input
+                                                        type="text"
+                                                        id="address"
+
+                                                        className="form-control form-control-m"
+                                                        value={address.line_2?address.line_2:''}
+                                                        disabled
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md={6}>
+                                                <div className="form-group">
+                                                    <label htmlFor="contact">City</label>
+                                                    <input
+                                                        type="text"
+                                                        id="address"
+
+                                                        className="form-control form-control-m"
+                                                        value={address.city?address.city:''}
+                                                        disabled
+                                                    />
+                                                </div>
+                                            </Col>
+                                            <Col md={6}>
+                                                <div className="form-group">
+                                                    <label htmlFor="contact">State/Province</label>
+                                                    <input
+                                                        type="text"
+                                                        id="address"
+
+                                                        className="form-control form-control-m"
+                                                        value={address.state_province?address.state_province:''}
+                                                        disabled
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md={6}>
+                                                <div className="form-group">
+                                                    <label htmlFor="contact">Country</label>
+                                                    <input
+                                                        type="text"
+                                                        id="address"
+
+                                                        className="form-control form-control-m"
+                                                        value={address.country?address.country:''}
+                                                        disabled
+                                                    />
+                                                </div>
+                                            </Col>
+                                            <Col md={6}>
+                                                <div className="form-group">
+                                                    <label htmlFor="contact">Postal Code</label>
+                                                    <input
+                                                        type="text"
+                                                        id="address"
+
+                                                        className="form-control form-control-m"
+                                                        value={address.postal_code?address.postal_code:''}
+                                                        disabled
+                                                    />
+                                                </div>
                                             </Col>
                                         </Row>
                                     </div>
