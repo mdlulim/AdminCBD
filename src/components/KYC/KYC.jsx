@@ -11,7 +11,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import { MemberService } from '../../providers';
 
 export default function Leads(props) {
-    const { member, kycDetails } = props;
+    const { member, kycDetails, address } = props;
     const [showImage, setShowImage] = useState(false);
     const [showReason, setShowReason] = useState(false);
     const [kycDocuments, setDocument] = useState([]);
@@ -135,7 +135,6 @@ export default function Leads(props) {
         setShowImage(true);
     }
 
-
     return (
         <>
             <Row>
@@ -144,7 +143,7 @@ export default function Leads(props) {
                     <RejectLevelModal show={showReason} setShow={setShowReason} approvalList={approvalList} setApprovalList={setApprovalList} rejectObj={rejectObj} setRejectedObj={setRejectedObj} />
                     <ViewModal show={showImage} setShow={setShowImage} kycDocuments={kycDocuments} kycDetails={kycDetails} />
                     <LevelZero approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={level_0} setKycApplication={setLevel_0} />
-                    <LevelOne approveLevel={approveLevelCB} kycApplication={level_1} setKycApplication={setLevel_1} />
+                    <LevelOne approveLevel={approveLevelCB} kycApplication={level_1} setKycApplication={setLevel_1} address={address} />
                     <LevelTwo approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={level_2} setKycApplication={setLevel_2} />
                     <LevelThree approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={level_3} setKycApplication={setLevel_3} />
                     <div style={{ textAlign: "right" }}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reactstrap';
 
 
@@ -7,6 +7,10 @@ export default function LevelZero(props) {
     const onShowImage = (image) => {
         props.showImage(image);
     }
+
+    useMemo(()=>{
+        
+    },[])
 
     return (
         <Row style={{ marginBottom: "20px", borderBottom: "1px solid gainsboro" }}>
@@ -42,8 +46,8 @@ export default function LevelZero(props) {
                             <Col xs={6} md={6}>
                                 <div className="form-group">
                                     <label>Selfie</label>
-                                    <Card onClick={() => onShowImage([{ uri: "https://upload.wikimedia.org/wikipedia/commons/1/13/Benedict_Cumberbatch_2011.png" }])}>
-                                        <img style={{ cursor: "pointer" }} src="https://upload.wikimedia.org/wikipedia/commons/1/13/Benedict_Cumberbatch_2011.png" alt="prof" />
+                                    <Card onClick={() => onShowImage([{ uri: 'https://cdn-cbigold.ams3.digitaloceanspaces.com/'+kycApplication.selfie[0] }])}>
+                                        <img style={{ cursor: "pointer" }} src={kycApplication.selfie?'https://cdn-cbigold.ams3.digitaloceanspaces.com/'+kycApplication.selfie[0]:''} alt="prof" />
                                     </Card>
                                 </div>
                             </Col>
