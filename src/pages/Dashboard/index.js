@@ -3,7 +3,7 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 import { AuthLayout } from 'containers';
 import { Common, Dashboard, Overview, Members } from 'components';
-import { MemberService, ProductService, TransactionService } from '../../providers';
+import { MemberService, ProductService, TransactionService, AccountService } from '../../providers';
 import { VectorMap } from '@south-paw/react-vector-maps';
 import world from '../../components/Dashboard/world.json';
 const Filter = () => {
@@ -37,12 +37,13 @@ export default function DashboardPage(props) {
     const [selectedMember, setSelectedMember] = useState({});
     const [products, setProducts] = useState([]);
     const [transactions, setTransactions] = useState([]);
+    const [mainAccount, setMainAccount] = useState({});
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const history = useHistory();
 
     useMemo(() => {
         MemberService.getMembers().then((res) => {
-            console.log(res.data.data.results)
+           // console.log(res.data.data.results)
             const userslist = res.data.data.results;
             const memberslist = res.data.data.results;
             const temp=  memberslist.slice(Math.max(memberslist.length - 5), 0)
@@ -50,9 +51,15 @@ export default function DashboardPage(props) {
             setFilteredMembers(temp);
           });
 
+          AccountService.getMainAccount().then((res) => {
+             console.log(res.data.data)
+             const memberslist = res.data.data;
+             setMainAccount(memberslist);
+           });
+
 
         ProductService.getProducts().then((res) => {
-            console.log(res.data)
+           // console.log(res.data)
             if(res.data.success){
               const productlist = res.data.data.results;
               setProducts(productlist);
@@ -60,7 +67,7 @@ export default function DashboardPage(props) {
           });
 
           TransactionService.getTransactions().then((res) => {
-            console.log(res.data.data)
+            console.log(res.data.data.results)
             if(res.data.success){
             const transaList = res.data.data.results;
             setTransactions(transaList);
@@ -87,7 +94,7 @@ export default function DashboardPage(props) {
           (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
         ));
 
-        console.log(filteredItems)
+       // console.log(filteredItems)
         setFilteredTransactions(filteredItems);
       }
 
@@ -110,7 +117,7 @@ export default function DashboardPage(props) {
                                 icon="li-receipt"
                                 title="Main Account Balance"
                                 subtitle="Summary amount"
-                                informer={<span className="text-bold">CBI 89000</span>}
+                                informer={<span className="text-bold text-success">{mainAccount ? mainAccount.currency_code+' '+ parseFloat(mainAccount.available_balance).toFixed(4): ''}</span>}
                             /></a>
                         </Col>
                         <Col xs={12} lg={4}>

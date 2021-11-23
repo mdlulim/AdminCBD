@@ -7,7 +7,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
 import TransactionDetails from './TransactionDetails';
-import { TransactionService } from '../../providers';
+import { TransactionService, AccountService, MemberService} from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -71,17 +71,29 @@ const Status = ({ status }) => {
   };
 
 export default function TransactionsByMember(props) {
+  const { userWallet } = props;
     const [show, setShow] = useState(false);
     const [showTransaction, setShowTransaction] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState([]);
     const [selectedTransPOP, setSelectedTransPOP] = useState([]);
+    const [userWallet2, setUserWallet] = useState({})
+    const [sponsorWallet, setSponsorWallet] = useState({})
+    const [mainWallet, setMainWallet] = useState({})
+    const [member, setMember] = useState({})
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const history = useHistory();
     const params = useParams();
     const { id } = params;
 
     useMemo(() => {
+       //Get member details
+       MemberService.getMember(id).then((res) => {
+            const memberDetails = res.data.data;
+            console.log(memberDetails);
+            setMember(memberDetails);
+        });
+
       TransactionService.getMemberTransactions(id).then((res) => {
        // console.log('Transaction by member')
        // console.log(res.data.data.results)
@@ -166,34 +178,32 @@ const handleDeleteMember = async data => {
 const onSubmitChangeStatus= data => {
   setSelectedTransaction(data);
   setShow(true);
-  console.log(data);
-    //return <Confirm show={show} setShow={setShow} />;
   };
+  //=========================================Approve Pending Deposit=========================================================
   const onSubmitTransactionDetails= data => {
-    TransactionService.getTransactionPOP(data.txid).then((res) => {
-      // console.log('Transaction by member')
-      console.log(res.data.data.rows[0])
+    //console.log(userWallet)
+   TransactionService.getTransactionPOP(data.txid).then((res) => {
        const pop = res.data.data.rows;
        setSelectedTransPOP(pop[0]);
      });
+
+     AccountService.getMainAccount().then((res) => {
+     // console.log(res.data.data)
+      const memberslist = res.data.data;
+      setMainWallet(memberslist);
+    });
+    // Get member wallet details
+     MemberService.getMemberWallet(member.sponsor).then((res) => {
+      const walletDetails = res.data.data;
+      console.log(res.data.data)
+      setSponsorWallet(walletDetails);
+  });
     setSelectedTransaction(data);
     setShowTransaction(true);
         // console.log(data);
       //return <Confirm show={show} setShow={setShow} />;
-    };
-
-  const onSubmitDeleteMember= data => {
-    return confirmAlert({
-      title: 'Delete Member',
-      message: 'Are you sure you want to delete ' + data.full_names + '?',
-      buttons: [{
-        label: 'Yes',
-        onClick: () => handleDeleteMember(data),
-      }, {
-        label: 'Cancel',
-      }]
-    });
   };
+
 
   const onSearchFilter = filterText => {
     const filteredItems = transactions.filter(item => (
@@ -208,7 +218,14 @@ const onSubmitChangeStatus= data => {
     return (
         <Card className="o-hidden mb-4">
            <ModalChangeStatus show={show} setShow={setShow} transaction={selectedTransaction} />
-           <TransactionDetails show={showTransaction} setShow={setShowTransaction} transaction={selectedTransaction} pop={selectedTransPOP} />
+           <TransactionDetails show={showTransaction} setShow={setShowTransaction}
+            transaction={selectedTransaction}
+            pop={selectedTransPOP}
+            member={member}
+            userWallet={userWallet}
+            sponsorWallet={sponsorWallet}
+            mainWallet={mainWallet} />
+           
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span className="text-primary">Transactions</span>

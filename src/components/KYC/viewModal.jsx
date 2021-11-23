@@ -9,7 +9,7 @@ export default function ViewModal(props) {
     }, []);
 
     const handleClose = () => {
-        console.log(kycDocuments, " ################")
+      //  console.log(kycDocuments, " ################")
         setShow(false);
     }
 

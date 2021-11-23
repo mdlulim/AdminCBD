@@ -8,15 +8,13 @@ const headers = {
   'Authorization': `Bearer ${authToken}`,
   'Content-Type': `application/json`,
   'Access-Control-Max-Age': `600`
-};  
-
-console.log(authToken);
+};
 
 class PermissionLevelService {
 
     static async getLevels() {
       return await axios({
-        mode: 'no-cors',
+        mode: 'no-cors',  
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/levels`,

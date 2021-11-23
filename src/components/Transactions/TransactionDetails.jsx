@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
-import { TransactionService, UserService } from '../../providers';
+import { TransactionService, UserService, AccountService,MemberService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import defaultImage from '../../assets/img/default.png'
@@ -14,17 +14,22 @@ const imageWidth = {
     width: '60%'
 }
 const TransactionDetails = props => {
-    const { show, setShow, transaction, pop} = props;
+    const { show, setShow, transaction, pop, userWallet, mainWallet, member, sponsorWallet} = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('');
+    const [mainAccount, setMainAccount] = useState({});
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
-    useMemo(() => {
-
-           console.log(transaction);
-
+    useEffect(() => {
+        console.log("Test modal ")
+        AccountService.getMainAccount().then((res) => {
+            const result = res.data.data;
+           // console.log(result)
+            setMainAccount(result)
+            //  mainWallet = result;
+          });
   }, []);
 
     const statusOptions = [
@@ -34,30 +39,71 @@ const TransactionDetails = props => {
 
 
 
+    const getMainAccount = () =>{
+         AccountService.getMainAccount().then((res) => {
+            const result = res.data.data;
+            // setMainAccount(result)
+            //  mainWallet = result;
+            return result
+          });
+
+    }
     const onSubmit = (event) => {
+
         event.preventDefault();
         setDisabled(true);
         setError('');
-
         const form = event.currentTarget;
-
-
-
-        console.log(transaction)
-        console.log(selectedStatus.value);
+     
+        console.log(sponsorWallet);
         const data = { status: selectedStatus.value} ;
 
-        if(selectedStatus){
+        let mainBalance = parseFloat(mainWallet.available_balance)+ parseFloat(transaction.amount) * 50/100;
+        let userBalance = parseFloat(userWallet.available_balance) + parseFloat(transaction.amount) * 25/100;
+        let sponsorBalance = parseFloat(sponsorWallet.available_balance) + parseFloat(transaction.amount) * 25/100;
+
+        const data2 = {
+            status: selectedStatus.value,
+            user: {
+                    id: userWallet.id,
+                    available_balance: userBalance
+                },
+            sponsor: {
+                    id: sponsorWallet.id,
+                    available_balance: sponsorBalance
+            },
+            main: {
+                    id: mainWallet.id,
+                    available_balance: mainBalance
+            }
+        }
+
+       console.log(data2)
+        if(selectedStatus.value === "Completed"){
             setShow(false)
-            // return confirmAlert({
-            //     title: 'Error',
-            //     message: 'Endpoint not provided',
-            //     buttons: [
-            //       {
-            //         label: 'Ok',
-            //       }
-            //     ]
-            //   });
+            TransactionService.approveDeposit(transaction.id, data2).then((response) =>{
+                console.log(response);
+                 if(response.data.success){
+                    MemberService.updateStatus(transaction.user_id, 'Active').then((response) => {
+                        console.log(response);
+                    })
+                     setShow(false)
+                     return confirmAlert({
+                        title: 'Succcess',
+                        message: 'Transaction was successfully updated',
+                        buttons: [
+                          {
+                            label: 'Ok',
+                          }
+                        ]
+                      });
+                 }else{
+                     setError('Something went wrong while trying to update members status');
+                 }
+                setDisabled(false);
+             })
+        }else{
+            setShow(false)
             TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
                 console.log(response);
                  if(response.data.success){

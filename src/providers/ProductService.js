@@ -12,12 +12,21 @@ const headers = {
 class ProductService {
 
   static async getProducts() {
-    console.log(authToken)
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products`,
+    });
+  }
+
+  static async getProductHistory() {
+    //console.log(authToken)
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/history`,
     });
   }
 

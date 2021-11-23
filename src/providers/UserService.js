@@ -20,6 +20,15 @@ class UserService {
       });
     }
 
+    static async getUsersall() {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/users`,
+      });
+    }
+
     static async addAdminUser(data){
         return await axios({
           mode: 'no-cors',
@@ -39,7 +48,7 @@ class UserService {
           method: 'PUT',
           headers: headers,
           data:data,
-          url: `${Config.API.BASE_URL}/users?group=admin`,
+          url: `${Config.API.BASE_URL}/users/${id}`,
         }).then((res) =>{
           const result = res;
           return result;
@@ -54,6 +63,17 @@ class UserService {
         url: `${Config.API.BASE_URL}/admin/users/${id}`,
       });
     }
+
+    static async archiveUser(id) {
+      return await axios({
+        mode: 'no-cors',
+        method: 'PUT',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/users/${id}/archive`,
+      });
+    }
+
+    
 }
 
 export default UserService;
