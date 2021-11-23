@@ -29,7 +29,6 @@ const ModalChangeStatus = props => {
     e.preventDefault();
     setShow(false);
     const form = e.currentTarget;
-    alert(form.perm_level.value);
     // const userData = {
     //     first_name: document.getElementById('first_name').value,
     //     last_name: form.last_name.value,
