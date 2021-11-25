@@ -63,7 +63,7 @@ const PermissionsList = props => {
             <div class="content">
                 <div class="container-fluid">
                 <button 
-                            className="btn btn-secondary float-right" 
+                            className="btn btn-secondary float-right"
                             type="button"
                             onClick={e => {
                               e.preventDefault();
@@ -206,7 +206,7 @@ const PermissionsList = props => {
                                         </tbody>
                                         </table>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </form>
                     </div>

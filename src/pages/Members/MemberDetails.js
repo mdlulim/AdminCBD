@@ -7,6 +7,22 @@ import { AuthLayout } from 'containers';
 import { Members, Transactions, Products, KYC } from 'components';
 import { KYCService } from '../../providers';
 
+const Status = ({ status }) => {
+    let badge = 'primary';
+    if (status === 'Pending') {
+      badge = 'warning';
+    }
+    if (status === 'Active') {
+      badge = 'success';
+    }
+    if (status === 'Blocked') {
+      badge = 'danger';
+    }
+    return (
+      // <span className={`badge badge-${badge}`}>{status}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
+    );
+  };
 
 const MemberDetails = props => {
     const breadcrumb = { heading: "Member Details" };
@@ -47,7 +63,7 @@ const MemberDetails = props => {
          //Get member details
          KYCService.getkycLlevel(id).then((res) => {
             setKycLevel(res.data.data.kyc_level)
-            //console.log(res.data.data)
+           // console.log(res.data.data)
             if(res.data.data.kyc_level != -1){
                 setRating(res.data.data.kyc_level);
             }
@@ -55,7 +71,7 @@ const MemberDetails = props => {
 
        MemberService.getMemberKYC(id).then(res=>{
             setkycDetails(res.data.data)
-           // console.log(res.data.data)
+            console.log(res.data.data)
        })
 
 
@@ -101,12 +117,15 @@ const MemberDetails = props => {
                                             </span>
                                         </div>
                                         <div className="author-box-job">
-                                            Wallet ID: {walletID ? '...............'+walletID.slice(walletID.length - 5): ''}<br />
-										    ID/Passport No: {member.id_number}<br />
-											Phone: {member.mobile}<br />
-											Email: {member.email}<br />
-											KYC Level: {kycLevel === -1?'unAssigned':kycLevel}<br />
-                                            Type: {member.group ? member.group.label : 'Member'}
+                                            <table>
+                                                <tr><td>Wallet ID </td><td> : {walletID ? '...............'+walletID.slice(walletID.length - 5): ''}</td></tr>
+                                                <tr><td>ID/Passport No </td><td> : {member.id_number}</td></tr>
+                                                <tr><td>Phone </td><td> : {member.mobile}</td></tr>
+                                                <tr><td>Email </td><td> : {member.email}</td></tr>
+                                                <tr><td>KYC Level </td><td> : {kycLevel === -1?'unAssigned':kycLevel}</td></tr>
+                                                <tr><td>Type </td><td> : {member.group ? member.group.label : 'Member'}</td></tr>
+                                                <tr><td>Status </td><td><Status {...member} /></td></tr>
+                                            </table>
 											<hr />
                                             <Rating ratingValue={rating} />
                                             <hr />

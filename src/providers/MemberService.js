@@ -12,6 +12,7 @@ const headers = {
 class MemberService {
 
   static async getMembers() {
+    console.log(authToken)
     return await axios({
       mode: 'no-cors',
       method: 'GET',
