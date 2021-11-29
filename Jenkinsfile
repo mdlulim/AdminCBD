@@ -64,16 +64,16 @@ pipeline {
             script {
               switch(JOB_NAME) {
                 case 'cbigold-admin-develop':
-                  sh("cd cbigold/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-develop:${developmentTag}");
+                  sh("cd cbigold/overlays/develop && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin:${developmentTag}");
                   break;
                 case 'cbigold-admin-production':
-                  sh("cd cbigold/overlays/production && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-production:${developmentTag}");
+                  sh("cd cbigold/overlays/production && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin:${developmentTag}");
                   break;
                 case 'cbigold-admin-qa':
-                  sh("cd cbigold/overlays/qa && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-qa:${developmentTag}");
+                  sh("cd cbigold/overlays/qa && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin:${developmentTag}");
                   break;
                 case 'cbigold-admin-staging':
-                  sh("cd cbigold/overlays/staging && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin-staging:${developmentTag}");
+                  sh("cd cbigold/overlays/staging && kustomize edit set image registry.digitalocean.com/cbiglobal/cbigold-admin:${developmentTag}");
                   break;
                 default:
                   echo 'No Kustomize application found';
