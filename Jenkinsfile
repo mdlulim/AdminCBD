@@ -42,7 +42,7 @@ pipeline {
           unixTime = (new Date().time / 1000) as Integer
           branchName = env.GIT_BRANCH.replace('/', '-').substring(7)
           developmentTag = "${branchName}-${gitCommit}-${unixTime}"
-          developmentImage = "${dockerRepoHost}/${JOB_NAME}:${developmentTag}"
+          developmentImage = "${dockerRepoHost}/cbigold-admin:${developmentTag}"
         }
         sh "docker build -t ${developmentImage} ./"
       }
