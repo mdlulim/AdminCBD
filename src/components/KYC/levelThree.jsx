@@ -1,24 +1,11 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reactstrap';
+import React, { useState } from 'react';
+import { Card, Row, Col, Button, ButtonGroup } from 'reactstrap';
 
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
 
 export default function Levelhree(props) {
-    const [show, setShow] = useState(false);
-    const [clickedDoc, setDocument] = useState({});
+    const { approveLevel, kycApplication, setKycApplication } = props;
     const [active, setActiveState] = useState(null);
 
-    const { approveLevel } = props;
 
     const onShowImage = (image) => {
         props.showImage(image);
@@ -37,15 +24,15 @@ export default function Levelhree(props) {
                        <ButtonGroup size="sm" style={{ display: "flex", justifyContent: "end" }}>
                             <Button
                                 color="primary"
-                                onClick={()=>{setActiveState(0); approveLevel({ level: 3, status: true })}}
-                                className={`${active === 0?'active':''}`}
+                                onClick={()=>{setKycApplication({...kycApplication, status: 'Approved'}); approveLevel({ level: 3, status: true })}}
+                                className={`${kycApplication.status === 'Approved'?'active':''}`}
                             >
                                 Approve
                             </Button>
                             <Button
                                 color="primary"
-                                onClick={()=>{setActiveState(1); approveLevel({ level: 3, status: false })}}
-                                className={`${active === 1?'active':''}`}
+                                onClick={()=>{setActiveState(1); approveLevel({ level: 3, status: false, setLevel: setKycApplication, levelData: kycApplication })}}
+                                className={`${kycApplication.status === 'Rejected'?'active':''}`}
                             >
                                 Decline
                             </Button>

@@ -34,15 +34,6 @@ export default function MembersPage(props) {
             <div className="form-row margin-bottom-20">
                 <Col xs={12} lg={3}>
                     <Common.Widget
-                        icon="li-user"
-                        title="All Members"
-                        subtitle="All Members"
-                        informer={<span className="text-bold">{members.length}</span>}
-                        invert={false}
-                    />
-                </Col>
-                <Col xs={12} lg={3}>
-                    <Common.Widget
                         icon="li-user-lock"
                         title="Active"
                         subtitle="Active Members"
@@ -53,9 +44,18 @@ export default function MembersPage(props) {
                 <Col xs={12} lg={3}>
                     <Common.Widget
                         icon="li-user-lock"
+                        title="Pending"
+                        subtitle="Pending Members"
+                        informer={<><span className="text-bold text-warning">{countMembers('Pending')}</span></>}
+                        invert={false}
+                    />
+                </Col>
+                <Col xs={12} lg={3}>
+                    <Common.Widget
+                        icon="li-user-lock"
                         title="Blocked"
                         subtitle="Blocked Members"
-                        informer={<><span className="text-bold text-warning">{countMembers('Blocked')}</span></>}
+                        informer={<><span className="text-bold text-danger">{countMembers('Blocked')}</span></>}
                         invert={false}
                     />
                 </Col>
@@ -73,7 +73,7 @@ export default function MembersPage(props) {
                 <Common.Widget
                     icon="li-users"
                     title="Members"
-                    subtitle="List of all members"
+                    subtitle={'Total Members '+members.length}
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">

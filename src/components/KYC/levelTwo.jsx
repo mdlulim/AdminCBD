@@ -1,38 +1,17 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Row, Col, CardTitle, Button, ButtonGroup } from 'reactstrap';
-
-
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
+import React, { useState } from 'react';
+import { Card, Row, Col, Button, ButtonGroup } from 'reactstrap';
 
 export default function LevelTwo(props) {
-    const { approveLevel, kycDetails } = props;
-    const [show, setShow] = useState(false);
-    const [clickedDoc, setDocument] = useState({});
+    const { approveLevel, kycApplication, setKycApplication } = props;
     const [active, setActiveState] = useState(null);
 
-
-    useMemo(() => {
-    }, []);
-
     const onShowImage = (image) => {
-        console.log(kycDetails['2'].data)
+      //  console.log(kycDetails['2'].data)
         props.showImage(image);
     }
 
     const onSubmit = (event) => {
         event.preventDefault();
-        // setDisabled(true);
-        // setError('');
     }
 
     return (
@@ -47,15 +26,15 @@ export default function LevelTwo(props) {
                        <ButtonGroup size="sm" style={{ display: "flex", justifyContent: "end" }}>
                             <Button
                                 color="primary"
-                                onClick={()=>{setActiveState(0); approveLevel({ level: 2, status: true })}}
-                                className={`${active === 0?'active':''}`}
+                                onClick={()=>{setKycApplication({...kycApplication, status: 'Approved'}); approveLevel({ level: 2, status: true })}}
+                                className={`${kycApplication.status === 'Approved'?'active':''}`}
                             >
                                 Approve
                             </Button>
                             <Button
                                 color="primary"
-                                onClick={()=>{setActiveState(1); approveLevel({ level: 2, status: false })}}
-                                className={`${active === 1?'active':''}`}
+                                onClick={()=>{setActiveState(1); approveLevel({ level: 2, status: false, setLevel: setKycApplication, levelData: kycApplication })}}
+                                className={`${kycApplication.status === 'Rejected'?'active':''}`}
                             >
                                 Decline
                             </Button>
@@ -74,7 +53,7 @@ export default function LevelTwo(props) {
                                             type="text"
                                             id="natureBusiness"
                                             className="form-control form-control-m"
-                                            value={"Speculative"}
+                                            value={kycApplication.businessNature?kycApplication.businessNature:''}
                                             disabled
                                         />
                                     </div>
@@ -86,7 +65,7 @@ export default function LevelTwo(props) {
                                             type="text"
                                             id="srcFunds"
                                             className="form-control form-control-m"
-                                            value={"Savings"}
+                                            value={kycApplication.srcFunds?kycApplication.srcFunds:''}
                                             disabled
                                         />
                                     </div>
@@ -101,18 +80,6 @@ export default function LevelTwo(props) {
                                         </Card>
                                     </div>
                                 </Col>
-                                {/* <Col xs={6} md={6}>
-                                    <div className="form-group">
-                                        <label htmlFor="registrationNumber">Registration Number</label>
-                                        <input
-                                            type="text"
-                                            id="registrationNumber"
-                                            className="form-control form-control-m"
-                                            value={"N100P900"}
-                                            disabled
-                                        />
-                                    </div>
-                                </Col> */}
                             </Row>
                         </form>
                     </Col>

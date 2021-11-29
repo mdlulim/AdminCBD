@@ -17,26 +17,26 @@ const Filter = () => {
             <button
                 className="btn btn-light d-none d-md-block float-right margin-right-5"
                 id="dashboard-rp-customrange"
-            >
+                >
                 September 22, 2021 - October 21, 2021
             </button>
         </>
     );
 }
 
-export default function Canceled(props) {
+export default function pending(props) {
     return (
         <AuthLayout
             {...props}
-            breadcrumb={{ active: "Rejected" }}
+            breadcrumb={{ active: "Pending" }}
             pageHeading={{
-                title: 'Rejected Transactions',
-                caption: 'EXPLORE OVERVIEW REJECTED TRANSACTION FOR CRYPTO BASED INNOVATION',
+                title: 'Transaction Import',
+                caption: 'EXPLORE OVERVIEW TRANSACTION IMPORT FOR CRYPTO BASED INNOVATION',
             }}
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Transactions transactionType={'cancelled'} />
+                <Transactions.ImportTransaction />
                 </Col>
             </div>
         </AuthLayout>

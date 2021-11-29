@@ -6,7 +6,7 @@ import DataTable from 'react-data-table-component';
 import { Modal } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
-import { TransactionService, MemberService } from '../../providers';
+import { TransactionService, MemberService, UserService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -99,7 +99,7 @@ export default function MakeTransfer(props) {
     const history = useHistory();
 
     useMemo(() => {
-        MemberService.getMembers().then((res) => {
+      UserService.getUsersall().then((res) => {
           console.log(res.data.data.results);
           const membersList = res.data.data.results;
           let temp = [];
@@ -141,7 +141,7 @@ const onSubmit= data => {
   }
 
 
-const senderWallet = (item) =>{
+const recieverWallet = (item) =>{
     //Get member details
     MemberService.getMemberWallet(item.value).then((res) => {
          console.log(res.data.data)
@@ -152,15 +152,6 @@ const senderWallet = (item) =>{
      const userFee = fees.filter(fee => fee.name === item.group.name)[0];
      //console.log(userFee);
      setUserType(userFee);
-}
-
-const recieverWallet = (item) =>{
-    //Get member details
-    MemberService.getMemberWallet(item.value).then((res) => {
-         console.log(res.data.data)
-       const walletDetails = res.data.data;
-       setWalletReciever(walletDetails);
-     });
 }
 
   const onSearchFilter = filterText => {
@@ -212,7 +203,7 @@ const recieverWallet = (item) =>{
                                     options={membersOptions}
                                     onChange={item => {
                                         setSelectedFromAccount(item);
-                                        senderWallet(item)}}
+                                        recieverWallet(item)}}
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
                                     />
@@ -229,32 +220,6 @@ const recieverWallet = (item) =>{
                 </Col>: ''}
                     </div>
                     <div className="col">
-                    <label for="inputEmail4" className="form-label">Enter amount to transfer</label>
-                    <Select
-                                    id="status"
-                                    name="status"
-                                    options={membersOptions}
-                                    onChange={item => {
-                                        setSelectedToAccount(item)
-                                        recieverWallet(item)
-                                    }}
-                                    className={`basic-multi-select form-control-m`}
-                                    classNamePrefix="select"
-                                    />
-                                        <br />
-                   { walletReciever? 
-                    <Col lg={12}>
-                    <Common.Widget
-                        icon="li-wallet"
-                        title={selectedToAccount.first_name+' '+selectedToAccount.last_name}
-                        subtitle={walletReciever.label+' | '+selectedToAccount.referral_id}
-                        informer={<span className="text-bold text-success">{walletReciever.available_balance+' '+walletReciever.currency_code}</span>}
-                        invert={false}
-                    />
-                </Col>: ''}
-                    
-                    </div>
-                    <div className="col">
                     <label for="inputEmail4" className="form-label">Enter amount to transfer </label>
                     <div className="input-group">
                         <div className="input-group-text">CBI</div>
@@ -263,7 +228,7 @@ const recieverWallet = (item) =>{
                         id="autoSizingInputGroup" 
                         placeholder="Amount" onChange={event => {
                             if(!isNaN(+event.target.value)){
-                                setTotalAmount(parseFloat(event.target.value)+parseFloat(userType.fee))
+                                setTotalAmount(event.target.value)
                                 //setErrorAmount(true)
                             }else{
                                // setErrorAmount(false)
@@ -278,7 +243,7 @@ const recieverWallet = (item) =>{
                     <Common.Widget
                         icon="li-wallet"
                         title={userType.label}
-                        subtitle={'Transaction Fee: '+userType.fee+' CBI'}
+                        subtitle={'Transaction Fee: 00.000'}
                         informer={<span className="text-bold text-success">{totalAmount}</span>}
                         invert={false}
                     />

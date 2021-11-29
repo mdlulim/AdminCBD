@@ -95,13 +95,24 @@ class MemberService {
     });
   }
 
+  //Update member bank details
+  static async updateMemberBankDetails(id, data) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      headers: headers,
+      data,
+      url: `${Config.API.BASE_URL}/bank_accounts/${id}`,
+    });
+  }
+
   static async updateStatus(id,status){
     if(status === 'Blocked'){
       return await axios({
         mode: 'no-cors',
         method: 'PUT',
         headers: headers,
-        url: `http://localhost:8090/users/${id}/block`,
+        url: `${Config.API.BASE_URL}/users/${id}/block`,
       }).then((res) =>{
         const result = res;
         return result;
@@ -111,7 +122,7 @@ class MemberService {
         mode: 'no-cors',
         method: 'PUT',
         headers: headers,
-        url: `http://localhost:8090/users/${id}/archive`,
+        url: `${Config.API.BASE_URL}/users/${id}/archive`,
       }).then((res) =>{
         console.log(res);
         //const result = {status: res.data.status, message: res.data.message}
@@ -122,7 +133,7 @@ class MemberService {
         mode: 'no-cors',
         method: 'PUT',
         headers: headers,
-        url: `http://localhost:8090/users/${id}/unblock`,
+        url: `${Config.API.BASE_URL}/users/${id}/unblock`,
       }).then((res) =>{
         const result = res; //{status: res.data.status, message: res.data.message}
         return result;

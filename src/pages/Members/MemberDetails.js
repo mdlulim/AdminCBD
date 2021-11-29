@@ -1,42 +1,12 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Card, CardBody, Col, Row } from 'reactstrap';
+import { Rating, RatingView } from 'react-simple-star-rating'
 import { MemberService } from '../../providers';
 import { AuthLayout } from 'containers';
-import { Common, Members, Transactions, Products, KYC } from 'components';
+import { Members, Transactions, Products, KYC } from 'components';
+import { KYCService } from '../../providers';
 
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
-
-const Filter = () => {
-    return (
-        <>
-            <Common.Dropdown
-                actions={[
-                    { label: 'Filter by Date Range' },
-                    { label: 'Filter by Date' },
-                    { label: 'Filter Month' },
-                    { label: 'Filter Year' }
-                ]}
-            />
-            <button
-                className="btn btn-light d-none d-md-block float-right margin-right-5"
-                id="dashboard-rp-customrange"
-            >
-                September 22, 2021 - October 21, 2021
-            </button>
-        </>
-    );
-}
 
 const MemberDetails = props => {
     const breadcrumb = { heading: "Member Details" };
@@ -44,29 +14,49 @@ const MemberDetails = props => {
     const [member, setMember] = useState({});
     const [wallet, setWallet] = useState({});
     const [address, setAddress] = useState({});
+    const [kycDetails, setkycDetails] = useState({});
+    const [rating, setRating] = useState(0);
+    const [walletID, setWalletID] = useState(null);
     const params = useParams();
     const { id } = params;
+    const [ kycLevel, setKycLevel] = useState(null);
 
     useMemo(() => {
         //Get member details
         MemberService.getMember(id).then((res) => {
             const memberDetails = res.data.data;
+            //console.log(memberDetails)
             setMember(memberDetails)
         })
 
         //Get member details
         MemberService.getMemberWallet(id).then((res) => {
-            // console.log(res.data.data)
             const walletDetails = res.data.data;
+           // console.log(res.data.data)
             setWallet(walletDetails);
+            setWalletID(walletDetails.id)
         });
 
         //Get member details
         MemberService.getMemberAddress(id).then((res) => {
-            // console.log(res.data.data.results[0])
-            const memberAddress = res.data.data.results;
-            setAddress(memberAddress[0]);
+                const memberAddress = res.data.data.results;
+                setAddress(memberAddress[0]);
         });
+
+
+         //Get member details
+         KYCService.getkycLlevel(id).then((res) => {
+            setKycLevel(res.data.data.kyc_level)
+            //console.log(res.data.data)
+            if(res.data.data.kyc_level != -1){
+                setRating(res.data.data.kyc_level);
+            }
+        })
+
+       MemberService.getMemberKYC(id).then(res=>{
+            setkycDetails(res.data.data)
+           // console.log(res.data.data)
+       })
 
 
     }, []);
@@ -107,16 +97,19 @@ const MemberDetails = props => {
                                                 Balance: {wallet.currency_code} {wallet.balance}
                                             </span><br /> */}
                                             < span className={wallet.available_balance > 0 ? 'text-success' :'text-danger'}>
-                                                Available Balance: {wallet.currency_code} {wallet.available_balance}
+                                                Available Balance: {wallet.currency_code} {parseFloat(wallet.available_balance).toFixed(4)}
                                             </span>
                                         </div>
                                         <div className="author-box-job">
+                                            Wallet ID: {walletID ? '...............'+walletID.slice(walletID.length - 5): ''}<br />
 										    ID/Passport No: {member.id_number}<br />
 											Phone: {member.mobile}<br />
 											Email: {member.email}<br />
-											Level: 0<br />
+											KYC Level: {kycLevel === -1?'unAssigned':kycLevel}<br />
                                             Type: {member.group ? member.group.label : 'Member'}
 											<hr />
+                                            <Rating ratingValue={rating} />
+                                            <hr />
 											<strong>Address</strong>
 											{address ?
                                                 <p>
@@ -202,7 +195,7 @@ const MemberDetails = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'transactions' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <Transactions.TransactionsByMember member={member} />
+                                            <Transactions.TransactionsByMember member={member} userWallet={wallet}/>
                                         </CardBody>
                                     </div>
                                 </div>
@@ -216,7 +209,7 @@ const MemberDetails = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <KYC.KYC member={member} />
+                                            <KYC.KYC member={member} address={address} kycDetails={kycDetails} />
                                         </CardBody>
                                     </div>
                                 </div>

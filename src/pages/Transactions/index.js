@@ -14,11 +14,16 @@ const Filter = () => {
                     { label: 'Filter Year' }
                 ]}
             />
+
             <button
                 className="btn d-none d-md-block float-right margin-right-5"
                 id="dashboard-rp-customrange"
+                onClick={e => {
+                    e.preventDefault();
+                    window.location = '/transactions/import';
+                  }}
             >
-                Transfer
+                Import Transactions
             </button>
         </>
     );
@@ -95,6 +100,19 @@ const TransactionList = props => {
             return countTypes.length;
         };
 
+        const countTransType = (type) =>{
+            const countTypes = transactions.filter(item => ((item && item.subtype && item.subtype.toLowerCase().includes(type.toLowerCase())) ));
+            return countTypes.length;
+        };
+        const countWithdrawal = () =>{
+            const countTypes = transactions.filter(transaction => transaction.subtype === 'withdrawal' || transaction.subtype === 'Withdrawal');
+            return countTypes.length;
+        };
+        const countTransactionType = (type) =>{
+            const countTypes = transactions.filter(transaction => transaction.subtype === type);
+            return countTypes.length;
+        };
+
 	return (
 		<AuthLayout  {...props}
         breadcrumb={{ active: "All Transactions" }}
@@ -118,7 +136,7 @@ const TransactionList = props => {
                         icon="li-wallet"
                         title="Deposit"
                         subtitle="Transactions"
-                        informer={<><span className="text-bold text-info">{countTransactions('deposit')}</span></>}
+                        informer={<><span className="text-bold text-info">{countTransType('deposit')}</span></>}
                         invert={false}
                     />
                 </Col>
@@ -127,7 +145,7 @@ const TransactionList = props => {
                         icon="li-wallet"
                         title="Widthdrawals"
                         subtitle="Transactions"
-                        informer={<><span className="text-bold text-info">{countTransactions('Widthdrawals')}</span></>}
+                        informer={<><span className="text-bold text-info">{countTransType('withdrawal')}</span></>}
                         invert={false}
                     />
                 </Col>
@@ -136,7 +154,7 @@ const TransactionList = props => {
                         icon="li-wallet"
                         title="Transfers"
                         subtitle="Transactions"
-                        informer={<span className="text-bold text-info">{countTransactions('Transfers')}</span>}
+                        informer={<span className="text-bold text-info">{countTransType('Transfer')}</span>}
                         invert={false}
                     />
                 </Col>

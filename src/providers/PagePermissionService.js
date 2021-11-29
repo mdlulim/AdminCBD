@@ -8,9 +8,7 @@ const headers = {
   'Authorization': `Bearer ${authToken}`,
   'Content-Type': `application/json`,
   'Access-Control-Max-Age': `600`
-};  
-
-console.log(authToken);
+};
 
 class PagePermissionService {
 
@@ -20,6 +18,15 @@ class PagePermissionService {
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/page_permissions`,
+      });
+    }
+
+    static async getPagePermissionsByPage(page) {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/page_permissions/page_name/${page}`,
       });
     }
 

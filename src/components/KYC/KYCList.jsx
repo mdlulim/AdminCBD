@@ -72,10 +72,10 @@ export default function KYCList(props) {
 
     useMemo(() => {
         KYCService.getKYCApplicants().then((res) => {
-            console.log(res.data.data)
-            const memberslist = res.data.data.results;
-            setMembers(memberslist);
-            setFilteredMembers(memberslist);
+       //   //  console.log(res)
+            // const memberslist = res.data.data.results;
+            // setMembers(memberslist);
+            // setFilteredMembers(memberslist);
         });
 
     }, []);
@@ -137,7 +137,7 @@ export default function KYCList(props) {
     const onSubmitChangeStatus = data => {
         setSelectedMember(data);
         setShow(true);
-        console.log(data);
+       // console.log(data);
         //return <Confirm show={show} setShow={setShow} />;
     };
 

@@ -261,14 +261,16 @@ const ProductAddNew = props => {
                     category_id     : category.id,
                     category_title  : category.title,
                     currency_code   : selectedCurrency,
-                    daily_interes   : parseFloat(form.estimated_daily_interest.value),
-                    gross_return    : parseFloat(form.minimum_gross_return.value),
                     investment_period: parseFloat(form.investment_period.value),
                     minimum_investment: parseFloat(form.minimum_investment.value),
                     price            : parseFloat(form.price.value),
                     product_code     : productCode,
                     type             : selectedProductType,
                     status           : selectedStatus,
+                    fees             : {
+                                        daily_interes   : parseFloat(form.estimated_daily_interest.value),
+                                        gross_return    : parseFloat(form.minimum_gross_return.value),
+                                    },
                     title            : form.title.value
                 }
                 console.log(data);
@@ -279,8 +281,8 @@ const ProductAddNew = props => {
 
     
     const create = (data) =>{
-        const title = data.title;
-        let permakey =title.split(' ').join('-').trim().toLowerCase();
+         const title = data.title;
+         let permakey =title.split(' ').join('-').trim().toLowerCase();
          let productExist = products.filter(product => product.permakey === permakey);
          console.log(productExist.length)
         if(!productExist.length){

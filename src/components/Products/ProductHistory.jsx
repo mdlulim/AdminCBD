@@ -38,7 +38,7 @@ const Status = ({ status }) => {
     if (status === 'Pending') {
       badge = 'warning';
     }
-    if (status === 'Published') {
+    if (status === 'Published' || status === 'Active') {
       badge = 'success';
     }
     if (status === 'Blocked') {
@@ -74,12 +74,12 @@ export default function Products(props) {
 
     useMemo(() => {
 
-      ProductService.getProducts().then((res) => {
-        //console.log('Products '+res.data.data.results)
+      ProductService.getProductHistory().then((res) => {
+        console.log('Products History');
         console.log(res.data.data.results)
         if(res.data.success){
           const productlist = res.data.data.results;
-          console.log(productlist)
+         // console.log(productlist)
           setProducts(productlist);
           setFilteredProducts(productlist);
         }
@@ -99,55 +99,44 @@ const columns = [
     selector: 'type',
     sortable: true,
 }, {
-  name: 'Educator Fee',
-  selector: 'educator_fee',
+  name: 'Purchase By',
+  selector: 'first_name',
   sortable: true,
-  cell: row => <div>{row.educator_fee? row.currency_code+' '+row.educator_fee: ''} {row.educator_percentage ? row.educator_percentage+' %': ''}</div>
+  cell: row => <div><div>{row.first_name} {row.last_name}</div>
+      <div className="small text-muted">
+        <span>Referral: {row.referral_id}</span>
+      </div></div>
 },{
-  name: 'Registration Fee',
-  selector: 'registration_fee',
+  name: 'Tokens',
+  selector: 'tokens',
   sortable: true, 
-  cell: row => <div>{row.registration_fee? row.currency_code+' '+row.registration_fee: ''} {row.educator_percentage ? row.educator_percentage+' %': ''}</div>
+  cell: row => <div>{row.tokens? row.tokens: ''}</div>
 },{
-  name: 'Product Amount',
-  selector: 'price',
+  name: 'Income',
+  selector: 'income',
   sortable: true,
-  cell: row => <div>{row.currency_code}  {row.price}</div>
+  cell: row => <div>{row.currency_code}  {row.income}</div>
 },{
     name: 'Status',
     selector: 'status',
     sortable: true,
     cell: row => <Status {...row} />
 }, {
-    name: 'Created Date',
-    selector: 'created',
+    name: 'Start Date',
+    selector: 'start_date',
     sortable: true,
   cell: row => <div>
-                <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
-                <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+                <strong><Moment date={row.start_date} format="D MMM YYYY" /></strong><br />
+                <span className="text-muted"><Moment date={row.start_date} format="hh:mm:ss" /></span>
              </div>
 },{
-    name: 'Actions',
-    sortable: true,
-    cell: row => <div>
-    <spam style={iconPadding}>
-      <a
-      href={`products/${row.id}`}
-      className="btn btn-secondary btn-sm btn-icon"
-    ><span className="fa fa-pencil" />
-    </a></spam>
-    {/* <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-secondary btn-sm btn-icon"
-      onClick={e => {
-        e.preventDefault();
-    
-        onSubmitDeleteProduct(row);
-      }}
-    >
-      <span className="fa fa-trash" />
-    </a></spam> */}
-  </div>
+  name: 'End Date',
+  selector: 'end_date',
+  sortable: true,
+cell: row => <div>
+              { row.end_date ? <><strong><Moment date={row.end_date} format="D MMM YYYY" /></strong><br />
+              <span className="text-muted"><Moment date={row.end_date} format="hh:mm:ss" /></span></>: ''}
+           </div>
 }];
 
 const handleChangePassword = async data => {
@@ -175,6 +164,9 @@ const onSubmitUpdateProduct= data => {
     const filteredItems = products.filter(item => (
       (item && item.title && item.title.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.last_name && item.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.referral_id && item.referral_id.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredProducts(filteredItems);
@@ -187,7 +179,7 @@ const onSubmitUpdateProduct= data => {
           
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Products</span>
+                    <span>Product History</span>
                     <span className="flex-grow-1" /><input
                         style={inputWith}
                         type="text"
@@ -196,13 +188,13 @@ const onSubmitUpdateProduct= data => {
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
-                    <div>
+                    {/* <div>
                             <a 
                             href={`products/add`}
                             className="btn btn-secondary">
                                 Add Product
                             </a>
-                    </div>
+                    </div> */}
                 </div>
             </CardBody>
             <DataTable

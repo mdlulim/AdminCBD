@@ -3,7 +3,7 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import Moment from 'react-moment';
 import { Products } from 'components';
-import { EditorState, ContentState} from 'draft-js';
+import { EditorState, ContentState, convertFromHTML} from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
@@ -74,6 +74,7 @@ export default function UpdateProductDetails(props) {
     const [disabled, setDisabled] = useState(false);
     const [activeTab, setActiveTab] = useState('referals');
     const [selectedGroup, setSelectedGroup] = useState('');
+    
     const [show, setShow] = useState(true);
     const [showCBIx7, setShowCBIx7] = useState(true);
     const [showFixedPlan, setShowFixedPlan] = useState(true);
@@ -87,6 +88,7 @@ export default function UpdateProductDetails(props) {
 	const [registrationFee, setRegistrationFee] = useState(0);
 	const [error, setError] = useState('');
     const [product, setProduct] = useState({});
+    const [products, setProducts] = useState([]);
     const [productCategories, setProductCategories] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('');
@@ -101,13 +103,21 @@ export default function UpdateProductDetails(props) {
 
     useMemo(() => {
 
+        ProductService.getProducts().then((res) => {
+            if(res.data.success){
+              const productlist = res.data.data.results;
+              //console.log(productlist)
+              setProducts(productlist);
+            }
+          });
+
         ProductService.getProductCategories().then((res) => {
             // console.log(res.data.data.results)
              if(res.data.success){
-               const productlist = res.data.data.results;
-               setCategories(productlist);
+               const categoriesList = res.data.data.results;
+               setCategories(categoriesList);
                let temp = [];
-               productlist.filter(item => (
+               categoriesList.filter(item => (
                      temp.push({ value: item.code, label: item.title })
                     // console.log(item)
                      //setProductCategories(productCategories => [{value:item.code, label:item.title}])
@@ -128,10 +138,13 @@ export default function UpdateProductDetails(props) {
             setAmountFee(productDetails.price)
             setRegistrationFee(productDetails.registration_fee);
             setSelectedStatus(productDetails.status)
-            
+            setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetails.body))))
+
+            console.log(productDetails.type)
             if(productDetails.type === "FX"){
                 setShow(false)
                 setShowCBIx7(true)
+                setShowFixedPlan(true)
                 if(productDetails.fees){
                 setFees({
                         educator_percentage: parseFloat(productDetails.fees.educator_percentage),
@@ -141,6 +154,7 @@ export default function UpdateProductDetails(props) {
             }else if (productDetails.type === "CBIX7"){
                 setShow(true)
                 setShowCBIx7(false)
+                setShowFixedPlan(true)
                 if(productDetails.fees){
                 setFees({
                     educator_percentage:  parseFloat(productDetails.fees.educator_percentage),
@@ -149,6 +163,16 @@ export default function UpdateProductDetails(props) {
                     slippage_percentage_sell: parseFloat(productDetails.fees.slippage_percentage_sell),
                     })
             }
+            }else if (productDetails.type === "FP"){
+                setShowFixedPlan(false)
+                setShow(true)
+                setShowCBIx7(true)
+                if(productDetails.fees){
+                    setFees({
+                        daily_interest  : parseFloat(productDetails.fees.daily_interest),
+                        gross_return    : parseFloat(productDetails.fees.gross_return),
+                        })
+                }
             }
          //setEditorState(ContentState.convertToHTML(productDetails.body));
         // setEditorState(EditorState.createWithContent(ContentState.createFromText(productDetails.body)));
@@ -161,16 +185,11 @@ export default function UpdateProductDetails(props) {
         e.preventDefault();
         setActiveTab(tab);
     };
-    
+
     const onEditorStateChange = editorState => {
         setEditorState(editorState);
         };
 
-        const productType = [
-            { value: 'Fraxion', label: 'Fraxion' },
-            { value: 'Fixed Plans', label: 'Fixed Plans' },
-            { value: 'CBIx7', label: 'CBIx7' }
-          ];
 
           const currencies = [
             { value: 'CBI',  label: 'CBI' },
@@ -241,11 +260,11 @@ export default function UpdateProductDetails(props) {
                 price: 0,
                 bbt_value: parseFloat(form.bbt_value.value),
                 fees: {
-                educator_percentage: parseFloat(form.educator_percentage.value),
-                registration_fee: parseFloat(form.registration_fee.value),
-                slippage_percentage_buy: parseFloat(form.slippage_percentage_buy.value),
-                slippage_percentage_sell: parseFloat(form.slippage_percentage_sell.value),
-             }
+                    educator_percentage: parseFloat(form.educator_percentage.value),
+                    registration_fee: parseFloat(form.registration_fee.value),
+                    slippage_percentage_buy: parseFloat(form.slippage_percentage_buy.value),
+                    slippage_percentage_sell: parseFloat(form.slippage_percentage_sell.value),
+                }
             }
             console.log(data);
             update(data)
@@ -253,17 +272,13 @@ export default function UpdateProductDetails(props) {
         }else if(selectedProductType === 'FX'){
             const myFees = {
                                 educator_percentage: parseFloat(form.educator_percentage_fx.value),
-                                registration_percentage: parseFloat(form.registration_percentage.value),
+                                registration_percentage: parseFloat(form.registration_percentage_fx.value),
                             }
                             console.log(myFees);
             const data ={
                 body: currentContentAsHTML,
                 currency_code: selectedCurrency,
-                educator_percentage: 4,
-                fees: {
-                    educator_percentage: parseFloat(form.educator_percentage.value),
-                    registration_percentage: parseFloat(form.registration_percentage.value),
-                },
+                fees: myFees,
                 status: selectedStatus,
                 title: product.title,
                 price: parseFloat(form.price.value),
@@ -275,13 +290,15 @@ export default function UpdateProductDetails(props) {
             const data ={
                     body            : currentContentAsHTML,
                     currency_code   : selectedCurrency,
-                    daily_interes   : parseFloat(form.estimated_daily_interest.value),
-                    gross_return    : parseFloat(form.minimum_gross_return.value),
                     investment_period: parseFloat(form.investment_period.value),
                     minimum_investment: parseFloat(form.minimum_investment.value),
                     price            : parseFloat(form.price.value),
                     status           : selectedStatus,
-                    title            : product.title
+                    title            : product.title,
+                    fees             : {
+                        daily_interest  : parseFloat(form.daily_interest.value),
+                        gross_return    : parseFloat(form.gross_return.value),
+                    }
                 }
                 console.log(data);
                 update(data)
@@ -295,7 +312,7 @@ export default function UpdateProductDetails(props) {
             console.log(response);
             return confirmAlert({
                 title: 'Succcess',
-                message: 'Member was successfully updated',
+                message: 'Product was successfully updated',
                 buttons: [
                   {
                     label: 'Ok',
@@ -309,6 +326,10 @@ export default function UpdateProductDetails(props) {
         <Row>
                     <Col md={6} lg={6} xl={6}>
                     <form onSubmit={onSubmitUpdate}>
+                    { error ?
+                        <div className="alert alert-warning" role="alert">
+                        {error}
+                        </div> : ''}
                                 <Row>
                                 <Col md={12}>
                                         <label htmlFor="product_type">Product Type</label>
@@ -329,7 +350,7 @@ export default function UpdateProductDetails(props) {
 											}}
                                             className={`basic-multi-select form-control-m`}
                                             classNamePrefix="select"
-                                            disabled ={true}
+                                            isDisabled ={true}
                                             />
                                 </Col>
                                 <Col md={6}>
@@ -347,11 +368,12 @@ export default function UpdateProductDetails(props) {
                                         <Select
                                             id="currency"
                                             name="currency"
-                                            defaultValue={product ? currencies.filter(option => option.label === product.currency_code): 'CBI'}
+                                            value={product ? currencies.filter(option => option.value === product.currency_code): ''}
                                             options={currencies}
                                             onChange={item => setSelectedCurrency(item.value)}
                                             className={`basic-multi-select form-control-m`}
                                             classNamePrefix="select"
+                                            isDisabled={true}
                                             />
                                 </Col>
                                 {selectedProductType === "CBIX7" ?
@@ -388,11 +410,11 @@ export default function UpdateProductDetails(props) {
 													setErrorAmount(false)
 												}
 											}}
-                                        /> 
+                                        />
                                         <label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label>
                                 </Col>}
                                 <Col md={6} hidden={show}>
-							<label htmlFor="educator_persantage">Educator Persentage Fee (%)FX </label>
+							<label htmlFor="educator_persantage">Educator Persentage Fee (%) </label>
                                         <input
                                             type="text"
                                             id="educator_percentage_fx"
@@ -413,8 +435,8 @@ export default function UpdateProductDetails(props) {
                                         <label htmlFor="name">Registration Persentage Fee (%) </label>
                                         <input
                                             type="text"
-                                            id="registration_percentage"
-                                            name="registration_percentage"
+                                            id="registration_percentage_fx"
+                                            name="registration_percentage_fx"
                                             className="form-control form-control-m"
                                             defaultValue={ fees.registration_percentage ? fees.registration_percentage : null}
 											onChange={event => {
@@ -427,58 +449,52 @@ export default function UpdateProductDetails(props) {
                                         />
                                 </Col>
                                 <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Estimated daily Interest (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <label htmlFor="name">Estimated daily Interest (%)</label>
                                         <input
                                             type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
-											className="form-control form-control-m"
+                                            id="daily_interest"
+                                            name="daily_interest"
+                                            className="form-control form-control-m"
+                                            defaultValue={ fees.daily_interest ? fees.daily_interest : null}
 											onChange={event => {
 												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setRegistrationFee(parseFloat(value).toFixed(2))
 													setErrorReg(true)
 												}else{
 													setErrorReg(false)
-													setRegistrationFee(0)
 												}
 											}}
                                         />
                                 </Col>
                                 <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Minimum Gross Return (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <label htmlFor="name">Minimum Gross Return (%)</label>
                                         <input
                                             type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
-											className="form-control form-control-m"
+                                            id="gross_return"
+                                            name="gross_return"
+                                            className="form-control form-control-m"
+                                            defaultValue={ fees.gross_return ? fees.gross_return : null}
 											onChange={event => {
 												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setRegistrationFee(parseFloat(value).toFixed(2))
 													setErrorReg(true)
 												}else{
 													setErrorReg(false)
-													setRegistrationFee(0)
 												}
 											}}
                                         />
                                 </Col>
                                 <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Investment Period (%) {registrationFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={registrationFee} />: '' }</label>
+                                        <label htmlFor="name">Investment Period (%)</label>
                                         <input
                                             type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
-											className="form-control form-control-m"
+                                            id="investment_period"
+                                            name="investment_period"
+                                            className="form-control form-control-m"
+                                            defaultValue={product ? product.investment_period : ''}
 											onChange={event => {
 												if(!isNaN(+event.target.value)){
-													let value =  event.target.value/100*amountFee
-													setRegistrationFee(parseFloat(value).toFixed(2))
 													setErrorReg(true)
 												}else{
 													setErrorReg(false)
-													setRegistrationFee(0)
 												}
 											}}
                                         />
@@ -487,9 +503,10 @@ export default function UpdateProductDetails(props) {
                                         <label htmlFor="name">Minimum Investment (%) </label>
                                         <input
                                             type="text"
-                                            id="registration_persantage"
-                                            name="registration_persantage"
-											className="form-control form-control-m"
+                                            id="minimum_investment"
+                                            name="minimum_investment"
+                                            className="form-control form-control-m"
+                                            defaultValue={product ? product.minimum_investment : ''}
 											onChange={event => {
 												if(!isNaN(+event.target.value)){
 													setErrorReg(true)
@@ -592,6 +609,7 @@ export default function UpdateProductDetails(props) {
                                         wrapperClassName="wrapperClassName"
                                         editorClassName="editorClassName"
                                         onEditorStateChange={onEditorStateChange}
+                                        EditorState={editorState}
                                     />
                                     <hr />
                                     </Col>

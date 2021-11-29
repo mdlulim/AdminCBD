@@ -6,7 +6,8 @@ import DataTable from 'react-data-table-component';
 import { useParams, useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
-import { TransactionService } from '../../providers';
+import TransactionDetails from './TransactionDetails';
+import { TransactionService, AccountService, MemberService} from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -70,15 +71,29 @@ const Status = ({ status }) => {
   };
 
 export default function TransactionsByMember(props) {
+  const { userWallet } = props;
     const [show, setShow] = useState(false);
+    const [showTransaction, setShowTransaction] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState([]);
+    const [selectedTransPOP, setSelectedTransPOP] = useState([]);
+    const [userWallet2, setUserWallet] = useState({})
+    const [sponsorWallet, setSponsorWallet] = useState({})
+    const [mainWallet, setMainWallet] = useState({})
+    const [member, setMember] = useState({})
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const history = useHistory();
     const params = useParams();
     const { id } = params;
 
     useMemo(() => {
+       //Get member details
+       MemberService.getMember(id).then((res) => {
+            const memberDetails = res.data.data;
+            console.log(memberDetails);
+            setMember(memberDetails);
+        });
+
       TransactionService.getMemberTransactions(id).then((res) => {
        // console.log('Transaction by member')
        // console.log(res.data.data.results)
@@ -142,6 +157,15 @@ cell: row => <div>{row.currency.code} {row.balance}</div>
             className="btn btn-secondary btn-sm btn-icon">
                         <span className="fa fa-pencil"></span>
                     </button>
+                    {row.subtype.toLowerCase() === 'deposit' ?
+                    <button
+            onClick={e => {
+              e.preventDefault();
+              onSubmitTransactionDetails(row);
+            }}
+            className="btn btn-secondary btn-sm btn-icon">
+                        <span className="fa fa-eye"></span>
+                    </button>: ''}
       </div>
 }];
 
@@ -154,29 +178,38 @@ const handleDeleteMember = async data => {
 const onSubmitChangeStatus= data => {
   setSelectedTransaction(data);
   setShow(true);
-  console.log(data);
-    //return <Confirm show={show} setShow={setShow} />;
+  };
+  //=========================================Approve Pending Deposit=========================================================
+  const onSubmitTransactionDetails= data => {
+    //console.log(userWallet)
+   TransactionService.getTransactionPOP(data.txid).then((res) => {
+       const pop = res.data.data.rows;
+       setSelectedTransPOP(pop[0]);
+     });
+
+     AccountService.getMainAccount().then((res) => {
+     // console.log(res.data.data)
+      const memberslist = res.data.data;
+      setMainWallet(memberslist);
+    });
+    // Get member wallet details
+     MemberService.getMemberWallet(member.sponsor).then((res) => {
+      const walletDetails = res.data.data;
+      console.log(res.data.data)
+      setSponsorWallet(walletDetails);
+  });
+    setSelectedTransaction(data);
+    setShowTransaction(true);
+        // console.log(data);
+      //return <Confirm show={show} setShow={setShow} />;
   };
 
-  const onSubmitDeleteMember= data => {
-    return confirmAlert({
-      title: 'Delete Member',
-      message: 'Are you sure you want to delete ' + data.full_names + '?',
-      buttons: [{
-        label: 'Yes',
-        onClick: () => handleDeleteMember(data),
-      }, {
-        label: 'Cancel',
-      }]
-    });
-  };
 
   const onSearchFilter = filterText => {
     const filteredItems = transactions.filter(item => (
-      (item && item.user.full_names && item.user.full_names.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase()))
+      (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.subtype && item.subtype.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredTransactions(filteredItems);
   }
@@ -185,6 +218,14 @@ const onSubmitChangeStatus= data => {
     return (
         <Card className="o-hidden mb-4">
            <ModalChangeStatus show={show} setShow={setShow} transaction={selectedTransaction} />
+           <TransactionDetails show={showTransaction} setShow={setShowTransaction}
+            transaction={selectedTransaction}
+            pop={selectedTransPOP}
+            member={member}
+            userWallet={userWallet}
+            sponsorWallet={sponsorWallet}
+            mainWallet={mainWallet} />
+           
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span className="text-primary">Transactions</span>
@@ -208,13 +249,6 @@ const onSubmitChangeStatus= data => {
                 highlightOnHover
                 pagination
             />
-            <CardBody className="text-center border-top">
-                <HashLinkContainer to="/transactions">
-                    <a className="card-link font-weight-bold" href="/transactions">
-                        More Users...
-                    </a>
-                </HashLinkContainer>
-            </CardBody>
         </Card>
     );
 }
