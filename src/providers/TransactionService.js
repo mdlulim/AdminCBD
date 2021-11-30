@@ -103,6 +103,14 @@ class TransactionService {
         url: `${Config.API.BASE_URL}/pop/deposits/${txid}`,
       });
     }
+      static async getTransactionPOPFile(url) {
+        return await axios({
+          mode: 'no-cors',
+          method: 'GET',
+          headers: headers,
+          url: `${Config.API.BASE_URL_POP}?filename=${url}`,
+        });
+      }
 
 }
 

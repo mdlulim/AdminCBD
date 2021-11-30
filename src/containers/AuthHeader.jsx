@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Session} from 'bc-react-session';
-
+import { AuthService } from '../providers';
 const session = Session.get();
 export default function AuthHeader(props) {
     const { sideNavHidden, setSideNavHidden } = props;
@@ -28,7 +28,9 @@ export default function AuthHeader(props) {
                 <div
                     className="rw-btn rw-btn--nav"
                     data-action="aside-hide"
-                    onClick={() => setSideNavHidden(!sideNavHidden)}
+                    onClick={() => {
+                        setSideNavHidden(!sideNavHidden)}
+                    }
                 >
                     <span />
                 </div>
@@ -118,7 +120,10 @@ export default function AuthHeader(props) {
                 <button
                     className="btn btn-light btn-icon float-left"
                     data-action="fixedpanel-toggle"
-                    onClick={() => window.location = '/login?loggedOut=true'}
+                    onClick={() => {
+                        //AuthService.logout
+                        window.location = '/login?loggedOut=true'}
+                    }
                 >
                     <span className="li-power-switch" />
                 </button>

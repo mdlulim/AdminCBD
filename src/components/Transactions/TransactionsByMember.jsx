@@ -185,8 +185,15 @@ const onSubmitChangeStatus= data => {
   const onSubmitTransactionDetails= data => {
     //console.log(userWallet)
    TransactionService.getTransactionPOP(data.txid).then((res) => {
+     //console.log(res.data.data.rows[0])
        const pop = res.data.data.rows;
-       setSelectedTransPOP(pop[0]);
+       const url = pop[0].file;
+       console.log(url)
+        TransactionService.getTransactionPOPFile(url).then((res) => {
+            console.log(res);
+            setSelectedTransPOP(res.data);
+        })
+       
      });
 
      AccountService.getMainAccount().then((res) => {

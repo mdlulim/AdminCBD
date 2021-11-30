@@ -6,6 +6,9 @@ import { MemberService } from '../../providers';
 import { AuthLayout } from 'containers';
 import { Members, Transactions, Products, KYC } from 'components';
 import { KYCService } from '../../providers';
+import { Session } from 'bc-react-session';
+
+const session = Session.get();
 
 const Status = ({ status }) => {
     let badge = 'primary';
@@ -33,12 +36,14 @@ const MemberDetails = props => {
     const [kycDetails, setkycDetails] = useState({});
     const [rating, setRating] = useState(0);
     const [walletID, setWalletID] = useState(null);
+    const [adminLevel, setAdminLevel] = useState(0)
     const params = useParams();
     const { id } = params;
     const [ kycLevel, setKycLevel] = useState(null);
 
     useMemo(() => {
         //Get member details
+        setAdminLevel(session.name.payload.user.permission_level)
         MemberService.getMember(id).then((res) => {
             const memberDetails = res.data.data;
             //console.log(memberDetails)
@@ -63,7 +68,7 @@ const MemberDetails = props => {
          //Get member details
          KYCService.getkycLlevel(id).then((res) => {
             setKycLevel(res.data.data.kyc_level)
-           // console.log(res.data.data)
+            //console.log(res.data.data)
             if(res.data.data.kyc_level != -1){
                 setRating(res.data.data.kyc_level);
             }
@@ -71,7 +76,7 @@ const MemberDetails = props => {
 
        MemberService.getMemberKYC(id).then(res=>{
             setkycDetails(res.data.data)
-            console.log(res.data.data)
+           // console.log(res.data.data)
        })
 
 
@@ -95,7 +100,7 @@ const MemberDetails = props => {
             }}
         >
             <Row>
-                <Col md={12} lg={3} xl={3}>
+                <Col md={12} lg={4} xl={4}>
                     <Card className="o-hidden author-box" style={{ minHeight: 300 }}>
                         <CardBody>
 
@@ -118,13 +123,13 @@ const MemberDetails = props => {
                                         </div>
                                         <div className="author-box-job">
                                             <table>
-                                                <tr><td>Wallet ID </td><td> : {walletID ? '...............'+walletID.slice(walletID.length - 5): ''}</td></tr>
+                                                <tr><td>Wallet ID </td><td> : { adminLevel === 5 ? walletID: walletID ? '........'+walletID.slice(walletID.length - 5): ''}</td></tr>
                                                 <tr><td>ID/Passport No </td><td> : {member.id_number}</td></tr>
                                                 <tr><td>Phone </td><td> : {member.mobile}</td></tr>
                                                 <tr><td>Email </td><td> : {member.email}</td></tr>
                                                 <tr><td>KYC Level </td><td> : {kycLevel === -1?'unAssigned':kycLevel}</td></tr>
                                                 <tr><td>Type </td><td> : {member.group ? member.group.label : 'Member'}</td></tr>
-                                                <tr><td>Status </td><td><Status {...member} /></td></tr>
+                                        <tr><td>Status </td><td><Status {...member} /></td></tr>
                                             </table>
 											<hr />
                                             <Rating ratingValue={rating} />
@@ -143,7 +148,7 @@ const MemberDetails = props => {
                         </CardBody>
                     </Card>
                 </Col>
-                <Col md={12} lg={9} xl={9}>
+                <Col md={12} lg={8} xl={8}>
                     <Card>
                         <CardBody>
                             <ul className="nav nav-tabs nav-tabs__round mt-0">
