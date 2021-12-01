@@ -16,7 +16,7 @@ class KYCService {
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}/users/all-kyc/`,
+      url: `${Config.API.BASE_URL}/all-kyc/`,
     });
   }
 

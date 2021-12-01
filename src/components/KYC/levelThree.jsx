@@ -6,6 +6,7 @@ export default function Levelhree(props) {
     const { approveLevel, kycApplication, setKycApplication } = props;
     const [active, setActiveState] = useState(null);
 
+    console.log(kycApplication, " level 3")
 
     const onShowImage = (image) => {
         props.showImage(image);
@@ -44,7 +45,7 @@ export default function Levelhree(props) {
                     <Col xs={6} md={6} >
                         <div className="form-group">
                             <label>Proof of Address</label>
-                            <Card onClick={() => onShowImage([{uri: "https://res.cloudinary.com/demo/image/upload/example_pdf.pdf"}])}>
+                            <Card onClick={() => onShowImage([{ uri: 'https://cdn-cbigold.ams3.digitaloceanspaces.com/'+kycApplication.address[0] }])}>
                                 <div className="fa fa-file" style={{fontSize: "100px", textAlign: "center", padding: "15px", cursor: "pointer"}}></div>
                             </Card>
                         </div>

@@ -1,9 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import Moment from 'react-moment';
-import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
-import { useHistory } from 'react-router-dom';
 
 import { KYCService } from '../../providers';
 
@@ -63,19 +61,15 @@ const Status = ({ status }) => {
 };
 
 export default function KYCList(props) {
-    const [show, setShow] = useState(false);
-    const [showDelete, setShowDelete] = useState(false);
     const [members, setMembers] = useState([]);
     const [filteredMembers, setFilteredMembers] = useState([]);
-    const [selectedMember, setSelectedMember] = useState({});
-    const history = useHistory();
 
-    useMemo(() => {
+    useEffect(() => {
         KYCService.getKYCApplicants().then((res) => {
-       //   //  console.log(res)
-            // const memberslist = res.data.data.results;
-            // setMembers(memberslist);
-            // setFilteredMembers(memberslist);
+            const memberslist = res.data.data;
+            setMembers(memberslist);
+            setFilteredMembers(memberslist);
+            console.log(memberslist, " list ", res.data)
         });
 
     }, []);
@@ -99,29 +93,6 @@ export default function KYCList(props) {
         selector: 'username',
         sortable: true,
     }, {
-        name: 'KYC Level',
-        selector: 'mobile',
-        sortable: true,
-        cell: row => <div>{row.kyc?1:"UnAssigned"}</div>
-    },
-    {
-        name: 'Level Applied',
-        selector: 'email',
-        sortable: true,
-    }, {
-        name: 'Application Date',
-        selector: 'created',
-        sortable: true,
-        cell: row => <div>
-            <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
-            <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
-        </div>
-    }, {
-        name: 'Status',
-        selector: 'status',
-        sortable: true,
-        cell: row => <Status {...row} />
-    }, {
         name: 'Actions',
         sortable: true,
         cell: row => <div>
@@ -133,23 +104,6 @@ export default function KYCList(props) {
             </a></div>
         </div>
     }];
-
-    const onSubmitChangeStatus = data => {
-        setSelectedMember(data);
-        setShow(true);
-       // console.log(data);
-        //return <Confirm show={show} setShow={setShow} />;
-    };
-
-    const onSubmitDeleteMember = data => {
-        setSelectedMember(data);
-        setShowDelete(true);
-    };
-
-    const countMembers = (type) => {
-        const countTypes = this.props.movies.filter(movie => movie.media_type === type);
-        return countTypes.length;
-    };
 
     const onSearchFilter = filterText => {
         const filteredItems = members.filter(item => (
