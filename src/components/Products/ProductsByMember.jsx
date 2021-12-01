@@ -88,7 +88,7 @@ export default function Products(props) {
     useMemo(() => {
       ProductService.getProductByMemberId(id).then((res) => {
         //console.log('Product By Member '+res.data.data.results)
-        console.log(res.data.data.results)
+       // console.log(res.data.data.results)
         const productlist = res.data.data.results;
         setProducts(productlist);
         setFilteredProducts(productlist);

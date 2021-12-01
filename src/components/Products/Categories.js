@@ -159,7 +159,7 @@ const onSubmitUpdateCategory= data => {
                             <a 
                             href={`categories/add`}
                             className="btn btn-secondary">
-                                Add Product
+                              Add Category
                             </a>
                     </div>
                 </div>

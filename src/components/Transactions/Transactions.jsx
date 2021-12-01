@@ -9,6 +9,7 @@ import DataTableExtensions from 'react-data-table-component-extensions';
 import { Modal } from 'react-bootstrap';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
+import ExportToExcel from './ExportToExcel';
 import ModalBulkUpdate from './ModalBulkUpdate';
 import { TransactionService, MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
@@ -18,6 +19,9 @@ import PropTypes from 'prop-types';
 import DatePicker from "react-datepicker";
 import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
+import { Session } from 'bc-react-session';
+
+const session = Session.get();
 // styles
 const customStyles = {
    
@@ -129,6 +133,7 @@ export default function Transactions(props) {
     const [selectedTransaction, setSelectedTransaction] = useState(false);
     const [editStatus, setEditStatus] = useState(true);
     const [members, setMembers] = useState([]);
+    const [adminLevel, setAdminLevel] = useState({});
     const [wealthCreaters, setWealthCreaters] = useState([]);
     const [selectedRows, setSelectedRows] = React.useState([]);
     const [users, setUsers] = React.useState([]);
@@ -139,7 +144,7 @@ export default function Transactions(props) {
 
 
     useMemo(() => {
-
+      setAdminLevel(session.name.payload.user.permission_level)
             TransactionService.getTransactions().then((res) => {
               //let id = res.data.data.results[0].user_id;
               //.log(res.data.data.results);
@@ -261,7 +266,7 @@ export default function Transactions(props) {
         cell: row => <div>
             <button
       className="btn btn-secondary btn-sm btn-icon"
-      disabled={row.status == "Completed" ? true: ''}
+      disabled={adminLevel != 5? row.status == "Completed" ? true: '':false}
       onClick={e => {
         e.preventDefault();
         setSelectedTransaction(row)
@@ -424,11 +429,14 @@ export default function Transactions(props) {
                             }}>
                                 Search By Date
                             </button>
-                            <CSVLink className="btn btn-info btn-icon" data={filteredTransactions}><span className="fa fa-download" /></CSVLink>
+                            {/* <span className="fa fa-download" /> */}
+                            <CSVLink className="btn btn-info btn-icon" data={filteredTransactions}>Export CSV</CSVLink>
+                            <ExportToExcel data={filteredTransactions}/>
                             </div>
                     </div>
                 </div>
             </CardBody>
+            
             <DataTable
               columns={columns}
               data={filteredTransactions}
