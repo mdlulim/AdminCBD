@@ -37,7 +37,8 @@ import Pending from 'pages/Transactions/Pending';
 import MakeTransferPage from 'pages/Transactions/MakeTransferPage';
 import Products from 'pages/Products';
 import ProductHistory from 'pages/Products/ProductHistory';
-import ProductCategories from 'pages/Products/ProductCategories';
+import ProductCategories from 'pages/ProductCategory';
+import CategoryNew from 'pages/ProductCategory/CategoryNew';
 import ProductAddNew from 'pages/Products/ProductAddNew';
 import ProductDetails from 'pages/Products/ProductDetails';
 import UserPermissions from 'pages/UserPermissions';
@@ -84,6 +85,7 @@ const App = () => {
 					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/history" component={(props) => <ProductHistory config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/categories" component={(props) => <ProductCategories config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/categories/add" component={(props) => <CategoryNew config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/add" component={(props) => <ProductAddNew config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/permissions" component={(props) => <UserPermissions config={settings} {...props} setMenu={setMenu} />} />
