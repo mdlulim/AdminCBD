@@ -138,8 +138,9 @@ export default function UpdateProductDetails(props) {
             setAmountFee(productDetails.price)
             setRegistrationFee(productDetails.registration_fee);
             setSelectedStatus(productDetails.status)
-            setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetails.body))))
-
+            if(productDetails.body){
+                setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetails.body))))
+            }
             console.log(productDetails.type)
             if(productDetails.type === "FX"){
                 setShow(false)

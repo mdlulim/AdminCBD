@@ -118,12 +118,12 @@ const MemberDetails = props => {
                                                 Balance: {wallet.currency_code} {wallet.balance}
                                             </span><br /> */}
                                             < span className={wallet.available_balance > 0 ? 'text-success' :'text-danger'}>
-                                                Available Balance: {wallet.currency_code} {parseFloat(wallet.available_balance).toFixed(4)}
+                                                Available Balance: {wallet.currency_code} {parseFloat(wallet.available_balance).toFixed(4)}<br />
                                             </span>
+                                            Wallet ID : { adminLevel === 5 ? walletID: walletID ? '........'+walletID.slice(walletID.length - 5): ''}
                                         </div>
                                         <div className="author-box-job">
                                             <table>
-                                                <tr><td>Wallet ID </td><td> : { adminLevel === 5 ? walletID: walletID ? '........'+walletID.slice(walletID.length - 5): ''}</td></tr>
                                                 <tr><td>ID/Passport No </td><td> : {member.id_number}</td></tr>
                                                 <tr><td>Phone </td><td> : {member.mobile}</td></tr>
                                                 <tr><td>Email </td><td> : {member.email}</td></tr>
