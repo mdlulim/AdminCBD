@@ -78,20 +78,14 @@ const Status = ({ status }) => {
   };
 
 export default function MakeTransfer(props) {
-    const [show, setShow] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
-    const [temp, setTemp] = useState({});
-    const handleClose = () => setShow(false);
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
     const [selectedFromAccount, setSelectedFromAccount] = useState({});
-    const [selectedToAccount, setSelectedToAccount] = useState({});
     const [members, setMembers] = useState([]);
+    const [selectedTxType, setSelectedTxTy] = useState({})
     const [membersOptions, setMembersOptions] = useState([]);
     const [walletSender, setWalletSender] = useState(null);
-    const [walletReciever, setWalletReciever] = useState(null);
     const [fees, setFees] = useState(null);
     const [userType, setUserType] = useState(null);
     const [processing, setProcessing] =useState(false);
@@ -122,19 +116,20 @@ export default function MakeTransfer(props) {
 
 
       }, []);
-
-const onSubmit= data => {
-    return confirmAlert({
-      title: 'Change Customer Status',
-      message: 'Are you sure you want to resend password for ' + data.full_names + '?',
-      buttons: [{
-        label: 'Yes',
-        onClick: () => makeTransfer(data),
-      }, {
-        label: 'Cancel',
-      }]
-    });
-  };
+const TransType = [ { name: 'credit',  label: 'Credit' },
+                    { name: 'debit', label: 'Debit' }
+                  ]
+const onTransfarSubmit= data => {
+  return confirmAlert({
+    title: 'Succcess',
+    message: 'Country was successfully Unblacklisted',
+    buttons: [
+      {
+        label: 'Ok',
+      }
+    ]
+  });
+  }
 
   const makeTransfer = (data) =>{
       console.log(data)
@@ -144,11 +139,11 @@ const onSubmit= data => {
 const recieverWallet = (item) =>{
     //Get member details
     MemberService.getMemberWallet(item.value).then((res) => {
-         console.log(res.data.data)
+         //console.log(res.data.data)
        const walletDetails = res.data.data;
        setWalletSender(walletDetails);
      });
-     console.log(fees)
+     //console.log(fees)
      const userFee = fees.filter(fee => fee.name === item.group.name)[0];
      //console.log(userFee);
      setUserType(userFee);
@@ -164,39 +159,17 @@ const recieverWallet = (item) =>{
 
     return (
         <Card className="o-hidden mb-4">
-            <CardBody className="p-0">
-                <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span className="flex-grow-1" />
-                    
-                      <div>
-                      {/* <button 
-                            className="btn btn-secondary"
-                            type="button"
-                            onClick={e => {
-                              e.preventDefault();
-                            }}>
-                                + Add Funds
-                            </button> */}
-                            <button 
-                            className="btn btn-secondary"
-                            type="button"
-                            onClick={e => {
-                              e.preventDefault();
-                            }}>
-                                Buddy Tranfer
-                            </button>
-                    </div>
-                </div>
-            </CardBody>
             <CardBody>
+           
             <Row>
                  <Col>
-            <h1>Transfer CBI Tokens</h1>
-            <span>Please use form below to specify details about your  transfer, and press submit button</span>
+            <h1>Credit/Debit User Account</h1>
+            {/* <span>Please use form below to specify details about your  transfer, and press submit button</span> */}
             <hr />
+            <form onSubmit={onTransfarSubmit}>
                 <div className="row g-3">
                     <div className="col">
-                    <label for="inputEmail4" class="form-label">Specify reciepent by name or user code</label>
+                    <label for="inputEmail4" class="form-label">Specify reciepent by name or refferal</label>
                     <Select
                                     id="status"
                                     name="status"
@@ -220,9 +193,18 @@ const recieverWallet = (item) =>{
                 </Col>: ''}
                     </div>
                     <div className="col">
-                    <label for="inputEmail4" className="form-label">Enter amount to transfer </label>
+                    <label for="inputEmail4" class="form-label">Select Transaction Type</label>
+                    <Select
+                                    id="status"
+                                    name="status"
+                                    options={TransType}
+                                    onChange={item => {
+                                        setSelectedTxTy(item)}}
+                                    className={`basic-multi-select form-control-m`}
+                                    classNamePrefix="select"
+                                    />
+                    <label for="inputEmail4" className="form-label">Enter CBI amount</label>
                     <div className="input-group">
-                        <div className="input-group-text">CBI</div>
                         <input type="text" 
                         className="form-control" 
                         id="autoSizingInputGroup" 
@@ -235,45 +217,25 @@ const recieverWallet = (item) =>{
                             }
                         }}
                     />
-                    {/* <label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label> */}
-                        <br />
-                        { userType? 
-                    <Col lg={12}>
-                        <br />
-                    <Common.Widget
-                        icon="li-wallet"
-                        title={userType.label}
-                        subtitle={'Transaction Fee: 00.000'}
-                        informer={<span className="text-bold text-success">{totalAmount}</span>}
-                        invert={false}
-                    />
-                </Col>: ''}
+                    </div>
+                    <label for="inputEmail4" className="form-label">Note</label>
+                    <div className="input-group">
+                    <textarea
+                          type="text"
+                          id="reason"
+                          name="reason"
+                          className="form-control form-control-m"
+                      />
                     </div>
                     </div>
                 </div>
                 <hr/>
-                <div className="row align-items-center m-0 g-3">
-                <button disabled={disabled}
-                            className="btn btn-primary"
-                            disabled={disabled}
-                            onClick={event => {
-                                confirmAlert({
-                                    title: 'Confirm submit',
-                                    message: 'Are you sure you want to process this transactions',
-                                    buttons: [
-                                      {
-                                        label: 'Yes',
-                                        onClick: () => {
-                                           console.log('Submitted')
-                                        }
-                                      }
-                                    ]
-                                  })
-                            }}
-                        >
+                <button
+                className="btn btn-primary"
+                disabled={disabled}>
                             {processing ? 'Processing...' : 'SUBMIT QUEST'}
                         </button>
-                </div>
+                </form>
             </Col>
             </Row>
             </CardBody>

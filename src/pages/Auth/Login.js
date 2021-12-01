@@ -5,6 +5,7 @@ import { Session } from 'bc-react-session';
 import AuthAervice from '../../providers/AuthService';
 import { AuthPages } from 'containers';
 import { UserService } from 'providers';
+import jwt from 'jwt-decode';
 
 export default function LoginPage(props) {
     const [error, setError] = useState('');
@@ -29,31 +30,22 @@ export default function LoginPage(props) {
                 IPv4: "123456"
             };
             AuthAervice.login(user, password, device,geoLocation).then((response) =>{
-                // console.log(response);
-            if(response.data.success === true){
-                const logLevel = () => {
-                    UserService.getUserByEmail(user).then((res) => {
-                        console.log(res.data.permission_level);
-                        localStorage.setItem('userLevel',res.data.permission_level);
-                    })};
-
-                logLevel();
-                
-                console.log(response.data.data.token)
+                console.log(jwt(response.data.data.token));
+            if(response.data.success === true && response.data.data.admin === true){
                 let sessionDuration = 864000;
                 Session.start({
                     payload: {
                         admin: response.data.data.admin,
-                        token: response.data.data.token
+                        token: response.data.data.token,
+                        user: jwt(response.data.data.token)
                     },
                     expiration: sessionDuration 
                 });
-                
-            window.location = '/dashboard';
+                window.location = '/dashboard';
             }else{
                 setLoading(false);
                 setDisabled(false);
-                setError(response.data.message);
+                setError("Username or password is incorrect");
             }
         console.log(response);
         }).catch(error => {

@@ -209,8 +209,7 @@ const columns = [{
         noHeader
         selectableRowsHighlight
         highlightOnHover
-        pagination
-      />
+        pagination />
 
     </Card>
   );

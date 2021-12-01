@@ -90,7 +90,7 @@ export default function TransactionsByMember(props) {
        //Get member details
        MemberService.getMember(id).then((res) => {
             const memberDetails = res.data.data;
-            console.log(memberDetails);
+            //console.log(memberDetails);
             setMember(memberDetails);
         });
 
@@ -149,6 +149,7 @@ cell: row => <div>{row.currency.code} {row.balance}</div>
     name: 'Actions',
     sortable: true,
     cell: row => <div>
+      <div style={iconPadding}>
             <button 
             onClick={e => {
               e.preventDefault();
@@ -157,15 +158,16 @@ cell: row => <div>{row.currency.code} {row.balance}</div>
             className="btn btn-secondary btn-sm btn-icon">
                         <span className="fa fa-pencil"></span>
                     </button>
-                    {row.subtype.toLowerCase() === 'deposit' ?
-                    <button
+                    </div>
+                    {row.subtype.toLowerCase() === 'deposit' && member.status === 'Pending' ?
+                    <div style={iconPadding}><button
             onClick={e => {
               e.preventDefault();
               onSubmitTransactionDetails(row);
             }}
             className="btn btn-secondary btn-sm btn-icon">
                         <span className="fa fa-eye"></span>
-                    </button>: ''}
+                    </button></div>: ''}
       </div>
 }];
 
@@ -183,8 +185,15 @@ const onSubmitChangeStatus= data => {
   const onSubmitTransactionDetails= data => {
     //console.log(userWallet)
    TransactionService.getTransactionPOP(data.txid).then((res) => {
+     //console.log(res.data.data.rows[0])
        const pop = res.data.data.rows;
-       setSelectedTransPOP(pop[0]);
+       const url = pop[0].file;
+       console.log(url)
+        TransactionService.getTransactionPOPFile(url).then((res) => {
+            console.log(res);
+            setSelectedTransPOP(res.data);
+        })
+       
      });
 
      AccountService.getMainAccount().then((res) => {
@@ -195,7 +204,7 @@ const onSubmitChangeStatus= data => {
     // Get member wallet details
      MemberService.getMemberWallet(member.sponsor).then((res) => {
       const walletDetails = res.data.data;
-      console.log(res.data.data)
+     // console.log(res.data.data)
       setSponsorWallet(walletDetails);
   });
     setSelectedTransaction(data);

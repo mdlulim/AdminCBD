@@ -20,6 +20,7 @@ import Currencies from './Currencies';
 import Configurations from './Configurations';
 import FormsConfig from './FormsConfig';
 import KYC from './KYC';
+import ProductCategory from './ProductCategory';
 
 export {
     Breadcrumb,
@@ -43,5 +44,6 @@ export {
     Currencies,
     Configurations,
     FormsConfig,
-    KYC
+    KYC,
+    ProductCategory
 };
