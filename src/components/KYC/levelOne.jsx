@@ -96,7 +96,7 @@ export default function LevelOne(props) {
                                                         id="address"
 
                                                         className="form-control form-control-m"
-                                                        value={address.line_1?address.line_1:''}
+                                                        value={address ?address.line_1:''}
                                                         disabled
                                                     />
                                                 </div>

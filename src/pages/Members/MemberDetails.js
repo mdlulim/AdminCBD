@@ -41,7 +41,7 @@ const MemberDetails = props => {
     const { id } = params;
     const [ kycLevel, setKycLevel] = useState(null);
 
-    useMemo(() => {
+    useState(() => {
         //Get member details
         setAdminLevel(session.name.payload.user.permission_level)
         MemberService.getMember(id).then((res) => {
@@ -124,12 +124,14 @@ const MemberDetails = props => {
                                         </div>
                                         <div className="author-box-job">
                                             <table>
+                                                <tbody>
                                                 <tr><td>ID/Passport No </td><td> : {member.id_number}</td></tr>
                                                 <tr><td>Phone </td><td> : {member.mobile}</td></tr>
                                                 <tr><td>Email </td><td> : {member.email}</td></tr>
                                                 <tr><td>KYC Level </td><td> : {kycLevel === -1?'unAssigned':kycLevel}</td></tr>
                                                 <tr><td>Type </td><td> : {member.group ? member.group.label : 'Member'}</td></tr>
-                                        <tr><td>Status </td><td><Status {...member} /></td></tr>
+                                                <tr><td>Status </td><td><Status {...member} /></td></tr>
+                                        </tbody>
                                             </table>
 											<hr />
                                             <Rating ratingValue={rating} />
