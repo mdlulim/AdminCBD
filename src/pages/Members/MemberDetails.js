@@ -40,7 +40,7 @@ const MemberDetails = props => {
         //Get member details
         MemberService.getMemberAddress(id).then((res) => {
                 const memberAddress = res.data.data.results;
-                setAddress(memberAddress[0]);
+                setAddress(memberAddress[memberAddress.length - 1]);
         });
 
 
