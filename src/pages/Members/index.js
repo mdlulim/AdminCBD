@@ -4,7 +4,13 @@ import { Common, Pagination, Members } from 'components';
 import { AuthLayout } from 'containers';
 import { MemberService } from '../../providers';
 
-
+// if(localStorage.getItem('hasAccess')){
+    // let mi = localStorage.getItem('vlist');
+    console.log(sessionStorage.getItem('members'));
+    // if(!mi.includes('members')){
+    //     // window.location.replace("http://localhost:3000/dashboard");
+    // }   
+// }
 export default function MembersPage(props) {
     const [members, setMembers] = useState([]);
     useMemo(() => {

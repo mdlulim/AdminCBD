@@ -1,7 +1,9 @@
 import { PagePermissionService } from 'providers';
 import React, { useEffect, useState, useMemo } from 'react';
 import menu from 'static/mainmenu.json';
-// var ;
+
+sessionStorage.clear();
+var member_page = false;
 const SubNavItem = props => {
     const [hasAccess, setHasAccess] = useState(false);
     const [perm, setPerm] = useState('');
@@ -35,19 +37,35 @@ const SubNavItem = props => {
                 setHasAccess(true);
             }
         });
-
         }, []);
+         if(hasAccess == true){
+             
+             if(title === 'Members'){
+                 alert(1);
+                member_page = true;
+             }
+             
+         } 
     return (
-        <li style={{display:(hasAccess !== true ? 'none' : true)}}>
+       
+        (hasAccess == true ? <li>
             <a
                 href={`${parentLink + link}`}
                 className="no-icon"
             >
                 <span className="text">{title}</span>
             </a>
-        </li>
+        </li> : '')
+        
     );
 }
+
+sessionStorage.setItem('members', member_page);
+
+// console.log(vl);
+// window.sessionStorage.setItem("items",vl);
+// console.log(window.sessionStorage.getItem('items'));
+// localStorage.setItem('vlist', vl);
 
 const NavItem = props => {
     const {
@@ -62,6 +80,7 @@ const NavItem = props => {
         activeClass,
         openableClass,
     } = props;
+    let cnt = 0;
     return (
         <li
             className={activeClass(link) + openableClass(childitems) + openClass(id)}
