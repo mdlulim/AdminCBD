@@ -124,7 +124,7 @@ class MemberService {
         headers: headers,
         url: `${Config.API.BASE_URL}/users/${id}/archive`,
       }).then((res) =>{
-        console.log(res);
+       // console.log(res);
         //const result = {status: res.data.status, message: res.data.message}
         const result = res;
         return result;

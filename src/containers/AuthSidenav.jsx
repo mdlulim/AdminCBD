@@ -1,6 +1,9 @@
 import { PagePermissionService } from 'providers';
 import React, { useEffect, useState, useMemo } from 'react';
 import menu from 'static/mainmenu.json';
+import { Session } from 'bc-react-session';
+
+const session = Session.get();
 // var ;
 const SubNavItem = props => {
     const [hasAccess, setHasAccess] = useState(false);
@@ -15,7 +18,7 @@ const SubNavItem = props => {
     } = props;
 
     useMemo(() => {
-        let ul =localStorage.getItem('userLevel');
+        let ul = session.name.payload.user.permission_level;
         PagePermissionService.getPagePermissionsByPage((title.toLowerCase()).replace(/\s/g, "")).then((res) => {
             console.log(ul);
             if(ul == 1){

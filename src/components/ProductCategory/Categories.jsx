@@ -6,8 +6,6 @@ import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
-import DeleteProductAlert from './DeleteProductAlert';
-import ModalUpdateCategories from './ModalUpdateCategories';
 import { ProductService } from '../../providers';
 // styles
 const customStyles = {
@@ -142,8 +140,6 @@ const onSubmitUpdateCategory= data => {
 
     return (
         <Card className="o-hidden mb-4">
-          <ModalUpdateCategories show={show} setShow={setShow} category={selectedCategory} />
-          
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>Product Categories</span>
