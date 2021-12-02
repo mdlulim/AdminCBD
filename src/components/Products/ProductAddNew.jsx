@@ -52,6 +52,7 @@ export default function ProductAddNew(props) {
     const [activeTab, setActiveTab] = useState('referals');
     const [selectedGroup, setSelectedGroup] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [selectedRebalancingFrequency, setSelectedRebalancingFrequency] = useState('');
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const { processing,confirmButtonDisabled, confirmButton,} = props;

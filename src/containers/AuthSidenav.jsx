@@ -1,17 +1,17 @@
 import { PagePermissionService } from 'providers';
 import React, { useEffect, useState, useMemo } from 'react';
 import menu from 'static/mainmenu.json';
+import { Session } from 'bc-react-session';
 
-sessionStorage.clear();
-var member_page = false;
+const session = Session.get();
+var vl =[];
+var member_page;;
 const SubNavItem = props => {
     const [hasAccess, setHasAccess] = useState(false);
     const [perm, setPerm] = useState('');
     var t='';
-    var ul = localStorage.getItem('userLevel');
-    
+    //var ul = localStorage.getItem('userLevel');
 
-    
     const {
         link,
         title,
@@ -19,8 +19,9 @@ const SubNavItem = props => {
     } = props;
 
     useMemo(() => {
+        let ul = session.name.payload.user.permission_level;
         PagePermissionService.getPagePermissionsByPage((title.toLowerCase()).replace(/\s/g, "")).then((res) => {
-            // alert(ul);
+            // console.log(ul);
             if(ul == 1){
                 setHasAccess(res.data.low);
             }else if(ul == 2){
@@ -39,13 +40,17 @@ const SubNavItem = props => {
         });
         }, []);
          if(hasAccess == true){
-             
-             if(title === 'Members'){
-                 alert(1);
-                member_page = true;
-             }
-             
-         } 
+             vl.push(title);             
+         }
+         Session.setPayload({
+            vlist: vl,
+        });
+            
+        //  Session.start({ 
+        //     payload: {
+        //         vlist: vl,
+        //     },
+        // }); 
     return (
        
         (hasAccess == true ? <li>
@@ -58,9 +63,11 @@ const SubNavItem = props => {
         </li> : '')
         
     );
+
+    
 }
 
-sessionStorage.setItem('members', member_page);
+// sessionStorage.setItem('members', member_page);
 
 // console.log(vl);
 // window.sessionStorage.setItem("items",vl);

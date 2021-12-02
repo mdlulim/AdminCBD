@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Document, Page } from 'react-pdf';
+import DocViewer, {PNGRenderer, JPGRenderer, PDFRenderer, MyCustomPNGRenderer } from "react-doc-viewer";
 import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
@@ -9,6 +11,7 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import defaultImage from '../../assets/img/default.png'
 import Config from '../../config';
+import pdfFile from '../../assets/1637397485456.pdf';
 
 const imageWidth = {
     width: '60%'
@@ -20,6 +23,8 @@ const TransactionDetails = props => {
     const [error, setError] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('');
     const [mainAccount, setMainAccount] = useState({});
+    const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
     useEffect(() => {
@@ -136,6 +141,12 @@ const TransactionDetails = props => {
         console.log(reason);
 
     }
+    function onDocumentLoadSuccess({ numPages }) {
+        setNumPages(numPages);
+      }
+      const docs = [
+        { uri: pdfFile },
+       ];
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
             {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
@@ -177,14 +188,7 @@ const TransactionDetails = props => {
                                     />
                                 </div>
                             </div>
-                            <div className="form-row">
-                                <div className="col">
-                                <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Proof of payment</label>
-                                <hr />
-                                    <img src={ pop ? `${Config.API.BASE_URL_POP}?filename=${pop.file}`: defaultImage} style={imageWidth} className="rounded mx-auto d-block" alt="..." />
-                                    </div>
-                                    </div>
-                                <div className="form-group">
+                            <div className="form-group">
                                     <label htmlFor="reason">Reason</label>
                                     {transaction ?
                                     <textarea
@@ -195,6 +199,14 @@ const TransactionDetails = props => {
                                     />
                                     : ''}
                                 </div>
+                            <div className="form-group">
+                                <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Proof of payment</label>
+                                <hr />
+                                {/* <DocViewer documents={docs} /> */}
+                                <object data={pdfFile} type="application/pdf" width="100%" height="100%">
+                                    <p>Alternative text - include a link <a href={pdfFile}>to the PDF!</a></p>
+                                </object>
+                                    </div>
                                 <hr />
                                 <Row>
                         <Col md={6}>

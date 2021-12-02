@@ -6,6 +6,9 @@ import { Common, Dashboard, Overview, Members } from 'components';
 import { MemberService, ProductService, TransactionService, AccountService } from '../../providers';
 import { VectorMap } from '@south-paw/react-vector-maps';
 import world from '../../components/Dashboard/world.json';
+import { Session } from 'bc-react-session';
+
+const session = Session.get();
 const Filter = () => {
     return (
         <>
@@ -38,10 +41,14 @@ export default function DashboardPage(props) {
     const [products, setProducts] = useState([]);
     const [transactions, setTransactions] = useState([]);
     const [mainAccount, setMainAccount] = useState({});
+    const [adminLevel, setAdminLevel] = useState({});
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const history = useHistory();
 
-    useMemo(() => {
+    useState(() => {
+        // console.log(session.name.payload)
+        setAdminLevel(session.name.payload.user.permission_level)
+       
         MemberService.getMembers().then((res) => {
            // console.log(res.data.data.results)
             const userslist = res.data.data.results;
@@ -52,7 +59,7 @@ export default function DashboardPage(props) {
           });
 
           AccountService.getMainAccount().then((res) => {
-             console.log(res.data.data)
+            //  console.log(res.data.data)
              const memberslist = res.data.data;
              setMainAccount(memberslist);
            });
@@ -111,7 +118,7 @@ export default function DashboardPage(props) {
             <div className="form-row">
                 <Col xs={12} lg={9}>
                     <div className="form-row margin-bottom-20">
-                        <Col xs={12} lg={4}>
+                      { adminLevel === 5 ? <Col xs={12} lg={4}>
                         <a href={`/main-account`} >
                             <Common.Widget
                                 icon="li-receipt"
@@ -119,8 +126,8 @@ export default function DashboardPage(props) {
                                 subtitle="Summary amount"
                                 informer={<span className="text-bold text-success">{mainAccount ? mainAccount.currency_code+' '+ parseFloat(mainAccount.available_balance).toFixed(4): ''}</span>}
                             /></a>
-                        </Col>
-                        <Col xs={12} lg={4}>
+                        </Col> : ''}
+                        <Col xs={12} lg={adminLevel == 5? 4:6}>
                         <a href={`/members/members`} >
                             <Common.Widget
                                 icon="li-users2"
@@ -129,7 +136,7 @@ export default function DashboardPage(props) {
                                 informer={<><span className="text-bold text-success">{countMembers('Active')}</span> / <span className="text-bold text-warning">{countMembers('Pending')}</span></>}
                             /></a>
                         </Col>
-                        <Col xs={12} lg={4}>
+                        <Col xs={12} lg={adminLevel == 5? 4:6}>
                         <a href={`/products`} >
                             <Common.Widget
                                 icon="li-layers"

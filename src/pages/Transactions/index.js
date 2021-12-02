@@ -3,6 +3,18 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
 import { Transactions, Common } from 'components';
 import { TransactionService } from '../../providers';
+import { Session } from 'bc-react-session';
+
+let baseURL = window.location.origin;
+const session = Session.get();
+let page = (window.location.pathname.split('/').pop()).toLowerCase();
+    
+if(page === ''){
+    let mi = session.payload.vlist;
+    if(!mi.includes("All Transactions")){
+        window.location.replace(baseURL+"/dashboard");
+    }   
+}
 const Filter = () => {
     return (
         <>

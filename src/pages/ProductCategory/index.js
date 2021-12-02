@@ -1,22 +1,9 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
-import { Products } from 'components';
-import { Session } from 'bc-react-session';
+import { ProductCategory } from 'components';
 
-let baseURL = window.location.origin;
-const session = Session.get();
-let page = (window.location.pathname.split('/').pop()).toLowerCase();
-    
-if(page === 'categories'){
-    let mi = session.payload.vlist;
-    if(!mi.includes("Categories")){
-        window.location.replace(baseURL+"/dashboard");
-    }   
-}
-
-
-const ProductsCategories = props => {
+const ProductCategories = props => {
 	const breadcrumb = { heading: "Product Categories" };
 	return (
 		<AuthLayout {...props}
@@ -28,7 +15,7 @@ const ProductsCategories = props => {
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
 				<Col md={12}>
-                    <Products.Categories />
+                    <ProductCategory.Categories />
                 </Col>
 				</Col>
 			</Row>
@@ -36,4 +23,4 @@ const ProductsCategories = props => {
 	);
 };
 
-export default ProductsCategories;
+export default ProductCategories;

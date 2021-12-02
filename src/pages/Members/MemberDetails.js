@@ -6,7 +6,36 @@ import { MemberService } from '../../providers';
 import { AuthLayout } from 'containers';
 import { Members, Transactions, Products, KYC } from 'components';
 import { KYCService } from '../../providers';
+import { Session } from 'bc-react-session';
 
+let baseURL = window.location.origin;
+const session = Session.get();
+
+    let page = (window.location.pathname.split('/').pop()).toLowerCase();
+    
+if(page === 'wealth-creators'){
+    let mi = session.payload.vlist;
+    if(!mi.includes("Wealth Creators")){
+        window.location.replace(baseURL+"/dashboard");
+    }   
+}
+
+const Status = ({ status }) => {
+    let badge = 'primary';
+    if (status === 'Pending') {
+      badge = 'warning';
+    }
+    if (status === 'Active') {
+      badge = 'success';
+    }
+    if (status === 'Blocked') {
+      badge = 'danger';
+    }
+    return (
+      // <span className={`badge badge-${badge}`}>{status}</span>
+      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
+    );
+  };
 
 const MemberDetails = props => {
     const breadcrumb = { heading: "Member Details" };
@@ -17,12 +46,14 @@ const MemberDetails = props => {
     const [kycDetails, setkycDetails] = useState({});
     const [rating, setRating] = useState(0);
     const [walletID, setWalletID] = useState(null);
+    const [adminLevel, setAdminLevel] = useState(0)
     const params = useParams();
     const { id } = params;
     const [ kycLevel, setKycLevel] = useState(null);
 
-    useMemo(() => {
+    useState(() => {
         //Get member details
+        setAdminLevel(session.name.payload.user.permission_level)
         MemberService.getMember(id).then((res) => {
             const memberDetails = res.data.data;
             //console.log(memberDetails)
@@ -79,7 +110,7 @@ const MemberDetails = props => {
             }}
         >
             <Row>
-                <Col md={12} lg={3} xl={3}>
+                <Col md={12} lg={4} xl={4}>
                     <Card className="o-hidden author-box" style={{ minHeight: 300 }}>
                         <CardBody>
 
@@ -97,16 +128,21 @@ const MemberDetails = props => {
                                                 Balance: {wallet.currency_code} {wallet.balance}
                                             </span><br /> */}
                                             < span className={wallet.available_balance > 0 ? 'text-success' :'text-danger'}>
-                                                Available Balance: {wallet.currency_code} {parseFloat(wallet.available_balance).toFixed(4)}
+                                                Available Balance: {wallet.currency_code} {parseFloat(wallet.available_balance).toFixed(4)}<br />
                                             </span>
+                                            Wallet ID : { adminLevel === 5 ? walletID: walletID ? '........'+walletID.slice(walletID.length - 5): ''}
                                         </div>
                                         <div className="author-box-job">
-                                            Wallet ID: {walletID ? '...............'+walletID.slice(walletID.length - 5): ''}<br />
-										    ID/Passport No: {member.id_number}<br />
-											Phone: {member.mobile}<br />
-											Email: {member.email}<br />
-											KYC Level: {kycLevel === -1?'unAssigned':kycLevel}<br />
-                                            Type: {member.group ? member.group.label : 'Member'}
+                                            <table>
+                                                <tbody>
+                                                <tr><td>ID/Passport No </td><td> : {member.id_number}</td></tr>
+                                                <tr><td>Phone </td><td> : {member.mobile}</td></tr>
+                                                <tr><td>Email </td><td> : {member.email}</td></tr>
+                                                <tr><td>KYC Level </td><td> : {kycLevel === -1?'unAssigned':kycLevel}</td></tr>
+                                                <tr><td>Type </td><td> : {member.group ? member.group.label : 'Member'}</td></tr>
+                                                <tr><td>Status </td><td><Status {...member} /></td></tr>
+                                        </tbody>
+                                            </table>
 											<hr />
                                             <Rating ratingValue={rating} />
                                             <hr />
@@ -124,7 +160,7 @@ const MemberDetails = props => {
                         </CardBody>
                     </Card>
                 </Col>
-                <Col md={12} lg={9} xl={9}>
+                <Col md={12} lg={8} xl={8}>
                     <Card>
                         <CardBody>
                             <ul className="nav nav-tabs nav-tabs__round mt-0">
@@ -209,7 +245,7 @@ const MemberDetails = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <KYC.KYC member={member} kycDetails={kycDetails} />
+                                            <KYC.KYC member={member} address={address} kycDetails={kycDetails} />
                                         </CardBody>
                                     </div>
                                 </div>
