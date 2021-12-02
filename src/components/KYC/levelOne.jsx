@@ -96,7 +96,7 @@ export default function LevelOne(props) {
                                                         id="address"
 
                                                         className="form-control form-control-m"
-                                                        value={address ?address.line_1:''}
+                                                        value={address && address.line_1?address.line_1:''}
                                                         disabled
                                                     />
                                                 </div>
@@ -109,7 +109,7 @@ export default function LevelOne(props) {
                                                         id="address"
 
                                                         className="form-control form-control-m"
-                                                        value={address.line_2?address.line_2:''}
+                                                        value={ address && address.line_2?address.line_2:''}
                                                         disabled
                                                     />
                                                 </div>
@@ -124,7 +124,7 @@ export default function LevelOne(props) {
                                                         id="address"
 
                                                         className="form-control form-control-m"
-                                                        value={address.city?address.city:''}
+                                                        value={ address && address.city?address.city:''}
                                                         disabled
                                                     />
                                                 </div>
@@ -137,7 +137,7 @@ export default function LevelOne(props) {
                                                         id="address"
 
                                                         className="form-control form-control-m"
-                                                        value={address.state_province?address.state_province:''}
+                                                        value={ address && address.state_province?address.state_province:''}
                                                         disabled
                                                     />
                                                 </div>
@@ -152,7 +152,7 @@ export default function LevelOne(props) {
                                                         id="address"
 
                                                         className="form-control form-control-m"
-                                                        value={address.country?address.country:''}
+                                                        value={ address && address.country?address.country:''}
                                                         disabled
                                                     />
                                                 </div>
@@ -165,7 +165,7 @@ export default function LevelOne(props) {
                                                         id="address"
 
                                                         className="form-control form-control-m"
-                                                        value={address.postal_code?address.postal_code:''}
+                                                        value={ address && address.postal_code?address.postal_code:''}
                                                         disabled
                                                     />
                                                 </div>

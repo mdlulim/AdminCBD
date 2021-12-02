@@ -7,6 +7,7 @@ import { UserService } from '../../providers';
 import Select from 'react-select';
 import PagePermissionService from 'providers/PagePermissionService';
 import ModalAddPermission from '../../components/UserPermissions/ModalAddPermission';
+import Width from 'pages/Transactions/Widthdrawals';
 
 $(document).ready(function() {
     $('body').on('click','.check', function(){
@@ -37,11 +38,11 @@ const PermissionsList = props => {
                 var arr = [];
                 Object(res.data.data.results).forEach(function(value) {
                     $(".table > tbody > tr#"+value.page+"").append(
-                    '<td><input id="low'+value.page+'" class="check" data-val="'+value.low+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.low ? 'checked' :'')+'/></td>'+
-                    '<td><input id="basic'+value.page+'" class="check" data-val="'+value.basic+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.basic ? 'checked' :'')+'/></td>'+
-                    '<td><input id="medium'+value.page+'" class="check" data-val="'+value.medium+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.medium ? 'checked' :'')+'/></td>'+
-                    '<td><input id="high'+value.page+'" class="check" data-val="'+value.high+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.high ? 'checked' :'')+'/></td>'+
-                    '<td><input id="veryhigh'+value.page+'" class="check" data-val="'+value.veryhigh+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.veryhigh ? 'checked' :'')+'/></td>');
+                    '<td style="text-align:center"><input id="low'+value.page+'" class="check" data-val="'+value.low+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.low ? 'checked' :'')+'/></td>'+
+                    '<td style="text-align:center"><input id="basic'+value.page+'" class="check" data-val="'+value.basic+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.basic ? 'checked' :'')+'/></td>'+
+                    '<td style="text-align:center"><input id="medium'+value.page+'" class="check" data-val="'+value.medium+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.medium ? 'checked' :'')+'/></td>'+
+                    '<td style="text-align:center"><input id="high'+value.page+'" class="check" data-val="'+value.high+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.high ? 'checked' :'')+'/></td>'+
+                    '<td style="text-align:center"><input id="veryhigh'+value.page+'" class="check" data-val="'+value.veryhigh+'" data-id="'+value.id+'" data-content="'+value.page+'" type="checkbox" '+(value.veryhigh ? 'checked' :'')+'/></td>');
                     
                   });
             })
@@ -82,17 +83,17 @@ const PermissionsList = props => {
                                         <table class="table">
                                         <thead>
                                             <tr>
-                                            <th scope="col">Pages</th>
-                                            <th scope="col">Low</th>
-                                            <th scope="col">Basic</th>
-                                            <th scope="col">Medium</th>
-                                            <th scope="col">High</th>
-                                            <th scope="col">Very High</th>
+                                            <th style={{width: 200 + 'px'}} scope="col">Pages</th>
+                                            <th style={{textAlign:'center'}} scope="col">Low</th>
+                                            <th style={{textAlign:'center'}} scope="col">Basic</th>
+                                            <th style={{textAlign:'center'}} scope="col">Medium</th>
+                                            <th style={{textAlign:'center'}} scope="col">High</th>
+                                            <th style={{textAlign:'center'}} scope="col">Very High</th>
                                             </tr> 
                                         </thead>
                                         <tbody>
                                             <tr id="alltransactions">
-                                                <th scope="row">Transactions</th>
+                                                <th scope="row">All Transactions</th>
                                             </tr>
                                             <tr id="pending">
                                                 <th scope="row">Pending</th>
@@ -109,8 +110,8 @@ const PermissionsList = props => {
                                             <tr id="completed">
                                                 <th scope="row">Completed</th>
                                             </tr>
-                                            <tr id="cancelled">
-                                                <th scope="row">Cancelled</th>
+                                            <tr id="rejected">
+                                                <th scope="row">Rejected</th>
                                             </tr>
                                         </tbody>
                                         </table>
@@ -127,12 +128,12 @@ const PermissionsList = props => {
                                         <table class="table">
                                         <thead>
                                             <tr>
-                                            <th scope="col">Pages</th>
-                                            <th scope="col">Low</th>
-                                            <th scope="col">Basic</th>
-                                            <th scope="col">Medium</th>
-                                            <th scope="col">High</th>
-                                            <th scope="col">Very High</th>
+                                            <th style={{width: 200 + 'px'}} scope="col">Pages</th>
+                                            <th style={{textAlign:'center'}} scope="col">Low</th>
+                                            <th style={{textAlign:'center'}} scope="col">Basic</th>
+                                            <th style={{textAlign:'center'}} scope="col">Medium</th>
+                                            <th style={{textAlign:'center'}} scope="col">High</th>
+                                            <th style={{textAlign:'center'}} scope="col">Very High</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -158,12 +159,12 @@ const PermissionsList = props => {
                                         <table class="table">
                                         <thead>
                                             <tr>
-                                            <th scope="col">Pages</th>
-                                            <th scope="col">Low</th>
-                                            <th scope="col">Basic</th>
-                                            <th scope="col">Medium</th>
-                                            <th scope="col">High</th>
-                                            <th scope="col">Very High</th>
+                                            <th style={{width: 200 + 'px'}} scope="col">Pages</th>
+                                            <th style={{textAlign:'center'}} scope="col">Low</th>
+                                            <th style={{textAlign:'center'}} scope="col">Basic</th>
+                                            <th style={{textAlign:'center'}} scope="col">Medium</th>
+                                            <th style={{textAlign:'center'}} scope="col">High</th>
+                                            <th style={{textAlign:'center'}} scope="col">Very High</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -191,12 +192,12 @@ const PermissionsList = props => {
                                         <table class="table">
                                         <thead>
                                             <tr>
-                                            <th scope="col">Pages</th>
-                                            <th scope="col">Low</th>
-                                            <th scope="col">Basic</th>
-                                            <th scope="col">Medium</th>
-                                            <th scope="col">High</th>
-                                            <th scope="col">Very High</th>
+                                            <th style={{width: 200 + 'px'}} scope="col">Pages</th>
+                                            <th style={{textAlign:'center'}} scope="col">Low</th>
+                                            <th style={{textAlign:'center'}} scope="col">Basic</th>
+                                            <th style={{textAlign:'center'}} scope="col">Medium</th>
+                                            <th style={{textAlign:'center'}} scope="col">High</th>
+                                            <th style={{textAlign:'center'}} scope="col">Very High</th>
                                             </tr>
                                         </thead>
                                         <tbody>

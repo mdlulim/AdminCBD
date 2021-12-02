@@ -46,7 +46,7 @@ export default function DashboardPage(props) {
     const history = useHistory();
 
     useState(() => {
-        console.log(session.name.payload)
+        // console.log(session.name.payload)
         setAdminLevel(session.name.payload.user.permission_level)
        
         MemberService.getMembers().then((res) => {
@@ -59,7 +59,7 @@ export default function DashboardPage(props) {
           });
 
           AccountService.getMainAccount().then((res) => {
-             console.log(res.data.data)
+            //  console.log(res.data.data)
              const memberslist = res.data.data;
              setMainAccount(memberslist);
            });
