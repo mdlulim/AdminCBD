@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { KYCService } from '../../providers';
 import LevelZero from './levelZero';
@@ -88,7 +88,7 @@ export default function Leads(props) {
 
     }
     
-    useMemo(() => {
+    useEffect(() => {
         const getKYC = async () => {
             const kyc = await MemberService.getMemberKYC(member.id)
             const data = kyc.data.data
