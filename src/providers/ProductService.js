@@ -40,6 +40,15 @@ class ProductService {
     });
   }
 
+  static async getProductCategory(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/categories/${id}`,
+    });
+  }
+
   static async getProduct(id) {
     return await axios({
       mode: 'no-cors',
@@ -83,6 +92,19 @@ class ProductService {
       headers: headers,
       data:data,
       url: `${Config.API.BASE_URL}/products`,
+    }).then((res) =>{
+      const result = res;
+      return result;
+    });
+  }
+
+  static async addProductCategory(data){
+    return await axios({
+      mode: 'no-cors',
+      method: 'POST',
+      headers: headers,
+      data:data,
+      url: `${Config.API.BASE_URL}/products/categories`,
     }).then((res) =>{
       const result = res;
       return result;

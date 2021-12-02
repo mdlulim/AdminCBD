@@ -111,13 +111,9 @@ const columns = [
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}>
-    <a
-      href={`#`}
+    <a  href={`categories/${row.id}`}
       className="btn btn-light btn-sm btn-icon"
-      onClick={e => {
-        e.preventDefault();
-        onSubmitUpdateCategory(row);
-      }}
+      
     > <span className="fa fa-pencil" />
     </a></spam>
   </div>
