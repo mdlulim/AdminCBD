@@ -3,8 +3,21 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Common, Pagination, Members } from 'components';
 import { AuthLayout } from 'containers';
 import { MemberService } from '../../providers';
+import { Session } from 'bc-react-session';
 
 
+let baseURL = window.location.origin;
+const session = Session.get();
+console.log(session.payload.vlist);
+
+    let page = (window.location.pathname.split('/').pop()).toLowerCase();
+    
+if(page === 'members'){
+    let mi = session.payload.vlist;
+    if(!mi.includes("Members")){
+        window.location.replace(baseURL+"/dashboard");
+    }   
+}
 export default function MembersPage(props) {
     const [members, setMembers] = useState([]);
     useMemo(() => {
