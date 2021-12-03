@@ -12,6 +12,8 @@ export default function Levelhree(props) {
         props.showImage(image);
     }
 
+    console.log(kycApplication, " kyc application")
+
 
     return (
         <Row style={{ marginBottom: "20px", borderBottom: "1px solid gainsboro" }}>
@@ -45,7 +47,7 @@ export default function Levelhree(props) {
                     <Col xs={6} md={6} >
                         <div className="form-group">
                             <label>Proof of Address</label>
-                            <Card onClick={() => onShowImage([{ uri: 'https://cdn-cbigold.ams3.digitaloceanspaces.com/'+kycApplication.address[0] }])}>
+                            <Card onClick={() => onShowImage([{ uri: 'https://cdn-cbigold.ams3.digitaloceanspaces.com/'+kycApplication.poa[0] }])}>
                                 <div className="fa fa-file" style={{fontSize: "100px", textAlign: "center", padding: "15px", cursor: "pointer"}}></div>
                             </Card>
                         </div>
