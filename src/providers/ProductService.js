@@ -10,7 +10,6 @@ const headers = {
 };
 
 class ProductService {
-
   static async getProducts() {
     return await axios({
       mode: 'no-cors',
