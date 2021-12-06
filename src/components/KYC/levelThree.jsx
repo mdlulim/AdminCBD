@@ -6,8 +6,6 @@ export default function Levelhree(props) {
     const { approveLevel, kycApplication, setKycApplication } = props;
     const [active, setActiveState] = useState(null);
 
-    console.log(kycApplication, " level 3")
-
     const onShowImage = (image) => {
         props.showImage(image);
     }
