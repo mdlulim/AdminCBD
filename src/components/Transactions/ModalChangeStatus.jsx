@@ -39,7 +39,10 @@ const ModalChangeStatus = props => {
 
         console.log(transaction)
         console.log(selectedStatus.value);
-        const data = { status: selectedStatus.value} ;
+        const data = { 
+                status: selectedStatus.value,
+                transaction: transaction, 
+            } ;
 
         if(selectedStatus){
             setShow(false)

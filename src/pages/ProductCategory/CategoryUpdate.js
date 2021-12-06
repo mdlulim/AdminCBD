@@ -1,5 +1,6 @@
 import React, {useState, useMemo} from 'react';
 import { Card, CardBody, Col, Row, Alert } from 'reactstrap';
+import { useParams, useHistory } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 import { AuthLayout } from 'containers';
 import { Products } from 'components';
@@ -18,17 +19,27 @@ const CreateCategory = props => {
     const [error, setError] = useState('');
     const [processing, setProcessing] = useState('');
     const [inputFields, setInputField] = useState([]);
-    const [categoeis, setCategories] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState([]);
     const [selectedRows, setSelectedRows] = React.useState([]);
     const [selectedFees, setSelectedFees] = useState({});
     const [selectedIndicators, setSelectedIndicators] = useState({});
     const [toggleCleared, setToggleCleared] = React.useState(false);
+    const params = useParams();
+    const { id } = params;
     
     useState(() => {
         ProductService.getProductCategories().then((res) => {
                const productlist = res.data.data.results;
                setCategories(productlist);
            });
+                //Get product category details
+        ProductService.getProductCategory(id).then((res) => {
+                console.log(res.data.data.inputFields.selectedRows);
+                const category = res.data.data;
+                setCategory(category)
+                setSelectedRows(res.data.data.inputFields.selectedRows)
+        })
         const inputData = [
                 {name: 'Title', value: 'title',required: true, type: "select", group: "field" },
                 {name: 'Description', value: 'body',required: true, type: "text", group: "field"},
@@ -145,8 +156,7 @@ const CreateCategory = props => {
         }
         const title = form.title.value;
         const code = form.code.value;
-        let permakeyTitleExist = categoeis.filter(category => category.title.split(' ').join('-').trim().toLowerCase() === title.split(' ').join('-').trim().toLowerCase());
-        let permakeyCodeExist = categoeis.filter(category => category.code.split(' ').join('-').trim().toLowerCase() === code.split(' ').join('-').trim().toLowerCase());
+        let permakeyTitleExist = categories.filter(category => category.title.split(' ').join('-').trim().toLowerCase() === title.split(' ').join('-').trim().toLowerCase());
 
         if(permakeyTitleExist[0]){
             setError("Category with this title is already exist!");
@@ -155,17 +165,9 @@ const CreateCategory = props => {
             return error
         }
 
-        if(permakeyCodeExist[0]){
-            setError("Category code is already exist!");
-            setDisabled(false);
-            setProcessing(false);
-            return error
-        }
-
         const data = {
             title       : form.title.value,
             description : form.description.value,
-            code        : form.code.value,
             inputFields : {selectedRows},
         }
         ProductService.addProductCategory(data).then((response) =>{
@@ -173,12 +175,12 @@ const CreateCategory = props => {
                 setShow(true);
                 confirmAlert({
                     title: 'Confirm submit',
-                    message: 'Product category was added successfully',
+                    message: 'Product category was updated successfully',
                     buttons: [
                       {
                         label: 'Yes',
                         onClick: () => {
-                            window.location = '/categories/add';
+                            window.location = `/categories/${id}`;
                         }
                       }
                     ]
@@ -203,7 +205,6 @@ const CreateCategory = props => {
 				<Col lg={12} xl={12}>
 				<Col md={12}>
                     <Card>
-                
                    {error ? <Alert className="fade alert alert-danger alert-dismissible show" onClose={() => setShow(false)} dismissible>
         <p>
           {error} error
@@ -219,6 +220,7 @@ const CreateCategory = props => {
                         className="form-control"
                         name="title"
                         id="autoSizingInputGroup"
+                        defaultValue={category ? category.title: ''}
                     />
                     </div>
                     <label for="inputEmail4" class="form-label">Category Code</label>
@@ -227,6 +229,8 @@ const CreateCategory = props => {
                         className="form-control"
                         id="autoSizingInputGroup"
                         name="code"
+                        disabled
+                        defaultValue={category ? category.code: ''}
                     />
                     </div>
                     <label for="inputEmail4" class="form-label">Description</label>
@@ -235,6 +239,7 @@ const CreateCategory = props => {
                         className="form-control"
                         id="autoSizingInputGroup"
                         name="description"
+                        defaultValue={category ? category.description: ''}
                     />
                     </div>
                     </div>
@@ -243,9 +248,9 @@ const CreateCategory = props => {
                         title={'Select Input Fields'}
                         columns={columns}
                         data={inputFields}
-                        selectableRows
                         contextActions={contextActions}
                         onSelectedRowsChange={handleRowSelected}
+                        on
                         clearSelectedRows={toggleCleared}
                         pagination
                         />
@@ -255,7 +260,7 @@ const CreateCategory = props => {
                 <button
                 className="btn btn-primary"
                 disabled={disabled}>
-                            {processing ? <img src={imageLoader} width="30" height="30" /> : 'SUBMIT QUEST'}
+                            {processing ? <img src={imageLoader} width="30" height="30" /> : 'UPDATE'}
                         </button>
                 </form>
                 </CardBody>

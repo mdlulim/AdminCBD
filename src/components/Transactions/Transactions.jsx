@@ -153,7 +153,7 @@ export default function Transactions(props) {
               transactions.map((transaction,num) =>{
 
               });
-              console.log(id)
+             // console.log(id)
             if(id != null && id.length > 15){
               const results = transaList.filter(item => item.id === id);
               setTransactions(results);
@@ -350,14 +350,10 @@ export default function Transactions(props) {
           if(checkCreatedDate === true){
             const searchByDate = transactions.filter(
               transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
-              //console.log('Created date');
-              //console.log(searchByDate);
               setFilteredTransactions(searchByDate);
           }else{
             const searchByDate = transactions.filter(
               transaction => (Date.parse(transaction.updated)) >= start && (Date.parse(transaction.updated)) <= end);
-              //console.log('Actioned date');
-              //console.log(searchByDate);
               setFilteredTransactions(searchByDate);
           }
           setDisabled(false);
@@ -373,7 +369,7 @@ export default function Transactions(props) {
 
       const contextActions = React.useMemo(() => {
         const handleBulkUpdate = () => {
-               console.log(selectedRows)
+              // console.log(selectedRows)
                     setShowBulk(true)
               //  return confirmAlert({
               //   title: 'Update Transaction',
