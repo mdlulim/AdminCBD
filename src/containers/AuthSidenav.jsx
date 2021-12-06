@@ -4,7 +4,8 @@ import menu from 'static/mainmenu.json';
 import { Session } from 'bc-react-session';
 
 const session = Session.get();
-// var ;
+var vl =[];
+var member_page;;
 const SubNavItem = props => {
     const [hasAccess, setHasAccess] = useState(false);
     const [perm, setPerm] = useState('');
@@ -20,7 +21,7 @@ const SubNavItem = props => {
     useMemo(() => {
         let ul = session.name.payload.user.permission_level;
         PagePermissionService.getPagePermissionsByPage((title.toLowerCase()).replace(/\s/g, "")).then((res) => {
-            console.log(ul);
+            // console.log(ul);
             if(ul == 1){
                 setHasAccess(res.data.low);
             }else if(ul == 2){
@@ -37,19 +38,41 @@ const SubNavItem = props => {
                 setHasAccess(true);
             }
         });
-
         }, []);
+         if(hasAccess == true){
+             vl.push(title);             
+         }
+         Session.setPayload({
+            vlist: vl,
+        });
+            
+        //  Session.start({ 
+        //     payload: {
+        //         vlist: vl,
+        //     },
+        // }); 
     return (
-        <li style={{display:(hasAccess !== true ? 'none' : true)}}>
+       
+        (hasAccess == true ? <li>
             <a
                 href={`${parentLink + link}`}
                 className="no-icon"
             >
                 <span className="text">{title}</span>
             </a>
-        </li>
+        </li> : '')
+        
     );
+
+    
 }
+
+// sessionStorage.setItem('members', member_page);
+
+// console.log(vl);
+// window.sessionStorage.setItem("items",vl);
+// console.log(window.sessionStorage.getItem('items'));
+// localStorage.setItem('vlist', vl);
 
 const NavItem = props => {
     const {
@@ -64,6 +87,7 @@ const NavItem = props => {
         activeClass,
         openableClass,
     } = props;
+    let cnt = 0;
     return (
         <li
             className={activeClass(link) + openableClass(childitems) + openClass(id)}

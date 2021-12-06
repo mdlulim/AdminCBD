@@ -2,6 +2,18 @@ import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
 import { Common, Transactions } from 'components';
+import { Session } from 'bc-react-session';
+
+let baseURL = window.location.origin;
+const session = Session.get();
+let page = (window.location.pathname.split('/').pop()).toLowerCase();
+    
+if(page === 'completed'){
+    let mi = session.payload.vlist;
+    if(!mi.includes("Completed")){
+        window.location.replace(baseURL+"/dashboard");
+    }   
+}
 
 const Filter = () => {
     return (

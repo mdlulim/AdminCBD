@@ -10,7 +10,6 @@ const headers = {
 };
 
 class ProductService {
-
   static async getProducts() {
     return await axios({
       mode: 'no-cors',
@@ -37,6 +36,15 @@ class ProductService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products/categories`,
+    });
+  }
+
+  static async getProductCategory(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/categories/${id}`,
     });
   }
 
@@ -83,6 +91,19 @@ class ProductService {
       headers: headers,
       data:data,
       url: `${Config.API.BASE_URL}/products`,
+    }).then((res) =>{
+      const result = res;
+      return result;
+    });
+  }
+
+  static async addProductCategory(data){
+    return await axios({
+      mode: 'no-cors',
+      method: 'POST',
+      headers: headers,
+      data:data,
+      url: `${Config.API.BASE_URL}/products/categories`,
     }).then((res) =>{
       const result = res;
       return result;
