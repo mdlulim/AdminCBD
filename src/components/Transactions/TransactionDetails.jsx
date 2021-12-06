@@ -53,6 +53,25 @@ const TransactionDetails = props => {
           });
 
     }
+
+    const onSubmit2 = (event) => {
+        event.preventDefault();
+        setDisabled(true);
+        setError('');
+        const form = event.currentTarget;
+
+        console.log(sponsorWallet);
+        const data = { 
+            status: selectedStatus.value,
+            transaction: transaction
+        } ;
+
+        TransactionService.approveDeposit(transaction.id, data).then((response) =>{
+            console.log(response);
+        })
+    }
+
+
     const onSubmit = (event) => {
 
         event.preventDefault();
@@ -71,10 +90,12 @@ const TransactionDetails = props => {
             status: selectedStatus.value,
             user: {
                     id: userWallet.id,
+                    user_id: userWallet.user_id,
                     available_balance: userBalance
                 },
             sponsor: {
                     id: sponsorWallet.id,
+                    user_id: sponsorWallet.user_id,
                     available_balance: sponsorBalance
             },
             main: {
@@ -159,7 +180,7 @@ const TransactionDetails = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success">Transaction Details</h3>
                         <hr />
-                        <form onSubmit={onSubmit}>
+                        <form onSubmit={onSubmit2}>
                             <div className="form-row">
                                 <div className="col">
                                     <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Transaction ID Test</label>

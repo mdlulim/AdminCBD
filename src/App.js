@@ -81,7 +81,7 @@ const App = () => {
 					<Route exact path="/transactions/transfers" component={(props) => <Transfers config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/completed" component={(props) => <Completed config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/pending" component={(props) => <Pending config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/transactions/widthdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/transactions/withdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/transfers/transfer" component={(props) => <MakeTransferPage config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/history" component={(props) => <ProductHistory config={settings} {...props} setMenu={setMenu} />} />
