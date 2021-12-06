@@ -76,7 +76,7 @@ export default function TransactionsByMember(props) {
     const [showTransaction, setShowTransaction] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState([]);
-    const [selectedTransPOP, setSelectedTransPOP] = useState([]);
+    const [selectedTransPOP, setSelectedTransPOP] = useState('');
     const [userWallet2, setUserWallet] = useState({})
     const [sponsorWallet, setSponsorWallet] = useState({})
     const [mainWallet, setMainWallet] = useState({})

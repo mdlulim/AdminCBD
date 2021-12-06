@@ -7,7 +7,7 @@ import Select from 'react-select';
 import { TransactionService, UserService, AccountService, MemberService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-import pdfFile from '../../assets/1637397485456.pdf';
+import DocViewer, {PNGRenderer, JPGRenderer, PDFRenderer } from "react-doc-viewer";
 
 const TransactionDetails = props => {
     const { show, setShow, transaction, pop, userWallet, mainWallet, member, sponsorWallet } = props;
@@ -34,7 +34,6 @@ const TransactionDetails = props => {
         { value: 'Rejected', label: 'Reject' },
         { value: 'Completed', label: 'Complete' }
     ];
-
 
     const getMainAccount = () => {
         AccountService.getMainAccount().then((res) => {
@@ -159,6 +158,8 @@ const TransactionDetails = props => {
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
             {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
             <Modal.Body>
+                {/* <DocViewer pluginRenderers={[PNGRenderer, JPGRenderer, PDFRenderer]} documents={[{ uri: pop }]} /> */}
+
                 <Row>
                     {showIcon &&
                         <Col xs={2} className="text-right mg-t-10 text-warning">
@@ -210,9 +211,8 @@ const TransactionDetails = props => {
                             <div className="form-group">
                                 <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Proof of payment</label>
                                 <hr />
-                                {/* <DocViewer documents={docs} /> */}
-                                <object data={"https://cdn-cbigold.ams3.digitaloceanspaces.com/"+pop} type="application/pdf" width="100%" height="100%">
-                                    <p>Alternative text - include a link <a href={"https://cdn-cbigold.ams3.digitaloceanspaces.com/"+pop}>to the PDF!</a></p>
+                                <object data={pop} type="application/pdf" width="100%" height="100%">
+                                    <p>Alternative text - include a link <a href={pop}>to the PDF!</a></p>
                                 </object>
                             </div>
                             <hr />
