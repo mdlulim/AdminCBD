@@ -180,7 +180,7 @@ const TransactionDetails = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success">Transaction Details</h3>
                         <hr />
-                        <form onSubmit={onSubmit2}>
+                        <form onSubmit={onSubmit}>
                             <div className="form-row">
                                 <div className="col">
                                     <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Transaction ID Test</label>
