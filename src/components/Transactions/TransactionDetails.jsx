@@ -35,8 +35,6 @@ const TransactionDetails = props => {
         { value: 'Completed', label: 'Complete' }
     ];
 
-    console.log(pop, " pop_____----____")
-
 
     const getMainAccount = () => {
         AccountService.getMainAccount().then((res) => {

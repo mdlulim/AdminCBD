@@ -190,7 +190,6 @@ const onSubmitChangeStatus= data => {
        const url = pop[0].file;
        console.log(url)
         TransactionService.getTransactionPOPFile(url).then((res) => {
-            console.log(res, " pop*************88");
             setSelectedTransPOP(res.data);
         })
        
