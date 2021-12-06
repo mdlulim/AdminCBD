@@ -76,7 +76,7 @@ export default function TransactionsByMember(props) {
     const [showTransaction, setShowTransaction] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState([]);
-    const [selectedTransPOP, setSelectedTransPOP] = useState([]);
+    const [selectedTransPOP, setSelectedTransPOP] = useState('');
     const [userWallet2, setUserWallet] = useState({})
     const [sponsorWallet, setSponsorWallet] = useState({})
     const [mainWallet, setMainWallet] = useState({})
@@ -190,11 +190,9 @@ const onSubmitChangeStatus= data => {
        const url = pop[0].file;
        setSelectedTransPOP(url);
        console.log(url)
-        // TransactionService.getTransactionPOPFile(url).then((res) => {
-        //     console.log(res);
-        //     setSelectedTransPOP(res.data);
-        // })
-       
+        TransactionService.getTransactionPOPFile(url).then((res) => {
+            setSelectedTransPOP(res.data);
+        })
      });
 
      AccountService.getMainAccount().then((res) => {

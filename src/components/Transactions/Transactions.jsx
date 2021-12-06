@@ -60,18 +60,6 @@ const inputWithDate={
   width: '25%'
 }
 
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
-
 const Status = ({ status }) => {
     let badge = 'primary';
     if (status === 'Pending') {
@@ -192,12 +180,6 @@ export default function Transactions(props) {
             });
         //getUserById('0192c293-fc26-47f0-a764-332b44dd08b1');
 
-        MemberService.getMembers().then((res) => {
-          const memberslist = res.data.data.results;
-          setMembers(memberslist);
-          setUsers(memberslist);
-        });
-
         MemberService.getWealthCreaters().then((res) => {
           //.log(res.data.data.results)
           const wealthCreaterslist = res.data.data.results;
@@ -209,25 +191,14 @@ export default function Transactions(props) {
 
       }, []);
 
-      const GetUserById = (user_id) => {
-        let member = members.filter(member => member.id === user_id)[0];
-        let member2 = wealthCreaters.filter(wealthCreater => wealthCreater.id === user_id)[0];
-
-        if(member){
-          return member;
-        }else{
-          return member2;
-        }
-
-      }
       const columns = [{
         name: 'Full Names',
         selector: 'id',
         sortable: true,
         wrap: true,
-        cell: (row) => <div><div>{GetUserById(row.user_id)? GetUserById(row.user_id).first_name: ''} {GetUserById(row.user_id)? GetUserById(row.user_id).last_name: ''}</div>
+        cell: (row) => <div><div>{row.user.first_name} {row.user.last_name}</div>
         <div className="small text-muted">
-        <span>{GetUserById(row.user_id)? GetUserById(row.user_id).id_number: ''}</span>
+        <span>{row.user.id_number ? 'Referral: '+row.user.id_number: ''}</span>
         </div></div>
     },{
         name: 'TransactionID',

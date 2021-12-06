@@ -14,6 +14,7 @@ import CompanyAccountService from './CompanyAccountService';
 import PermissionLevelService from './PermissionLevelService';
 import AccountService from './AccountService';
 import PagePermissionService from './PagePermissionService';
+import FeeService from './FeeService';
 
 
 export {
@@ -31,5 +32,6 @@ export {
     CompanyAccountService,
     PermissionLevelService,
     AccountService,
-    PagePermissionService
+    PagePermissionService,
+    FeeService,
 };

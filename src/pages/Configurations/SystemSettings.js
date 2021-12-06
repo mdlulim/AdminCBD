@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Common, Pagination, UserRoles } from 'components';
+import { Common, Settings } from 'components';
 import { AuthLayout } from 'containers';
 
 
-export default function ConfigFees(props) {
-    const [activeTab, setActiveTab] = useState('kyc');
+export default function SystemSettings(props) {
+    const [activeTab, setActiveTab] = useState('referals');
 
 
     const toggleTab = (e, tab) => {
@@ -39,7 +39,7 @@ export default function ConfigFees(props) {
                                         data-toggle="tab"
                                         href="/"
                                     >
-                                        Registration Fee
+                                        Transactions
                                     </a>
                                 </li>
                                 <li className="nav-item">
@@ -49,7 +49,7 @@ export default function ConfigFees(props) {
                                         data-toggle="tab"
                                         href="/"
                                     >
-                                        Transaction Fee
+                                        Systems
                                     </a>
                                 </li>
                                 <li className="nav-item">
@@ -62,7 +62,7 @@ export default function ConfigFees(props) {
                                         Transactions
                                     </a>
                                 </li>
-                                <li className="nav-item">
+                                {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'banking-details' ? 'active' : ''}`}
                                         onClick={e => toggleTab(e, 'banking-details')}
@@ -81,16 +81,18 @@ export default function ConfigFees(props) {
                                     >
                                         KYC
                                     </a>
-                                </li>
+                                </li> */}
                             </ul>
                             <div className="tab-content">
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
                                     <CardBody className="pl-0 pr-0 pb-0">
+                                        <Settings.TransactionFees />
                                     </CardBody>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
+                                            <Settings.SystemFees />
                                         </CardBody>
                                     </div>
                                 </div>

@@ -133,9 +133,9 @@
             "icon": "li-equalizer",
             "childitems": [
                 {
-                    "id": "fees",
-                    "title": "Fees",
-                    "link": "/fees",
+                    "id": "Settings",
+                    "title": "settings",
+                    "link": "/settings",
                     "icon": null
                 },
                 {

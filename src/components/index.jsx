@@ -21,6 +21,7 @@ import Configurations from './Configurations';
 import FormsConfig from './FormsConfig';
 import KYC from './KYC';
 import ProductCategory from './ProductCategory';
+import Settings from './Settings';
 
 export {
     Breadcrumb,
@@ -45,5 +46,6 @@ export {
     Configurations,
     FormsConfig,
     KYC,
-    ProductCategory
+    ProductCategory,
+    Settings,
 };

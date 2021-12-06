@@ -15,7 +15,7 @@ import PageNotFound from 'pages/PageNotFound';
 // private routes
 import Dashboard from 'pages/Dashboard';
 import Reports from 'pages/Reports';
-import ConfigFees from 'pages/Configurations/ConfigFees';
+import SystemSettings from 'pages/Configurations/SystemSettings';
 import Users from 'pages/Configurations/Users';
 import UserRoles from './pages/Configurations/UserRoles';
 import Countries from './pages/Configurations/Countries';
@@ -68,7 +68,7 @@ const App = () => {
 					<Route exact path="/members/leads" component={(props) => <Leads config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/wealth-creators" component={(props) => <WealthCreater config={settings} {...props} menu={menu} />} />
 					<Route exact path="/configurations/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/configurations/fees" component={(props) => <ConfigFees config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/configurations/settings" component={(props) => <SystemSettings config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/roles" component={(props) => <UserRoles config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/countries" component={(props) => <Countries config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/currencies" component={(props) => <Currencies config={settings} {...props} setMenu={setMenu} />} />
