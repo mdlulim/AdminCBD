@@ -188,11 +188,12 @@ const onSubmitChangeStatus= data => {
      //console.log(res.data.data.rows[0])
        const pop = res.data.data.rows;
        const url = pop[0].file;
+       setSelectedTransPOP(url);
        console.log(url)
-        TransactionService.getTransactionPOPFile(url).then((res) => {
-            console.log(res);
-            setSelectedTransPOP(res.data);
-        })
+        // TransactionService.getTransactionPOPFile(url).then((res) => {
+        //     console.log(res);
+        //     setSelectedTransPOP(res.data);
+        // })
        
      });
 

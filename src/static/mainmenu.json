@@ -133,6 +133,12 @@
             "icon": "li-equalizer",
             "childitems": [
                 {
+                    "id": "fees",
+                    "title": "Fees",
+                    "link": "/fees",
+                    "icon": null
+                },
+                {
                     "id": "users",
                     "title": "Users",
                     "link": "/users",

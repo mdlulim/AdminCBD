@@ -101,7 +101,8 @@ const TransactionDetails = props => {
             main: {
                     id: mainWallet.id,
                     available_balance: mainBalance
-            }
+            }, 
+            transaction: transaction,
         }
 
        console.log(data2)
