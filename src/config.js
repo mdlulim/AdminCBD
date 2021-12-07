@@ -1,12 +1,52 @@
 var Config = {};
-Config.STAGE = process.ENV ? process.ENV : 'dev';
-Config.API = {
-    BASE_URL: 'http://localhost:8085',
-    BASE_URL_POP: 'https://dev.cbiglobal.io/v1/storage/file',
-    BASE_URL_LOGIN: 'http://localhost:8090',
-};
+let stage = 'local'
+if (window.location) {
+    var arr = window.location.hostname.split('.');
+    if (arr[0] !== 'localhost') {
+        stage = arr[1];
+        if (stage === 'cbiglobal') {
+            Config.STAGE = 'development';
+        } else if (stage === 'qa') {
+            Config.STAGE = 'qa';
+        } else if (stage === 'release') {
+            Config.STAGE = 'release';
+        }else {
+            Config.STAGE = 'production';
+        }
+    }
+}
+
+if (Config.STAGE === 'production') {
+    Config.API = {
+        BASE_URL: 'https://api.cbiglobal.io/v1/admin',
+        BASE_URL_POP: 'https://api.cbiglobal.io/v1/storage/file',
+        BASE_URL_LOGIN: 'https://api.cbiglobal.io/v1/auth',
+    }
+} else if (Config.STAGE === 'qa') {
+    Config.API = {
+        BASE_URL: 'https://dev.qa.cbiglobal.io/v1/admin',
+        BASE_URL_POP: 'https://dev.qa.cbiglobal.io/v1/storage/file',
+        BASE_URL_LOGIN: 'https://dev.qa.cbiglobal.io/v1/auth',
+    }
+} else if (Config.STAGE === 'development') {
+    Config.API = {
+        BASE_URL: 'https://dev.cbiglobal.io/v1/admin',
+        BASE_URL_POP: 'https://dev.cbiglobal.io/v1/storage/file',
+        BASE_URL_LOGIN: 'https://dev.cbiglobal.io/v1/auth',
+    }
+} else if (Config.STAGE === 'release') {
+    Config.API = {
+        BASE_URL: 'https://dev.release.cbiglobal.io/v1/admin',
+        BASE_URL_POP: 'https://dev.release.cbiglobal.io/v1/storage/file',
+        BASE_URL_LOGIN: 'https://dev.release.cbiglobal.io/v1/auth',
+    }
+}else {
+    Config.STAGE = 'local'
+    Config.API = {
+        BASE_URL: 'http://localhost:8085',
+        BASE_URL_POP: 'https://dev.cbiglobal.io/v1/storage/file',
+        BASE_URL_LOGIN: 'http://localhost:8090',
+    }
+}
 
 export default Config;
-
-//https://dev.cbiglobal.io/v1/storage/file?filename=pop/deposit/3c3035f6-eafa-4e80-afb8-3f3450f719b5/1637397485456.pdf
-//https://dev.cbiglobal.io/v1/storage/file?filename=pop/deposit/3c3035f6-eafa-4e80-afb8-3f3450f719b5/1637397485456.pdf
