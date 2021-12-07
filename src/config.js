@@ -1,3 +1,4 @@
+var Config = {};
 if (process.env.NODE_ENV === 'production') {
     Config.STAGE = process.env.NODE_ENV;
     Config.API = {
