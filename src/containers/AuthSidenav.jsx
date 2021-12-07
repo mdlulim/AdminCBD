@@ -23,13 +23,11 @@ const SubNavItem = props => {
         let user = {};
         if (SessionProvider.isValid()) {
             user = SessionProvider.get();
-            console.log(user);
         }else{
             window.location = '/login';
         }
         let ul = user.permission_level;
         PagePermissionService.getPagePermissionsByPage((title.toLowerCase()).replace(/\s/g, "")).then((res) => {
-            // console.log(ul);
             if(ul == 1){
                 setHasAccess(res.data.low);
             }else if(ul == 2){
@@ -52,12 +50,6 @@ const SubNavItem = props => {
          Session.setPayload({
             vlist: vl,
         });
-            
-        //  Session.start({ 
-        //     payload: {
-        //         vlist: vl,
-        //     },
-        // }); 
     return (
        
         (hasAccess == true ? <li>
@@ -68,17 +60,12 @@ const SubNavItem = props => {
                 <span className="text">{title}</span>
             </a>
         </li> : '')
-        
     );
-
-    
 }
 
 // sessionStorage.setItem('members', member_page);
 
-// console.log(vl);
 // window.sessionStorage.setItem("items",vl);
-// console.log(window.sessionStorage.getItem('items'));
 // localStorage.setItem('vlist', vl);
 
 const NavItem = props => {

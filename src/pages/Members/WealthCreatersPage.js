@@ -10,7 +10,6 @@ const WealthCreatersPage = props => {
 
     useMemo(() => {
         MemberService.getMembers().then((res) => {
-          console.log(res.data.data.results)
           const memberslist = res.data.data.results;
           setMembers(memberslist);
         });

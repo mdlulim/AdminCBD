@@ -95,6 +95,8 @@ export default function DashboardPage(props) {
 
     const onSearchFilter = filterText => {
         const filteredItems = transactions.filter(item => (
+            (item && item.user.first_name && item.user.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
+            (item && item.user.last_name && item.user.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
             (item && item.user_id && item.user_id.toLowerCase().includes(filterText.toLowerCase())) ||
           (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
           (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -255,21 +257,6 @@ export default function DashboardPage(props) {
                             </Card>
                         </Col>
                     </div>
-                   
-                    {/* <Card className="margin-bottom-0">
-                        <CardBody className="padding-top-10 padding-bottom-10">
-                             <Dashboard.ResentMembers />
-                        </CardBody>
-                        <CardBody className="padding-top-10">
-                            <div className="form-row margin-top-0">
-                                <Col xs={12} className="text-center">
-                                    <a href="/members/members" className="btn btn-secondary">
-                                        View all members
-                                    </a>
-                                </Col>
-                            </div>
-                        </CardBody>
-                    </Card> */}
                 </Col>
                 <Col xs={12} lg={3}>
                     <Card>

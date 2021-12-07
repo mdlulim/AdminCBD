@@ -23,6 +23,7 @@ import Currencies from './pages/Configurations/Currencies';
 import FormsConfigurations from './pages/Configurations/FormsConfigurations';
 import Configurations from './pages/Configurations/Configurations';
 import Members from 'pages/Members';
+import MembersPending from 'pages/Members/MembersPending';
 import CompanyAccount from 'pages/CompanyAccount';
 import Leads from 'pages/Members/Leads';
 import WealthCreater from 'pages/Members/WealthCreater';
@@ -63,6 +64,7 @@ const App = () => {
 					<Route exact path="/login" component={(props) => <AuthLogin config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/forgot-password" component={(props) => <AuthForgotPassword config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} />
+					<Route exact path="/members/pending" component={(props) => <MembersPending config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/leads" component={(props) => <Leads config={settings} {...props} menu={menu} />} />

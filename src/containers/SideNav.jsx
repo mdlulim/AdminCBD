@@ -92,7 +92,6 @@ const SideNav = props => {
 
     useEffect(() => {
         setShow('');
-        console.log()
         setActiveNav(path.replace('/', ''));
     }, [path]);
 

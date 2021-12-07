@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
 import DeleteAlert from './DeleteAlert';
-import { MemberService } from '../../providers';
+import { MemberService, TransactionService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye, Edit, UserMinus } from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -68,6 +68,7 @@ const Status = ({ status }) => {
 };
 
 export default function Members(props) {
+  const { status } = props;
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [members, setMembers] = useState([]);
@@ -77,10 +78,16 @@ export default function Members(props) {
 
     useMemo(() => {
         MemberService.getMembers().then((res) => {
-          //console.log(res.data.data)
-          const memberslist = res.data.data.results;
-          setMembers(memberslist);
-          setFilteredMembers(memberslist);
+            const memberslist = res.data.data.results;
+            
+            if(status === 'pending'){
+              const list = memberslist.filter(member => member.status === "Pending");
+              setMembers(list);
+              setFilteredMembers(list);
+            }else{
+              setMembers(memberslist);
+              setFilteredMembers(memberslist);
+            }
         });
  
       }, []);
@@ -153,9 +160,27 @@ const columns = [{
   }];
 
   const onSubmitChangeStatus = data => {
-    setSelectedMember(data);
-    setShow(true);
-    console.log(data);
+    TransactionService.getMemberTransactions(data.id).then((res) => {
+       const transaList = res.data.data.results;
+       if(transaList.length){
+          
+       }else{
+        return confirmAlert({
+              title: 'Transaction ',
+              message: 'There is no pending transaction for '+data.first_name+' '+data.last_name+'!',
+              buttons: [
+                {
+                  label: 'Ok',
+                }
+              ]
+          });
+       }
+       console.log(transaList)
+      // setTransactions(transaList);
+      // setFilteredTransactions(transaList);
+    });
+    //setSelectedMember(data);
+    //setShow(true);
     //return <Confirm show={show} setShow={setShow} />;
   };
 

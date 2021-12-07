@@ -14,17 +14,9 @@ export default function AuthHeader(props) {
         let user = {};
         if (SessionProvider.isValid()) {
             user = SessionProvider.get();
-            console.log(user)
         }else{
             window.location = '/login';
         }
-
-        // if(session.isValid){
-        //     //console.log(session.name.payload.token)
-        //     setToken(session.name.payload.token);
-        // }else{
-        // window.location = '/login';
-        // }
 
     },[]);
 
