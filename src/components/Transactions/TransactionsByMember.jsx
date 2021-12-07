@@ -159,7 +159,7 @@ cell: row => <div>{row.currency.code} {row.balance}</div>
                         <span className="fa fa-pencil"></span>
                     </button>
                     </div>
-                    {row.subtype.toLowerCase() === 'deposit' && member.status === 'Pending' ?
+                    {row.subtype.toLowerCase() === 'deposit' ?
                     <div style={iconPadding}><button
             onClick={e => {
               e.preventDefault();

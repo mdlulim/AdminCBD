@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Col, Alert } from 'reactstrap';
 import { browserName, osName, osVersion } from 'react-device-detect';
 import { Session } from 'bc-react-session';
@@ -6,11 +6,19 @@ import AuthAervice from '../../providers/AuthService';
 import { AuthPages } from 'containers';
 import { UserService } from 'providers';
 import jwt from 'jwt-decode';
+const session = Session.get();
 
 export default function LoginPage(props) {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
+    useEffect(() => {
+        if(session.isValid){
+            window.location = '/dashboard';
+            return
+        }
+
+    },[]);
         // when the form is submitted
   const onSubmit = (event) => {
         event.preventDefault();
