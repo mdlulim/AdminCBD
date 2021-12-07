@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
-import { HashLinkContainer } from 'components';
+import { HashLinkContainer } from 'components/Settings/node_modules/components';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';

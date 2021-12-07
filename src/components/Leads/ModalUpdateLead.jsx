@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
-import { FeatherIcon } from 'components';
+import { FeatherIcon } from 'components/Settings/node_modules/components';
 import Select from 'react-select';
 
 const ModalUpdateLead = props => {

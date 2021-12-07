@@ -9,6 +9,7 @@ export default function AuthHeader(props) {
 
     useEffect(() => {
         if(session.isValid){
+            //console.log(session.name.payload.token)
             setToken(session.name.payload.token);
         }else{
         window.location = '/login';

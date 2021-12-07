@@ -53,18 +53,6 @@ const inputWithDate = {
   width: '25%'
 }
 
-const Image = () => {
-  return (
-    <img
-      alt=""
-      height="32px"
-      style={{ borderRadius: 4 }}
-      width="32px"
-      src={require("images/1.jpeg")}
-    />
-  );
-};
-
 const Status = ({ status }) => {
   let badge = 'primary';
   if (status === 'Pending') {
@@ -177,40 +165,17 @@ export default function Transactions(props) {
         }
       }
     });
-    //getUserById('0192c293-fc26-47f0-a764-332b44dd08b1');
-
-    MemberService.getMembers().then((res) => {
-      const memberslist = res.data.data.results;
-      setMembers(memberslist);
-      setUsers(memberslist);
-    });
-
-    MemberService.getWealthCreaters().then((res) => {
-      const wealthCreaterslist = res.data.data.results;
-      setWealthCreaters(wealthCreaterslist);
-    });
 
   }, []);
 
-  const GetUserById = (user_id) => {
-    let member = members.filter(member => member.id === user_id)[0];
-    let member2 = wealthCreaters.filter(wealthCreater => wealthCreater.id === user_id)[0];
-
-    if (member) {
-      return member;
-    } else {
-      return member2;
-    }
-
-  }
   const columns = [{
     name: 'Full Names',
     selector: 'id',
     sortable: true,
     wrap: true,
-    cell: (row) => <div><div>{GetUserById(row.user_id) ? GetUserById(row.user_id).first_name : ''} {GetUserById(row.user_id) ? GetUserById(row.user_id).last_name : ''}</div>
+    cell: (row) => <div><div>{row.user ? row.user.first_name :''} {row.user ? row.user.last_name : ''}</div>
       <div className="small text-muted">
-        <span>{GetUserById(row.user_id) ? GetUserById(row.user_id).id_number : ''}</span>
+        <span>{row.user ? row.user.id_number : ''}</span>
       </div></div>
   }, {
     name: 'TransactionID',
@@ -263,6 +228,9 @@ export default function Transactions(props) {
 
   const onSearchFilter = filterText => {
     const filteredItems = transactions.filter(item => (
+      (item && item.user.first_name && item.user.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.user.last_name && item.user.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.subtype && item.subtype.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase())) ||

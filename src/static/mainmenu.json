@@ -133,6 +133,12 @@
             "icon": "li-equalizer",
             "childitems": [
                 {
+                    "id": "Settings",
+                    "title": "settings",
+                    "link": "/settings",
+                    "icon": null
+                },
+                {
                     "id": "users",
                     "title": "Users",
                     "link": "/users",

@@ -90,9 +90,10 @@ const TransactionDetails = props => {
                 available_balance: sponsorBalance
             },
             main: {
-                id: mainWallet.id,
-                available_balance: mainBalance
-            }
+                    id: mainWallet.id,
+                    available_balance: mainBalance
+            }, 
+            transaction: transaction,
         }
 
         console.log(data2)

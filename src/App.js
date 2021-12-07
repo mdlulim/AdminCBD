@@ -15,6 +15,7 @@ import PageNotFound from 'pages/PageNotFound';
 // private routes
 import Dashboard from 'pages/Dashboard';
 import Reports from 'pages/Reports';
+import SystemSettings from 'pages/Configurations/SystemSettings';
 import Users from 'pages/Configurations/Users';
 import UserRoles from './pages/Configurations/UserRoles';
 import Countries from './pages/Configurations/Countries';
@@ -58,7 +59,7 @@ const App = () => {
 		<AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
 			<Router basename={process.env.PUBLIC_URL}>
 				<Switch>
-					<Redirect exact from="/" to="/dashboard" />
+					<Redirect exact from="/" to="/login" />
 					<Route exact path="/login" component={(props) => <AuthLogin config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/forgot-password" component={(props) => <AuthForgotPassword config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} />
@@ -67,6 +68,7 @@ const App = () => {
 					<Route exact path="/members/leads" component={(props) => <Leads config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/wealth-creators" component={(props) => <WealthCreater config={settings} {...props} menu={menu} />} />
 					<Route exact path="/configurations/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/configurations/settings" component={(props) => <SystemSettings config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/roles" component={(props) => <UserRoles config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/countries" component={(props) => <Countries config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/currencies" component={(props) => <Currencies config={settings} {...props} setMenu={setMenu} />} />
