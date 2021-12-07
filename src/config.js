@@ -14,6 +14,7 @@ if (window.location) {
     }
 }
 
+
 if (Config.STAGE === 'production') {
     Config.API = {
         BASE_URL: 'https://api.cbiglobal.io/v1/admin',
