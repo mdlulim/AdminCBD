@@ -1,5 +1,5 @@
 var Config = {};
-stage = 'local'
+let stage = 'local'
 if (window.location) {
     var arr = window.location.hostname.split('.');
     if (arr[0] !== 'localhost') {
@@ -15,7 +15,6 @@ if (window.location) {
         }
     }
 }
-
 
 if (Config.STAGE === 'production') {
     Config.API = {
