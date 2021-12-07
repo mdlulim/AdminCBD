@@ -35,7 +35,7 @@ const CreateCategory = props => {
            });
                 //Get product category details
         ProductService.getProductCategory(id).then((res) => {
-                console.log(res.data.data.inputFields.selectedRows);
+                console.log(res.data.data);
                 const category = res.data.data;
                 setCategory(category)
                 setSelectedRows(res.data.data.inputFields.selectedRows)
@@ -168,6 +168,7 @@ const CreateCategory = props => {
         const data = {
             title       : form.title.value,
             description : form.description.value,
+            code        :form.code.value,
             inputFields : {selectedRows},
         }
         ProductService.addProductCategory(data).then((response) =>{
@@ -198,8 +199,8 @@ const CreateCategory = props => {
 		<AuthLayout {...props}
 		breadcrumb={{ active: "Category" }}
 		pageHeading={{
-			title: 'Create New Category',
-			caption: 'EXPLORE OVERVIEW CATEGORIES FOR CRYPTO BASED INNOVATION'
+			title: 'Update Category',
+			caption: 'EXPLORE OVERVIEW UPDATE CATEGORy FOR CRYPTO BASED INNOVATION'
 		}}>
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
@@ -229,7 +230,6 @@ const CreateCategory = props => {
                         className="form-control"
                         id="autoSizingInputGroup"
                         name="code"
-                        disabled
                         defaultValue={category ? category.code: ''}
                     />
                     </div>

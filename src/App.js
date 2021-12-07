@@ -59,7 +59,7 @@ const App = () => {
 		<AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
 			<Router basename={process.env.PUBLIC_URL}>
 				<Switch>
-					<Redirect exact from="/" to="/login" />
+					<Redirect exact from="/" to="/dashboard" />
 					<Route exact path="/login" component={(props) => <AuthLogin config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/forgot-password" component={(props) => <AuthForgotPassword config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} />

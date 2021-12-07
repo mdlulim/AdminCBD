@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import {Session} from 'bc-react-session';
+import { SessionProvider } from 'providers';
 import { AuthService } from '../providers';
 const session = Session.get();
+
+
 export default function AuthHeader(props) {
     const { sideNavHidden, setSideNavHidden } = props;
     const [alertOpen, setAlertOpen] = useState(false);
     const [token, setToken] = useState('');
 
     useEffect(() => {
-        if(session.isValid){
-            //console.log(session.name.payload.token)
-            setToken(session.name.payload.token);
+        let user = {};
+        if (SessionProvider.isValid()) {
+            user = SessionProvider.get();
+            console.log(user)
         }else{
-        window.location = '/login';
+            window.location = '/login';
         }
+
+        // if(session.isValid){
+        //     //console.log(session.name.payload.token)
+        //     setToken(session.name.payload.token);
+        // }else{
+        // window.location = '/login';
+        // }
 
     },[]);
 
@@ -122,7 +133,7 @@ export default function AuthHeader(props) {
                     className="btn btn-light btn-icon float-left"
                     data-action="fixedpanel-toggle"
                     onClick={() => {
-                        //AuthService.logout
+                        SessionProvider.destroy()
                         window.location = '/login?loggedOut=true'}
                     }
                 >

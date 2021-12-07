@@ -4,21 +4,13 @@ import { browserName, osName, osVersion } from 'react-device-detect';
 import { Session } from 'bc-react-session';
 import AuthAervice from '../../providers/AuthService';
 import { AuthPages } from 'containers';
-import { UserService } from 'providers';
+import { UserService, SessionProvider } from 'providers';
 import jwt from 'jwt-decode';
-const session = Session.get();
 
 export default function LoginPage(props) {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
-    useEffect(() => {
-        if(session.isValid){
-            window.location = '/dashboard';
-            return
-        }
-
-    },[]);
         // when the form is submitted
   const onSubmit = (event) => {
         event.preventDefault();
@@ -41,14 +33,16 @@ export default function LoginPage(props) {
                 console.log(jwt(response.data.data.token));
             if(response.data.success === true && response.data.data.admin === true){
                 let sessionDuration = 864000;
-                Session.start({
-                    payload: {
-                        admin: response.data.data.admin,
-                        token: response.data.data.token,
-                        user: jwt(response.data.data.token)
-                    },
-                    expiration: sessionDuration 
-                });
+                //setAuthTokens(data.token);
+                SessionProvider.set(response.data.data.token);
+                // Session.start({
+                //     payload: {
+                //         admin: response.data.data.admin,
+                //         token: response.data.data.token,
+                //         user: jwt(response.data.data.token)
+                //     },
+                //     expiration: sessionDuration 
+                // });
                 window.location = '/dashboard';
             }else{
                 setLoading(false);
