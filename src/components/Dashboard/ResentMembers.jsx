@@ -76,7 +76,6 @@ export default function Members(props) {
 
     useMemo(() => {
         MemberService.getMembers().then((res) => {
-          console.log(res.data.data)
           const memberslist = res.data.data.results;
           setMembers(memberslist);
           setFilteredMembers(memberslist);
@@ -150,8 +149,6 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
 const onSubmitChangeStatus= data => {
   setSelectedMember(data);
   setShow(true);
-  console.log(data);
-    //return <Confirm show={show} setShow={setShow} />;
   };
 
   const onSubmitDeleteMember= data => {

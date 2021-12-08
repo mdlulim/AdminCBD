@@ -75,7 +75,6 @@ export default function Referals(props) {
 
     useMemo(() => {
       MemberService.getMemberReferrals(id).then((res) => {
-         // console.log(res.data.data.results)
           const memberslist = res.data.data.results;
           setReferrals(memberslist);
           setFilteredReferrals(memberslist);
@@ -137,7 +136,6 @@ const handleDeleteMember = async data => {
 
 const onSubmitChangeStatus= data => {
   setShow(true)
-  console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 

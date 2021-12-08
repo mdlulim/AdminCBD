@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {Session} from 'bc-react-session';
 import { SessionProvider } from 'providers';
 import { AuthService } from '../providers';
-const session = Session.get();
 
 
 export default function AuthHeader(props) {
@@ -14,17 +12,9 @@ export default function AuthHeader(props) {
         let user = {};
         if (SessionProvider.isValid()) {
             user = SessionProvider.get();
-            console.log(user)
         }else{
             window.location = '/login';
         }
-
-        // if(session.isValid){
-        //     //console.log(session.name.payload.token)
-        //     setToken(session.name.payload.token);
-        // }else{
-        // window.location = '/login';
-        // }
 
     },[]);
 

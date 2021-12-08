@@ -33,11 +33,8 @@ const ModalAdddCountry = props => {
 
         const form = event.currentTarget;
 
-
-        console.log(selectedStatus);
         if(selectedStatus){
             // MemberService.updateStatus(member.id, selectedStatus.value).then((response) =>{
-            //     console.log(response);
             //      if(response.data.success){
             //          setShow(false)
             //          return confirmAlert({

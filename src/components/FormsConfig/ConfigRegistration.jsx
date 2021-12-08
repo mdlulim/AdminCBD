@@ -44,7 +44,6 @@ export default function ConfigRegistration(props) {
 
     // A super simple expandable component.
     useMemo(() => {
-        console.log(registerForm.fieldset[0])
         setFields(registerForm.fieldset[0]);
     },[]);
     const columns = [{

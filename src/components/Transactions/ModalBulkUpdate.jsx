@@ -36,10 +36,6 @@ const ModalChangeStatus = props => {
 
         const form = event.currentTarget;
 
-
-
-        console.log(transactions)
-        console.log(selectedStatus.value);
         const data = { status: selectedStatus.value} ;
 
         if(selectedStatus){
@@ -64,7 +60,7 @@ const ModalChangeStatus = props => {
         let status = false
         transactions.map((transaction,num) =>{
             TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
-                console.log(response);
+              //  console.log(response);
                   
                 })
             if(num+1 === transactions.length ){

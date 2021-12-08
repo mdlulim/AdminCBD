@@ -116,7 +116,6 @@ const columns = [ {
 const onSubmitUpdateRole= data => {
   setShow(true)
   setSelectedRole(data);
-  console.log(data);
   };
 
   const onSubmitDeleteRole= data => {

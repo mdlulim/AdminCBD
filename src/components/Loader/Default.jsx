@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 const DefaultLoader = props => {
     const { text } = props;
-    console.log(text);
     return (
         <div className="default-loader-wrapper">
             <section id="global">

@@ -12,13 +12,11 @@ class AuthService {
     static async login(username, password, device, geoinfo){
         
         const apiURL = Config.API.BASE_URL_LOGIN;
-        console.log(apiURL+'/login',{"user":username, "password":password, "device":device, "geoinfo": geoinfo})
+       // console.log(apiURL+'/login',{"user":username, "password":password, "device":device, "geoinfo": geoinfo})
         const res    = await axios.post(apiURL+'/login',{"user":username, "password":password, "device":device, "geoinfo": geoinfo});
-        console.log(res);
         return res;
     }
 
-    console
     static async addUser(user){
         return await axios({
           mode: 'no-cors',

@@ -86,7 +86,6 @@ export default function MemberByProductID(props) {
 
     useMemo(() => {
       ProductService.getMembersByPoducts(id).then((res) => {
-         console.log(res.data)
          if(res.data.success){
           const memberslist = res.data.data.results;
           setProducts(memberslist);
@@ -151,7 +150,6 @@ const handleDeleteMember = async data => {
 
 const onSubmitChangeStatus= data => {
   setShow(true)
-  console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 
@@ -174,8 +172,6 @@ const onSubmitChangeStatus= data => {
     const end = Date.parse(endDate);
             const searchByDate = products.filter(
               product => (Date.parse(product.created)) >= start && (Date.parse(product.created)) <= end);
-              //console.log('Created date');
-              //console.log(searchByDate);
               setFilteredProducts(searchByDate);
           setDisabled(false);
           setShow(false)

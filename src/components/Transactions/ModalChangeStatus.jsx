@@ -26,8 +26,6 @@ const ModalChangeStatus = props => {
         { value: 'Completed', label: 'Complete' }
       ];
 
-
-
     const onSubmit = (event) => {
         event.preventDefault();
         setDisabled(true);
@@ -35,10 +33,6 @@ const ModalChangeStatus = props => {
 
         const form = event.currentTarget;
 
-
-
-        console.log(transaction)
-        console.log(selectedStatus.value);
         const data = { 
                 status: selectedStatus.value,
                 transaction: transaction, 
@@ -56,7 +50,7 @@ const ModalChangeStatus = props => {
             //     ]
             //   });
             TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
-                console.log(response);
+
                  if(response.data.success){
                      setShow(false)
                      return confirmAlert({
@@ -82,7 +76,6 @@ const ModalChangeStatus = props => {
         event.preventDefault();
         const form = event.currentTarget;
         const reason = form.reason.value;
-        console.log(reason);
 
     }
     return (

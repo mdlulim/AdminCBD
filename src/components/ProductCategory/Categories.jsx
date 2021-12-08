@@ -74,7 +74,6 @@ export default function Products(props) {
     useMemo(() => {
 
         ProductService.getProductCategories().then((res) => {
-             console.log(res.data.data.results)
                 if(res.data.success){
                     const productlist = res.data.data.results;
                     setCategories(productlist);

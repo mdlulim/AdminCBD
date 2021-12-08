@@ -8,13 +8,10 @@ import { Modal } from 'react-bootstrap';
 import ModalChangeStatus from './ModalChangeStatus';
 import ExportToExcel from './ExportToExcel';
 import ModalBulkUpdate from './ModalBulkUpdate';
-import { TransactionService, MemberService } from '../../providers';
+import { TransactionService, MemberService, SessionProvider } from '../../providers';
 import DatePicker from "react-datepicker";
 import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
-import { Session } from 'bc-react-session';
-
-const session = Session.get();
 // styles
 const customStyles = {
 
@@ -125,7 +122,11 @@ export default function Transactions(props) {
 
 
   useMemo(() => {
-    setAdminLevel(session.name.payload.user.permission_level)
+    if (SessionProvider.isValid()) {
+      const user = SessionProvider.get();
+       setAdminLevel(user.permission_level)
+   }
+   
     TransactionService.getTransactions().then((res) => {
       const transaList = res.data.data.results;
 

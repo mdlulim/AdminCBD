@@ -50,18 +50,6 @@ const inputWithDate={
   width: '25%'
 }
 
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
-
 const Status = ({ status }) => {
     let badge = 'primary';
     if (status === 'Pending') {

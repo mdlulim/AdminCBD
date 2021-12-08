@@ -20,8 +20,12 @@
                     "title": "Members",
                     "link": "/members",
                     "icon": null
-                },
-                {
+                },{
+                    "id": "pending",
+                    "title": "Pending Members",
+                    "link": "/pending",
+                    "icon": null
+                },{
                     "id": "wealth-creators",
                     "title": "Wealth Creators",
                     "link": "/wealth-creators",

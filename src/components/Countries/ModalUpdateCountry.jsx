@@ -15,10 +15,6 @@ const ModalUpdateCountry = props => {
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
-    useMemo(() => {
-        //setSelectedStatus({ value: member.status,  label: member.status });
-        console.log(country);
-    }, []);
 
     const statusOptions = [
         { value: 'Active',  label: 'Active' },
@@ -33,7 +29,7 @@ const ModalUpdateCountry = props => {
 
         const form = event.currentTarget;
             CountryService.unBlackListCountry(country.id).then((response) =>{
-                console.log(response);
+
                  if(response.data.success){
                      setShow(false)
                      return confirmAlert({

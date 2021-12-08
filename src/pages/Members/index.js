@@ -3,26 +3,22 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Common, Pagination, Members } from 'components';
 import { AuthLayout } from 'containers';
 import { MemberService } from '../../providers';
-import { Session } from 'bc-react-session';
 
 
 let baseURL = window.location.origin;
-const session = Session.get();
-console.log(session.payload.vlist);
 
     let page = (window.location.pathname.split('/').pop()).toLowerCase();
     
-if(page === 'members'){
-    let mi = session.payload.vlist;
-    if(!mi.includes("Members")){
-        window.location.replace(baseURL+"/dashboard");
-    }   
-}
+// if(page === 'members'){
+//     let mi = session.payload.vlist;
+//     if(!mi.includes("Members")){
+//         window.location.replace(baseURL+"/dashboard");
+//     }   
+// }
 export default function MembersPage(props) {
     const [members, setMembers] = useState([]);
     useMemo(() => {
         MemberService.getMembers().then((res) => {
-            console.log(res.data.data.results)
             const userslist = res.data.data.results;
             setMembers(userslist);
         });
@@ -90,90 +86,7 @@ export default function MembersPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                    <Members.Members />
-                    {/* <div className="table-responsive">
-                        <table className="table table-indent-rows margin-bottom-0">
-                            <thead>
-                                <tr>
-                                    <th width="40">
-                                        <div className="custom-control custom-checkbox">
-                                            <input type="checkbox" className="custom-control-input" id="t1_checkbox_0" />
-                                            <label className="custom-control-label" htmlFor="t1_checkbox_0"></label>
-                                        </div>
-                                    </th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th width="100">CBI #</th>
-                                    <th width="100">Country</th>
-                                    <th width="100">Products</th>
-                                    <th width="160">Date Joined</th>
-                                    <th width="150">Status</th>
-                                    <th width="100"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div className="custom-control custom-checkbox">
-                                            <input type="checkbox" className="custom-control-input" id="t1_checkbox_2" />
-                                            <label className="custom-control-label" htmlFor="t1_checkbox_2"></label>
-                                        </div>
-                                    </td>
-                                    <td><strong>Mduduzi</strong></td>
-                                    <td><strong>Mdluli</strong></td>
-                                    <td>2002001</td>
-                                    <td>ZA</td>
-                                    <td>2</td>
-                                    <td>
-                                        <strong>24/09/2021</strong> <span className="text-muted">12:00PM</span>
-                                    </td>
-                                    <td>
-                                        <div className="btn btn-outline-success btn-block disabled btn-sm">
-                                            Active
-                                        </div>
-                                    </td>
-                                    <td className="text-right">
-                                        <button className="btn btn-light btn-sm btn-icon">
-                                            <span className="fa fa-pencil" />
-                                        </button>
-                                        <button className="btn btn-secondary btn-sm btn-icon ml-2">
-                                            <span className="fa fa-eye" />
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div className="custom-control custom-checkbox">
-                                            <input type="checkbox" className="custom-control-input" id="t1_checkbox_2" />
-                                            <label className="custom-control-label" htmlFor="t1_checkbox_2"></label>
-                                        </div>
-                                    </td>
-                                    <td><strong>Sabelo</strong></td>
-                                    <td><strong>Mdluli</strong></td>
-                                    <td>2002001</td>
-                                    <td>ZA</td>
-                                    <td>2</td>
-                                    <td>
-                                        <strong>24/01/2020</strong> <span className="text-muted">12:00PM</span>
-                                    </td>
-                                    <td>
-                                        <div className="btn btn-outline-danger btn-block disabled btn-sm">
-                                            Blocked
-                                        </div>
-                                    </td>
-                                    <td className="text-right">
-                                        <button className="btn btn-light btn-sm btn-icon">
-                                            <span className="fa fa-pencil" />
-                                        </button>
-                                        <button className="btn btn-secondary btn-sm btn-icon ml-2">
-                                            <span className="fa fa-eye" />
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> */}
-
+                    <Members.Members status={'add'} />
                 </CardBody>
             </Card>
         </AuthLayout>

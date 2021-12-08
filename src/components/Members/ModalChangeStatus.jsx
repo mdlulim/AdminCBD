@@ -18,7 +18,6 @@ const ModalChangeStatus = props => {
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
-        // console.log(member)
     }, []);
 
     const statusOptions = [
@@ -32,12 +31,8 @@ const ModalChangeStatus = props => {
         setError('');
 
         const form = event.currentTarget;
-
-        console.log(selectedStatus)
-        console.log(selectedStatus);
         if (selectedStatus) {
             MemberService.updateStatus(member.id, selectedStatus.value).then((response) => {
-                console.log(response);
                 if (response.data.success) {
                     setShow(false)
                     return confirmAlert({
@@ -67,9 +62,9 @@ const ModalChangeStatus = props => {
         event.preventDefault();
         const form = event.currentTarget;
         const reason = form.reason.value;
-        console.log(reason);
 
     }
+    
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
             {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
