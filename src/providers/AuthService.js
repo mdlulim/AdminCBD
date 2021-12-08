@@ -1,10 +1,19 @@
 import axios from 'axios';
 import Config from '../config';
-import { Session } from 'bc-react-session';
+import SessionProvider from './SessionProvider';
 
-const session   = Session.get();
-const authToken = (session.payload.user) ? session.payload.token: null;
-const headers   = {'Authorization': `Bearer ${authToken}`} ;
+const authToken = SessionProvider.getToken();
+
+let headers = {
+  'Content-Type': 'application/json'
+};
+
+if (SessionProvider.isValid()) {
+  headers = {
+    'Authorization': `Bearer ${authToken}`,
+    'Content-Type': 'application/json',
+  }
+}
 
 class AuthService { 
   
@@ -54,7 +63,7 @@ class AuthService {
 
     static async logout() {
         // remove user from local storage to log user out bPDg2i
-        Session.destroy();
+        SessionProvider.destroy();
     }
 }
 export default AuthService;
