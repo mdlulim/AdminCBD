@@ -94,15 +94,12 @@ export default function MakeTransfer(props) {
 
     useMemo(() => {
       UserService.getUsersall().then((res) => {
-          console.log(res.data.data.results);
           const membersList = res.data.data.results;
           let temp = [];
           membersList.filter(item => (
                     temp.push({ value: item.id, label: item.first_name+' '+item.last_name+' ('+item.referral_id+')', first_name: item.first_name , last_name: item.last_name, referral_id: item.referral_id, group: item.group})
-                   // console.log(item)
                     //setProductCategories(productCategories => [{value:item.code, label:item.title}])
                 ))
-               console.log(temp)
           setMembersOptions(temp);
           setMembers(membersList);
         });
@@ -132,20 +129,17 @@ const onTransfarSubmit= data => {
   }
 
   const makeTransfer = (data) =>{
-      console.log(data)
+      //console.log(data)
   }
 
 
 const recieverWallet = (item) =>{
     //Get member details
     MemberService.getMemberWallet(item.value).then((res) => {
-         //console.log(res.data.data)
        const walletDetails = res.data.data;
        setWalletSender(walletDetails);
      });
-     //console.log(fees)
      const userFee = fees.filter(fee => fee.name === item.group.name)[0];
-     //console.log(userFee);
      setUserType(userFee);
 }
 

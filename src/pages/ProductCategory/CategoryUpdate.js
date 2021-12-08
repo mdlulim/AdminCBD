@@ -35,7 +35,6 @@ const CreateCategory = props => {
            });
                 //Get product category details
         ProductService.getProductCategory(id).then((res) => {
-                console.log(res.data.data);
                 const category = res.data.data;
                 setCategory(category)
                 setSelectedRows(res.data.data.inputFields.selectedRows)

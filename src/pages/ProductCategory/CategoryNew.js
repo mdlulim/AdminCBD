@@ -73,7 +73,7 @@ const CreateCategory = props => {
 }];
   const contextActions = React.useMemo(() => {
     const handleBulkUpdate = () => {
-           console.log(selectedRows)
+          // console.log(selectedRows)
     };
 
     return (

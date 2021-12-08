@@ -43,14 +43,7 @@ const Login = props => {
                 console.log(response);
             if(response.data.success === true){
                 console.log(response.data.data.token)
-                let sessionDuration = 864000;
-                Session.start({
-                    payload: {
-                        admin: response.data.data.admin,
-                        token: response.data.data.token
-                    },
-                    expiration: sessionDuration 
-                });
+               
             window.location = '/';
             }else{
                 setLoading(false);

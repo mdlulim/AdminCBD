@@ -18,7 +18,6 @@ const ModalChangeStatus = props => {
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
-       // console.log(member)
     }, []);
 
     const statusOptions = [
@@ -33,11 +32,8 @@ const ModalChangeStatus = props => {
 
         const form = event.currentTarget;
 
-
-        console.log(selectedStatus);
         if(selectedStatus){
             MemberService.updateStatus(category.id, selectedStatus.value).then((response) =>{
-                console.log(response);
                  if(response.data.success){
                      setShow(false)
                      return confirmAlert({

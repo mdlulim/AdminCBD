@@ -73,9 +73,7 @@ export default function Leads(props) {
     const history = useHistory();
 
     useMemo(() => {
-      console.log('leads')
       LeadService.getLeads().then((res) => {
-        console.log(res.data.data.results)
         const leadslist = res.data.data.results;
         setLeads(leadslist);
         setFilteredLeads(leadslist);
@@ -185,7 +183,6 @@ const handleDeleteLead = async data => {
 const onSubmitChangeStatus= data => {
   setSelectedLead(data);
   setShow(true);
-  console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 

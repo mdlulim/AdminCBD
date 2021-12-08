@@ -1,11 +1,8 @@
 import React, { useState, useMemo, useCallback, useRef, Fragment, useEffect } from 'react';
 import { HashLinkContainer } from 'components';
-import {Session} from 'bc-react-session';
-import { AuthService } from '../providers';
+import { AuthService, SessionProvider } from '../providers';
 import moment from 'moment';
 import AutoLogoutTimer from '../nativeClass/AutoLogoutTimer';
-
-const session = Session.get();
 
 export default function Header(props) {
     const { toggleSidebarClass } = props;
@@ -27,10 +24,11 @@ export default function Header(props) {
         return () =>{
             timer.cleanUp();
         }
-        if(session.isValid){
-            setToken(session.payload.token);
+        let user = {};
+        if (SessionProvider.isValid()) {
+            user = SessionProvider.get();
         }else{
-        window.location = '/login';
+            window.location = '/login';
         }
 
     },[]);
@@ -47,11 +45,6 @@ export default function Header(props) {
         });
         return () =>{
             timer.cleanUp();
-        }
-        if(session.isValid){
-            setToken(session.payload.token);
-        }else{
-        window.location = '/login';
         }
 
     },[]);

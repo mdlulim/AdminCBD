@@ -3,12 +3,9 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Common, Pagination, Members } from 'components';
 import { AuthLayout } from 'containers';
 import { MemberService } from '../../providers';
-import { Session } from 'bc-react-session';
 
 
 let baseURL = window.location.origin;
-const session = Session.get();
-console.log(session.payload.vlist);
 
     let page = (window.location.pathname.split('/').pop()).toLowerCase();
 

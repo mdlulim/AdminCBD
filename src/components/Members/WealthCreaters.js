@@ -74,9 +74,7 @@ export default function WealthCreaters(props) {
     const history = useHistory();
 
     useMemo(() => {
-      console.log('wealthCreaters')
       MemberService.getWealthCreaters().then((res) => {
-        console.log(res.data.data.results)
         const wealthCreaterslist = res.data.data.results;
         setWealthCreaters(wealthCreaterslist);
         setFilteredWealthCreaters(wealthCreaterslist);
@@ -148,7 +146,6 @@ cell: row => <div><div>{row.first_name} {row.last_name}</div>
 const onSubmitChangeStatus= data => {
   setWealthCreaters(data);
   setShow(true);
-  console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 

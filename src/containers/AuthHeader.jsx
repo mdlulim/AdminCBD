@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {Session} from 'bc-react-session';
 import { SessionProvider } from 'providers';
 import { AuthService } from '../providers';
-const session = Session.get();
 
 
 export default function AuthHeader(props) {

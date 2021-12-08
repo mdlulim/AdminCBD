@@ -6,7 +6,6 @@ export default function LevelTwo(props) {
     const [active, setActiveState] = useState(null);
 
     const onShowImage = (image) => {
-      //  console.log(kycDetails['2'].data)
         props.showImage(image);
     }
 

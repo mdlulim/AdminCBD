@@ -3,12 +3,10 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 import { AuthLayout } from 'containers';
 import { Common, Dashboard, Overview, Members } from 'components';
-import { MemberService, ProductService, TransactionService, AccountService } from '../../providers';
+import { MemberService, ProductService, TransactionService, AccountService, SessionProvider } from '../../providers';
 import { VectorMap } from '@south-paw/react-vector-maps';
 import world from '../../components/Dashboard/world.json';
-import { Session } from 'bc-react-session';
 
-const session = Session.get();
 const Filter = () => {
     return (
         <>
@@ -46,11 +44,12 @@ export default function DashboardPage(props) {
     const history = useHistory();
 
     useState(() => {
-        // console.log(session.name.payload)
-        setAdminLevel(session.name.payload.user.permission_level)
-       
+        if (SessionProvider.isValid()) {
+           const user = SessionProvider.get();
+            setAdminLevel(user.permission_level)
+        }
+        
         MemberService.getMembers().then((res) => {
-           // console.log(res.data.data.results)
             const userslist = res.data.data.results;
             const memberslist = res.data.data.results;
             const temp=  memberslist.slice(Math.max(memberslist.length - 5), 0)
@@ -59,14 +58,12 @@ export default function DashboardPage(props) {
           });
 
           AccountService.getMainAccount().then((res) => {
-            //  console.log(res.data.data)
              const memberslist = res.data.data;
              setMainAccount(memberslist);
            });
 
 
         ProductService.getProducts().then((res) => {
-           // console.log(res.data)
             if(res.data.success){
               const productlist = res.data.data.results;
               setProducts(productlist);
@@ -74,7 +71,6 @@ export default function DashboardPage(props) {
           });
 
           TransactionService.getTransactions().then((res) => {
-            console.log(res.data.data.results)
             if(res.data.success){
             const transaList = res.data.data.results;
             setTransactions(transaList);
@@ -103,7 +99,6 @@ export default function DashboardPage(props) {
           (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
         ));
 
-       // console.log(filteredItems)
         setFilteredTransactions(filteredItems);
       }
 

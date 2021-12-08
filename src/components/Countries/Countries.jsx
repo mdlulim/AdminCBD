@@ -61,7 +61,6 @@ export default function Countries(props) {
 
     useMemo(() => {
       CountryService.getCountries().then((res) => {
-        console.log(res.data.data.results);
         const userslist = res.data.data.results;
         setCountries(userslist);
         setFilteredCountries(userslist);
@@ -115,13 +114,11 @@ const columns = [ {
 const onSubmitUnblacklist= data => {
   setShow(true)
   setSelectedCountry(data);
-  console.log(data);
   };
 
   const onSubmitblacklist= data => {
     setShowAddNew(true)
     setSelectedCountry(data);
-    console.log(data);
     };
 
   const onSubmitDeleteRole= data => {

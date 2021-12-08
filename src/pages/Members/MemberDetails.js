@@ -5,20 +5,18 @@ import { Rating, RatingView } from 'react-simple-star-rating'
 import { MemberService } from '../../providers';
 import { AuthLayout } from 'containers';
 import { Members, Transactions, Products, KYC } from 'components';
-import { KYCService } from '../../providers';
-import { Session } from 'bc-react-session';
+import { KYCService, SessionProvider } from '../../providers';
 
 let baseURL = window.location.origin;
-const session = Session.get();
 
     let page = (window.location.pathname.split('/').pop()).toLowerCase();
     
-if(page === 'wealth-creators'){
-    let mi = session.payload.vlist;
-    if(!mi.includes("Wealth Creators")){
-        window.location.replace(baseURL+"/dashboard");
-    }   
-}
+// if(page === 'wealth-creators'){
+//     let mi = session.payload.vlist;
+//     if(!mi.includes("Wealth Creators")){
+//         window.location.replace(baseURL+"/dashboard");
+//     }   
+// }
 
 const Status = ({ status }) => {
     let badge = 'primary';
@@ -53,7 +51,11 @@ const MemberDetails = props => {
 
     useState(() => {
         //Get member details
-        setAdminLevel(session.name.payload.user.permission_level)
+        if (SessionProvider.isValid()) {
+            const user = SessionProvider.get();
+             setAdminLevel(user.permission_level)
+         }
+         
         MemberService.getMember(id).then((res) => {
             const memberDetails = res.data.data;
             //console.log(memberDetails)

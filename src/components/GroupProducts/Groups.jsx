@@ -140,7 +140,6 @@ const columns = [ {
 const onSubmitUpdateGroup= data => {
   setShow(true)
   setSelectedGroup(data);
-  console.log(data);
   };
 
   const onSubmitDeleteGroup= data => {

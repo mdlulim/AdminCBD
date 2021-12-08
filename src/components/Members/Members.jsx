@@ -175,7 +175,6 @@ const columns = [{
               ]
           });
        }
-       console.log(transaList)
       // setTransactions(transaList);
       // setFilteredTransactions(transaList);
     });

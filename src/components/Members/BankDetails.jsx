@@ -41,7 +41,7 @@ export default function Referals(props) {
 
 
   const isEdited = () => {
-    console.log()
+    //console.log()
   }
 
   const onSubmit = async (data) => {

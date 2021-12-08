@@ -69,7 +69,6 @@ export default function KYCList(props) {
             const memberslist = res.data.data;
             setMembers(memberslist);
             setFilteredMembers(memberslist);
-            console.log(memberslist, " list ", res.data)
         });
 
     }, []);

@@ -1,10 +1,8 @@
 import { PagePermissionService, SessionProvider } from 'providers';
 import React, { useEffect, useState, useMemo } from 'react';
 import menu from 'static/mainmenu.json';
-import { Session } from 'bc-react-session';
 import Moment from 'react-moment';
 
-const session = Session.get();
 var vl =[];
 var member_page;
 const SubNavItem = props => {
@@ -45,11 +43,8 @@ const SubNavItem = props => {
         });
         }, []);
          if(hasAccess == true){
-             vl.push(title);             
+             vl.push(title);
          }
-         Session.setPayload({
-            vlist: vl,
-        });
     return (
        
         (hasAccess == true ? <li>

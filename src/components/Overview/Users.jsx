@@ -166,7 +166,6 @@ const handleDeleteMember = async data => {
 const onSubmitChangeStatus= data => {
   setSelectedMember(data);
   setShow(true);
-  console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 
