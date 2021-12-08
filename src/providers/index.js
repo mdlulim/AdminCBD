@@ -1,4 +1,4 @@
-//import SessionProvider from './SessionProvider';
+import SessionProvider from './SessionProvider';
 import AuthService from './AuthService';
 import GeoLocationService from './GeoLocationService';
 import UserRolesService from './UserRolesService';
@@ -18,6 +18,7 @@ import FeeService from './FeeService';
 
 
 export {
+    SessionProvider,
     AuthService,
     GeoLocationService,
     UserRolesService,

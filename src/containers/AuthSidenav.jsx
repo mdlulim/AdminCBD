@@ -1,11 +1,12 @@
-import { PagePermissionService } from 'providers';
+import { PagePermissionService, SessionProvider } from 'providers';
 import React, { useEffect, useState, useMemo } from 'react';
 import menu from 'static/mainmenu.json';
 import { Session } from 'bc-react-session';
+import Moment from 'react-moment';
 
 const session = Session.get();
 var vl =[];
-var member_page;;
+var member_page;
 const SubNavItem = props => {
     const [hasAccess, setHasAccess] = useState(false);
     const [perm, setPerm] = useState('');
@@ -19,7 +20,14 @@ const SubNavItem = props => {
     } = props;
 
     useMemo(() => {
-        let ul = session.name.payload.user.permission_level;
+        let user = {};
+        if (SessionProvider.isValid()) {
+            user = SessionProvider.get();
+            console.log(user);
+        }else{
+            window.location = '/login';
+        }
+        let ul = user.permission_level;
         PagePermissionService.getPagePermissionsByPage((title.toLowerCase()).replace(/\s/g, "")).then((res) => {
             // console.log(ul);
             if(ul == 1){
@@ -33,7 +41,6 @@ const SubNavItem = props => {
             }else if(ul == 5){
                 setHasAccess(res.data.veryhigh);
             }
-            
             if(title === 'User Permissions' || title === 'Users' || title === 'User Roles'  || title === 'Countries'  || title === 'Settings'  || title === 'Forms Configuration'){
                 setHasAccess(true);
             }
@@ -101,7 +108,7 @@ const NavItem = props => {
                     }
                 }}
             >
-                <span className={`icon ${icon}`}></span> 
+                <span className={`icon ${icon}`}></span>
                 <span className="text">{title}</span>
             </a>
             {childitems && childitems.length > 0 &&
@@ -124,8 +131,16 @@ export default function AuthSidenav(props) {
     const [navClass, setNavClass] = useState('');
     const [showProfileDropdown, setShowProfileDropdown] = useState(false);
     const [showProfileDropdown2, setShowProfileDropdown2] = useState(false);
+    const [user, setUser] = useState({});
     
     useEffect(() => {
+        let user = {};
+        if (SessionProvider.isValid()) {
+            user = SessionProvider.get();
+            setUser(user)
+        }else{
+            window.location = '/login';
+        }
         const { path } = match;
         if (path) {
             setActiveNav(path);
@@ -160,8 +175,8 @@ export default function AuthSidenav(props) {
                 <div className="user user--bordered user--lg user--w-lineunder user--controls"> 
                     <img src="/assets/img/users/user_1.jpeg" className="mCS_img_loaded" />
                     <div className="user__name">
-                        <strong>Mduduzi Mdluli</strong><br />
-                        <span className="text-muted">Administrator</span>
+                        <strong>{user.first_name+' '+user.last_name}</strong><br />
+    <span className="text-muted">{user.group_name}</span>
                         <div className="user__controls">
                             <div className={`dropdown ${showProfileDropdown ? 'show' : ''}`}>
                                 <button 
@@ -178,17 +193,14 @@ export default function AuthSidenav(props) {
                                     aria-labelledby="dropdownMenuButton"
                                 >
                                     <a className="dropdown-item" href="/">Profile</a>
-                                    <a className="dropdown-item" href="/">Projects</a>
-                                    <a className="dropdown-item" href="/">Invoices</a>
                                     <a className="dropdown-item" href="/">Settings</a>
                                     <div className="dropdown-divider"></div>
-                                    <a className="dropdown-item" href="/">Log out</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="user__lineunder">
-                        <div className="text">Last visit 15min ago</div>
+    <div className="text">Last visit <Moment date={user.time} format="hh:mm:ss" /></div>
                         <div className="buttons">
                             <div className={`dropdown ${showProfileDropdown2 ? 'show' : ''}`}>
                                 <button

@@ -1,8 +1,9 @@
 import Cookies from 'js-cookie';
-import config from '../config';
+import moment from 'moment';
+import Config from '../config';
 
 class SessionProvider {
-    static cookiename = config.auth.cookie.name || '';
+    static cookiename = Config.auth.cookie.name;
     static start(token) {
         this.destroy();
         this.set(token);
@@ -12,13 +13,13 @@ class SessionProvider {
         Cookies.remove(this.cookiename);
     }
 
-    static set(jwt, expires = config.auth.cookie.expires) {
+    static set(jwt, expires = Config.auth.cookie.expires) {
         Cookies.set(this.cookiename, jwt, { expires });
     }
 
     static get() {
         const jwt = Cookies.get(this.cookiename);
-        let session;
+        let session = null;
         try {
             if (jwt) {
                 const base64Url = jwt.split('.')[1];
@@ -32,8 +33,16 @@ class SessionProvider {
     }
 
     static isValid() {
-        const jwt = Cookies.get(this.cookiename);
-        return (jwt);
+        let valid = false;
+        const session = this.get();
+        if (session) {
+            const { time } = session;
+            if (time) {
+                const diff = moment(time).add(6, 'hours').diff();
+                valid = diff > 0;
+            }
+        }
+        return valid;
     }
 
     // return the token from the session storage

@@ -15,7 +15,12 @@ if (window.location) {
         }
     }
 }
-
+Config.auth = {
+    cookie: {
+        name: '__cbiWebAppUserSession',
+        expires: 1, // days
+    }
+}
 if (Config.STAGE === 'production') {
     Config.API = {
         BASE_URL: 'https://api.cbiglobal.io/v1/admin',
