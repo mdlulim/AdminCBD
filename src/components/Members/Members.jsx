@@ -6,6 +6,7 @@ import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
+import TransactionDetails from '../Transactions/TransactionDetails';
 import DeleteAlert from './DeleteAlert';
 import { MemberService, TransactionService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
@@ -70,10 +71,13 @@ const Status = ({ status }) => {
 export default function Members(props) {
   const { status } = props;
   const [show, setShow] = useState(false);
+  const [ showTransaction, setShowTransaction ] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [members, setMembers] = useState([]);
+  const [selectedTransPOP, setSelectedTransPOP] = useState('');
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [selectedMember, setSelectedMember] = useState({});
+  const [transaction, setTransaction] = useState({});
   const history = useHistory();
 
     useMemo(() => {
@@ -147,7 +151,16 @@ const columns = [{
         <span className="fa fa-eye" />
       </a></div>
       <div style={iconPadding}>
+        {row.status === 'Pending'?
         <a
+          href={`#`}
+          className="btn btn-light btn-sm btn-icon"
+          onClick={e => {
+            e.preventDefault();
+            onSubmitApproveMember(row);
+          }}
+        > <span className="fa fa-pencil" />
+        </a>:<a
           href={`#`}
           className="btn btn-light btn-sm btn-icon"
           onClick={e => {
@@ -155,35 +168,51 @@ const columns = [{
             onSubmitChangeStatus(row);
           }}
         > <span className="fa fa-pencil" />
-        </a></div>
+        </a>} </div>
     </div>
   }];
 
   const onSubmitChangeStatus = data => {
-    TransactionService.getMemberTransactions(data.id).then((res) => {
-       const transaList = res.data.data.results;
-       if(transaList.length){
-          
-       }else{
-        return confirmAlert({
-              title: 'Transaction ',
-              message: 'There is no pending transaction for '+data.first_name+' '+data.last_name+'!',
-              buttons: [
-                {
-                  label: 'Ok',
-                }
-              ]
-          });
-       }
-      // setTransactions(transaList);
-      // setFilteredTransactions(transaList);
-    });
-    //setSelectedMember(data);
-    //setShow(true);
+    setSelectedMember(data);
+    setShow(true);
     //return <Confirm show={show} setShow={setShow} />;
   };
 
   const onSubmitDeleteMember = data => {
+    setSelectedMember(data);
+    setShowDelete(true);
+  };
+
+  const onSubmitApproveMember = data => {
+    TransactionService.getMemberTransactions(data.id).then((res) => {
+      const transaList = res.data.data.results;
+      if(transaList.length){
+         console.log(transaList[0])
+         TransactionService.getTransactionPOP(transaList[0].txid).then((res) => {
+          //console.log(res.data.data.rows[0])
+            const pop = res.data.data.rows;
+            const url = pop[0].file;
+             TransactionService.getTransactionPOPFile(url).then((res) => {
+                 setSelectedTransPOP(res.data);
+             })
+          });
+
+         setTransaction(transaList[0])
+         setShowTransaction(true)
+      }else{
+       return confirmAlert({
+             title: 'Transaction ',
+             message: 'There is no pending transaction for '+data.first_name+' '+data.last_name+'!',
+             buttons: [
+               {
+                 label: 'Ok',
+               }
+             ]
+         });
+      }
+     // setTransactions(transaList);
+     // setFilteredTransactions(transaList);
+   });
     setSelectedMember(data);
     setShowDelete(true);
   };
@@ -211,7 +240,12 @@ const columns = [{
   return (
     <Card className="o-hidden mb-4">
       <ModalChangeStatus show={show} setShow={setShow} member={selectedMember} />
-      <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedMember} />
+      <TransactionDetails 
+      show={showTransaction} 
+      setShow={setShowTransaction} 
+      transaction={transaction}
+      pop={selectedTransPOP} />
+      {/* <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedMember} /> */}
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
           <span>CBI Members</span>

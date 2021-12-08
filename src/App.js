@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router,Route,Redirect,Switch} from 'react-router-dom';
 
 import { AuthContext } from 'context/auth';
-// import PrivateRoute from './PrivateRoute';
+import PrivateRoute from './PrivateRoute';
 import config from './config';
 
 // auth pages/routes
@@ -63,7 +63,7 @@ const App = () => {
 					<Redirect exact from="/" to="/dashboard" />
 					<Route exact path="/login" component={(props) => <AuthLogin config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/forgot-password" component={(props) => <AuthForgotPassword config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} />
+					<PrivateRoute exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/pending" component={(props) => <MembersPending config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />

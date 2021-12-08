@@ -188,24 +188,13 @@ const onSubmitChangeStatus= data => {
      //console.log(res.data.data.rows[0])
        const pop = res.data.data.rows;
        const url = pop[0].file;
-       setSelectedTransPOP(url);
-       console.log(url)
+       //setSelectedTransPOP(url);
+       
         TransactionService.getTransactionPOPFile(url).then((res) => {
             setSelectedTransPOP(res.data);
+           // console.log(url)
         })
      });
-
-     AccountService.getMainAccount().then((res) => {
-     // console.log(res.data.data)
-      const memberslist = res.data.data;
-      setMainWallet(memberslist);
-    });
-    // Get member wallet details
-     MemberService.getMemberWallet(member.sponsor).then((res) => {
-      const walletDetails = res.data.data;
-     // console.log(res.data.data)
-      setSponsorWallet(walletDetails);
-  });
     setSelectedTransaction(data);
     setShowTransaction(true);
         // console.log(data);

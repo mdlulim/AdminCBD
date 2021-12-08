@@ -21,7 +21,7 @@ export default function Timeline(props) {
                     <div className="dot dot-warning"></div>
                     <div className="content">
                         <div className="title margin-bottom-0">
-            {item.subtype} of <strong>{item.currency.code} {item.amount}</strong> on <Moment date={item.created} format="D MMM YYYY" /> from <strong>{item.user.first_name+' '+item.user.last_name}</strong> - <a href={'/transactions/transactions/'+item.id}>Details...</a>
+            {item.subtype} of <strong>{item.currency.code} {item.amount}</strong> on <Moment date={item.created} format="D MMM YYYY" /> from <strong>{item.user ? item.user.first_name+' '+item.user.last_name: ''}</strong> - <a href={'/transactions/transactions/'+item.id}>Details...</a>
                         </div>
                     </div>
                 </div>

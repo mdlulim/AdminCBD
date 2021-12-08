@@ -21,7 +21,6 @@ const TransactionDetails = props => {
     const { title, body, processing, confirmButtonDisabled, confirmButton, cancelButton, showIcon, size, } = props;
 
     useEffect(() => {
-        console.log("Test modal ")
         AccountService.getMainAccount().then((res) => {
             const result = res.data.data;
             // console.log(result)
@@ -73,26 +72,8 @@ const TransactionDetails = props => {
         console.log(sponsorWallet);
         const data = { status: selectedStatus.value };
 
-        let mainBalance = parseFloat(mainWallet.available_balance) + parseFloat(transaction.amount) * 50 / 100;
-        let userBalance = parseFloat(userWallet.available_balance) + parseFloat(transaction.amount) * 25 / 100;
-        let sponsorBalance = parseFloat(sponsorWallet.available_balance) + parseFloat(transaction.amount) * 25 / 100;
-
         const data2 = {
             status: selectedStatus.value,
-            user: {
-                id: userWallet.id,
-                user_id: userWallet.user_id,
-                available_balance: userBalance
-            },
-            sponsor: {
-                id: sponsorWallet.id,
-                user_id: sponsorWallet.user_id,
-                available_balance: sponsorBalance
-            },
-            main: {
-                    id: mainWallet.id,
-                    available_balance: mainBalance
-            }, 
             transaction: transaction,
         }
 
@@ -100,11 +81,11 @@ const TransactionDetails = props => {
         if (selectedStatus.value === "Completed") {
             setShow(false)
             TransactionService.approveDeposit(transaction.id, data2).then((response) => {
-                console.log(response);
-                if (response.data.success) {
-                    MemberService.updateStatus(transaction.user_id, 'Active').then((response) => {
-                        console.log(response);
-                    })
+              //  console.log(response);
+                if (response.data.success === true) {
+                    // MemberService.updateStatus(transaction.user_id, 'Active').then((response) => {
+                    //     console.log(response);
+                    // })
                     setShow(false)
                     return confirmAlert({
                         title: 'Succcess',
@@ -116,6 +97,15 @@ const TransactionDetails = props => {
                         ]
                     });
                 } else {
+                    return confirmAlert({
+                        title: 'Error Message',
+                        message: response.data.message,
+                        buttons: [
+                            {
+                                label: 'Ok',
+                            }
+                        ]
+                    });
                     setError('Something went wrong while trying to update members status');
                 }
                 setDisabled(false);

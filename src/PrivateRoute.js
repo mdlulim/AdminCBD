@@ -10,7 +10,7 @@ function PrivateRoute({ component: Component, ...rest }) {
                 SessionProvider.isValid() ? (
                     <Component {...props} />
                 ) : (
-                    <Redirect to={`/auth/login?rurl=${window.location.pathname.substr(1)}`} />
+                    <Redirect to={`/login?rurl=${window.location.pathname.substr(1)}`} />
                 )
             }
         />
