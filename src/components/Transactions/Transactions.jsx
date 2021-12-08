@@ -6,6 +6,7 @@ import { CSVLink } from "react-csv";
 import DataTable from 'react-data-table-component';
 import { Modal } from 'react-bootstrap';
 import ModalChangeStatus from './ModalChangeStatus';
+import TransactionDetails from '../Transactions/TransactionDetails';
 import ExportToExcel from './ExportToExcel';
 import ModalBulkUpdate from './ModalBulkUpdate';
 import { TransactionService, MemberService, SessionProvider } from '../../providers';
@@ -116,6 +117,8 @@ export default function Transactions(props) {
   const [selectedRows, setSelectedRows] = React.useState([]);
   const [users, setUsers] = React.useState([]);
   const [toggleCleared, setToggleCleared] = React.useState(false);
+  const [selectedTransPOP, setSelectedTransPOP] = useState('');
+  const [showApproveMember, setShowApproveMember] = useState(false);
   const params = useParams();
   const { id } = params;
   const history = useHistory();
@@ -218,8 +221,7 @@ export default function Transactions(props) {
         disabled={adminLevel != 5 ? row.status == "Completed" ? true : '' : false}
         onClick={e => {
           e.preventDefault();
-          setSelectedTransaction(row)
-          setShowUpdate(true)
+          onUpdateDeposit(row)
         }}
       > <span className="fa fa-pencil" />
       </button>
@@ -244,6 +246,29 @@ export default function Transactions(props) {
     startDate: new Date(),
     endDate: new Date(),
     key: 'selection',
+  }
+
+  const onUpdateDeposit = (data) => {
+    console.log(data)
+
+    if(data.user.status === 'Pending'){
+      TransactionService.getTransactionPOP(data.txid).then((res) => {
+        //console.log(res.data.data.rows[0])
+          const pop = res.data.data.rows;
+          const url = pop[0].file;
+           TransactionService.getTransactionPOPFile(url).then((res) => {
+               setSelectedTransPOP(res.data);
+           })
+        });
+
+        setSelectedTransaction(data)
+        setShowApproveMember(true)
+    }else{
+       setSelectedTransaction(data)
+          setShowUpdate(true)
+      console.log('normal deposit')
+    }
+
   }
 
   const selectDataRange = (data) => {
@@ -288,6 +313,11 @@ export default function Transactions(props) {
     <Card className="o-hidden mb-4">
       <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows} />
       <ModalChangeStatus show={showUpdate} setShow={setShowUpdate} transaction={selectedTransaction} />
+      <TransactionDetails 
+      show={showApproveMember} 
+      setShow={setShowApproveMember} 
+      transaction={selectedTransaction}
+      pop={selectedTransPOP} />
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
           <span>Transactions</span>

@@ -10,7 +10,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import DocViewer, {PNGRenderer, JPGRenderer, PDFRenderer } from "react-doc-viewer";
 
 const TransactionDetails = props => {
-    const { show, setShow, transaction, pop, userWallet, mainWallet, member, sponsorWallet } = props;
+    const { show, setShow, transaction, pop, userWallet, mainWallet, member } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
@@ -50,7 +50,6 @@ const TransactionDetails = props => {
         setError('');
         const form = event.currentTarget;
 
-        console.log(sponsorWallet);
         const data = {
             status: selectedStatus.value,
             transaction: transaction
@@ -69,7 +68,6 @@ const TransactionDetails = props => {
         setError('');
         const form = event.currentTarget;
 
-        console.log(sponsorWallet);
         const data = { status: selectedStatus.value };
 
         const data2 = {
@@ -106,7 +104,7 @@ const TransactionDetails = props => {
                             }
                         ]
                     });
-                    setError('Something went wrong while trying to update members status');
+                   // setError('Something went wrong while trying to update members status');
                 }
                 setDisabled(false);
             })
