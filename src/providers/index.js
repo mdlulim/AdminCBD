@@ -15,6 +15,7 @@ import PermissionLevelService from './PermissionLevelService';
 import AccountService from './AccountService';
 import PagePermissionService from './PagePermissionService';
 import FeeService from './FeeService';
+import FileStorageProvider from './FileStorageProvider';
 
 
 export {
@@ -35,4 +36,5 @@ export {
     AccountService,
     PagePermissionService,
     FeeService,
+    FileStorageProvider
 };
