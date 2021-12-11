@@ -3,7 +3,6 @@ import Config from '../config';
 import SessionProvider from './SessionProvider';
 
 const baseurl =Config.API.BASE_URL_FILE_STORAGE;
-console.log(Config, " ---------")
 const token = SessionProvider.getToken();
 let headers = {
     'Content-Type': 'application/json'
