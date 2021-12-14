@@ -32,21 +32,21 @@ if (Config.STAGE === 'production') {
     Config.API = {
         BASE_URL: 'https://dev.qa.cbiglobal.io/v1/admin',
         BASE_URL_POP: 'https://dev.qa.cbiglobal.io/v1/storage/file',
-        BASE_URL_FILE_STORAGE:'https://dev.cbiglobal.io/v1/storage/',
+        BASE_URL_FILE_STORAGE:'https://dev.cbiglobal.io/v1/storage',
         BASE_URL_LOGIN: 'https://dev.qa.cbiglobal.io/v1/auth',
     }
 } else if (Config.STAGE === 'development') {
     Config.API = {
         BASE_URL: 'https://dev.cbiglobal.io/v1/admin',
         BASE_URL_POP: 'https://dev.cbiglobal.io/v1/storage/file',
-        BASE_URL_FILE_STORAGE:'https://dev.cbiglobal.io/v1/storage/',
+        BASE_URL_FILE_STORAGE:'https://dev.cbiglobal.io/v1/storage',
         BASE_URL_LOGIN: 'https://dev.cbiglobal.io/v1/auth',
     }
 } else if (Config.STAGE === 'release') {
     Config.API = {
         BASE_URL: 'https://dev.release.cbiglobal.io/v1/admin',
         BASE_URL_POP: 'https://dev.release.cbiglobal.io/v1/storage/file',
-        BASE_URL_FILE_STORAGE:'https://dev.cbiglobal.io/v1/storage/',
+        BASE_URL_FILE_STORAGE:'https://dev.cbiglobal.io/v1/storage',
         BASE_URL_LOGIN: 'https://dev.release.cbiglobal.io/v1/auth',
     }
 }else {
@@ -54,7 +54,7 @@ if (Config.STAGE === 'production') {
     Config.API = {
         BASE_URL: 'http://localhost:8080',
         BASE_URL_POP: 'https://dev.cbiglobal.io/v1/storage/file',
-        BASE_URL_FILE_STORAGE:'https://dev.cbiglobal.io/v1/storage/',
+        BASE_URL_FILE_STORAGE:'http://localhost:8090',
         BASE_URL_LOGIN: 'https://dev.cbiglobal.io/v1/auth',
     }
 }
