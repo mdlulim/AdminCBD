@@ -310,7 +310,7 @@ export default function Transactions(props) {
             <div>
               <div style={myButtons}>
                 <button
-                  className="btn btn-secondary"
+                  className="btn btn-secondary m-2"
                   type="button"
                   onClick={e => {
                     e.preventDefault();

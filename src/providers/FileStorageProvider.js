@@ -35,12 +35,13 @@ class FileStorageProvider {
         const form = new FormData();
         form.append('upload', file);
         headers['Content-Type'] = file.type;
-        return axios.post(`${baseurl}batch-upload/${category}/${type}${(filename)?`?filename=${filename}`:''}`, form, {
+        return axios.post(`${baseurl}/batch-upload/${category}/${type}${(filename)?`?filename=${filename}`:''}`, form, {
             headers,
         })
             .then((json) => json.data)
-            .then(res => res)
+            .then(res => {console.log(res, " response from server"); return res})
             .catch((err) => {
+                console.log(err, " error from server")
                 if (err.response) return err.response.data;
                 return err;
             });
