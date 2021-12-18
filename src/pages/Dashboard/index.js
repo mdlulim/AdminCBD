@@ -46,6 +46,7 @@ export default function DashboardPage(props) {
     useState(() => {
         if (SessionProvider.isValid()) {
            const user = SessionProvider.get();
+           console.log(SessionProvider.getToken())
             setAdminLevel(user.permission_level)
         }
         

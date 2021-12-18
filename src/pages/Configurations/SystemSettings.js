@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Common, Settings } from 'components';
+import { Common, Settings, GeneralSettings } from 'components';
 import { AuthLayout } from 'containers';
 
 
 export default function SystemSettings(props) {
-    const [activeTab, setActiveTab] = useState('referals');
+    const [activeTab, setActiveTab] = useState('general');
 
 
     const toggleTab = (e, tab) => {
@@ -17,21 +17,31 @@ export default function SystemSettings(props) {
             {...props}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
-                active: "Config Fees"
+                active: "Configuration"
             }}
             pageHeading={{
-                title: 'Manage Fees',
-                caption: 'EXPLORE FEES FOR CRYPTO BASED INNOVATION',
+                title: 'Manage Configuration',
+                caption: 'EXPLORE Configuration FOR CRYPTO BASED INNOVATION',
             }}
         >
             <Card>
                 <Common.Widget
                     icon="li-cog"
-                    title="Fees Configurations"
+                    title="Configurations"
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
                 <ul className="nav nav-tabs nav-tabs__round mt-0">
+                                <li className="nav-item">
+                                    <a
+                                        className={`nav-link show ${activeTab === 'general' ? 'active' : ''}`}
+                                        onClick={e => toggleTab(e, 'general')}
+                                        data-toggle="tab"
+                                        href="/"
+                                    >
+                                        General Settings
+                                    </a>
+                                </li>
                                 <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'referals' ? 'active' : ''}`}
@@ -42,7 +52,7 @@ export default function SystemSettings(props) {
                                         Transactions
                                     </a>
                                 </li>
-                                <li className="nav-item">
+                                {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'products' ? 'active' : ''}`}
                                         onClick={e => toggleTab(e, 'products')}
@@ -61,7 +71,7 @@ export default function SystemSettings(props) {
                                     >
                                         Transactions
                                     </a>
-                                </li>
+                                </li> */}
                                 {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'banking-details' ? 'active' : ''}`}
@@ -84,6 +94,13 @@ export default function SystemSettings(props) {
                                 </li> */}
                             </ul>
                             <div className="tab-content">
+                                <div role="tabpanel" className={`tab-pane show ${activeTab === 'general' ? 'active' : ''}`}>
+                                    <div className="profile-setting__card">
+                                        <CardBody className="pl-0 pr-0 pb-0">
+                                        <GeneralSettings.GeneralSettings />
+                                        </CardBody>
+                                    </div>
+                                </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
                                     <CardBody className="pl-0 pr-0 pb-0">
                                         <Settings.TransactionFees />
@@ -93,12 +110,6 @@ export default function SystemSettings(props) {
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
                                             <Settings.SystemFees />
-                                        </CardBody>
-                                    </div>
-                                </div>
-                                <div role="tabpanel" className={`tab-pane show ${activeTab === 'transactions' ? 'active' : ''}`}>
-                                    <div className="profile-setting__card">
-                                        <CardBody className="pl-0 pr-0 pb-0">
                                         </CardBody>
                                     </div>
                                 </div>
