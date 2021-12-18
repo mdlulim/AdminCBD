@@ -36,6 +36,7 @@
     "config": "^3.2.4",
     "convert-excel-to-json": "^1.7.0",
     "cryptoapis.io": "^4.0.0",
+    "csv-headers": "^1.0.0",
     "dateformat": "^3.0.3",
     "disable-scroll": "^0.6.0",
     "draft-convert": "^2.1.12",

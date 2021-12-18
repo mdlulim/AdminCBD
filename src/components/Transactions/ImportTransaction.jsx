@@ -16,6 +16,7 @@ import { TransactionService, SessionProvider } from '../../providers';
 import DatePicker from "react-datepicker";
 import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
+import csvHeaders from 'csv-headers';
 
 export default function Transactions(props) {
   const { handleSubmit, register } = useForm();
@@ -213,6 +214,7 @@ export default function Transactions(props) {
                       <select
                         name="type"
                         ref={register({ required: true })}
+                        onChange={()=>{setFBatchFile([])}}
                         className="form-control"
                       >
                         <option value="withdrawal">Withdrawal</option>
