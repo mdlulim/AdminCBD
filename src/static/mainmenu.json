@@ -138,7 +138,7 @@
             "childitems": [
                 {
                     "id": "Settings",
-                    "title": "settings",
+                    "title": "Settings",
                     "link": "/settings",
                     "icon": null
                 },
@@ -163,11 +163,6 @@
                     "id": "countries",
                     "title": "Countries",
                     "link": "/countries",
-                    "icon": null
-                },{
-                    "id": "settings",
-                    "title": "Settings",
-                    "link": "/settings",
                     "icon": null
                 },{
                     "id": "forms",
