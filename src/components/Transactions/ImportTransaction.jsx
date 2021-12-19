@@ -57,7 +57,25 @@ export default function Transactions(props) {
     accept: 'text/csv',
     onDropRejected: () => alert('Please select a valid file'),
     onDropAccepted: (transactionFile) => {
-      setFBatchFile(transactionFile)
+      var reader = new FileReader();
+      reader.onloadend = function (e) {
+        var rows = e.target.result.split("\n");
+        var headers = rows[0].split(",")
+
+        if (document.getElementById("type").value === 'withdrawal') {
+          var expectedHeaders = ["TX_ID","REFERRAL","TYPE","AMOUNT","STATUS"]
+
+          if (headers.sort().join(',') !== expectedHeaders.sort().join(',')) {
+            alert('Invalid CSV file format');
+          } else {
+            setFBatchFile(transactionFile)
+          }
+        }else if(document.getElementById("type").value === 'deposit'){
+          alert('Deposits not supported yet')
+        }
+
+      }
+      reader.readAsText(transactionFile[0]);
     },
   });
 
@@ -78,6 +96,7 @@ export default function Transactions(props) {
     }
     setFBatchFile([])
     alert("Succeded! Batch File Uploaded")
+    window.location.reload(false);
   }
 
   useMemo(() => {
@@ -162,7 +181,7 @@ export default function Transactions(props) {
       > <span className="fa fa-pencil" />
       </button>
     </div>
-  }**/]; 
+  }**/];
 
 
   const onSearchFilter = filterText => {
@@ -213,7 +232,9 @@ export default function Transactions(props) {
                       <select
                         name="type"
                         ref={register({ required: true })}
+                        onChange={() => { setFBatchFile([]) }}
                         className="form-control"
+                        id="type"
                       >
                         <option value="withdrawal">Withdrawal</option>
                         <option value="deposit">Deposit</option>
@@ -310,7 +331,7 @@ export default function Transactions(props) {
             <div>
               <div style={myButtons}>
                 <button
-                  className="btn btn-secondary"
+                  className="btn btn-secondary m-2"
                   type="button"
                   onClick={e => {
                     e.preventDefault();
