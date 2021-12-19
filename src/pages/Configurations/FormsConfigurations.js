@@ -172,7 +172,6 @@ const FormsConfigurations = props => {
         setLoginForm(forms.login);
         setRegisterForm(forms.register);
         setForgotPasswordForm(forms.forgotPassword)
-        console.log(forms);
       }, []);
 
 

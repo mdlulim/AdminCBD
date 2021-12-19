@@ -54,7 +54,6 @@ const AlertModal = props => {
                 veryhigh: $('#veryhigh').is(':checked') ? true : false
              }
         ).then((response) =>{
-            console.log(response);
              if(response.data.success){
                  setShow(false)
                  return confirmAlert({

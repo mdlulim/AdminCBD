@@ -70,7 +70,6 @@ export default function TransactionFees(props) {
 
     useMemo(() => {
         FeeService.getFees().then((res) => {
-          console.log(res.data.data)
           const feeslist = res.data.data.results;
           setFees(feeslist);
           setFilteredFees(feeslist);
@@ -127,7 +126,6 @@ const columns = [ {
   const onSubmitChangeStatus = data => {
     setSelectedFee(data);
     setShow(true);
-    console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 

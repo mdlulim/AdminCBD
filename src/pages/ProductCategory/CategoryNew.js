@@ -189,7 +189,6 @@ const CreateCategory = props => {
             setDisabled(false);
             setProcessing(false);
         })
-        console.log(data)
     }
 
 	return (

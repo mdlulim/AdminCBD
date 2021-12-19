@@ -8,7 +8,6 @@ export default function UsersPage(props) {
     const [users, setUsers] = useState([]);
     useMemo(() => {
         UserService.getUsers().then((res) => {
-          console.log(res.data.data.results)
           const userslist = res.data.data.results;
           setUsers(userslist);
         });

@@ -34,7 +34,6 @@ const AlertModal = props => {
         e.preventDefault();
        const form = e.currentTarget;
        UserService.archiveUser(user.id).then((response) =>{
-           console.log(response);
             if(response.data.success){
                 setShow(false)
                 return confirmAlert({

@@ -77,7 +77,6 @@ export default function Users(props) {
 
     useMemo(() => {
       UserService.getUsers().then((res) => {
-        console.log(res.data.data);
         const userslist = res.data.data.results;
         setUsers(userslist);
         setFilteredUsers(userslist);

@@ -249,7 +249,6 @@ export default function Transactions(props) {
   }
 
   const onUpdateDeposit = (data) => {
-    console.log(data)
 
     if(data.user.status === 'Pending'){
       TransactionService.getTransactionPOP(data.txid).then((res) => {
@@ -266,7 +265,6 @@ export default function Transactions(props) {
     }else{
        setSelectedTransaction(data)
           setShowUpdate(true)
-      console.log('normal deposit')
     }
 
   }

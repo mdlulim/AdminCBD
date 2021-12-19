@@ -46,7 +46,6 @@ const AlertModal = props => {
                 archived:false
              }
         ).then((response) =>{
-            console.log(response);
              if(response.data.success){
                  setShow(false)
                  return confirmAlert({

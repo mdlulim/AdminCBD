@@ -18,7 +18,6 @@ const ModalChangeStatus = props => {
 
     useMemo(() => {
         //setSelectedStatus({ value: fee.status,  label: fee.status });
-        // console.log(fee)
     }, []);
 
     const statusOptions = [
@@ -30,7 +29,6 @@ const ModalChangeStatus = props => {
         setError('');
 
         const form = event.currentTarget;
-        console.log(form)
         const data = {
             tx_type: fee.tx_type,
             value: parseFloat(form.tx_value.value),
@@ -39,10 +37,8 @@ const ModalChangeStatus = props => {
             currency_code: fee.currency_code,
             group_id: fee.group_id,
         }
-       console.log(data)
         if (form.tx_value.value && form.percentage.value && form.subtype.value) {
             FeeService.updateFee(fee.id, data).then((response) => {
-                console.log(response);
                 if (response.data.success) {
                     setShow(false)
                     return confirmAlert({
@@ -74,7 +70,6 @@ const ModalChangeStatus = props => {
         event.preventDefault();
         const form = event.currentTarget;
         const reason = form.reason.value;
-        console.log(reason);
 
     }
     return (

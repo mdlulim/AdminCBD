@@ -32,10 +32,8 @@ const onSubmit = (e) =>{
         status: form.status.value,
         permission_level: form.perm_level.value,
     }
-    console.log(userData);
 
     UserService.addAdminUser(userData).then((response) =>{
-        console.log(response);
          if(response.data.success){
              setShow(false)
              return confirmAlert({

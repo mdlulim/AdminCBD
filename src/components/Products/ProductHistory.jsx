@@ -75,8 +75,6 @@ export default function Products(props) {
     useMemo(() => {
 
       ProductService.getProductHistory().then((res) => {
-        console.log('Products History');
-        console.log(res.data.data.results)
         if(res.data.success){
           const productlist = res.data.data.results;
          // console.log(productlist)

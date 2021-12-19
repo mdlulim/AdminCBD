@@ -40,9 +40,7 @@ const Login = props => {
                 IPv4: "123456"
             };
             AuthAervice.login(user, password, device,geoLocation).then((response) =>{
-                console.log(response);
             if(response.data.success === true){
-                console.log(response.data.data.token)
                
             window.location = '/';
             }else{
@@ -50,17 +48,13 @@ const Login = props => {
                 setDisabled(false);
                 setError(response.data.message);
             }
-        console.log(response);
         }).catch(error => {
-            console.log(error);
             setError(error.message);
             setLoading(false);
             setDisabled(false);
         });
 
         //const geoLocation = GeoLocationService.getClientLocation();
-        //console.log('');
-        //console.log(geoLocation);
     }
     return (
         <AuthLayout>

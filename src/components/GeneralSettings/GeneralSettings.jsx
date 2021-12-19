@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import GeneralSettingUpdate from './GeneralSettingUpdate';
 import GeneralSettingAddNew from './GeneralSettingAddNew';
 import { SettingService } from '../../providers';
+import { confirmAlert } from 'react-confirm-alert';
 // styles
 const customStyles = {
 
@@ -37,13 +38,13 @@ export default function TransactionSettings(props) {
   const [showNew, setShowNew] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [settings, setSettings] = useState([]);
+  const [error, setError] = useState('');
   const [filteredSettings, setFilteredSettings] = useState([]);
   const [selectedSetting, setSelectedSetting] = useState({});
   const history = useHistory();
 
     useMemo(() => {
         SettingService.getSettings().then((res) => {
-          console.log(res.data)
           const settingslist = res.data.data.results;
           setSettings(settingslist);
           setFilteredSettings(settingslist);
@@ -85,19 +86,63 @@ const columns = [{
           }}
         > <span className="fa fa-pencil" />
         </a></div>
+        <div style={iconPadding}>
+        <a
+          href={`#`}
+          className="btn btn-light btn-sm btn-icon"
+          onClick={e => {
+            e.preventDefault();
+            return confirmAlert({
+                title: 'Confirmation',
+                message: 'Are you sure you want to delete this setting?',
+                buttons: [
+                  {
+                    label: 'Ok',
+                    onClick: () => {
+                        onSubmitDeleteSetting(row)
+                    }
+                  }
+                ]
+            });
+           // onSubmitChangeStatus(row);
+          }}
+        > <span className="fa fa-trash" />
+        </a></div>
     </div>
   }];
 
   const onSubmitChangeStatus = data => {
     setSelectedSetting(data);
     setShow(true);
-    console.log(data);
     //return <Confirm show={show} setShow={setShow} />;
   };
 
   const onSubmitDeleteSetting = data => {
-    setSelectedSetting(data);
-    setShowDelete(true);
+      console.log(data)
+      if(data.id){
+        SettingService.destroySetting(data.id).then((response) => {
+            if (response.data.success) {
+                setShow(false)
+                return confirmAlert({
+                    title: 'Succcess',
+                    message: 'Setting was successfully updated',
+                    buttons: [
+                      {
+                        label: 'Ok',
+                        onClick: () => {
+                            window.location = '/configurations/settings';
+                        }
+                      }
+                    ]
+                });
+            } else {
+                setError(response.data.message);
+            }
+        })
+      }
+
+   // setSelectedSetting(data);
+    //setShowDelete(true);
   };
 
   const countSettings = (type) => {

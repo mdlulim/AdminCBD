@@ -10,7 +10,6 @@ const LeadsList = props => {
 
     useMemo(() => {
         LeadService.getLeads().then((res) => {
-          console.log(res.data.data.results)
           const leadslist = res.data.data.results;
           setLeads(leadslist);
         });

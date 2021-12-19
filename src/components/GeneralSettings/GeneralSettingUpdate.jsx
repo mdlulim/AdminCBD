@@ -18,7 +18,6 @@ const ModalChangeStatus = props => {
 
     useMemo(() => {
         //setSelectedStatus({ value: setting.status,  label: setting.status });
-        // console.log(setting)
     }, []);
 
     const statusOptions = [
@@ -30,7 +29,6 @@ const ModalChangeStatus = props => {
         setError('');
 
         const form = event.currentTarget;
-        console.log(form)
         const data = {
             title: form.title.value,
             category: setting.category,
@@ -38,10 +36,8 @@ const ModalChangeStatus = props => {
             key: setting.key,
             subcategory: setting.subcategory,
         }
-       console.log(data)
         if (form.tx_value.value && form.title.value) {
             SettingService.updateSetting(setting.id, data).then((response) => {
-                console.log(response);
                 if (response.data.success) {
                     setShow(false)
                     return confirmAlert({
@@ -73,7 +69,6 @@ const ModalChangeStatus = props => {
         event.preventDefault();
         const form = event.currentTarget;
         const reason = form.reason.value;
-        console.log(reason);
 
     }
     return (

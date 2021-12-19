@@ -148,7 +148,6 @@ export default function Transactions(props) {
               transactions.map((transaction,num) =>{
 
               });
-              console.log(id)
             if(id != null && id.length > 15){
               const results = transaList.filter(item => item.id === id);
               setTransactions(results);
@@ -328,7 +327,7 @@ export default function Transactions(props) {
   }
 
   const handleSelectDateRange = (data) =>{
-    console.log(data);
+    //console.log(data);
   }
 
   const selectionRange = {
@@ -368,7 +367,6 @@ export default function Transactions(props) {
 
       const contextActions = React.useMemo(() => {
         const handleBulkUpdate = () => {
-               console.log(selectedRows)
                     setShowBulk(true)
               //  return confirmAlert({
               //   title: 'Update Transaction',
