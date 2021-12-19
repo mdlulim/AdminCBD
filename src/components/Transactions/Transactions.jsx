@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import Moment from 'react-moment';
 import { useParams, useHistory } from 'react-router-dom';
@@ -9,10 +9,11 @@ import ModalChangeStatus from './ModalChangeStatus';
 import TransactionDetails from '../Transactions/TransactionDetails';
 import ExportToExcel from './ExportToExcel';
 import ModalBulkUpdate from './ModalBulkUpdate';
-import { TransactionService, MemberService, SessionProvider } from '../../providers';
+import { TransactionService, MemberService, SessionProvider, FileStorageProvider } from '../../providers';
 import DatePicker from "react-datepicker";
 import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
+import CsvDownloader from 'react-csv-downloader';
 // styles
 const customStyles = {
 
@@ -103,6 +104,7 @@ export default function Transactions(props) {
   const [disabled, setDisabled] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [csvTransactions, setCsvTransactions] = useState([])
   const [temp, setTemp] = useState({});
   const handleClose = () => setShow(false);
   const [startDate, setStartDate] = useState(new Date());
@@ -122,14 +124,15 @@ export default function Transactions(props) {
   const params = useParams();
   const { id } = params;
   const history = useHistory();
+  const csvDownloaderClick = useRef(null)
 
 
   useMemo(() => {
     if (SessionProvider.isValid()) {
       const user = SessionProvider.get();
-       setAdminLevel(user.permission_level)
-   }
-   
+      setAdminLevel(user.permission_level)
+    }
+
     TransactionService.getTransactions().then((res) => {
       const transaList = res.data.data.results;
 
@@ -177,7 +180,7 @@ export default function Transactions(props) {
     selector: 'id',
     sortable: true,
     wrap: true,
-    cell: (row) => <div><div>{row.user ? row.user.first_name :''} {row.user ? row.user.last_name : ''}</div>
+    cell: (row) => <div><div>{row.user ? row.user.first_name : ''} {row.user ? row.user.last_name : ''}</div>
       <div className="small text-muted">
         <span>{row.user ? row.user.id_number : ''}</span>
       </div></div>
@@ -251,21 +254,21 @@ export default function Transactions(props) {
   const onUpdateDeposit = (data) => {
     console.log(data)
 
-    if(data.user.status === 'Pending'){
+    if (data.user.status === 'Pending') {
       TransactionService.getTransactionPOP(data.txid).then((res) => {
         //console.log(res.data.data.rows[0])
-          const pop = res.data.data.rows;
-          const url = pop[0].file;
-           TransactionService.getTransactionPOPFile(url).then((res) => {
-               setSelectedTransPOP(res.data);
-           })
-        });
+        const pop = res.data.data.rows;
+        const url = pop[0].file;
+        TransactionService.getTransactionPOPFile(url).then((res) => {
+          setSelectedTransPOP(res.data);
+        })
+      });
 
-        setSelectedTransaction(data)
-        setShowApproveMember(true)
-    }else{
-       setSelectedTransaction(data)
-          setShowUpdate(true)
+      setSelectedTransaction(data)
+      setShowApproveMember(true)
+    } else {
+      setSelectedTransaction(data)
+      setShowUpdate(true)
       console.log('normal deposit')
     }
 
@@ -313,11 +316,11 @@ export default function Transactions(props) {
     <Card className="o-hidden mb-4">
       <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows} />
       <ModalChangeStatus show={showUpdate} setShow={setShowUpdate} transaction={selectedTransaction} />
-      <TransactionDetails 
-      show={showApproveMember} 
-      setShow={setShowApproveMember} 
-      transaction={selectedTransaction}
-      pop={selectedTransPOP} />
+      <TransactionDetails
+        show={showApproveMember}
+        setShow={setShowApproveMember}
+        transaction={selectedTransaction}
+        pop={selectedTransPOP} />
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
           <span>Transactions</span>
@@ -329,11 +332,12 @@ export default function Transactions(props) {
             className={`form-control form-control-m`}
             placeholder="Search..."
             onKeyUp={e => onSearchFilter(e.target.value)}
+            id="txSearch"
           />
           <div>
             <div style={myButtons}>
               <button
-                className="btn btn-secondary"
+                className="btn btn-secondary m-2"
                 type="button"
                 onClick={e => {
                   e.preventDefault();
@@ -341,8 +345,45 @@ export default function Transactions(props) {
                 }}>
                 Search By Date
               </button>
-              <CSVLink className="btn btn-info btn-icon" data={filteredTransactions}>Export CSV</CSVLink>
-              <ExportToExcel data={filteredTransactions} />
+
+              <button
+                className="btn btn-secondary"
+                type="button" onClick={
+                  async () => {
+                    var data = []
+                    var csvData = []
+
+                    if (transactionType === 'pending' && document.getElementById('txSearch').value === "withdraw") {
+                      filteredTransactions.forEach(row => {
+                        data.push({ status: 'InProgress', txid: row.txid })
+                        csvData.push({ TX_ID: row.txid, REFERRAL: row.user.referral_id, TYPE: row.subtype, AMOUNT: row.amount, STATUS: row.status })
+                      })
+                      const res = await FileStorageProvider.update_status(data)
+                      if (res.success) {
+                        setCsvTransactions(csvData)
+                        csvDownloaderClick.current.click()
+                      } else {
+                        alert('Failed create csv!')
+                      }
+
+                    } else {
+                      setCsvTransactions(filteredTransactions)
+                      csvDownloaderClick.current.click()
+                    }
+                  }}
+              >Export CSV</button>
+              <CsvDownloader
+
+                filename="myfile"
+                extension=".csv"
+                separator=","
+                wrapColumnChar=""
+                // columns={columns}
+                datas={csvTransactions}
+              >
+                <button style={{ display: 'none' }} ref={csvDownloaderClick}></button>
+              </CsvDownloader>
+              {/* <ExportToExcel data={filteredTransactions} /> */}
             </div>
           </div>
         </div>

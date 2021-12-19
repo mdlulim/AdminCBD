@@ -25,6 +25,15 @@ class TransactionService {
       });
     }
 
+    static async getTransactionBatchFiles() {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL_FILE_STORAGE}/batch-get`,
+      });
+    }
+
     static async getUsers() {
       return await axios({
         mode: 'no-cors',
