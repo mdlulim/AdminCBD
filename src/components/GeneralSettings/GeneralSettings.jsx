@@ -5,7 +5,7 @@ import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import GeneralSettingUpdate from './GeneralSettingUpdate';
 import GeneralSettingAddNew from './GeneralSettingAddNew';
-import { SettingService } from '../../providers';
+import { SettingService, SessionProvider } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert';
 // styles
 const customStyles = {
@@ -39,11 +39,16 @@ export default function TransactionSettings(props) {
   const [showDelete, setShowDelete] = useState(false);
   const [settings, setSettings] = useState([]);
   const [error, setError] = useState('');
+  const [adminLevel, setAdminLevel] = useState(0);
   const [filteredSettings, setFilteredSettings] = useState([]);
   const [selectedSetting, setSelectedSetting] = useState({});
   const history = useHistory();
 
     useMemo(() => {
+        if (SessionProvider.isValid()) {
+            const user = SessionProvider.get();
+             setAdminLevel(user.permission_level)
+         }
         SettingService.getSettings().then((res) => {
           const settingslist = res.data.data.results;
           setSettings(settingslist);
@@ -86,7 +91,7 @@ const columns = [{
           }}
         > <span className="fa fa-pencil" />
         </a></div>
-        <div style={iconPadding}>
+        { adminLevel === 5 ?<div style={iconPadding}>
         <a
           href={`#`}
           className="btn btn-light btn-sm btn-icon"
@@ -107,7 +112,7 @@ const columns = [{
            // onSubmitChangeStatus(row);
           }}
         > <span className="fa fa-trash" />
-        </a></div>
+        </a></div>: ''}
     </div>
   }];
 
