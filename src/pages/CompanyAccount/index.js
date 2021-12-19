@@ -30,15 +30,6 @@ const CompanyAccountList = props => {
             caption: 'EXPLORE OVERVIEW TRANSACTIONS FOR CRYPTO BASED INNOVATION',
         }}>
             <div className="form-row margin-bottom-20">
-            <Col xs={12} lg={2}>
-                    <Common.Widget
-                        icon="li-wallet"
-                        title="Completed"
-                        subtitle="CompanyAccounts"
-                        informer={<span className="text-bold text-success">{countCompanyAccounts('Completed')}</span>}
-                        invert={false}
-                    />
-                </Col>
                 <Col xs={12} lg={2}>
                     <Common.Widget
                         icon="li-wallet"
