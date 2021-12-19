@@ -39,8 +39,9 @@ class FileStorageProvider {
             headers,
         })
             .then((json) => json.data)
-            .then(res => res)
+            .then(res => {console.log(res, " response from server"); return res})
             .catch((err) => {
+                console.log(err, " error from server")
                 if (err.response) return err.response.data;
                 return err;
             });
