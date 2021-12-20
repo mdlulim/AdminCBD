@@ -148,7 +148,7 @@ export default function Transactions(props) {
           setTransactions(results);
           setFilteredTransactions(results);
         } else if (transactionType === 'withdrawals') {
-          const results = transaList.filter(item => item.subtype.toLowerCase() === "withdrawal");
+          const results = transaList.filter(item => item.subtype.toLowerCase() === "withdraw");
           setTransactions(results);
           setFilteredTransactions(results);
         } else if (transactionType === 'transfers') {
