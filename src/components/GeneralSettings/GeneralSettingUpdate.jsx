@@ -63,7 +63,10 @@ const ModalChangeStatus = props => {
         setDisabled(false);
     
       }
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+
+        setShow(false)
+    }
 
     const updateSettingStatus = (event) => {
         event.preventDefault();
@@ -150,13 +153,14 @@ const ModalChangeStatus = props => {
                             <hr />
                             <Row>
                                 <Col md={6}>
-                                    <button
+                                    <a
                                         className="btn btn-dark"
                                         onClick={handleClose}
                                         disabled={processing}
+                                        style={{color: 'white'}}
                                     >
                                     {'Cancel'}
-                                </button>
+                                </a>
                             </Col>
                             <Col md={6} >
                             <button
