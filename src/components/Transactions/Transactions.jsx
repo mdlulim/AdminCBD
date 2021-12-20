@@ -1,8 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Card, CardBody, Row, Col } from 'reactstrap';
+import { Card, CardBody, Row, Col, Input, FormGroup, Label } from 'reactstrap';
 import Moment from 'react-moment';
 import { useParams, useHistory } from 'react-router-dom';
-import { CSVLink } from "react-csv";
 import DataTable from 'react-data-table-component';
 import { Modal } from 'react-bootstrap';
 import ModalChangeStatus from './ModalChangeStatus';
@@ -14,6 +13,7 @@ import DatePicker from "react-datepicker";
 import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
 import CsvDownloader from 'react-csv-downloader';
+import { Filter } from 'react-feather';
 // styles
 const customStyles = {
 
@@ -45,7 +45,8 @@ const inputWith = {
 }
 
 const myButtons = {
-  padding: '2px'
+  padding: '2px',
+  display: 'flex'
 }
 
 const inputWithDate = {
@@ -121,9 +122,10 @@ export default function Transactions(props) {
   const [toggleCleared, setToggleCleared] = React.useState(false);
   const [selectedTransPOP, setSelectedTransPOP] = useState('');
   const [showApproveMember, setShowApproveMember] = useState(false);
+  const [forBank, setForBank] = useState(false)
+  const [activeFilter, setActiveFilter] = useState('all')
   const params = useParams();
   const { id } = params;
-  const history = useHistory();
   const csvDownloaderClick = useRef(null)
 
 
@@ -141,23 +143,7 @@ export default function Transactions(props) {
         setTransactions(results);
         setFilteredTransactions(results);
       } else {
-        if (transactionType === 'all') {
-          setTransactions(transaList);
-          setFilteredTransactions(transaList);
-        } else if (transactionType === 'pending') {
-          const results = transaList.filter(item => item.status === "Pending");
-          setTransactions(results);
-          setFilteredTransactions(results);
-        }
-        else if (transactionType === 'cancelled') {
-          const results = transaList.filter(item => item.status === "Rejected");
-          setTransactions(results);
-          setFilteredTransactions(results);
-        } else if (transactionType === 'completed') {
-          const results = transaList.filter(item => item.status === "Completed");
-          setTransactions(results);
-          setFilteredTransactions(results);
-        } else if (transactionType === 'deposit') {
+        if (transactionType === 'deposit') {
           const results = transaList.filter(item => item.subtype.toLowerCase() === "deposit");
           setTransactions(results);
           setFilteredTransactions(results);
@@ -165,7 +151,7 @@ export default function Transactions(props) {
           const results = transaList.filter(item => item.subtype.toLowerCase() === "withdrawal");
           setTransactions(results);
           setFilteredTransactions(results);
-        } else if (transactionType === 'transfars') {
+        } else if (transactionType === 'transfers') {
           const results = transaList.filter(item => item.subtype.toLowerCase() === "transfer");
           setTransactions(results);
           setFilteredTransactions(results);
@@ -174,6 +160,8 @@ export default function Transactions(props) {
     });
 
   }, []);
+
+
 
   const columns = [{
     name: 'Full Names',
@@ -292,6 +280,17 @@ export default function Transactions(props) {
     setShow(false)
   }
 
+  const filterChange = (e) => {
+    if (e.target.value === 'all') {
+      setFilteredTransactions(transactions);
+    } else {
+      const results = transactions.filter(item => item.status === e.target.value);
+      setFilteredTransactions(results);
+    }
+    setActiveFilter(e.target.value)
+
+  }
+
   const handleRowSelected = React.useCallback(state => {
     setSelectedRows(state.selectedRows);
     //console.log(state.selectedRows)
@@ -336,7 +335,7 @@ export default function Transactions(props) {
           />
           <div>
             <div style={myButtons}>
-              <button
+              {/* <button
                 className="btn btn-secondary m-2"
                 type="button"
                 onClick={e => {
@@ -344,16 +343,39 @@ export default function Transactions(props) {
                   setShow(true);
                 }}>
                 Search By Date
+              </button> */}
+              <button
+
+                className={`btn ${forBank?'btn-secondary':'btn-light'} m-2`}
+                type="button"
+                disabled={activeFilter === 'Pending' ? false : true}
+                onClick={() => { setForBank(!forBank) }}>
+                For Processing
               </button>
+
+
+              <Input
+                className="m-2"
+                type="select"
+                onChange={filterChange.bind(this)}
+
+              >
+                <option value="all">All</option>
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+                <option value="Rejected">Rejected</option>
+                <option value="InProgress">Processing</option>
+              </Input>
 
               <button
                 className="btn btn-secondary"
-                type="button" onClick={
+                type="button"
+                disabled={filteredTransactions.length < 1}
+                onClick={
                   async () => {
                     var data = []
                     var csvData = []
-
-                    if (transactionType === 'pending' && document.getElementById('txSearch').value === "withdraw") {
+                    if (forBank) {
                       filteredTransactions.forEach(row => {
                         data.push({ status: 'InProgress', txid: row.txid })
                         csvData.push({ TX_ID: row.txid, REFERRAL: row.user.referral_id, TYPE: row.subtype, AMOUNT: row.amount, STATUS: row.status })
@@ -368,6 +390,7 @@ export default function Transactions(props) {
 
                     } else {
                       setCsvTransactions(filteredTransactions)
+                      setForBank(false)
                       csvDownloaderClick.current.click()
                     }
                   }}
