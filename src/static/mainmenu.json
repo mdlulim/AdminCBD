@@ -68,14 +68,9 @@
             "icon": "li-cash-dollar",
             "childitems": [
                 {
-                    "id": "transactions",
-                    "title": "All Transactions",
-                    "link": "/",
-                    "icon": null
-                },{
-                    "id": "pending",
-                    "title": "Pending",
-                    "link": "/pending",
+                    "id": "imports",
+                    "title": "Imports",
+                    "link": "/import",
                     "icon": null
                 },
                 {
@@ -94,18 +89,6 @@
                     "id": "transfers",
                     "title": "Transfers",
                     "link": "/transfers",
-                    "icon": null
-                },
-                {
-                    "id": "completed",
-                    "title": "Completed",
-                    "link": "/completed",
-                    "icon": null
-                },
-                {
-                    "id": "rejected",
-                    "title": "Rejected",
-                    "link": "/rejected",
                     "icon": null
                 }
             ]
