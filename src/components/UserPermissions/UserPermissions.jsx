@@ -63,7 +63,6 @@ export default function UsersRoles(props) {
 
     useMemo(() => {
       UserRolesService.getUserRoles().then((res) => {
-        console.log(res.data.data);
         const userslist = res.data.data.results;
         setRoles(userslist);
         setFilteredRoles(userslist);

@@ -65,15 +65,11 @@ const ProductAddNew = props => {
               let temp = [];
               productlist.filter(item => (
                     temp.push({ value: item.code, label: item.title })
-                   // console.log(item)
                     //setProductCategories(productCategories => [{value:item.code, label:item.title}])
                 ))
-               console.log(temp)
               setProductCategories(temp);
             }
           });
-
-         console.log(productCategories)
       }, []);
 		const toggleTab = (e, tab) => {
 			e.preventDefault();
@@ -119,9 +115,7 @@ const ProductAddNew = props => {
                         slippage_percentage_sell: parseFloat(form.slippage_persantage_sell.value),
                      }
                     }
-                    console.log(productData);
                  ProductService.addProduct(productData).then((response) =>{
-                    console.log(response);
                     if(response.status){
                         setShow(true);
                         confirmAlert({

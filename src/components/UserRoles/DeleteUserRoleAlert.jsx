@@ -34,7 +34,6 @@ const AlertModal = props => {
         e.preventDefault();
        const form = e.currentTarget;
        UserRolesService.archiveRole(role.id).then((response) =>{
-           console.log(response);
             if(response.data.success){
                 setShow(false)
                 return confirmAlert({

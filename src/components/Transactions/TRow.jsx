@@ -257,7 +257,7 @@ const onSubmitChangeStatus= data => {
   }
 
   const handleSelectDateRange = (data) =>{
-    console.log(data);
+    //console.log(data);
   }
 
   const selectionRange = {
@@ -296,7 +296,6 @@ const onSubmitChangeStatus= data => {
 
       const handleRowSelected = React.useCallback(state => {
         setSelectedRows(state.selectedRows);
-        console.log(state.selectedRows)
       }, []);
 
       const contextActions = React.useMemo(() => {

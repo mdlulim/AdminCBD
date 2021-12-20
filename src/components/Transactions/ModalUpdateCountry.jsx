@@ -17,7 +17,6 @@ const ModalUpdateCountry = props => {
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
-        console.log(country);
     }, []);
 
     const statusOptions = [
@@ -33,7 +32,6 @@ const ModalUpdateCountry = props => {
 
         const form = event.currentTarget;
             CountryService.unBlackListCountry(country.id).then((response) =>{
-                console.log(response);
                  if(response.data.success){
                      setShow(false)
                      return confirmAlert({

@@ -106,13 +106,11 @@ export default function UpdateProductDetails(props) {
         ProductService.getProducts().then((res) => {
             if(res.data.success){
               const productlist = res.data.data.results;
-              //console.log(productlist)
               setProducts(productlist);
             }
           });
 
         ProductService.getProductCategories().then((res) => {
-            // console.log(res.data.data.results)
              if(res.data.success){
                const categoriesList = res.data.data.results;
                setCategories(categoriesList);
@@ -122,14 +120,12 @@ export default function UpdateProductDetails(props) {
                     // console.log(item)
                      //setProductCategories(productCategories => [{value:item.code, label:item.title}])
                  ))
-                console.log(temp)
                setProductCategories(temp);
              }
            });
 
        //Get member details
        ProductService.getProduct(id).then((res) => {
-         console.log(res.data.data);
          const productDetails = res.data.data;
          setProduct(productDetails);
             setSelectedProductType(productDetails.type);
@@ -141,7 +137,6 @@ export default function UpdateProductDetails(props) {
             if(productDetails.body){
                 setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetails.body))))
             }
-            console.log(productDetails.type)
             if(productDetails.type === "FX"){
                 setShow(false)
                 setShowCBIx7(true)
@@ -210,7 +205,6 @@ export default function UpdateProductDetails(props) {
             let regFee = parseFloat(registrationFee);
            // const title = form.title.value;
            let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-           //console.log(currentContentAsHTML);
 
             const productData ={
                 title				: form.title.value,
@@ -227,7 +221,6 @@ export default function UpdateProductDetails(props) {
              }
 
              ProductService.updateProduct(id, productData).then((response) =>{
-                console.log(response);
                 return confirmAlert({
                     title: 'Succcess',
                     message: 'Member was successfully updated',
@@ -240,7 +233,6 @@ export default function UpdateProductDetails(props) {
                  setDisabled(false);
              })
 
-            console.log('%'+form.educator_persantage.value);
     }
 
     const onSubmitUpdate = (event) =>{
@@ -267,7 +259,6 @@ export default function UpdateProductDetails(props) {
                     slippage_percentage_sell: parseFloat(form.slippage_percentage_sell.value),
                 }
             }
-            console.log(data);
             update(data)
 
         }else if(selectedProductType === 'FX'){
@@ -275,7 +266,6 @@ export default function UpdateProductDetails(props) {
                                 educator_percentage: parseFloat(form.educator_percentage_fx.value),
                                 registration_percentage: parseFloat(form.registration_percentage_fx.value),
                             }
-                            console.log(myFees);
             const data ={
                 body: currentContentAsHTML,
                 currency_code: selectedCurrency,
@@ -284,7 +274,6 @@ export default function UpdateProductDetails(props) {
                 title: product.title,
                 price: parseFloat(form.price.value),
             }
-            console.log(data);
             update(data)
 
         }else if(selectedProductType === 'FP'){
@@ -301,7 +290,6 @@ export default function UpdateProductDetails(props) {
                         gross_return    : parseFloat(form.gross_return.value),
                     }
                 }
-                console.log(data);
                 update(data)
         }
 
@@ -310,7 +298,6 @@ export default function UpdateProductDetails(props) {
     
     const update = (data) =>{
         ProductService.updateProduct(id, data).then((response) =>{
-            console.log(response);
             return confirmAlert({
                 title: 'Succcess',
                 message: 'Product was successfully updated',

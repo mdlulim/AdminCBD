@@ -18,7 +18,6 @@ const ModalChangeStatus = props => {
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
-       console.log(transaction)
     }, []);
 
     const statusOptions = [

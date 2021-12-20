@@ -10,7 +10,6 @@ const CompanyAccountList = props => {
 
     useMemo(() => {
         CompanyAccountService.getTransactions().then((res) => {
-          console.log(res.data.data.results)
           const transactionlist = res.data.data.results;
           setCompanyAccounts(transactionlist);
         });

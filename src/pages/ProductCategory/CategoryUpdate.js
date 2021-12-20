@@ -83,7 +83,6 @@ const CreateCategory = props => {
 }];
   const contextActions = React.useMemo(() => {
     const handleBulkUpdate = () => {
-           console.log(selectedRows)
     };
 
     return (
@@ -191,7 +190,6 @@ const CreateCategory = props => {
             setDisabled(false);
             setProcessing(false);
         })
-        console.log(data)
     }
 
 	return (

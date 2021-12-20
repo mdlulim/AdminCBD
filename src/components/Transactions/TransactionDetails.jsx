@@ -56,7 +56,7 @@ const TransactionDetails = props => {
         };
 
         TransactionService.approveDeposit(transaction.id, data).then((response) => {
-            console.log(response);
+            //console.log(response);
         })
     }
 
@@ -75,7 +75,6 @@ const TransactionDetails = props => {
             transaction: transaction,
         }
 
-        console.log(data2)
         if (selectedStatus.value === "Completed") {
             setShow(false)
             TransactionService.approveDeposit(transaction.id, data2).then((response) => {
@@ -111,7 +110,6 @@ const TransactionDetails = props => {
         } else {
             setShow(false)
             TransactionService.updateTransactionStatus(transaction.id, data).then((response) => {
-                console.log(response);
                 if (response.data.success) {
                     setShow(false)
                     return confirmAlert({
@@ -139,7 +137,6 @@ const TransactionDetails = props => {
         event.preventDefault();
         const form = event.currentTarget;
         const reason = form.reason.value;
-        console.log(reason);
 
     }
 

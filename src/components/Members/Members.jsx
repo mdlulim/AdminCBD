@@ -187,9 +187,7 @@ const columns = [{
     TransactionService.getMemberTransactions(data.id).then((res) => {
       const transaList = res.data.data.results;
       if(transaList.length){
-         console.log(transaList[0])
          TransactionService.getTransactionPOP(transaList[0].txid).then((res) => {
-          //console.log(res.data.data.rows[0])
             const pop = res.data.data.rows;
             const url = pop[0].file;
              TransactionService.getTransactionPOPFile(url).then((res) => {

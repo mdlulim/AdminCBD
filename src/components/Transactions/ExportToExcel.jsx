@@ -11,8 +11,7 @@ export default function ExportToExcel(props) {
 
     //update user's record whose withdrawal request have been included in an excel sheet
     const setInProgress = () => {
-        //
-        console.log(data, " => data from export")
+       // console.log(data, " => data from export")
     }
 
 

@@ -20,7 +20,6 @@ const ModalChangeStatus = props => {
 
     useMemo(() => {
         CompanyService.getCompanies().then((res) => {
-            console.log(res.data)
             const list = res.data.data.results;
             let temp = [];
             list.filter(item => (
@@ -28,6 +27,7 @@ const ModalChangeStatus = props => {
                     //setProductCategories(productCategories => [{value:item.code, label:item.title}])
                 ))
             setCompanies(temp);
+            setSelectedCompany(temp[0])
           });
     }, []);
 
@@ -40,7 +40,6 @@ const ModalChangeStatus = props => {
         setError('');
 
         const form = event.currentTarget;
-        console.log(form)
         const data = {
             title: form.title.value,
             category: selectedCategory.value,
@@ -48,11 +47,9 @@ const ModalChangeStatus = props => {
             company_id: selectedCompany.value,
             subcategory: 'config',
         }
-
-       console.log(data)
+        
         if (form.tx_value.value && form.title.value) {
             SettingService.createSetting(data).then((response) => {
-                console.log(response);
                 if (response.data.success) {
                     setShow(false)
                     return confirmAlert({
@@ -84,7 +81,6 @@ const ModalChangeStatus = props => {
         event.preventDefault();
         const form = event.currentTarget;
         const reason = form.reason.value;
-        console.log(reason);
 
     }
     return (
@@ -141,10 +137,9 @@ const ModalChangeStatus = props => {
                                         name="subtype"
                                         className="form-control form-control-m"
                                         value="config"
-                                        disabled
                                     />
                             </div>
-                            <div className="form-group">
+                            {/* <div className="form-group">
                                 <label htmlFor="email">Select Company</label>
                                    <Select
                                      id="status"
@@ -154,7 +149,7 @@ const ModalChangeStatus = props => {
                                      className={`basic-multi-select form-control-m`}
                                      classNamePrefix="select"
                                      />
-                            </div>
+                            </div> */}
                             <hr />
                             <Row>
                                 <Col md={6}>

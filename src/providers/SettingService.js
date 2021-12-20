@@ -51,6 +51,18 @@ class SettingService {
         });
       }
 
+      static async destroySetting(id){
+        return await axios({
+          mode: 'no-cors',
+          method: 'DELETE',
+          headers: headers,
+          url: `${Config.API.BASE_URL}/settings/${id}`,
+        }).then((res) =>{
+          const result = res;
+          return result;
+        });
+      }
+
     static async getSetting(id) {
       return await axios({
         mode: 'no-cors',
