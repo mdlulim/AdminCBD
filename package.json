@@ -88,6 +88,7 @@
     "react-images-upload": "^1.2.8",
     "react-images-uploader": "^1.2.0-rc1",
     "react-loader-spinner": "^4.0.0",
+    "react-loading-screen": "0.0.17",
     "react-moment": "^1.1.1",
     "react-native-elements": "^3.4.2",
     "react-notifications-component": "^2.2.3",

@@ -92,6 +92,13 @@
                     "icon": null
                 }
             ]
+        },{
+            "id": "bank-accounts",
+            "title": "Bank Accounts",
+            "description": "Manage bank accounts",
+            "link": "/bank-accounts",
+            "icon": "li-cash-dollar",
+            "childitems": []
         },
         {
             "id": "main-account",

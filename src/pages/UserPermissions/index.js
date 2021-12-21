@@ -183,6 +183,32 @@ const PermissionsList = props => {
                                     </div>                                    
                                 </div>
 
+                                <div class="row col-sm-12" >
+                                <div class="col-sm-6" >
+                                        <div class="form-group">
+                                        <h2>BANK ACCOUNTS</h2>
+                                        <hr/>
+                                        <table class="table">
+                                        <thead>
+                                            <tr>
+                                            <th style={{width: 200 + 'px'}} scope="col">Pages</th>
+                                            <th style={{textAlign:'center'}} scope="col">Low</th>
+                                            <th style={{textAlign:'center'}} scope="col">Basic</th>
+                                            <th style={{textAlign:'center'}} scope="col">Medium</th>
+                                            <th style={{textAlign:'center'}} scope="col">High</th>
+                                            <th style={{textAlign:'center'}} scope="col">Very High</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr id="products">
+                                                <th scope="row">Bank Accounts</th>
+                                         </tr>
+                                        </tbody>
+                                        </table>
+                                        </div>
+                                    </div>                                    
+                                </div>
+
 
                                 <div class="row col-sm-12" id="reports-div">
                                 <div class="col-sm-6" >

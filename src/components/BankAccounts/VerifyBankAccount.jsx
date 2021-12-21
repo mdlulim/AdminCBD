@@ -14,53 +14,29 @@ const ModalChangeStatus = props => {
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
     const [selectedCurrencyCode, setSelectedCurrencyCode] = useState('');
-    const [selectedMinite, setSelectedMinite] = useState('');
     const { title, body, processing, confirmButtonDisabled, confirmButton, cancelButton, showIcon, size, } = props;
 
-    useState(() => {
-        if(setting.key === 'otp_validity'){
-            const selectValue = minitesOptions.filter(option => option.value === setting.value)
-            setSelectedMinite(selectValue);
-            console.log(selectValue)
-        }
-        
+    useMemo(() => {
+        //setSelectedStatus({ value: setting.status,  label: setting.status });
     }, []);
 
     const statusOptions = [
         { value: 'CBI', label: 'CBI' },
     ];
-
-    const minitesOptions = [
-        { value: '15', label: '15 Minites' },
-        { value: '30', label: '30 Minites' },
-        { value: '45', label: '45 Minites' },
-    ];
-
     const onSubmit = (event) => {
         event.preventDefault();
         setDisabled(true);
         setError('');
-        let value = '';
-        if(setting.key === 'otp_validity'){
-            if(selectedMinite === ''){
-                value = setting.value;
-            }else{
-                value = selectedMinite.value;
-            }
-        }else{
-            value = form.tx_value.value ;
-        }
 
         const form = event.currentTarget;
         const data = {
             title: form.title.value,
             category: setting.category,
-            value: value,
+            value: form.tx_value.value,
             key: setting.key,
             subcategory: setting.subcategory,
         }
-        
-        if (value && form.title.value) {
+        if (form.tx_value.value && form.title.value) {
             SettingService.updateSetting(setting.id, data).then((response) => {
                 if (response.data.success) {
                     setShow(false)
@@ -149,29 +125,18 @@ const ModalChangeStatus = props => {
                                     />
                                     : ''}
                             </div>
-                                {setting.key === 'otp_validity' ?
-                                <div className="form-group">
-                                <label htmlFor="email">{setting.title}</label>
-                                   <Select
-                                     id="status"
-                                     name="status"
-                                     options={minitesOptions}
-                                     value={minitesOptions.filter(option => option.value === setting.value)}
-                                     onChange={item => setSelectedMinite(item)}
-                                     className={`basic-multi-select form-control-m`}
-                                     classNamePrefix="select"
-                                     />
-                            </div>
-                                    : <div className="form-group">
-                                        <label htmlFor="value"> {setting.title} Value</label>
-                                        <input
+                            <div className="form-group">
+                                <label htmlFor="value">Value</label>
+                                {setting ?
+                                    <input
                                         type="text"
                                         id="tx_value"
                                         name="tx_value"
                                         className="form-control form-control-m"
                                         defaultValue={setting.value}
                                     />
-                                </div>}
+                                    : ''}
+                            </div>
                             <div className="form-group">
                                 <label htmlFor="email">Sub Category</label>
                                 {setting ?
