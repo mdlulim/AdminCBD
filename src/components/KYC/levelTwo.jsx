@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, Row, Col, Button, ButtonGroup } from 'reactstrap';
 
 export default function LevelTwo(props) {
@@ -21,24 +21,24 @@ export default function LevelTwo(props) {
                         <h4>Level 2</h4>
                     </Col>
                     <Col md={6}>
-                    <form>
-                       <ButtonGroup size="sm" style={{ display: "flex", justifyContent: "end" }}>
-                            <Button
-                                color="primary"
-                                onClick={()=>{setKycApplication({...kycApplication, status: 'Approved'}); approveLevel({ level: 2, status: true })}}
-                                className={`${kycApplication.status === 'Approved'?'active':''}`}
-                            >
-                                Approve
-                            </Button>
-                            <Button
-                                color="primary"
-                                onClick={()=>{setActiveState(1); approveLevel({ level: 2, status: false, setLevel: setKycApplication, levelData: kycApplication })}}
-                                className={`${kycApplication.status === 'Rejected'?'active':''}`}
-                            >
-                                Decline
-                            </Button>
-                        </ButtonGroup>
-                       </form>
+                        <form>
+                            <ButtonGroup size="sm" style={{ display: "flex", justifyContent: "end" }}>
+                                <Button
+                                    color="primary"
+                                    onClick={() => { setKycApplication({ ...kycApplication, status: 'Approved' }); approveLevel({ level: 2, status: true }) }}
+                                    className={`${kycApplication.status === 'Approved' ? 'active' : ''}`}
+                                >
+                                    Approve
+                                </Button>
+                                <Button
+                                    color="primary"
+                                    onClick={() => { setActiveState(1); approveLevel({ level: 2, status: false, setLevel: setKycApplication, levelData: kycApplication }) }}
+                                    className={`${kycApplication.status === 'Rejected' ? 'active' : ''}`}
+                                >
+                                    Decline
+                                </Button>
+                            </ButtonGroup>
+                        </form>
                     </Col>
                 </Row>
                 <Row>
@@ -52,7 +52,7 @@ export default function LevelTwo(props) {
                                             type="text"
                                             id="natureBusiness"
                                             className="form-control form-control-m"
-                                            value={kycApplication.businessNature?kycApplication.businessNature:''}
+                                            value={kycApplication.businessNature ? kycApplication.businessNature : ''}
                                             disabled
                                         />
                                     </div>
@@ -64,7 +64,7 @@ export default function LevelTwo(props) {
                                             type="text"
                                             id="srcFunds"
                                             className="form-control form-control-m"
-                                            value={kycApplication.srcFunds?kycApplication.srcFunds:''}
+                                            value={kycApplication.srcFunds ? kycApplication.srcFunds : ''}
                                             disabled
                                         />
                                     </div>
@@ -74,8 +74,11 @@ export default function LevelTwo(props) {
                                 <Col xs={6} md={6} >
                                     <div className="form-group">
                                         <label>ID/Passport Document</label>
-                                        <Card onClick={() => onShowImage([{uri:"https://res.cloudinary.com/demo/image/upload/example_pdf.pdf"}])}>
-                                            <div className="fa fa-file" style={{fontSize: "100px", textAlign: "center", padding: "15px", cursor: "pointer"}}></div>
+                                        <Card onClick={() => onShowImage(
+                                            kycApplication.id_document.map(doc => {
+                                                return { uri: 'https://cdn-cbigold.ams3.digitaloceanspaces.com/' + doc }
+                                            }))}>
+                                            <div className="fa fa-file" style={{ fontSize: "100px", textAlign: "center", padding: "15px", cursor: "pointer" }}></div>
                                         </Card>
                                     </div>
                                 </Col>
