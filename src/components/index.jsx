@@ -23,6 +23,7 @@ import KYC from './KYC';
 import ProductCategory from './ProductCategory';
 import Settings from './Settings';
 import GeneralSettings from './GeneralSettings';
+import BankAccounts from './BankAccounts';
 
 export {
     Breadcrumb,
@@ -50,4 +51,5 @@ export {
     ProductCategory,
     Settings,
     GeneralSettings,
+    BankAccounts,
 };

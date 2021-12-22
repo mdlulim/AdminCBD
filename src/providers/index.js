@@ -18,6 +18,7 @@ import FeeService from './FeeService';
 import FileStorageProvider from './FileStorageProvider';
 import SettingService from './SettingService';
 import CompanyService from './CompanyService';
+import BankAccountService from './BankAccount.js';
 
 
 export {
@@ -41,4 +42,5 @@ export {
     FileStorageProvider,
     SettingService,
     CompanyService,
+    BankAccountService,
 };
