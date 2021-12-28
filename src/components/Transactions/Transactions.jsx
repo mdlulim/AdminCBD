@@ -88,7 +88,7 @@ const Money = (row) => {
       badge = 'danger';
     }
   }
-  return <strong className={'text-' + badge}>{simbol + '' + row.amount} CBI</strong>
+  return <strong className={'text-' + badge}>{simbol + '' + row.amount} {row.currency.code}</strong>
 };
 
 // Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
@@ -143,6 +143,7 @@ export default function Transactions(props) {
         setTransactions(results);
         setFilteredTransactions(results);
       } else {
+        console.log(transaList, " transactions")
         if (transactionType === 'deposit') {
           const results = transaList.filter(item => item.subtype.toLowerCase() === "deposit");
           setTransactions(results);
