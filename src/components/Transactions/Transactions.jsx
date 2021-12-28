@@ -143,7 +143,6 @@ export default function Transactions(props) {
         setTransactions(results);
         setFilteredTransactions(results);
       } else {
-        console.log(transaList, " transactions")
         if (transactionType === 'deposit') {
           const results = transaList.filter(item => item.subtype.toLowerCase() === "deposit");
           setTransactions(results);
