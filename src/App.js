@@ -46,6 +46,7 @@ import ProductAddNew from 'pages/Products/ProductAddNew';
 import ProductDetails from 'pages/Products/ProductDetails';
 import UserPermissions from 'pages/UserPermissions';
 import BankAccounts from 'pages/BankAccounts';
+import SendOTPBankAccounts from 'pages/BankAccounts/SendOPTBankAccount';
 import KYC from 'pages/KYC';
 const App = () => {
 	const settings = config;
@@ -79,6 +80,7 @@ const App = () => {
 					<Route exact path="/configurations" component={(props) => <Configurations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/bank-accounts" component={(props) => <BankAccounts config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/bank-accounts/:id" component={(props) => <SendOTPBankAccounts config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/transactions/:id" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/main-account" component={(props) => <CompanyAccount config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/deposits" component={(props) => <Deposits config={settings} {...props} setMenu={setMenu} />} />

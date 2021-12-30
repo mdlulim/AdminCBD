@@ -7,6 +7,7 @@ import { MemberService } from '../../providers';
 const WealthCreatersPage = props => {
     const breadcrumb = { heading: "Wealth Creaters" };
     const [members, setMembers] = useState([]);
+    const [pageLoading, setPageLoading] = useState(true);
 
     useMemo(() => {
         MemberService.getMembers().then((res) => {
@@ -52,7 +53,10 @@ const WealthCreatersPage = props => {
        setMembers(membersList);
   
   
-        }, []);
+        }, [
+            setPageLoading,
+            setMembers,
+        ]);
 
     const countMembers = (type) =>{
         const countTypes = members.filter(member => member.status === type);
@@ -60,7 +64,10 @@ const WealthCreatersPage = props => {
     };
 
 	return (
-		<Layout {...props} breadcrumb={breadcrumb}>
+        <Layout 
+        {...props} 
+        loading={pageLoading}
+        breadcrumb={breadcrumb}>
 			<Row>
                 <Col lg={3} md={6} sm={6}>
                     <Card className="card-icon-bg card-icon-bg-primary o-hidden mb-4">

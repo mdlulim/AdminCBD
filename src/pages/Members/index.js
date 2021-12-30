@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Common, Pagination, Members } from 'components';
+import { Common, Pagination, Members, Loader } from 'components';
 import { AuthLayout } from 'containers';
 import { MemberService } from '../../providers';
 
@@ -8,29 +8,34 @@ import { MemberService } from '../../providers';
 let baseURL = window.location.origin;
 
     let page = (window.location.pathname.split('/').pop()).toLowerCase();
-    
-// if(page === 'members'){
-//     let mi = session.payload.vlist;
-//     if(!mi.includes("Members")){
-//         window.location.replace(baseURL+"/dashboard");
-//     }   
-// }
+
 export default function MembersPage(props) {
     const [members, setMembers] = useState([]);
-    useMemo(() => {
-        MemberService.getMembers().then((res) => {
-            const userslist = res.data.data.results;
-            setMembers(userslist);
-        });
-    }, []);
+    const [pageLoading, setPageLoading] = useState(true);
+
+    async function fetchData(){
+        const memberslist = await MemberService.getMembers();
+            setMembers(memberslist.results);
+            setPageLoading(false);
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [
+        setPageLoading,
+    ]);
 
     const countMembers = (type) => {
         const countTypes = members.filter(member => member.status === type);
         return countTypes.length;
     }
+
+    if (pageLoading) return <Loader.Default />;
+
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
                 active: "Members"
@@ -86,7 +91,7 @@ export default function MembersPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                    <Members.Members status={'add'} />
+                    <Members.Members status={'add'} pageLoading={pageLoading} setPageLoading={setPageLoading} />
                 </CardBody>
             </Card>
         </AuthLayout>

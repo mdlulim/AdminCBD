@@ -7,3 +7,9 @@
     border-radius: 50% !important;
 
 }
+
+.headerTwoDiv{
+    margin:1% auto;
+    margin-right: auto; margin-left: auto; width: 20%;
+    padding-top: 15%;
+}

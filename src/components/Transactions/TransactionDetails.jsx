@@ -20,13 +20,12 @@ const TransactionDetails = props => {
     const [pageNumber, setPageNumber] = useState(1);
     const { title, body, processing, confirmButtonDisabled, confirmButton, cancelButton, showIcon, size, } = props;
 
+    async function fetchData(){
+        const mainAccount = await AccountService.getMainAccount()
+            setMainAccount(mainAccount);
+    }
     useEffect(() => {
-        AccountService.getMainAccount().then((res) => {
-            const result = res.data.data;
-            // console.log(result)
-            setMainAccount(result)
-            //  mainWallet = result;
-        });
+        fetchData()
     }, []);
 
     const statusOptions = [

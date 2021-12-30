@@ -22,7 +22,14 @@ class TransactionService {
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/transactions`,
-      });
+      }).then(json => json.data)
+      .then(res => {
+        const { success, data } = res;
+        if (success) {
+          return data || [];
+        }
+        return [];
+      })
     }
 
     static async getTransactionBatchFiles() {

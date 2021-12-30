@@ -127,6 +127,7 @@ export default function UpdateProductDetails(props) {
        //Get member details
        ProductService.getProduct(id).then((res) => {
          const productDetails = res.data.data;
+         console.log(res.data.data);
          setProduct(productDetails);
             setSelectedProductType(productDetails.type);
             setSelectedCurrency(productDetails.currency_code);
@@ -137,7 +138,7 @@ export default function UpdateProductDetails(props) {
             if(productDetails.body){
                 setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetails.body))))
             }
-            if(productDetails.type === "FX"){
+            if(productDetails.type === "FX" || productDetails.type === "Fraxion"){
                 setShow(false)
                 setShowCBIx7(true)
                 setShowFixedPlan(true)

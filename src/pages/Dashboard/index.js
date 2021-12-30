@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 import { AuthLayout } from 'containers';
-import { Common, Dashboard, Overview, Members } from 'components';
+import { Common, Dashboard, Overview, Members, Loader } from 'components';
 import { MemberService, ProductService, TransactionService, AccountService, SessionProvider } from '../../providers';
 import { VectorMap } from '@south-paw/react-vector-maps';
 import world from '../../components/Dashboard/world.json';
@@ -34,6 +34,7 @@ const inputWith={
 
 export default function DashboardPage(props) {
     const [members, setMembers] = useState([]);
+    const [pageLoading, setPageLoading] = useState(true);
     const [filteredMembers, setFilteredMembers] = useState([]);
     const [selectedMember, setSelectedMember] = useState({});
     const [products, setProducts] = useState([]);
@@ -43,42 +44,35 @@ export default function DashboardPage(props) {
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const history = useHistory();
 
-    useState(() => {
+    async function fetchData(){
+        const members = await MemberService.getMembers();
+            const memberslist = members.results;
+            const temp=  memberslist.slice(Math.max(memberslist.length - 5), 0)
+            setMembers(memberslist);
+            setFilteredMembers(temp);
+
+        const mainAccount = await AccountService.getMainAccount()
+            setMainAccount(mainAccount);
+
+        const poducts = await ProductService.getProducts();
+              setProducts(poducts.results);
+
+        const transaList = await TransactionService.getTransactions();
+             setTransactions(transaList.results);
+             setFilteredTransactions(transaList.results)
+
+        setPageLoading(false);
+    }
+    useEffect(() => {
         if (SessionProvider.isValid()) {
            const user = SessionProvider.get();
             setAdminLevel(user.permission_level)
         }
-        
-        MemberService.getMembers().then((res) => {
-            const userslist = res.data.data.results;
-            const memberslist = res.data.data.results;
-            const temp=  memberslist.slice(Math.max(memberslist.length - 5), 0)
-            setMembers(memberslist);
-            setFilteredMembers(temp);
-          });
+        fetchData();
 
-          AccountService.getMainAccount().then((res) => {
-             const memberslist = res.data.data;
-             setMainAccount(memberslist);
-           });
-
-
-        ProductService.getProducts().then((res) => {
-            if(res.data.success){
-              const productlist = res.data.data.results;
-              setProducts(productlist);
-            }
-          });
-
-          TransactionService.getTransactions().then((res) => {
-            if(res.data.success){
-            const transaList = res.data.data.results;
-            setTransactions(transaList);
-            setFilteredTransactions(transaList)
-            }
-          });
-
-      }, []);
+      }, [
+        setPageLoading,
+      ]);
 
       const countMembers = (type) =>{
         const countTypes = members.filter(member => member.status === type);
@@ -101,10 +95,11 @@ export default function DashboardPage(props) {
 
         setFilteredTransactions(filteredItems);
       }
-
+    if (pageLoading) return <Loader.Default />;
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{ active: "Dashboard" }}
             pageHeading={{
                 title: 'CBI Admin Dashboard',
@@ -112,6 +107,8 @@ export default function DashboardPage(props) {
                 actions: <Filter />
             }}
         >
+              {!pageLoading &&
+              <>
             <div className="form-row">
                 <Col xs={12} lg={9}>
                     <div className="form-row margin-bottom-20">
@@ -281,6 +278,7 @@ export default function DashboardPage(props) {
                     </Card>
                 </Col>
             </div>
+            </>}
         </AuthLayout>
     );
 }

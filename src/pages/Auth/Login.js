@@ -5,18 +5,20 @@ import AuthAervice from '../../providers/AuthService';
 import { AuthPages } from 'containers';
 import { UserService, SessionProvider } from 'providers';
 import jwt from 'jwt-decode';
-
+import { Loader } from 'components';
 export default function LoginPage(props) {
+    const [show, setShow] = useState(false)
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
+    const [pageLoading, setPageLoading] = useState(false);
         // when the form is submitted
   const onSubmit = (event) => {
         event.preventDefault();
         setLoading(true);
         setDisabled(true);
-        const form = event.currentTarget;
 
+        const form = event.currentTarget;
         const user = form.username.value;
         const password = form.password.value;
 
@@ -25,20 +27,22 @@ export default function LoginPage(props) {
             os_name: osName,
             os_version: osVersion,
         };
+
         const geoLocation= {
                 IPv4: "123456"
             };
             AuthAervice.login(user, password, device,geoLocation).then((response) =>{
             if(response.data.success === true && response.data.data.admin === true){
-                //setAuthTokens(data.token);
                 SessionProvider.set(response.data.data.token);
                 window.location = '/dashboard';
             }else{
+                setShow(false)
                 setLoading(false);
                 setDisabled(false);
                 setError("Username or password is incorrect");
             }
         }).catch(error => {
+            setShow(false)
             setError(error.message);
             setLoading(false);
             setDisabled(false);
@@ -49,6 +53,7 @@ export default function LoginPage(props) {
 
     return (
         <AuthPages {...props}>
+            <>
             <a href="/" className="logo-holder logo-holder--lg logo-holder--wide">
                 <div className="logo-text">
                     <strong className="text-primary">CBI</strong> <strong>GLOBAL</strong>
@@ -89,6 +94,13 @@ export default function LoginPage(props) {
                             <button disabled={disabled} type="submit" className="btn btn-secondary btn-block">
                                 Login to account
                             </button>
+                            {/* <div className="App">
+                                <div className={"row"}>
+                                <div className={"item"}>
+                                    <Loader type="spinner-cub" bgColor={"#FFFFFF"} title={"spinner-cub"} color={'#FFFFFF'} size={80} />
+                                </div>
+                                </div>
+                            </div> */}
                         </Col>
                     </div>
                 </div>
@@ -107,6 +119,7 @@ export default function LoginPage(props) {
                     </Col> */}
                 </div>
             </div>
+            </>
         </AuthPages>
     );
 }

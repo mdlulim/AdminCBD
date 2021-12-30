@@ -6,8 +6,9 @@ import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
-import { BankAccountService } from '../../providers';
-import VerifyBankAccount from './VerifyBankAccount';
+import { BankAccountService, SessionProvider } from '../../providers';
+import SendOTPBankAccount from './SendOTPBankAccount';
+import { confirmAlert } from 'react-confirm-alert';
 // styles
 const customStyles = {
    
@@ -55,6 +56,7 @@ export default function BankAccounts(props) {
     const [showResend, setShowResend] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
     const [bankAccounts, setBankAccounts] = useState([]);
+    const [adminLevel, setAdminLevel]     = useState(0);
     const [filteredBankAccounts, setFilteredBankAccounts] = useState([]);
     const [selectedBankAccount, setSelectedBankAccount] = useState({});
     const history = useHistory();
@@ -62,9 +64,13 @@ export default function BankAccounts(props) {
 
     useMemo(() => {
 
+    if (SessionProvider.isValid()) {
+        const user = SessionProvider.get();
+        setAdminLevel(user.permission_level)
+    }
       BankAccountService.getPendingBankAccounts().then((res) => {
         //console.log('BankAccounts '+res.data.data.results)
-        console.log(res.data.data.data)
+        console.log(res.data)
         if(res.data.success){
           const productlist = res.data.data.data.results;
           setBankAccounts(productlist);
@@ -97,6 +103,13 @@ const columns = [
   selector: 'bank_code',
   sortable: true,
 },{
+    name: 'Mobile',
+    selector: 'mobile',
+    sortable: true,
+    cell: row => <div>
+                <strong>{row.user.mobile}</strong>
+             </div>
+  },{
     name: 'Status',
     selector: 'status',
     sortable: true,
@@ -113,27 +126,26 @@ const columns = [
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-    <spam style={iconPadding}>
-      <a
-      href={`products/${row.id}`}
-      className="btn btn-secondary btn-sm btn-icon"
-    ><span className="fa fa-pencil" />
-    </a></spam>
-    {/* <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-secondary btn-sm btn-icon"
-      onClick={e => {
-        e.preventDefault();
+     { adminLevel === 5 ?<div style={iconPadding}>
+        <a
+          href={`/bank-accounts/${row.id}`}
+          className="btn btn-light btn-sm btn-icon"
+        > <span className="fa fa-pencil" />
+        </a></div>: ''}
     
-        onSubmitDeleteBankAccount(row);
-      }}
-    >
-      <span className="fa fa-trash" />
-    </a></spam> */}
   </div>
 }];
 
+const onSubmitChangeStatus = data => {
+    setSelectedBankAccount(data);
+    setShow(true);
+    //return <Confirm show={show} setShow={setShow} />;
+  };
+
 const handleChangePassword = async data => {
+}
+const onSubmitDeleteSetting = async data =>{
+
 }
 
 const handleDeleteBankAccount = async data => {
@@ -170,6 +182,7 @@ const onSubmitUpdateBankAccount= data => {
 
     return (
         <Card className="o-hidden mb-4">
+            <SendOTPBankAccount show={show} setShow={setShow} bankAccount={selectedBankAccount} />
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
                     <span>Bank Accounts</span>

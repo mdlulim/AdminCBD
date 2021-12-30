@@ -1,34 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
-const DefaultLoader = props => {
-    const { text } = props;
+import spinner from '../../assets/img/loading-buffering.gif'
+export default function Default(props) {
     return (
-        <div className="default-loader-wrapper">
-            <section id="global">
-                <div id="top" className="mask">
-                    <div className="plane"></div>
-                </div>
-                <div id="middle" className="mask">
-                    <div className="plane"></div>
-                </div>
-                <div id="bottom" className="mask">
-                    <div className="plane"></div>
-                </div>
-                {/* <div id="base" className="mask">
-                    <div className="plane"></div>
-                </div> */}
-            </section>
-        </div>
-    );
-};
-
-DefaultLoader.propTypes = {
-    text: PropTypes.string,
-};
-
-DefaultLoader.defaultProps = {
-    text: 'Loading',
-};
-
-export default DefaultLoader;
+        <div class="headerTwoDiv">
+              <img src={spinner} alt="Loading" width="150" height="150" />
+        </div> );
+}
