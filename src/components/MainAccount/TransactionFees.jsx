@@ -1,13 +1,11 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Card, CardBody, Row, Col, Input, FormGroup, Label } from 'reactstrap';
 import Moment from 'react-moment';
 import { useParams, useHistory } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Modal } from 'react-bootstrap';
-import ModalChangeStatus from './ModalChangeStatus';
+import { Common } from 'components'
 import TransactionDetails from '../Transactions/TransactionDetails';
-import ExportToExcel from './ExportToExcel';
-import ModalBulkUpdate from './ModalBulkUpdate';
 import { TransactionService, MemberService, SessionProvider, FileStorageProvider } from '../../providers';
 import DatePicker from "react-datepicker";
 import 'react-data-table-component-extensions/dist/index.css';
@@ -98,12 +96,12 @@ const Money = (row) => {
 
 
 export default function Transactions(props) {
-  const { transactionType } = props;
+  const { transactions} = props;
   const [show, setShow] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [showBulk, setShowBulk] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [transactions, setTransactions] = useState([]);
+  //const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [csvTransactions, setCsvTransactions] = useState([])
   const [temp, setTemp] = useState({});
@@ -111,10 +109,7 @@ export default function Transactions(props) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [checkCreatedDate, setCheckCreatedDate] = useState(true);
-  const [checkActionDate, setCheckActionDate] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState(false);
-  const [editStatus, setEditStatus] = useState(true);
-  const [members, setMembers] = useState([]);
   const [adminLevel, setAdminLevel] = useState({});
   const [wealthCreaters, setWealthCreaters] = useState([]);
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -129,48 +124,35 @@ export default function Transactions(props) {
   const csvDownloaderClick = useRef(null)
 
 
-  useMemo(() => {
+  async function fetchData(){
+    console.log('======================Components====================')
+    console.log(transactions)
+  }
+  useEffect(() => {
     if (SessionProvider.isValid()) {
       const user = SessionProvider.get();
       setAdminLevel(user.permission_level)
     }
-
-    TransactionService.getTransactions().then((res) => {
-      const transaList = res.results;
-
-      if (id != null && id.length > 15) {
-        const results = transaList.filter(item => item.id === id);
-        setTransactions(results);
-        setFilteredTransactions(results);
-      } else {
-        if (transactionType === 'deposit') {
-          const results = transaList.filter(item => item.subtype.toLowerCase() === "deposit");
-          setTransactions(results);
-          setFilteredTransactions(results);
-        } else if (transactionType === 'withdrawals') {
-          const results = transaList.filter(item => item.subtype.toLowerCase() === "withdraw");
-          setTransactions(results);
-          setFilteredTransactions(results);
-        } else if (transactionType === 'transfers') {
-          const results = transaList.filter(item => item.subtype.toLowerCase() === "transfer");
-          setTransactions(results);
-          setFilteredTransactions(results);
-        }
-      }
-    });
+    fetchData();
+    // TransactionService.getTransactions().then((res) => {
+    //     const transaList = res.results;
+    //     const results = transaList.filter(item => item.status.toLowerCase() === "completed");
+    //     setTransactions(results);
+    //     setFilteredTransactions(results);
+    // });
 
   }, []);
 
 
 
   const columns = [{
-    name: 'Full Names',
+    name: 'From',
     selector: 'id',
     sortable: true,
     wrap: true,
     cell: (row) => <div><div>{row.user ? row.user.first_name : ''} {row.user ? row.user.last_name : ''}</div>
       <div className="small text-muted">
-        <span>{row.user ? row.user.id_number : ''}</span>
+        <span>{row.user ? 'Referral: '+row.user.referral_id : ''}</span>
       </div></div>
   }, {
     name: 'TransactionID',
@@ -185,12 +167,6 @@ export default function Transactions(props) {
     selector: 'fee',
     sortable: true,
   }, {
-    name: 'Amount',
-    selector: 'amount',
-    sortable: true,
-    cell: row => <div> {Money(row)}<br />
-      <span className="text-muted">{row.balance} CBI</span></div>
-  }, {
     name: 'Status',
     selector: 'status',
     sortable: true,
@@ -202,20 +178,6 @@ export default function Transactions(props) {
     cell: row => <div>
       <strong><Moment date={row.updated} format="D MMM YYYY" /></strong><br />
       <span className="text-muted"><Moment date={row.updated} format="hh:mm:ss" /></span>
-    </div>
-  }, {
-    name: 'Actions',
-    sortable: true,
-    cell: row => <div>
-      <button
-        className="btn btn-secondary btn-sm btn-icon"
-        disabled={adminLevel != 5 ? row.status == "Completed" ? true : '' : false}
-        onClick={e => {
-          e.preventDefault();
-          onUpdateDeposit(row)
-        }}
-      > <span className="fa fa-pencil" />
-      </button>
     </div>
   }];
 
@@ -237,26 +199,6 @@ export default function Transactions(props) {
     startDate: new Date(),
     endDate: new Date(),
     key: 'selection',
-  }
-
-  const onUpdateDeposit = (data) => {
-
-    if (data.user.status === 'Pending') {
-      TransactionService.getTransactionPOP(data.txid).then((res) => {
-        const pop = res.data.data.rows;
-        const url = pop[0].file;
-        TransactionService.getTransactionPOPFile(url).then((res) => {
-          setSelectedTransPOP(res.data);
-        })
-      });
-
-      setSelectedTransaction(data)
-      setShowApproveMember(true)
-    } else {
-      setSelectedTransaction(data)
-      setShowUpdate(true)
-    }
-
   }
 
   const selectDataRange = (data) => {
@@ -310,8 +252,44 @@ export default function Transactions(props) {
 
   return (
     <Card className="o-hidden mb-4">
-      <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows} />
-      <ModalChangeStatus show={showUpdate} setShow={setShowUpdate} transaction={selectedTransaction} />
+         <div className="form-row margin-bottom-20">
+                        <Col xs={12} lg={3}>
+                        <a href={``} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Deposits"
+                                subtitle="Fees"
+                                informer={<><span className="text-bold text-success">{0}</span></>}
+                            /></a>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                        <a href={``} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Withdrawal"
+                                subtitle="Fees"
+                                informer={<><span className="text-bold text-warning">{0}</span> </>}
+                            /></a>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                        <a href={``} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Transfer"
+                                subtitle="Fees"
+                                informer={<><span className="text-bold text-danger">{0}</span> </>}
+                            /></a>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                        <a href={``} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Registration"
+                                subtitle="Fees"
+                                informer={<><span className="text-bold text-danger">{0}</span> </>}
+                            /></a>
+                        </Col>
+                    </div>
       <TransactionDetails
         show={showApproveMember}
         setShow={setShowApproveMember}
@@ -330,82 +308,6 @@ export default function Transactions(props) {
             onKeyUp={e => onSearchFilter(e.target.value)}
             id="txSearch"
           />
-          <div>
-            <div style={myButtons}>
-              {/* <button
-                className="btn btn-secondary m-2"
-                type="button"
-                onClick={e => {
-                  e.preventDefault();
-                  setShow(true);
-                }}>
-                Search By Date
-              </button> */}
-              <button
-
-                className={`btn ${forBank?'btn-secondary':'btn-light'} m-2`}
-                type="button"
-                disabled={activeFilter === 'Pending' ? false : true}
-                onClick={() => { setForBank(!forBank) }}>
-                For Processing
-              </button>
-
-
-              <Input
-                className="m-2"
-                type="select"
-                onChange={filterChange.bind(this)}
-
-              >
-                <option value="all">All</option>
-                <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
-                <option value="Rejected">Rejected</option>
-                <option value="InProgress">Processing</option>
-              </Input>
-
-              <button
-                className="btn btn-secondary"
-                type="button"
-                disabled={filteredTransactions.length < 1}
-                onClick={
-                  async () => {
-                    var data = []
-                    var csvData = []
-                    if (forBank) {
-                      filteredTransactions.forEach(row => {
-                        data.push({ status: 'InProgress', txid: row.txid })
-                        csvData.push({ TX_ID: row.txid, REFERRAL: row.user.referral_id, TYPE: row.subtype, AMOUNT: row.amount, STATUS: row.status })
-                      })
-                      const res = await FileStorageProvider.update_status(data)
-                      if (res.success) {
-                        setCsvTransactions(csvData)
-                        csvDownloaderClick.current.click()
-                      } else {
-                        alert('Failed create csv!')
-                      }
-
-                    } else {
-                      setCsvTransactions(filteredTransactions)
-                      setForBank(false)
-                      csvDownloaderClick.current.click()
-                    }
-                  }}
-              >Export CSV</button>
-              <CsvDownloader
-
-                filename="myfile"
-                extension=".csv"
-                separator=","
-                wrapColumnChar=""
-                // columns={columns}
-                datas={csvTransactions}
-              >
-                <button style={{ display: 'none' }} ref={csvDownloaderClick}></button>
-              </CsvDownloader>
-              {/* <ExportToExcel data={filteredTransactions} /> */}
-            </div>
-          </div>
         </div>
       </CardBody>
 
@@ -419,7 +321,6 @@ export default function Transactions(props) {
         pagination
       />
       <Modal show={show} onHide={handleClose} centered className="confirm-modal">
-        {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
         <Modal.Body>
           <Row>
             <Col>

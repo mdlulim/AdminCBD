@@ -38,7 +38,14 @@ class ProductService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products/history`,
-    });
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
+    })
   }
 
   static async getProductCategories() {

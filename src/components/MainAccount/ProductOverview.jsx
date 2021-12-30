@@ -1,12 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody } from 'reactstrap';
+import { Card, CardBody, Col } from 'reactstrap';
 import Moment from 'react-moment';
-import { HashLinkContainer } from 'components';
+import { HashLinkContainer, Common } from 'components';
 import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
-import DeleteProductAlert from './DeleteProductAlert';
 import { ProductService } from '../../providers';
 // styles
 const customStyles = {
@@ -75,12 +74,9 @@ export default function Products(props) {
     useMemo(() => {
 
       ProductService.getProductHistory().then((res) => {
-        if(res.data.success){
           const productlist = res.results;
-         // console.log(productlist)
           setProducts(productlist);
           setFilteredProducts(productlist);
-        }
         
       });
 
@@ -173,11 +169,47 @@ const onSubmitUpdateProduct= data => {
 
     return (
         <Card className="o-hidden mb-4">
-          <DeleteProductAlert show={showDelete} setShow={setShowDelete} product={selectedProduct} />
-          
+            <div className="form-row margin-bottom-20">
+                        <Col xs={12} lg={3}>
+                        <a href={``} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="CBX7"
+                                subtitle="Total Amount"
+                                informer={<><span className="text-bold text-success">{0}</span></>}
+                            /></a>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                        <a href={``} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Fraxions"
+                                subtitle="Total Amount"
+                                informer={<><span className="text-bold text-warning">{0}</span> </>}
+                            /></a>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                        <a href={``} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Fixed Plan"
+                                subtitle="Total Amount"
+                                informer={<><span className="text-bold text-danger">{0}</span> </>}
+                            /></a>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                        <a href={``} >
+                            <Common.Widget
+                                icon="li-users2"
+                                title="Other"
+                                subtitle="Total Amount"
+                                informer={<><span className="text-bold text-danger">{0}</span> </>}
+                            /></a>
+                        </Col>
+                    </div>
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Product History</span>
+                    <span>Product Overview</span>
                     <span className="flex-grow-1" /><input
                         style={inputWith}
                         type="text"
@@ -186,13 +218,6 @@ const onSubmitUpdateProduct= data => {
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
-                    {/* <div>
-                            <a 
-                            href={`products/add`}
-                            className="btn btn-secondary">
-                                Add Product
-                            </a>
-                    </div> */}
                 </div>
             </CardBody>
             <DataTable
