@@ -98,7 +98,7 @@ const Money = (row) => {
 
 
 export default function Transactions(props) {
-  const { transactionType } = props;
+  const { transactionType, setPageLoading } = props;
   const [show, setShow] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [showBulk, setShowBulk] = useState(false);
@@ -157,9 +157,11 @@ export default function Transactions(props) {
           setFilteredTransactions(results);
         }
       }
+
+      setPageLoading(false);
     });
 
-  }, []);
+  }, [setPageLoading]);
 
 
 
@@ -343,7 +345,7 @@ export default function Transactions(props) {
               </button> */}
               <button
 
-                className={`btn ${forBank?'btn-secondary':'btn-light'} m-2`}
+                className={`btn ${forBank ? 'btn-secondary' : 'btn-light'} m-2`}
                 type="button"
                 disabled={activeFilter === 'Pending' ? false : true}
                 onClick={() => { setForBank(!forBank) }}>

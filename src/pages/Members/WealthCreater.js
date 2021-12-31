@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
 import { Common, Members } from 'components';
@@ -25,9 +25,12 @@ const Filter = () => {
 }
 
 export default function WealthCreatersPage(props) {
+    const [pageLoading, setPageLoading] = useState(true);
+
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{ active: "Wealth Creators" }}
             pageHeading={{
                 title: 'CBI Wealth Creators',
@@ -36,7 +39,7 @@ export default function WealthCreatersPage(props) {
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Members.WealthCreaters />
+                <Members.WealthCreaters setPageLoading={setPageLoading}/>
                 </Col>
             </div>
         </AuthLayout>

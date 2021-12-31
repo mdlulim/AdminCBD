@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
 import { Common, Transactions } from 'components';
@@ -35,9 +35,12 @@ const Filter = () => {
 }
 
 export default function Width(props) {
+    const [pageLoading, setPageLoading] = useState(true);
+
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{ active: "Widthdrawals" }}
             pageHeading={{
                 title: 'Withdrawal Transactions',
@@ -46,7 +49,7 @@ export default function Width(props) {
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Transactions transactionType={'withdrawals'} />
+                <Transactions.Transactions transactionType={'withdrawals'} setPageLoading={setPageLoading} />
                 </Col>
             </div>
         </AuthLayout>

@@ -3,157 +3,160 @@ import { Card, CardBody } from 'reactstrap';
 import Moment from 'react-moment';
 import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
-import { Unlock,  Edit, Trash} from 'react-feather';
+import { Unlock, Edit, Trash } from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
 import DeleteProductAlert from './DeleteProductAlert';
 import { ProductService } from '../../providers';
 // styles
 const customStyles = {
-   
-    headCells: {
-        style: {
-            color: 'rgba(0,0,0,.54)',
-            paddingLeft: '18px', // override the cell padding for head cells
-            paddingRight: '18px',
-        },
+
+  headCells: {
+    style: {
+      color: 'rgba(0,0,0,.54)',
+      paddingLeft: '18px', // override the cell padding for head cells
+      paddingRight: '18px',
     },
-    cells: {
-        style: {
-            paddingLeft: '18px', // override the cell padding for data cells
-            paddingRight: '18px',
-        },
+  },
+  cells: {
+    style: {
+      paddingLeft: '18px', // override the cell padding for data cells
+      paddingRight: '18px',
     },
+  },
 };
-const iconPadding ={
-    paddingRight: '3px',
+const iconPadding = {
+  paddingRight: '3px',
 }
-const inputWith={
+const inputWith = {
   width: '30%',
   marginRight: '20px'
 }
 
 const Status = ({ status }) => {
-    let badge = 'primary';
-    if (status === 'Pending') {
-      badge = 'warning';
-    }
-    if (status === 'Published' || status === 'Active') {
-      badge = 'success';
-    }
-    if (status === 'Blocked') {
-        badge = 'danger';
-      }
-    return (
-      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
-    );
-  };
+  let badge = 'primary';
+  if (status === 'Pending') {
+    badge = 'warning';
+  }
+  if (status === 'Published' || status === 'Active') {
+    badge = 'success';
+  }
+  if (status === 'Blocked') {
+    badge = 'danger';
+  }
+  return (
+    <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
+  );
+};
 
 const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
+  return (
+    <img
+      alt=""
+      height="32px"
+      style={{ borderRadius: 4 }}
+      width="32px"
+      src={require("images/1.jpeg")}
+    />
+  );
 };
 
 export default function Products(props) {
-    const [show, setShow] = useState(false);
-    const [showDelete, setShowDelete] = useState(false);
-    const [showResend, setShowResend] = useState(false);
-    const [showAddNew, setShowAddNew] = useState(false);
-    const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState({});
-    const history = useHistory();
+  const { setPageLoading, pageLoading } = props;
+  const [show, setShow] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showResend, setShowResend] = useState(false);
+  const [showAddNew, setShowAddNew] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState({});
+  const history = useHistory();
 
 
-    useMemo(() => {
+  useMemo(() => {
 
-      ProductService.getProductHistory().then((res) => {
-        if(res.data.success){
-          const productlist = res.data.data.results;
-         // console.log(productlist)
-          setProducts(productlist);
-          setFilteredProducts(productlist);
-        }
-        
-      });
+    ProductService.getProductHistory().then((res) => {
+      console.log("history")
+      if (res.data.success) {
+        const productlist = res.data.data.results;
+        // console.log(productlist)
+        setProducts(productlist);
+        setFilteredProducts(productlist);
+      }
+      setPageLoading(false);
 
-      }, []);
-    // table headings definition
-const columns = [
-  {
-    name: 'Title',
-    selector: 'title',
-    sortable: true,
-    wrap: true,
-},{
-    name: 'Type',
-    selector: 'type',
-    sortable: true,
-}, {
-  name: 'Purchase By',
-  selector: 'first_name',
-  sortable: true,
-  cell: row => <div><div>{row.first_name} {row.last_name}</div>
-      <div className="small text-muted">
-        <span>Referral: {row.referral_id}</span>
-      </div></div>
-},{
-  name: 'Tokens',
-  selector: 'tokens',
-  sortable: true, 
-  cell: row => <div>{row.tokens? row.tokens: ''}</div>
-},{
-  name: 'Income',
-  selector: 'income',
-  sortable: true,
-  cell: row => <div>{row.currency_code}  {row.income}</div>
-},{
-    name: 'Status',
-    selector: 'status',
-    sortable: true,
-    cell: row => <Status {...row} />
-}, {
-    name: 'Start Date',
-    selector: 'start_date',
-    sortable: true,
-  cell: row => <div>
-                <strong><Moment date={row.start_date} format="D MMM YYYY" /></strong><br />
-                <span className="text-muted"><Moment date={row.start_date} format="hh:mm:ss" /></span>
-             </div>
-},{
-  name: 'End Date',
-  selector: 'end_date',
-  sortable: true,
-cell: row => <div>
-              { row.end_date ? <><strong><Moment date={row.end_date} format="D MMM YYYY" /></strong><br />
-              <span className="text-muted"><Moment date={row.end_date} format="hh:mm:ss" /></span></>: ''}
-           </div>
-}];
+    });
 
-const handleChangePassword = async data => {
-}
+  }, []);
+  // table headings definition
+  const columns = [
+    {
+      name: 'Title',
+      selector: 'title',
+      sortable: true,
+      wrap: true,
+    }, {
+      name: 'Type',
+      selector: 'type',
+      sortable: true,
+    }, {
+      name: 'Purchase By',
+      selector: 'first_name',
+      sortable: true,
+      cell: row => <div><div>{row.first_name} {row.last_name}</div>
+        <div className="small text-muted">
+          <span>Referral: {row.referral_id}</span>
+        </div></div>
+    }, {
+      name: 'Tokens',
+      selector: 'tokens',
+      sortable: true,
+      cell: row => <div>{row.tokens ? row.tokens : ''}</div>
+    }, {
+      name: 'Income',
+      selector: 'income',
+      sortable: true,
+      cell: row => <div>{row.currency_code}  {row.income}</div>
+    }, {
+      name: 'Status',
+      selector: 'status',
+      sortable: true,
+      cell: row => <Status {...row} />
+    }, {
+      name: 'Start Date',
+      selector: 'start_date',
+      sortable: true,
+      cell: row => <div>
+        <strong><Moment date={row.start_date} format="D MMM YYYY" /></strong><br />
+        <span className="text-muted"><Moment date={row.start_date} format="hh:mm:ss" /></span>
+      </div>
+    }, {
+      name: 'End Date',
+      selector: 'end_date',
+      sortable: true,
+      cell: row => <div>
+        {row.end_date ? <><strong><Moment date={row.end_date} format="D MMM YYYY" /></strong><br />
+          <span className="text-muted"><Moment date={row.end_date} format="hh:mm:ss" /></span></> : ''}
+      </div>
+    }];
 
-const handleDeleteProduct = async data => {
-}
+  const handleChangePassword = async data => {
+  }
 
-const onSubmitUpdateProduct= data => {
-  setSelectedProduct(data);
-  setShow(true);
+  const handleDeleteProduct = async data => {
+  }
+
+  const onSubmitUpdateProduct = data => {
+    setSelectedProduct(data);
+    setShow(true);
   };
 
-  const onSubmitResendPassword= data => {
+  const onSubmitResendPassword = data => {
     setSelectedProduct(data);
     setShowResend(true);
-    };
+  };
 
-  const onSubmitDeleteProduct= data => {
+  const onSubmitDeleteProduct = data => {
     setSelectedProduct(data);
     setShowDelete(true)
   };
@@ -171,39 +174,39 @@ const onSubmitUpdateProduct= data => {
   }
 
 
-    return (
-        <Card className="o-hidden mb-4">
-          <DeleteProductAlert show={showDelete} setShow={setShowDelete} product={selectedProduct} />
-          
-            <CardBody className="p-0">
-                <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Product History</span>
-                    <span className="flex-grow-1" /><input
-                        style={inputWith}
-                        type="text"
-                        name="search"
-                        className={`form-control form-control-m`}
-                        placeholder="Search..."
-                        onKeyUp={e => onSearchFilter(e.target.value)}
-                      />
-                    {/* <div>
+  return (
+    <Card className="o-hidden mb-4">
+      <DeleteProductAlert show={showDelete} setShow={setShowDelete} product={selectedProduct} />
+
+      <CardBody className="p-0">
+        <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
+          <span>Product History</span>
+          <span className="flex-grow-1" /><input
+            style={inputWith}
+            type="text"
+            name="search"
+            className={`form-control form-control-m`}
+            placeholder="Search..."
+            onKeyUp={e => onSearchFilter(e.target.value)}
+          />
+          {/* <div>
                             <a 
                             href={`products/add`}
                             className="btn btn-secondary">
                                 Add Product
                             </a>
                     </div> */}
-                </div>
-            </CardBody>
-            <DataTable
-                data={filteredProducts}
-                columns={columns}
-                customStyles={customStyles}
-                noHeader
-                selectableRowsHighlight
-                highlightOnHover
-                pagination
-            />
-        </Card>
-    );
+        </div>
+      </CardBody>
+      <DataTable
+        data={filteredProducts}
+        columns={columns}
+        customStyles={customStyles}
+        noHeader
+        selectableRowsHighlight
+        highlightOnHover
+        pagination
+      />
+    </Card>
+  );
 }
