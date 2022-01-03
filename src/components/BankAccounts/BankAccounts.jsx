@@ -128,8 +128,9 @@ const columns = [
     cell: row => <div>
      { adminLevel === 5 ?<div style={iconPadding}>
         <a
-          href={`/bank-accounts/${row.id}`}
+          href={``}
           className="btn btn-light btn-sm btn-icon"
+          disabled
         > <span className="fa fa-pencil" />
         </a></div>: ''}
     

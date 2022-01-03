@@ -41,17 +41,9 @@ console.log('Test submit status')
             } ;
 
         if(selectedStatus){
-            // return confirmAlert({
-            //     title: 'Error',
-            //     message: 'Endpoint not provided',
-            //     buttons: [
-            //       {
-            //         label: 'Ok',
-            //       }
-            //     ]
-            //   });
-            TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
 
+            TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
+                console.log(response.data)
                  if(response.data.success){
                      setProcessing(false)
                      setShow(false)
@@ -66,7 +58,7 @@ console.log('Test submit status')
                       });
                  }else{
                      setProcessing(false)
-                     setError('Something went wrong while trying to update members status');
+                     setError(response.data.message);
                  }
                 setDisabled(false);
              })

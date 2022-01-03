@@ -19,7 +19,7 @@ import FileStorageProvider from './FileStorageProvider';
 import SettingService from './SettingService';
 import CompanyService from './CompanyService';
 import BankAccountService from './BankAccountService';
-
+import MainAccountService from './MainAccountService';
 
 export {
     SessionProvider,
@@ -43,4 +43,5 @@ export {
     SettingService,
     CompanyService,
     BankAccountService,
+    MainAccountService,
 };

@@ -53,9 +53,10 @@ export default function DashboardPage(props) {
 
         const mainAccount = await AccountService.getMainAccount()
             setMainAccount(mainAccount);
-
-        const poducts = await ProductService.getProducts();
-              setProducts(poducts.results);
+            console.log(mainAccount)
+        const poductsList = await ProductService.getProducts();
+              setProducts(poductsList.results);
+              console.log(poductsList)
 
         const transaList = await TransactionService.getTransactions();
              setTransactions(transaList.results);

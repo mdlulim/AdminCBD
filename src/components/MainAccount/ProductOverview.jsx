@@ -61,24 +61,18 @@ const Image = () => {
 };
 
 export default function Products(props) {
+    const { transactionType, products } = props;
     const [show, setShow] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [showResend, setShowResend] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
-    const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState({});
     const history = useHistory();
 
 
     useMemo(() => {
-
-      ProductService.getProductHistory().then((res) => {
-          const productlist = res.results;
-          setProducts(productlist);
-          setFilteredProducts(productlist);
-        
-      });
+        setFilteredProducts(products);
 
       }, []);
     // table headings definition

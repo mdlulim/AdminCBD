@@ -71,17 +71,12 @@ export default function Products(props) {
     const [selectedProduct, setSelectedProduct] = useState({});
     const history = useHistory();
 
-
     useMemo(() => {
 
       ProductService.getProducts().then((res) => {
-        //console.log('Products '+res.data.data.results)
-        if(res.data.success){
-          const productlist = res.data.data.results;
+          const productlist = res.results;
           setProducts(productlist);
           setFilteredProducts(productlist);
-        }
-        
       });
 
       }, []);

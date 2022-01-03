@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Card, CardBody, Row, Col, Input, FormGroup, Label } from 'reactstrap';
 import Moment from 'react-moment';
 import { useParams, useHistory } from 'react-router-dom';
@@ -30,9 +30,6 @@ const customStyles = {
   },
 };
 
-const iconPadding = {
-  paddingRight: '3px',
-}
 
 const selectPadding = {
   paddingRight: '10px',
@@ -67,79 +64,25 @@ const Status = ({ status }) => {
   );
 };
 
-const Money = (row) => {
-  let badge = 'pending';
-  let simbol = '+';
-  if (row.subtype === 'withdrawal' || row.subtype === 'Withdrawal') {
-    simbol = '-';
-    if (row.status === 'Pending') {
-      badge = 'warning';
-    } else {
-      badge = 'danger'
-    }
-  } else {
-    if (row.status === 'Pending') {
-      badge = 'warning';
-    } else if (row.status === 'Completed') {
-      badge = 'success';
-    } else {
-      badge = 'danger';
-    }
-  }
-  return <strong className={'text-' + badge}>{simbol + '' + row.amount} {row.currency.code}</strong>
-};
-
-// Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
 
 
 
-
-
-export default function Transactions(props) {
-  const { transactions} = props;
+export default function TransactionFees(props) {
+  const { transactionType, transactions } = props;
   const [show, setShow] = useState(false);
-  const [showUpdate, setShowUpdate] = useState(false);
-  const [showBulk, setShowBulk] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  //const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const [csvTransactions, setCsvTransactions] = useState([])
-  const [temp, setTemp] = useState({});
   const handleClose = () => setShow(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [checkCreatedDate, setCheckCreatedDate] = useState(true);
-  const [selectedTransaction, setSelectedTransaction] = useState(false);
-  const [adminLevel, setAdminLevel] = useState({});
-  const [wealthCreaters, setWealthCreaters] = useState([]);
-  const [selectedRows, setSelectedRows] = React.useState([]);
-  const [users, setUsers] = React.useState([]);
-  const [toggleCleared, setToggleCleared] = React.useState(false);
-  const [selectedTransPOP, setSelectedTransPOP] = useState('');
-  const [showApproveMember, setShowApproveMember] = useState(false);
-  const [forBank, setForBank] = useState(false)
   const [activeFilter, setActiveFilter] = useState('all')
   const params = useParams();
   const { id } = params;
   const csvDownloaderClick = useRef(null)
 
 
-  async function fetchData(){
-    console.log('======================Components====================')
-    console.log(transactions)
-  }
-  useEffect(() => {
-    if (SessionProvider.isValid()) {
-      const user = SessionProvider.get();
-      setAdminLevel(user.permission_level)
-    }
-    fetchData();
-    // TransactionService.getTransactions().then((res) => {
-    //     const transaList = res.results;
-    //     const results = transaList.filter(item => item.status.toLowerCase() === "completed");
-    //     setTransactions(results);
-    //     setFilteredTransactions(results);
-    // });
+  useMemo(() => {
+        setFilteredTransactions(transactions);
 
   }, []);
 
@@ -187,6 +130,7 @@ export default function Transactions(props) {
       (item && item.user.first_name && item.user.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.user.last_name && item.user.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.user.referral_id && item.user.referral_id.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.subtype && item.subtype.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -206,15 +150,9 @@ export default function Transactions(props) {
     const start = Date.parse(startDate);
     const end = Date.parse(endDate);
 
-    if (checkCreatedDate === true) {
-      const searchByDate = transactions.filter(
-        transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
-      setFilteredTransactions(searchByDate);
-    } else {
       const searchByDate = transactions.filter(
         transaction => (Date.parse(transaction.updated)) >= start && (Date.parse(transaction.updated)) <= end);
       setFilteredTransactions(searchByDate);
-    }
     setDisabled(false);
     setShow(false)
   }
@@ -229,26 +167,6 @@ export default function Transactions(props) {
     setActiveFilter(e.target.value)
 
   }
-
-  const handleRowSelected = React.useCallback(state => {
-    setSelectedRows(state.selectedRows);
-    //console.log(state.selectedRows)
-  }, []);
-
-  const contextActions = React.useMemo(() => {
-    const handleBulkUpdate = () => {
-      setShowBulk(true)
-    };
-
-    return (
-      <button
-        className="btn btn-secondary"
-        type="button"
-        onClick={handleBulkUpdate}>
-        <span className="fa fa-pencil" /> Bulk Update
-      </button>
-    );
-  }, [filteredTransactions, selectedRows, toggleCleared]);
 
   return (
     <Card className="o-hidden mb-4">
@@ -290,11 +208,6 @@ export default function Transactions(props) {
                             /></a>
                         </Col>
                     </div>
-      <TransactionDetails
-        show={showApproveMember}
-        setShow={setShowApproveMember}
-        transaction={selectedTransaction}
-        pop={selectedTransPOP} />
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
           <span>Transactions</span>
@@ -314,10 +227,6 @@ export default function Transactions(props) {
       <DataTable
         columns={columns}
         data={filteredTransactions}
-        selectableRows
-        contextActions={contextActions}
-        onSelectedRowsChange={handleRowSelected}
-        clearSelectedRows={toggleCleared}
         pagination
       />
       <Modal show={show} onHide={handleClose} centered className="confirm-modal">

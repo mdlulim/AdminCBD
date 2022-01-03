@@ -155,6 +155,9 @@ export default function Transactions(props) {
           const results = transaList.filter(item => item.subtype.toLowerCase() === "transfer");
           setTransactions(results);
           setFilteredTransactions(results);
+        }else if (transactionType === 'all') {
+          setTransactions(transaList);
+          setFilteredTransactions(transaList);
         }
       }
     });
