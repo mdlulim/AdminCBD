@@ -184,14 +184,20 @@ const onSubmitChangeStatus= data => {
     //console.log(userWallet)
    TransactionService.getTransactionPOP(data.txid).then((res) => {
      //console.log(res.data.data.rows[0])
-       const pop = res.data.data.rows;
-       const url = pop[0].file;
+       const pop = res.rows;
+       console.log(res.rows)
+       const url = ''
+       if(res.rows.length){
+          const url = pop[0].file;
+          TransactionService.getTransactionPOPFile(url).then((res) => {
+              setSelectedTransPOP(res.data);
+            // console.log(url)
+          })
+       }
+
        //setSelectedTransPOP(url);
-       
-        TransactionService.getTransactionPOPFile(url).then((res) => {
-            setSelectedTransPOP(res.data);
-           // console.log(url)
-        })
+
+        
      });
     setSelectedTransaction(data);
     setShowTransaction(true);

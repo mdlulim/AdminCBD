@@ -38,7 +38,7 @@ class MainAccountService {
           method: 'GET',
           headers: headers,
           data: subtype,
-          url: `${Config.API.BASE_URL}/transaction-type`,
+          url: `${Config.API.BASE_URL}/transactions-type`,
         }).then(json => json.data)
         .then(res => {
           const { success, data } = res;
@@ -55,7 +55,7 @@ class MainAccountService {
           method: 'GET',
           headers: headers,
           data: subtype,
-          url: `${Config.API.BASE_URL}/transaction-total`,
+          url: `${Config.API.BASE_URL}/transactions-total`,
         }).then(json => json.data)
         .then(res => {
           const { success, data } = res;

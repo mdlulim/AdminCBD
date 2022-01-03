@@ -3,5 +3,5 @@ import SendOTPBank from './SendOTPBank';
 
 export default {
     BankAccounts,
-    SendOTPBank
+    SendOTPBank,
 }

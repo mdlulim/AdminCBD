@@ -37,9 +37,11 @@ const CompanyAccountList = props => {
     async function fetchData(){
         const mainAccount = await MainAccountService.getMainAccount()
             setMainAccount(mainAccount);
-        const data = {subtype: "withdrawal"}
-        const types = await MainAccountService.getTransactionType(data)
+        const data = {subtype: 'deposit'}
+        const types = await MainAccountService.getTransactionTotal(data);
+        console.log("======================Transaction==================")
         console.log(types)
+
         const poducts = await ProductService.getProductHistory();
               setProducts(poducts.results);
               setFilteredProducts(poducts.results)
@@ -48,7 +50,7 @@ const CompanyAccountList = props => {
         const results = transaList.results.filter(item => item.status.toLowerCase() === "completed");
              setTransactions(results);
              setFilteredTransactions(results);
-             console.log(results)
+            // console.log(results)
 
 
         setPageLoading(false);

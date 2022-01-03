@@ -31,6 +31,19 @@ class BankAccountService {
       });
     }
 
+    static async createBankAccount(data){
+      return await axios({
+        mode: 'no-cors',
+        method: 'POST',
+        headers: headers,
+        data:data,
+        url: `${Config.API.BASE_URL}/bank-accounts`,
+      }).then((res) =>{
+        const result = res;
+        return result;
+      });
+    }
+
     static async getPendingBankAccounts() {
         console.log(authToken)
         return await axios({

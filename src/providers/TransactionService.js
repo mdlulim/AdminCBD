@@ -122,7 +122,14 @@ class TransactionService {
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/pop/deposits/${txid}`,
-      });
+      }).then(json => json.data)
+      .then(res => {
+        const { success, data } = res;
+        if (success) {
+          return data || [];
+        }
+        return [];
+      })
     }
       static async getTransactionPOPFile(url) {
         return await axios({
