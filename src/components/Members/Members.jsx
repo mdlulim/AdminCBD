@@ -71,6 +71,7 @@ const Status = ({ status }) => {
 export default function Members(props) {
   const { status } = props;
   const [show, setShow] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
   const [ showTransaction, setShowTransaction ] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [members, setMembers] = useState([]);
@@ -80,21 +81,19 @@ export default function Members(props) {
   const [transaction, setTransaction] = useState({});
   const history = useHistory();
 
+  async function fetchData(){
+    const memberslist = await MemberService.getMembers();
+        setMembers(memberslist.results);
+        setFilteredMembers(memberslist.results);
+  //  setPageLoading(false);
+}
+
     useMemo(() => {
-        MemberService.getMembers().then((res) => {
-            const memberslist = res.data.data.results;
-            
-            if(status === 'pending'){
-              const list = memberslist.filter(member => member.status === "Pending");
-              setMembers(list);
-              setFilteredMembers(list);
-            }else{
-              setMembers(memberslist);
-              setFilteredMembers(memberslist);
-            }
-        });
- 
-      }, []);
+      fetchData();
+
+      }, [
+        setPageLoading,
+      ]);
     // table headings definition
 const columns = [{
     name: '',

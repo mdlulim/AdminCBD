@@ -4,6 +4,7 @@ import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
+import Loader from "react-js-loader";
 import { TransactionService, UserService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
@@ -13,8 +14,9 @@ const ModalChangeStatus = props => {
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
+    const [processing, setProcessing] = useState(false)
     const [selectedStatus, setSelectedStatus] = useState('');
-    const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
+    const { title, body,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
@@ -29,7 +31,8 @@ const ModalChangeStatus = props => {
         event.preventDefault();
         setDisabled(true);
         setError('');
-
+        setProcessing(true);
+console.log('Test submit status')
         const form = event.currentTarget;
 
         const data = { 
@@ -38,19 +41,11 @@ const ModalChangeStatus = props => {
             } ;
 
         if(selectedStatus){
-            setShow(false)
-            // return confirmAlert({
-            //     title: 'Error',
-            //     message: 'Endpoint not provided',
-            //     buttons: [
-            //       {
-            //         label: 'Ok',
-            //       }
-            //     ]
-            //   });
-            TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
 
+            TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
+                console.log(response.data)
                  if(response.data.success){
+                     setProcessing(false)
                      setShow(false)
                      return confirmAlert({
                         title: 'Succcess',
@@ -62,11 +57,17 @@ const ModalChangeStatus = props => {
                         ]
                       });
                  }else{
-                     setError('Something went wrong while trying to update members status');
+                     setProcessing(false)
+                     setError(response.data.message);
                  }
                 setDisabled(false);
              })
+        }else{
+            setDisabled(false);
+            setProcessing(false)
+                     setError('Please select transacrion status');
         }
+        setProcessing(false)
         setDisabled(false);
       }
     const handleClose = () => setShow(false);
@@ -75,7 +76,6 @@ const ModalChangeStatus = props => {
         event.preventDefault();
         const form = event.currentTarget;
         const reason = form.reason.value;
-
     }
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
@@ -154,7 +154,7 @@ const ModalChangeStatus = props => {
                                 </div>
                                 <hr />
                                 <Row>
-                        <Col md={6}>
+                        <Col md={4}>
                         <button
                                         className="btn btn-dark"
                                         onClick={handleClose}
@@ -163,13 +163,16 @@ const ModalChangeStatus = props => {
                                     {'Cancel'}
                                 </button>
                             </Col>
-                            <Col md={6} >
+                            <Col md={4}>
+                               {processing ? <Loader type="spinner-cub" bgColor={"#323c47"} color={'#FFFFFF'} size={30} /> : ''}
+                            </Col>
+                            <Col md={4} >
                             <button
                                         type="submit"
                                         className="btn btn-success float-right"
-                                        disabled={disabled}
+                                        disabled={processing}
                                     >
-                                    {processing ? 'Processing...' : 'Update'}
+                                    {processing ? 'Processing': 'Update'}
                                 </button>
                             </Col>
                             </Row>

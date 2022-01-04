@@ -23,7 +23,6 @@ const ModalChangeStatus = props => {
             setSelectedMinite(selectValue);
             console.log(selectValue)
         }
-        
     }, []);
 
     const statusOptions = [
@@ -31,9 +30,9 @@ const ModalChangeStatus = props => {
     ];
 
     const minitesOptions = [
-        { value: '15', label: '15 Minites' },
-        { value: '30', label: '30 Minites' },
-        { value: '45', label: '45 Minites' },
+        { value: '15', label: '15 Minutes' },
+        { value: '30', label: '30 Minutes' },
+        { value: '45', label: '45 Minutes' },
     ];
 
     const onSubmit = (event) => {

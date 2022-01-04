@@ -22,6 +22,13 @@ class AccountService {
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/business-account`,
+      }).then(json => json.data)
+      .then(res => {
+        const { success, data } = res;
+        if (success) {
+          return data || [];
+        }
+        return [];
       });
     }
 
@@ -31,6 +38,13 @@ class AccountService {
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/account/${id}`,
+      }).then(json => json.data)
+      .then(res => {
+        const { success, data } = res;
+        if (success) {
+          return data || [];
+        }
+        return [];
       });
     }
 }

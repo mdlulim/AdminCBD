@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { Container } from 'reactstrap';
+import { Loader } from 'components';
 import { PageHeading } from 'components';
 import AuthHeader from './AuthHeader';
 import AuthSidenav from './AuthSidenav';
 
 const AuthLayout = props => {
-    const { breadcrumb, header, sidenav, pageHeading } = props;
+    const { breadcrumb, header, sidenav, pageHeading, loading } = props;
     const [sideNavHidden, setSideNavHidden] = useState(false);
     const [sideNavMinimized, setSideNavMinimized] = useState(false);
     return (
+        <>
+        {loading && <Loader.Default />}
         <div className="page page--w-header">
             <AuthHeader
                 {...props}
@@ -42,6 +45,7 @@ const AuthLayout = props => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

@@ -22,7 +22,14 @@ class MemberService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/users?group=member`,
-    });
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
+    })
   }
 
   static async getWealthCreaters() {
@@ -40,7 +47,14 @@ class MemberService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/users/${id}`,
-    });
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
+    })
   }
 
   static async getMemberKYC(id) {
@@ -67,7 +81,14 @@ class MemberService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/users/${id}/addresses`,
-    });
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
+    })
   }
 
   //Get member referels
@@ -87,6 +108,13 @@ class MemberService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/users/${id}/wallet`,
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
     });
   }
 

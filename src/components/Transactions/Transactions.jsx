@@ -136,7 +136,7 @@ export default function Transactions(props) {
     }
 
     TransactionService.getTransactions().then((res) => {
-      const transaList = res.data.data.results;
+      const transaList = res.results;
 
       if (id != null && id.length > 15) {
         const results = transaList.filter(item => item.id === id);
@@ -155,6 +155,9 @@ export default function Transactions(props) {
           const results = transaList.filter(item => item.subtype.toLowerCase() === "transfer");
           setTransactions(results);
           setFilteredTransactions(results);
+        }else if (transactionType === 'all') {
+          setTransactions(transaList);
+          setFilteredTransactions(transaList);
         }
       }
     });

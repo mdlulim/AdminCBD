@@ -5,6 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
 import { BankAccountService } from '../../providers';
+import VerifyBankAccount from './VerifyBankAccount';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
@@ -12,6 +13,7 @@ const ModalChangeStatus = props => {
     const { show, setShow, bankAccount } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
+    const [showVerify, setShowVerify] = useState(false);
     const [error, setError] = useState([]);
     const [selectedCurrencyCode, setSelectedCurrencyCode] = useState('');
     const { title, body, processing, confirmButtonDisabled, confirmButton, cancelButton, showIcon, size, } = props;
@@ -37,21 +39,22 @@ const ModalChangeStatus = props => {
             subcategory: bankAccount.subcategory,
         }
             BankAccountService.sendOTP(bankAccount.id, bankAccount).then((response) => {
-                console.log(response);
+                console.log(response.data);
                 if (response.data.success) {
                     setShow(false)
-                    return confirmAlert({
-                        title: 'Succcess',
-                        message: 'Setting was successfully updated',
-                        buttons: [
-                          {
-                            label: 'Ok',
-                            onClick: () => {
-                                window.location = '/configurations/bankAccounts';
-                            }
-                          }
-                        ]
-                    });
+                    setShowVerify(true)
+                    // return confirmAlert({
+                    //     title: 'Succcess',
+                    //     message: 'Setting was successfully updated',
+                    //     buttons: [
+                    //       {
+                    //         label: 'Ok',
+                    //         onClick: () => {
+                    //             window.location = '/configurations/bankAccounts';
+                    //         }
+                    //       }
+                    //     ]
+                    // });
                 } else {
                     setError(response.data.message);
                 }
@@ -75,7 +78,9 @@ const ModalChangeStatus = props => {
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
             {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
             <Modal.Body>
+            
                 <Row>
+                <VerifyBankAccount show={showVerify} setShow={setShowVerify} bankAccount={bankAccount} />
                     {showIcon &&
                         <Col xs={2} className="text-right mg-t-10 text-warning">
                             <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
@@ -110,13 +115,42 @@ const ModalChangeStatus = props => {
                                     : ''}
                             </div>
                             <div className="form-group">
-                                <label htmlFor="email">OTP Number</label>
+                                <label htmlFor="email">Account Type</label>
+                                {bankAccount ?
                                     <input
                                         type="text"
-                                        id="confirm_otp"
-                                        name="confirm_otp"
+                                        id="percentage"
+                                        name="percentage"
                                         className="form-control form-control-m"
+                                        defaultValue={bankAccount.type}
+                                        disabled
                                     />
+                                    : ''}
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="value">Bank Name</label>
+                                {bankAccount ?
+                                    <input
+                                        type="text"
+                                        id="tx_value"
+                                        name="tx_value"
+                                        className="form-control form-control-m"
+                                        defaultValue={bankAccount.bank_name}
+                                    />
+                                    : ''}
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="email">Branc Code</label>
+                                {bankAccount ?
+                                    <input
+                                        type="text"
+                                        id="subtype"
+                                        name="subtype"
+                                        className="form-control form-control-m"
+                                        value={bankAccount.branch_code}
+                                        disabled
+                                    />
+                                    : ''}
                             </div>
                             <hr />
                             <Row>
@@ -136,14 +170,7 @@ const ModalChangeStatus = props => {
                                 className="btn btn-success float-right"
                                 disabled={disabled}
                             >
-                                {processing ? 'Processing...' : 'Resend OTP'}
-                            </button>
-                            <button
-                                type="submit"
-                                className="btn btn-success float-right"
-                                disabled={disabled}
-                            >
-                                {processing ? 'Processing...' : 'Confirm OTP'}
+                                {processing ? 'Processing...' : 'Send OTP'}
                             </button>
                                 </Col>
                             </Row>

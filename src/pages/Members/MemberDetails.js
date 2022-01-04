@@ -39,6 +39,7 @@ const MemberDetails = props => {
     const breadcrumb = { heading: "Member Details" };
     const [activeTab, setActiveTab] = useState('kyc');
     const [member, setMember] = useState({});
+    const [pageLoading, setPageLoading] = useState(true);
     const [wallet, setWallet] = useState({});
     const [address, setAddress] = useState({});
     const [kycDetails, setkycDetails] = useState({});
@@ -49,50 +50,46 @@ const MemberDetails = props => {
     const { id } = params;
     const [ kycLevel, setKycLevel] = useState(null);
 
+    async function fetchData(){
+        const member = await MemberService.getMember(id);
+            setMember(member);
+            console.log(member)
+
+        const walletDetails = await MemberService.getMemberWallet(id);
+            setWallet(walletDetails);
+            setWalletID(walletDetails.id);
+
+            const memberAddress = await MemberService.getMemberAddress(id);
+                const address = memberAddress.results;
+                setAddress(address[address.length - 1]);
+
+            //Get member details
+            await KYCService.getkycLlevel(id).then((res) => {
+                setKycLevel(res.data.data.kyc_level)
+                //console.log(res.data.data)
+                if(res.data.data.kyc_level != -1){
+                    setRating(res.data.data.kyc_level);
+                }
+            })
+
+            await MemberService.getMemberKYC(id).then(res=>{
+                    setkycDetails(res.data.data)
+                // console.log(res.data.data)
+            })
+
+            setPageLoading(false);
+    }
+
     useState(() => {
         //Get member details
         if (SessionProvider.isValid()) {
             const user = SessionProvider.get();
              setAdminLevel(user.permission_level)
          }
-         
-        MemberService.getMember(id).then((res) => {
-            const memberDetails = res.data.data;
-            //console.log(memberDetails)
-            setMember(memberDetails)
-        })
-
-        //Get member details
-        MemberService.getMemberWallet(id).then((res) => {
-            const walletDetails = res.data.data;
-           // console.log(res.data.data)
-            setWallet(walletDetails);
-            setWalletID(walletDetails.id)
-        });
-
-        //Get member details
-        MemberService.getMemberAddress(id).then((res) => {
-                const memberAddress = res.data.data.results;
-                setAddress(memberAddress[memberAddress.length - 1]);
-        });
-
-
-         //Get member details
-         KYCService.getkycLlevel(id).then((res) => {
-            setKycLevel(res.data.data.kyc_level)
-            //console.log(res.data.data)
-            if(res.data.data.kyc_level != -1){
-                setRating(res.data.data.kyc_level);
-            }
-        })
-
-       MemberService.getMemberKYC(id).then(res=>{
-            setkycDetails(res.data.data)
-           // console.log(res.data.data)
-       })
-
-
-    }, []);
+         fetchData();
+    }, [
+        setPageLoading,
+    ]);
 
 
     const toggleTab = (e, tab) => {
@@ -105,6 +102,7 @@ const MemberDetails = props => {
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{ active: "Member Details" }}
             pageHeading={{
                 title: 'Member Details',
@@ -139,7 +137,7 @@ const MemberDetails = props => {
                                                 <tbody>
                                                 <tr><td>ID/Passport No </td><td> : {member.id_number}</td></tr>
                                                 <tr><td>Phone </td><td> : {member.mobile}</td></tr>
-                                                <tr><td>Email </td><td> : {member.email}</td></tr>
+                                                <tr><td>Email </td><td> :<a href={`mailto:${member.email}`}>{member.email}</a></td></tr>
                                                 <tr><td>KYC Level </td><td> : {kycLevel === -1?'unAssigned':kycLevel}</td></tr>
                                                 <tr><td>Type </td><td> : {member.group ? member.group.label : 'Member'}</td></tr>
                                                 <tr><td>Status </td><td><Status {...member} /></td></tr>

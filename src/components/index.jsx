@@ -24,6 +24,7 @@ import ProductCategory from './ProductCategory';
 import Settings from './Settings';
 import GeneralSettings from './GeneralSettings';
 import BankAccounts from './BankAccounts';
+import MainAccount from './MainAccount';
 
 export {
     Breadcrumb,
@@ -52,4 +53,5 @@ export {
     Settings,
     GeneralSettings,
     BankAccounts,
+    MainAccount,
 };

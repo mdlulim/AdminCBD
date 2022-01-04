@@ -24,7 +24,6 @@ export default function MembersPage(props) {
                 caption: 'EXPLORE PENDING MEMBERS DASHBOARD FOR CRYPTO BASED INNOVATION',
             }}
         >
-            
             <Card>
                 <Common.Widget
                     icon="li-users"

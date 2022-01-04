@@ -52,17 +52,17 @@ export default function SystemSettings(props) {
                                         Transactions
                                     </a>
                                 </li>
-                                {/* <li className="nav-item">
+                                <li className="nav-item">
                                     <a
-                                        className={`nav-link show ${activeTab === 'products' ? 'active' : ''}`}
-                                        onClick={e => toggleTab(e, 'products')}
+                                        className={`nav-link show ${activeTab === 'banking-details' ? 'active' : ''}`}
+                                        onClick={e => toggleTab(e, 'banking-details')}
                                         data-toggle="tab"
                                         href="/"
                                     >
-                                        Systems
+                                        Company Bank Details
                                     </a>
                                 </li>
-                                <li className="nav-item">
+                                {/*  <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'transactions' ? 'active' : ''}`}
                                         onClick={e => toggleTab(e, 'transactions')}
@@ -106,16 +106,17 @@ export default function SystemSettings(props) {
                                         <Settings.TransactionFees />
                                     </CardBody>
                                 </div>
+                                <div role="tabpanel" className={`tab-pane show ${activeTab === 'banking-details' ? 'active' : ''}`}>
+                                    <div className="profile-setting__card">
+                                        <CardBody className="pl-0 pr-0 pb-0">
+                                        <GeneralSettings.CampanyBankDetails />
+                                        </CardBody>
+                                    </div>
+                                </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
                                             <Settings.SystemFees />
-                                        </CardBody>
-                                    </div>
-                                </div>
-                                <div role="tabpanel" className={`tab-pane show ${activeTab === 'banking-details' ? 'active' : ''}`}>
-                                    <div className="profile-setting__card">
-                                        <CardBody className="pl-0 pr-0 pb-0">
                                         </CardBody>
                                     </div>
                                 </div>

@@ -87,6 +87,7 @@
     "react-hook-form": "^3.28.2",
     "react-images-upload": "^1.2.8",
     "react-images-uploader": "^1.2.0-rc1",
+    "react-js-loader": "^0.1.0",
     "react-loader-spinner": "^4.0.0",
     "react-loading-screen": "0.0.17",
     "react-moment": "^1.1.1",

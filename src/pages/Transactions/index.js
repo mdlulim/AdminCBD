@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
 import { Transactions, Common } from 'components';
@@ -42,11 +42,12 @@ const Filter = () => {
 const TransactionList = props => {
     const breadcrumb = { heading: "Transactions" };
     const [transactions, setTransactions] = useState([]);
+    const [pageLoading, setPageLoading] = useState(true);
 
-    useMemo(() => {
+    useEffect(() => {
         TransactionService.getTransactions().then((res) => {
-          console.log(res.data.data.results)
-          const transactionlist = res.data.data.results;
+          console.log(res.results)
+          const transactionlist = res.results;
           setTransactions(transactionlist);
         });
           const transactionsList = [{
@@ -102,8 +103,12 @@ const TransactionList = props => {
               created: '5 mins ago',
               status: 'Rejected',
           }];
-       setTransactions(transactionsList);
-        }, []);
+            setTransactions(transactionsList);
+            setPageLoading(false);
+        }, [
+            setPageLoading,
+            setTransactions
+        ]);
 
         const countTransactions = (type) =>{
             const countTypes = transactions.filter(transaction => transaction.status === type);
@@ -124,7 +129,9 @@ const TransactionList = props => {
         };
 
 	return (
-		<AuthLayout  {...props}
+        <AuthLayout  
+        {...props}
+        loading={pageLoading}
         breadcrumb={{ active: "All Transactions" }}
         pageHeading={{
             title: 'CBI Transactions',

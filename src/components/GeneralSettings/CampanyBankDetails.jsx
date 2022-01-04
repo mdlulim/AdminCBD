@@ -6,10 +6,11 @@ import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
-import { BankAccountService, SessionProvider } from '../../providers';
-import SendOTPBankAccount from './SendOTPBankAccount';
+import { CompanyBankAccountService, SessionProvider } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert';
-// styles
+import AddCompanyBankDetails from './AddCompanyBankDetails';
+import UpdateCompanyBankDetails from './UpdateCompanyBankDetails';
+// styles AddCompanyBankDetails
 const customStyles = {
    
     headCells: {
@@ -39,7 +40,7 @@ const Status = ({ status }) => {
     if (status === 'Pending') {
       badge = 'warning';
     }
-    if (status === 'Verified') {
+    if (status === 'Active') {
       badge = 'success';
     }
     if (status === 'Blocked') {
@@ -52,6 +53,7 @@ const Status = ({ status }) => {
 
 export default function BankAccounts(props) {
     const [show, setShow] = useState(false);
+    const [showBank, setShowBank] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [showResend, setShowResend] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
@@ -68,14 +70,11 @@ export default function BankAccounts(props) {
         const user = SessionProvider.get();
         setAdminLevel(user.permission_level)
     }
-      BankAccountService.getPendingBankAccounts().then((res) => {
+    CompanyBankAccountService.getCompanyBankAccounts().then((res) => {
         //console.log('BankAccounts '+res.data.data.results)
-        console.log(res.data)
-        if(res.data.success){
-          const productlist = res.data.data.data.results;
-          setBankAccounts(productlist);
-          setFilteredBankAccounts(productlist);
-        }
+          const data = res.results;
+          setBankAccounts(data);
+          setFilteredBankAccounts(data);
       });
 
       }, []);
@@ -103,13 +102,6 @@ const columns = [
   selector: 'bank_code',
   sortable: true,
 },{
-    name: 'Mobile',
-    selector: 'mobile',
-    sortable: true,
-    cell: row => <div>
-                <strong>{row.user.mobile}</strong>
-             </div>
-  },{
     name: 'Status',
     selector: 'status',
     sortable: true,
@@ -128,9 +120,13 @@ const columns = [
     cell: row => <div>
      { adminLevel === 5 ?<div style={iconPadding}>
         <a
-          href={``}
+          href={`#`}
           className="btn btn-light btn-sm btn-icon"
-          disabled
+          onClick={e => {
+            e.preventDefault();
+            setSelectedBankAccount(row)
+            setShowBank(true)
+          }}
         > <span className="fa fa-pencil" />
         </a></div>: ''}
     
@@ -142,15 +138,6 @@ const onSubmitChangeStatus = data => {
     setShow(true);
     //return <Confirm show={show} setShow={setShow} />;
   };
-
-const handleChangePassword = async data => {
-}
-const onSubmitDeleteSetting = async data =>{
-
-}
-
-const handleDeleteBankAccount = async data => {
-}
 
 const onSubmitUpdateBankAccount= data => {
   setSelectedBankAccount(data);
@@ -183,10 +170,12 @@ const onSubmitUpdateBankAccount= data => {
 
     return (
         <Card className="o-hidden mb-4">
-            <SendOTPBankAccount show={show} setShow={setShow} bankAccount={selectedBankAccount} />
+            <AddCompanyBankDetails show={show} setShow={setShow} bankAccount={selectedBankAccount} />
+            <UpdateCompanyBankDetails show={showBank} setShow={setShowBank} bankAccount={selectedBankAccount} />
+            
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>Bank Accounts</span>
+                    <span>Bank Details</span>
                     <span className="flex-grow-1" /><input
                         style={inputWith}
                         type="text"
@@ -195,13 +184,15 @@ const onSubmitUpdateBankAccount= data => {
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
-                    {/* <div>
-                            <a 
-                            href={`products/add`}
-                            className="btn btn-secondary">
-                                Add BankAccount
-                            </a>
-                    </div> */}
+                    <div>
+                      <button
+                      onClick={e => {
+                          setShow(true)
+                      }}
+                      className="btn btn-secondary">
+                          Add New
+                      </button>
+              </div>
                 </div>
             </CardBody>
             <DataTable
