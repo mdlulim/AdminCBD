@@ -33,8 +33,8 @@ const AddCompanyBankDetails = props => {
           });
 
           setTypes([
-            { value: 'Cheque', label: 'Cheque' },
-            { value: 'Savings', label: 'Savings' },
+            { value: 'Cheque Account', label: 'Cheque Account' },
+            { value: 'Business Cheque Account', label: 'Business Cheque Account' },
         ]);
 
         setStatuses([
@@ -51,8 +51,6 @@ const AddCompanyBankDetails = props => {
         setDisabled(true);
         setError('');
 
-        console.log(selectedCompany);
-
         const form = event.currentTarget;
         const data = {
             name: form.name.value,
@@ -63,11 +61,11 @@ const AddCompanyBankDetails = props => {
             branch_code: form.branch_code.value,
             user_id: selectedCompany.value,
             status: selectedStatus.value,
+            description: form.description.value,
         }
-       console.log(data)
         if (form.name.value && form.number.value) {
             CompanyBankAccountService.createCompanyBankAccount(data).then((response) => {
-                console.log(response.data)
+               
                 if (response.data.success) {
                     setShow(false)
                     return confirmAlert({
@@ -157,6 +155,15 @@ const AddCompanyBankDetails = props => {
                                         type="text"
                                         id="bank_code"
                                         name="bank_code"
+                                        className="form-control form-control-m"
+                                    />
+                            </div>
+                            <div className="form-group">
+                                    <label htmlFor="fullname">Description</label>
+                                    <input
+                                        type="text"
+                                        id="description"
+                                        name="description"
                                         className="form-control form-control-m"
                                     />
                             </div>

@@ -66,16 +66,15 @@ const AddCompanyBankDetails = props => {
             status      : selectedStatus ? selectedStatus.value: bankAccount.status,
         }
 
-    //    console.log(data)
-    //    return data;
+
         if (form.name.value && form.number.value) {
             CompanyBankAccountService.updateCompanyBankAccount(bankAccount.id, data).then((response) => {
-                console.log(response)
+                console.log(response.data)
                 if (response.data.success) {
                     setShow(false)
                     return confirmAlert({
                         title: 'Succcess',
-                        message: 'Setting was successfully updated',
+                        message: response.data.message,
                         buttons: [
                           {
                             label: 'Ok',

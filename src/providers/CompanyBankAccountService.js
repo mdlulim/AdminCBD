@@ -62,14 +62,13 @@ class CompanyBankAccountService {
 
     static async updateCompanyBankAccount(id,bank){
       return await axios({
-        mode: 'no-cors',
-        method: 'PUT',
-        data: bank,
-        headers: headers,
-        url: `${Config.API.BASE_URL}/company-bank-accounts/${id}`,
+          mode: 'no-cors',
+          method: 'PUT',
+          data: bank,
+          headers: headers,
+          url: `${Config.API.BASE_URL}/company-bank-accounts/${id}`,
       }).then((res) =>{
-        const result = {status: res.data.status, message: res.data.message}
-        return result;
+        return res;
       });
     }
 
