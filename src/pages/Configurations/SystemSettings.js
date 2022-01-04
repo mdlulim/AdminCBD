@@ -62,16 +62,16 @@ export default function SystemSettings(props) {
                                         Company Bank Details
                                     </a>
                                 </li>
-                                {/*  <li className="nav-item">
+                                 <li className="nav-item">
                                     <a
-                                        className={`nav-link show ${activeTab === 'transactions' ? 'active' : ''}`}
-                                        onClick={e => toggleTab(e, 'transactions')}
+                                        className={`nav-link show ${activeTab === 'kyc' ? 'active' : ''}`}
+                                        onClick={e => toggleTab(e, 'kyc')}
                                         data-toggle="tab"
                                         href="/"
                                     >
-                                        Transactions
+                                        KYC Limits
                                     </a>
-                                </li> */}
+                                </li>
                                 {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'banking-details' ? 'active' : ''}`}
@@ -113,10 +113,10 @@ export default function SystemSettings(props) {
                                         </CardBody>
                                     </div>
                                 </div>
-                                <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
+                                <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <Settings.SystemFees />
+                                            <GeneralSettings.KYCLimitsOverview />
                                         </CardBody>
                                     </div>
                                 </div>
