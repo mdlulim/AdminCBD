@@ -59,6 +59,34 @@ class KYCService {
     });
   }
 
+  static async getKYCLimits() {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/kyc-limits`,
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
+    });
+  }
+
+  static async updateKYCLimit(id,data){
+    return await axios({
+        mode: 'no-cors',
+        method: 'PUT',
+        data: data,
+        headers: headers,
+        url: `${Config.API.BASE_URL}/kyc-limits/${id}`,
+    }).then((res) =>{
+      return res;
+    });
+  }
+
 }
 
 export default KYCService;

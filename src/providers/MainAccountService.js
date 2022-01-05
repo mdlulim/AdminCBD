@@ -39,14 +39,10 @@ class MainAccountService {
           headers: headers,
           data: subtype,
           url: `${Config.API.BASE_URL}/transactions-type`,
-        }).then(json => json.data)
-        .then(res => {
-          const { success, data } = res;
-          if (success) {
-            return data || [];
-          }
-          return [];
-        })
+        }).then((res) =>{
+          const result = res;
+          return result;
+        });
     }
 
     static async getTransactionTotal(subtype) {

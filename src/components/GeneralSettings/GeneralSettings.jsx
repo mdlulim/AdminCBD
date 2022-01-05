@@ -123,7 +123,6 @@ const columns = [{
   };
 
   const onSubmitDeleteSetting = data => {
-      console.log(data)
       if(data.id){
         SettingService.destroySetting(data.id).then((response) => {
             if (response.data.success) {

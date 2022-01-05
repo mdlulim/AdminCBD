@@ -37,10 +37,10 @@ const CompanyAccountList = props => {
     async function fetchData(){
         const mainAccount = await MainAccountService.getMainAccount()
             setMainAccount(mainAccount);
-        const data = {subtype: 'deposit'}
-        const types = await MainAccountService.getTransactionTotal(data);
-        console.log("======================Transaction==================")
-        console.log(types)
+        const data = { subtype: 'deposit' }
+        const types = await MainAccountService.getTransactionType(data);
+         console.log("======================Transaction==================")
+         console.log(types.data.data)
 
         const poducts = await ProductService.getProductHistory();
               setProducts(poducts.results);
