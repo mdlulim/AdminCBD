@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
@@ -22,7 +22,7 @@ const ModalChangeStatus = props => {
     const [selectedStatus, setSelectedStatus] = useState('');
     const { title, body,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
-    useMemo(() => {
+    useEffect(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
     }, []);
 
@@ -59,19 +59,17 @@ const ModalChangeStatus = props => {
                         ]
                       });
                  }else{
-                     setProcessing(false)
                      setError(response.data.message);
                  }
                 setDisabled(false);
              })
         }else{
             setDisabled(false);
-            setProcessing(false)
                      setError('Please select transacrion status');
         }
-        setProcessing(false)
         setDisabled(false);
       }
+
     const handleClose = () => setShow(false);
 
     const updateTransactionStatus = (event) => {
@@ -170,7 +168,7 @@ const ModalChangeStatus = props => {
                                 </button>
                             </Col>
                             <Col md={4}>
-                               {processing ? <Loader type="spinner-cub" bgColor={"#323c47"} color={'#FFFFFF'} size={30} /> : ''}
+                               {disabled ? <Loader type="spinner-cub" bgColor={"#323c47"} color={'#FFFFFF'} size={30} /> : ''}
                             </Col>
                             <Col md={4} >
                             <button
@@ -178,7 +176,7 @@ const ModalChangeStatus = props => {
                                 className="btn btn-success float-right"
                                 disabled={processing}
                                     >
-                                    { processing ? <img src={spinningLoader} style={loaderCSS} /> : ''} {'Update'}
+                                    { disabled === true ? <img src={spinningLoader} style={loaderCSS} /> : ''} {' Update'}
                                 </button>
                             </Col>
                             </Row>

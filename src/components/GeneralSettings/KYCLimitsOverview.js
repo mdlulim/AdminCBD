@@ -68,7 +68,6 @@ export default function BankAccounts(props) {
         setAdminLevel(user.permission_level)
     }
     KYCService.getKYCLimits().then((res) => {
-        console.log(res)
           const data = res.results;
           setKYCLimits(data);
           setFilteredKYCLimits(data);

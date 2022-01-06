@@ -22,7 +22,14 @@ class FeeService {
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/fees`,
-      });
+      }).then(json => json.data)
+      .then(res => {
+        const { success, data } = res;
+        if (success) {
+          return data || [];
+        }
+        return [];
+      })
     }
 
     static async createFee(data){
