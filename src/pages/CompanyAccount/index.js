@@ -119,7 +119,7 @@ const CompanyAccountList = props => {
             {!pageLoading &&
               <>
               <div className="form-row margin-bottom-20">
-                        <Col xs={12} lg={3}>
+                        <Col xs={12} lg={4}>
                             <a href={``} >
                              <Common.Widget
                                 icon="li-receipt"
@@ -128,7 +128,7 @@ const CompanyAccountList = props => {
                                 informer={<><span className="text-bold text-success">{mainAccount ? parseFloat(mainAccount.available_balance).toFixed(4)+' '+mainAccount.currency_code: ''}</span> </>}
                             /></a>
                         </Col>
-                        <Col xs={12} lg={3}>
+                        <Col xs={12} lg={4}>
                         <a href={``} >
                             <Common.Widget
                                 icon="li-receipt"
@@ -137,7 +137,16 @@ const CompanyAccountList = props => {
                                 informer={<><span className="text-bold text-success">{totals ? parseFloat(totals.total).toFixed(4)+' '+mainAccount.currency_code: ''}</span></>}
                             /></a>
                         </Col>
-                        <Col xs={12} lg={3}>
+                        <Col xs={12} lg={4}>
+                        <a href={``} >
+                            <Common.Widget
+                                icon="li-receipt"
+                                title="Registration"
+                                subtitle="Fees"
+                                informer={<><span className="text-bold text-success">{totals ? parseFloat(totals.registration).toFixed(4)+' '+mainAccount.currency_code: ''}</span> </>}
+                            /></a>
+                        </Col>
+                        {/* <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
                                 icon="li-receipt"
@@ -145,16 +154,7 @@ const CompanyAccountList = props => {
                                 subtitle="Total Amount"
                                 informer={<><span className="text-bold text-warning">{0}</span> </>}
                             /></a>
-                        </Col>
-                        <Col xs={12} lg={3}>
-                        <a href={``} >
-                            <Common.Widget
-                                icon="li-receipt"
-                                title="Registration"
-                                subtitle="Fees"
-                                informer={<><span className="text-bold text-danger">{0}</span> </>}
-                            /></a>
-                        </Col>
+                        </Col> */}
                     </div>
              <Card>
                 <CardBody className="padding-botton-0">
@@ -169,7 +169,7 @@ const CompanyAccountList = props => {
                                         Transaction Fees
                                     </a>
                                 </li>
-                                <li className="nav-item">
+                                {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'referals' ? 'active' : ''}`}
                                         onClick={e => toggleTab(e, 'referals')}
@@ -178,7 +178,7 @@ const CompanyAccountList = props => {
                                     >
                                        Products
                                     </a>
-                                </li>
+                                </li> */}
                                 {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'products' ? 'active' : ''}`}

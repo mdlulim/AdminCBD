@@ -167,37 +167,41 @@ const onSubmitUpdateProduct= data => {
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="CBX7"
                                 subtitle="Total Amount"
                                 informer={<><span className="text-bold text-success">{0}</span></>}
+                                invert={false}
                             /></a>
                         </Col>
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="Fraxions"
                                 subtitle="Total Amount"
                                 informer={<><span className="text-bold text-warning">{0}</span> </>}
+                                invert={false}
                             /></a>
                         </Col>
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="Fixed Plan"
                                 subtitle="Total Amount"
                                 informer={<><span className="text-bold text-danger">{0}</span> </>}
+                                invert={false}
                             /></a>
                         </Col>
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="Other"
                                 subtitle="Total Amount"
                                 informer={<><span className="text-bold text-danger">{0}</span> </>}
+                                invert={false}
                             /></a>
                         </Col>
                     </div>
