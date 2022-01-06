@@ -32,25 +32,28 @@ class MainAccountService {
       });
     }
 
-    static async getTransactionType(subtype) {
-        return await axios({
-          mode: 'no-cors',
-          method: 'GET',
-          headers: headers,
-          data: subtype,
-          url: `${Config.API.BASE_URL}/transactions-type`,
-        }).then((res) =>{
-          const result = res;
-          return result;
-        });
+    static async getTransactionType(data) {
+      return await axios({
+        mode: 'no-cors',
+        method: 'POST',
+        headers: headers,
+        data: data,
+        url: `${Config.API.BASE_URL}/transactions-type`,
+      }).then(json => json.data)
+      .then(res => {
+        const { success, data } = res;
+        if (success) {
+          return data || [];
+        }
+        return [];
+      })
     }
 
-    static async getTransactionTotal(subtype) {
+    static async getTransactionTotal() {
         return await axios({
           mode: 'no-cors',
           method: 'GET',
           headers: headers,
-          data: subtype,
           url: `${Config.API.BASE_URL}/transactions-total`,
         }).then(json => json.data)
         .then(res => {

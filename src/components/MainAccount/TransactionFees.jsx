@@ -68,7 +68,7 @@ const Status = ({ status }) => {
 
 
 export default function TransactionFees(props) {
-  const { transactionType, transactions } = props;
+  const { transactionType, transactions, totals } = props;
   const [show, setShow] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
@@ -174,37 +174,41 @@ export default function TransactionFees(props) {
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="Deposits"
                                 subtitle="Fees"
-                                informer={<><span className="text-bold text-success">{0}</span></>}
+                                informer={<><span className="text-bold text-success">{totals.deposit} {transactions ? transactions[0].currency.code: ''}</span></>}
+                                invert={false}
                             /></a>
                         </Col>
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="Withdrawal"
                                 subtitle="Fees"
-                                informer={<><span className="text-bold text-warning">{0}</span> </>}
+                                informer={<><span className="text-bold text-success">{totals.withdrawal} {transactions ? transactions[0].currency.code: ''}</span> </>}
+                                invert={false}
                             /></a>
                         </Col>
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="Transfer"
                                 subtitle="Fees"
-                                informer={<><span className="text-bold text-danger">{0}</span> </>}
+                                informer={<><span className="text-bold text-success">{totals.transfer} {transactions ? transactions[0].currency.code: ''}</span> </>}
+                                invert={false}
                             /></a>
                         </Col>
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
-                                title="Registration"
+                                icon="li-receipt"
+                                title="Product"
                                 subtitle="Fees"
-                                informer={<><span className="text-bold text-danger">{0}</span> </>}
+                                informer={<><span className="text-bold text-success">{totals.product} {transactions ? transactions[0].currency.code: ''}</span> </>}
+                                invert={false}
                             /></a>
                         </Col>
                     </div>

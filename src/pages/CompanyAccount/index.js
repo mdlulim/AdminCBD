@@ -18,7 +18,7 @@ const CompanyAccountList = props => {
     const [show, setShow] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [pageLoading, setPageLoading] = useState(true);
-    const [companyAccounts, setCompanyAccounts] = useState([]);
+    const [totals, setTotals] = useState([]);
     const [activeTab, setActiveTab] = useState('general');
     const [mainAccount, setMainAccount] = useState({});
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -37,19 +37,25 @@ const CompanyAccountList = props => {
     async function fetchData(){
         const mainAccount = await MainAccountService.getMainAccount()
             setMainAccount(mainAccount);
-        const data = { subtype: 'deposit' }
-        const types = await MainAccountService.getTransactionType(data);
-         console.log("======================Transaction==================")
-         console.log(types.data.data)
-
-        const poducts = await ProductService.getProductHistory();
-              setProducts(poducts.results);
-              setFilteredProducts(poducts.results)
-
-        const transaList = await TransactionService.getTransactions();
-        const results = transaList.results.filter(item => item.status.toLowerCase() === "completed");
+        const types = await MainAccountService.getTransactionType({ subtype: "deposit" });
+        const data = { subtype: "deposit" }
+        const totals = await MainAccountService.getTransactionTotal();
+        setTotals(totals)
+        console.log(totals)
+         
+         const results = types.results.filter(item => item.status.toLowerCase() === "completed");
              setTransactions(results);
              setFilteredTransactions(results);
+
+
+        // const poducts = await ProductService.getProductHistory();
+        //       setProducts(poducts.results);
+        //       setFilteredProducts(poducts.results)
+
+        // const transaList = await TransactionService.getTransactions();
+        // const results = transaList.results.filter(item => item.status.toLowerCase() === "completed");
+        //      setTransactions(results);
+        //      setFilteredTransactions(results);
             // console.log(results)
 
 
@@ -116,25 +122,25 @@ const CompanyAccountList = props => {
                         <Col xs={12} lg={3}>
                             <a href={``} >
                              <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="Main Account"
                                 subtitle="Summary Amount"
-                                informer={<><span className="text-bold text-danger">{0}</span> </>}
+                                informer={<><span className="text-bold text-success">{mainAccount ? parseFloat(mainAccount.available_balance).toFixed(4)+' '+mainAccount.currency_code: ''}</span> </>}
                             /></a>
                         </Col>
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="Transaction Fees"
                                 subtitle="Fees"
-                                informer={<><span className="text-bold text-success">{0}</span></>}
+                                informer={<><span className="text-bold text-success">{totals ? parseFloat(totals.total).toFixed(4)+' '+mainAccount.currency_code: ''}</span></>}
                             /></a>
                         </Col>
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="Products"
                                 subtitle="Total Amount"
                                 informer={<><span className="text-bold text-warning">{0}</span> </>}
@@ -143,7 +149,7 @@ const CompanyAccountList = props => {
                         <Col xs={12} lg={3}>
                         <a href={``} >
                             <Common.Widget
-                                icon="li-users2"
+                                icon="li-receipt"
                                 title="Registration"
                                 subtitle="Fees"
                                 informer={<><span className="text-bold text-danger">{0}</span> </>}
@@ -218,7 +224,7 @@ const CompanyAccountList = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'general' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                             <MainAccount.TransactionFees transactions={filteredTransactions} transactionType={`TestData`} />
+                                             <MainAccount.TransactionFees transactions={filteredTransactions} totals={totals} />
                                         </CardBody>
                                     </div>
                                 </div>
