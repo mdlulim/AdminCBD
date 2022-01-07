@@ -79,9 +79,6 @@ const CompanyAccountList = props => {
                             setShow(true)
                         }
                         },
-                        { label: 'Filter by Date' },
-                        { label: 'Filter Month' },
-                        { label: 'Filter Year' }
                     ]}
                 />
                 {!pageLoading ?
