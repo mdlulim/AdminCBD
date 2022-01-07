@@ -2,6 +2,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
+import Moment from 'react-moment';
+import moment from 'moment';
 import { AuthLayout } from 'containers';
 import { MainAccount, Common } from 'components';
 import { MainAccountService, ProductService, TransactionService } from '../../providers';
@@ -13,6 +15,7 @@ const inputWith = {
   const inputWithDate = {
     width: '25%'
   }
+
 const CompanyAccountList = props => {
     const breadcrumb = { heading: "CompanyAccounts" };
     const [show, setShow] = useState(false);
@@ -35,32 +38,32 @@ const CompanyAccountList = props => {
     };
 
     async function fetchData(){
+        var date = new Date();
+        date.setDate(date.getDate() - 30);
+        var dateString = date.toISOString().split('T')[0]; // "2016-06-08"
+
+        const d = new Date();
+        let text = d.toString();
+
+        const startDate = moment().add(-30, 'days')._d;
+        const endDate = moment(text)._d;
+        setStartDate(startDate)
+        setEndDate(endDate)
         const mainAccount = await MainAccountService.getMainAccount()
             setMainAccount(mainAccount);
-        const types = await MainAccountService.getTransactionType({ subtype: "deposit" });
-        const data = { subtype: "deposit" }
-        const totals = await MainAccountService.getTransactionTotal();
+        const dateRange = {
+            start_date  : startDate,
+            end_date    : endDate
+        };
+        const types = await MainAccountService.getTransactionType(dateRange);
+        const totals = await MainAccountService.getTransactionTotal(dateRange);
         setTotals(totals)
-        console.log(totals)
-         
-         const results = types.results.filter(item => item.status.toLowerCase() === "completed");
-             setTransactions(results);
-             setFilteredTransactions(results);
-
-
-        // const poducts = await ProductService.getProductHistory();
-        //       setProducts(poducts.results);
-        //       setFilteredProducts(poducts.results)
-
-        // const transaList = await TransactionService.getTransactions();
-        // const results = transaList.results.filter(item => item.status.toLowerCase() === "completed");
-        //      setTransactions(results);
-        //      setFilteredTransactions(results);
-            // console.log(results)
+        setTransactions(types.results);
+        setFilteredTransactions(types.results);
 
 
         setPageLoading(false);
-    } 
+    }
     useEffect(() => {
 
         fetchData()
@@ -86,24 +89,31 @@ const CompanyAccountList = props => {
                     className="btn btn-light d-none d-md-block float-right margin-right-5"
                     id="dashboard-rp-customrange"
                 >
-                    September 22, 2021 - October 21, 2021
+                    <Moment date={startDate} format="D MMMM YYYY" /> - <Moment date={endDate} format="D MMMM YYYY" />
                 </button> : ''}
             </>
         );
     }
 
-    const selectDataRange = (data) => {
+    async function selectDataRange(){
        setDisabled(true);
-        const start = Date.parse(startDate);
-        const end = Date.parse(endDate);
-        const searchByDate = transactions.filter(
-            transaction => (Date.parse(transaction.updated)) >= start && (Date.parse(transaction.updated)) <= end);
-        const searchByDateProducts = products.filter(
-            product => (Date.parse(product.updated)) >= start && (Date.parse(product.updated)) <= end);
-            setFilteredProducts(searchByDateProducts);
-            setFilteredTransactions(searchByDate);
+       setPageLoading(true)
+         console.log(startDate)
+         console.log(endDate)
+
+         const dateRange = {
+            start_date  : startDate,
+            end_date    : endDate
+        };
+        const types = await MainAccountService.getTransactionType(dateRange);
+        const totals = await MainAccountService.getTransactionTotal(dateRange);
+        setTotals(totals)
+        setTransactions(types.results);
+        setFilteredTransactions(types.results);
+
         setDisabled(false);
         setShow(false)
+        setPageLoading(false)
     }
 
 	return (

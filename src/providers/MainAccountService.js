@@ -49,11 +49,12 @@ class MainAccountService {
       })
     }
 
-    static async getTransactionTotal() {
+    static async getTransactionTotal(data) {
         return await axios({
           mode: 'no-cors',
-          method: 'GET',
+          method: 'POST',
           headers: headers,
+          data: data,
           url: `${Config.API.BASE_URL}/transactions-total`,
         }).then(json => json.data)
         .then(res => {
