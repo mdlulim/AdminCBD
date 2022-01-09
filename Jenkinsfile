@@ -113,6 +113,7 @@ pipeline {
               break;
           }
         }
+        sh("${ARGOCD_AUTH_TOKEN}")
         sh("argocd app sync cbigold-${application}");
         sh("argocd app wait cbigold-${application}");
       }
