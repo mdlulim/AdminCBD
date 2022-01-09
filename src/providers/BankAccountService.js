@@ -15,8 +15,11 @@ let headers = {
 
 if (SessionProvider.isValid()) {
   headers = {
-    'Authorization': `Bearer ${authToken}`,
-    'Content-Type': 'application/json',
+    'Authorization'   : `Bearer ${authToken}`,
+    'Content-Type'    : 'application/json',
+    'X-Frame-Options' : 'SAMEORIGIN',
+    'X-XSS-Protection': 1,
+    'X-Content-Type-Options': 'nosniff',
   }
 }
 
