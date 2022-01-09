@@ -14,16 +14,18 @@ const loaderCSS ={
     width: '20px'
 }
 const ModalChangeStatus = props => {
-    const { show, setShow, transaction} = props;
+    const { show, setShow, transaction } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState('');
-    const [processing, setProcessing] = useState(false)
+    const [processing, setProcessing] = useState(false);
+    const [pageLoading, setPageLoading] = useState(true)
     const [selectedStatus, setSelectedStatus] = useState('');
-    const { title, body,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
+    const { confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
     useEffect(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
+        setPageLoading(false)
     }, []);
 
     const statusOptions = [
@@ -36,6 +38,7 @@ const ModalChangeStatus = props => {
         setDisabled(true);
         setError('');
         setProcessing(true);
+        setPageLoading(true);
         const form = event.currentTarget;
 
         const data = { 
@@ -60,14 +63,19 @@ const ModalChangeStatus = props => {
                       });
                  }else{
                      setError(response.data.message);
+                     setPageLoading(false);
                  }
                 setDisabled(false);
+                setPageLoading(false);
              })
         }else{
             setDisabled(false);
-                     setError('Please select transacrion status');
+            setError('Please select transacrion status');
+            setProcessing(false);
+            setPageLoading(false);
         }
         setDisabled(false);
+        setPageLoading(false);
       }
 
     const handleClose = () => setShow(false);
@@ -176,7 +184,7 @@ const ModalChangeStatus = props => {
                                 className="btn btn-success float-right"
                                 disabled={processing}
                                     >
-                                    { disabled === true ? <img src={spinningLoader} style={loaderCSS} /> : ''} {' Update'}
+                                    { processing ? <img src={spinningLoader} style={loaderCSS} /> : ''} {' Update'}
                                 </button>
                             </Col>
                             </Row>

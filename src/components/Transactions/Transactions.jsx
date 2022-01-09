@@ -314,7 +314,12 @@ export default function Transactions(props) {
   return (
     <Card className="o-hidden mb-4">
       <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows} />
-      <ModalChangeStatus show={showUpdate} setShow={setShowUpdate} transaction={selectedTransaction} />
+      <ModalChangeStatus 
+      show={showUpdate} 
+      setShow={setShowUpdate} 
+      transaction={selectedTransaction} 
+      />
+      
       <TransactionDetails
         show={showApproveMember}
         setShow={setShowApproveMember}

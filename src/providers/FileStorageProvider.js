@@ -10,9 +10,12 @@ let headers = {
 
 if (SessionProvider.isValid()) {
     headers = {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-    }
+        'Authorization'   : `Bearer ${token}`,
+        'Content-Type'    : 'application/json',
+        'X-Frame-Options' : 'SAMEORIGIN',
+        'X-XSS-Protection': 1,
+        'X-Content-Type-Options': 'nosniff',
+      }
 }
 
 class FileStorageProvider {
