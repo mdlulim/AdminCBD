@@ -133,6 +133,12 @@
                     "icon": null
                 },
                 {
+                    "id": "commission",
+                    "title": "Commission",
+                    "link": "/commission",
+                    "icon": null
+                },
+                {
                     "id": "users",
                     "title": "Users",
                     "link": "/users",
