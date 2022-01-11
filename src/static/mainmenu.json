@@ -133,9 +133,9 @@
                     "icon": null
                 },
                 {
-                    "id": "commission",
-                    "title": "Commission",
-                    "link": "/commission",
+                    "id": "commissions",
+                    "title": "Commissions",
+                    "link": "/commissions",
                     "icon": null
                 },
                 {

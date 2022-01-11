@@ -121,7 +121,7 @@ const ModalChangeStatus = props => {
                                      />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="value">Value</label>
+                                <label htmlFor="value">Commission Percentage</label>
                                     <input
                                         type="text"
                                         id="tx_value"

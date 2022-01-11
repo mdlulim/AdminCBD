@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
@@ -34,33 +34,34 @@ const inputWith = {
 }
 
 export default function TransactionSettings(props) {
-    const { commissions } = props;
   const [show, setShow] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [settings, setSettings] = useState(commissions);
+  const [settings, setSettings] = useState([]);
   const [error, setError] = useState('');
   const [adminLevel, setAdminLevel] = useState(0);
-  const [filteredSettings, setFilteredSettings] = useState(commissions);
+  const [filteredSettings, setFilteredSettings] = useState([]);
   const [selectedSetting, setSelectedSetting] = useState({});
   const history = useHistory();
 
-    useEffect(() => {
-        if (SessionProvider.isValid()) {
-            const user = SessionProvider.get();
-             setAdminLevel(user.permission_level)
-         }
-        //  console.log(commissions)
-          setSettings(commissions);
-          setFilteredSettings(commissions);
+  async function fetchData(){
+    SettingService.getSettingsCommission().then((res) => {
+      const settingslist = res.results;
+      setSettings(settingslist);
+      setFilteredSettings(settingslist);
+    });
+}
+useEffect(() => {
 
-    }, []);
+    if (SessionProvider.isValid()) {
+        const user = SessionProvider.get();
+         setAdminLevel(user.permission_level)
+     }
+    fetchData()
+}, []);
+
     // table headings definition
 const columns = [{
-    name: 'Category',
-    selector: 'category',
-    sortable: true,
-}, {
     name: 'Key',
     selector: 'key',
     sortable: true,
@@ -69,7 +70,7 @@ const columns = [{
     selector: 'title',
     sortable: true,
   }, {
-    name: 'Value',
+    name: 'Percentage',
     selector: 'value',
     sortable: true,
   },{

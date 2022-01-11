@@ -177,10 +177,13 @@ const PermissionsList = props => {
                                             <tr id="categories">
                                                 <th scope="row">Categories</th>
                                             </tr>
+                                            <tr id="commissions">
+                                                <th scope="row">Commissions</th>
+                                            </tr>
                                         </tbody>
                                         </table>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
 
                                 <div class="row col-sm-12" >
@@ -206,7 +209,7 @@ const PermissionsList = props => {
                                         </tbody>
                                         </table>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
 
 

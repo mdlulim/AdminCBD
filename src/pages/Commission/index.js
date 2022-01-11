@@ -14,14 +14,7 @@ export default function SystemSettings(props) {
     const [filteredSettings, setFilteredSettings] = useState([]);
 
     async function fetchData(){
-        
-        SettingService.getSettingsCommission().then((res) => {
-          const settingslist = res.results;
-          setSettings(settingslist);
-          setFilteredSettings(settingslist);
-        });
-
-
+       
         setPageLoading(false);
     }
     useEffect(() => {
@@ -30,7 +23,6 @@ export default function SystemSettings(props) {
             const user = SessionProvider.get();
              setAdminLevel(user.permission_level)
          }
-        fetchData()
     }, []);
 
 
@@ -124,7 +116,7 @@ export default function SystemSettings(props) {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'general' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                        <Commission.CommissionConfig  commissions={filteredSettings} />
+                                        <Commission.CommissionConfig />
                                         </CardBody>
                                     </div>
                                 </div>
