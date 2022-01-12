@@ -15,8 +15,11 @@ let headers = {
 
 if (SessionProvider.isValid()) {
   headers = {
-    'Authorization': `Bearer ${authToken}`,
-    'Content-Type': 'application/json',
+    'Authorization'   : `Bearer ${authToken}`,
+    'Content-Type'    : 'application/json',
+    'X-Frame-Options' : 'SAMEORIGIN',
+    'X-XSS-Protection': 1,
+    'X-Content-Type-Options': 'nosniff',
   }
 }
 
@@ -28,6 +31,19 @@ class BankAccountService {
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/bank-accounts`,
+      });
+    }
+
+    static async createBankAccount(data){
+      return await axios({
+        mode: 'no-cors',
+        method: 'POST',
+        headers: headers,
+        data:data,
+        url: `${Config.API.BASE_URL}/bank-accounts`,
+      }).then((res) =>{
+        const result = res;
+        return result;
       });
     }
 

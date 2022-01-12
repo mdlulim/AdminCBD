@@ -74,18 +74,15 @@ export default function Products(props) {
   const [selectedProduct, setSelectedProduct] = useState({});
   const history = useHistory();
 
+    useMemo(() => {
 
-  useMemo(() => {
-    ProductService.getProducts().then((res) => {
-      if(res.data.success){
-        const productlist = res.data.data.results;
-        setProducts(productlist);
-        setFilteredProducts(productlist);
-      }
+      ProductService.getProducts().then((res) => {
+          const productlist = res.results;
+          setProducts(productlist);
+          setFilteredProducts(productlist);
 
-    setPageLoading(false);
-
-    });
+          setPageLoading(false)
+      });
 
   }, [setPageLoading, pageLoading]);
   // table headings definition

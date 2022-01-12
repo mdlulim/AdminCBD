@@ -52,26 +52,26 @@ export default function SystemSettings(props) {
                                         Transactions
                                     </a>
                                 </li>
-                                {/* <li className="nav-item">
-                                    <a
-                                        className={`nav-link show ${activeTab === 'products' ? 'active' : ''}`}
-                                        onClick={e => toggleTab(e, 'products')}
-                                        data-toggle="tab"
-                                        href="/"
-                                    >
-                                        Systems
-                                    </a>
-                                </li>
                                 <li className="nav-item">
                                     <a
-                                        className={`nav-link show ${activeTab === 'transactions' ? 'active' : ''}`}
-                                        onClick={e => toggleTab(e, 'transactions')}
+                                        className={`nav-link show ${activeTab === 'banking-details' ? 'active' : ''}`}
+                                        onClick={e => toggleTab(e, 'banking-details')}
                                         data-toggle="tab"
                                         href="/"
                                     >
-                                        Transactions
+                                        Company Bank Details
                                     </a>
-                                </li> */}
+                                </li>
+                                 <li className="nav-item">
+                                    <a
+                                        className={`nav-link show ${activeTab === 'kyc' ? 'active' : ''}`}
+                                        onClick={e => toggleTab(e, 'kyc')}
+                                        data-toggle="tab"
+                                        href="/"
+                                    >
+                                        KYC Limits
+                                    </a>
+                                </li>
                                 {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'banking-details' ? 'active' : ''}`}
@@ -106,16 +106,17 @@ export default function SystemSettings(props) {
                                         <Settings.TransactionFees />
                                     </CardBody>
                                 </div>
-                                <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
-                                    <div className="profile-setting__card">
-                                        <CardBody className="pl-0 pr-0 pb-0">
-                                            <Settings.SystemFees />
-                                        </CardBody>
-                                    </div>
-                                </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'banking-details' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
+                                        <GeneralSettings.CampanyBankDetails />
+                                        </CardBody>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
+                                    <div className="profile-setting__card">
+                                        <CardBody className="pl-0 pr-0 pb-0">
+                                            <GeneralSettings.KYCLimitsOverview />
                                         </CardBody>
                                     </div>
                                 </div>

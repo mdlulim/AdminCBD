@@ -52,11 +52,11 @@ if (Config.STAGE === 'production') {
 }else {
     Config.STAGE = 'local'
     Config.API = {
-        BASE_URL: 'http://localhost:8071',
+        BASE_URL: 'http://localhost:8081',
         BASE_URL_POP: 'https://dev.cbiglobal.io/v1/storage/file',
         BASE_URL_FILE_STORAGE:'http://localhost:8040',
         BASE_URL_BATCH: 'http://localhost:8020',
-        BASE_URL_LOGIN: 'http://localhost:8082',
+        BASE_URL_LOGIN: 'http://localhost:4000',
     }
 }
 

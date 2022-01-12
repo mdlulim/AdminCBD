@@ -75,17 +75,13 @@ export default function Products(props) {
 
   useMemo(() => {
 
-    ProductService.getProductHistory().then((res) => {
-      console.log("history")
-      if (res.data.success) {
-        const productlist = res.data.data.results;
-        // console.log(productlist)
-        setProducts(productlist);
-        setFilteredProducts(productlist);
-      }
-      setPageLoading(false);
+      ProductService.getProductHistory().then((res) => {
+          const productlist = res.results;
+          setProducts(productlist);
+          setFilteredProducts(productlist);
 
-    });
+          setPageLoading(false)
+      });
 
   }, []);
   // table headings definition

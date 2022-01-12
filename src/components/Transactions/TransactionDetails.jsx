@@ -4,21 +4,28 @@ import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
+import spinningLoader from '../../assets/img/loading-buffering.gif'
 import { TransactionService, UserService, AccountService, MemberService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import DocViewer, {PNGRenderer, JPGRenderer, PDFRenderer } from "react-doc-viewer";
+
+const loaderCSS ={
+    width: '20px'
+}
 
 const TransactionDetails = props => {
     const { show, setShow, transaction, pop, userWallet, mainWallet, member } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
+    const [processing, setProcessing] = useState(false);
+    const [pageLoading, setPageLoading] = useState(false)
     const [selectedStatus, setSelectedStatus] = useState('');
     const [mainAccount, setMainAccount] = useState({});
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
-    const { title, body, processing, confirmButtonDisabled, confirmButton, cancelButton, showIcon, size, } = props;
+    const { title, body, confirmButtonDisabled, confirmButton, cancelButton, showIcon, size, } = props;
 
     async function fetchData(){
         const mainAccount = await AccountService.getMainAccount()
@@ -33,40 +40,15 @@ const TransactionDetails = props => {
         { value: 'Completed', label: 'Complete' }
     ];
 
-    const getMainAccount = () => {
-        AccountService.getMainAccount().then((res) => {
-            const result = res.data.data;
-            // setMainAccount(result)
-            //  mainWallet = result;
-            return result
-        });
-
-    }
-
-    const onSubmit2 = (event) => {
-        event.preventDefault();
-        setDisabled(true);
-        setError('');
-        const form = event.currentTarget;
-
-        const data = {
-            status: selectedStatus.value,
-            transaction: transaction
-        };
-
-        TransactionService.approveDeposit(transaction.id, data).then((response) => {
-            //console.log(response);
-        })
-    }
-
 
     const onSubmit = (event) => {
 
         event.preventDefault();
         setDisabled(true);
         setError('');
-        const form = event.currentTarget;
+        setProcessing(true);
 
+        const form = event.currentTarget;
         const data = { status: selectedStatus.value };
 
         const data2 = {
@@ -75,14 +57,15 @@ const TransactionDetails = props => {
         }
 
         if (selectedStatus.value === "Completed") {
-            setShow(false)
+            console.log(processing ? 'yes': 'No');
             TransactionService.approveDeposit(transaction.id, data2).then((response) => {
-              //  console.log(response);
+
                 if (response.data.success === true) {
                     // MemberService.updateStatus(transaction.user_id, 'Active').then((response) => {
                     //     console.log(response);
                     // })
                     setShow(false)
+                    setProcessing(false);
                     return confirmAlert({
                         title: 'Succcess',
                         message: 'Transaction was successfully updated',
@@ -93,6 +76,8 @@ const TransactionDetails = props => {
                         ]
                     });
                 } else {
+                    setDisabled(false);
+                    setProcessing(false);
                     return confirmAlert({
                         title: 'Error Message',
                         message: response.data.message,
@@ -104,13 +89,12 @@ const TransactionDetails = props => {
                     });
                    // setError('Something went wrong while trying to update members status');
                 }
-                setDisabled(false);
             })
         } else {
-            setShow(false)
             TransactionService.updateTransactionStatus(transaction.id, data).then((response) => {
                 if (response.data.success) {
                     setShow(false)
+                    setProcessing(false);
                     return confirmAlert({
                         title: 'Succcess',
                         message: 'Transaction was successfully updated',
@@ -124,9 +108,11 @@ const TransactionDetails = props => {
                     setError('Something went wrong while trying to update members status');
                 }
                 setDisabled(false);
+                setProcessing(false);
             })
         }
         setDisabled(false);
+        setProcessing(false);
     }
 
 
@@ -215,9 +201,9 @@ const TransactionDetails = props => {
                                     <button
                                         type="submit"
                                         className="btn btn-success float-right"
-                                        disabled={disabled}
-                                    >
-                                        {processing ? 'Processing...' : 'Update'}
+                                        disabled={processing}
+                                        >
+                                        { processing ? <img src={spinningLoader} style={loaderCSS} /> : ''} {' Update'}
                                     </button>
                                 </Col>
                             </Row>

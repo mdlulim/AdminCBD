@@ -9,8 +9,11 @@ let headers = {
 
 if (SessionProvider.isValid()) {
   headers = {
-    'Authorization': `Bearer ${authToken}`,
-    'Content-Type': 'application/json',
+    'Authorization'   : `Bearer ${authToken}`,
+    'Content-Type'    : 'application/json',
+    'X-Frame-Options' : 'SAMEORIGIN',
+    'X-XSS-Protection': 1,
+    'X-Content-Type-Options': 'nosniff',
   }
 }
 
@@ -56,6 +59,34 @@ class KYCService {
     }).then((res) => {
       const result = res;
       return result;
+    });
+  }
+
+  static async getKYCLimits() {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/kyc-limits`,
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
+    });
+  }
+
+  static async updateKYCLimit(id,data){
+    return await axios({
+        mode: 'no-cors',
+        method: 'PUT',
+        data: data,
+        headers: headers,
+        url: `${Config.API.BASE_URL}/kyc-limits/${id}`,
+    }).then((res) =>{
+      return res;
     });
   }
 

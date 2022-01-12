@@ -70,7 +70,8 @@ export default function TransactionFees(props) {
 
     useMemo(() => {
         FeeService.getFees().then((res) => {
-          const feeslist = res.data.data.results;
+          console.log(res.data.results)
+          const feeslist = res.data.results;
           setFees(feeslist);
           setFilteredFees(feeslist);
         });
@@ -93,6 +94,14 @@ const columns = [ {
     name: 'Subtype',
     selector: 'subtype',
     sortable: true,
+  },
+  {
+    name: 'Group',
+    selector: 'subtype',
+    sortable: true,
+    cell: row => <div>
+      <strong>{row.group.label}</strong><br />
+    </div>
   },
   {
     name: 'Currency Code',

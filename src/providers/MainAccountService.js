@@ -17,7 +17,7 @@ if (SessionProvider.isValid()) {
   }
 }
 
-class AccountService {
+class MainAccountService {
 
     static async getMainAccount() {
       return await axios({
@@ -35,12 +35,13 @@ class AccountService {
       });
     }
 
-    static async getAccountByID(id) {
+    static async getTransactionType(data) {
       return await axios({
         mode: 'no-cors',
-        method: 'GET',
+        method: 'POST',
         headers: headers,
-        url: `${Config.API.BASE_URL}/account/${id}`,
+        data: data,
+        url: `${Config.API.BASE_URL}/transactions-type`,
       }).then(json => json.data)
       .then(res => {
         const { success, data } = res;
@@ -48,8 +49,26 @@ class AccountService {
           return data || [];
         }
         return [];
-      });
+      })
     }
+
+    static async getTransactionTotal(data) {
+        return await axios({
+          mode: 'no-cors',
+          method: 'POST',
+          headers: headers,
+          data: data,
+          url: `${Config.API.BASE_URL}/transactions-total`,
+        }).then(json => json.data)
+        .then(res => {
+          const { success, data } = res;
+          if (success) {
+            return data || [];
+          }
+          return [];
+        })
+    }
+
 }
 
-export default AccountService;
+export default MainAccountService;

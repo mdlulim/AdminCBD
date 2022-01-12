@@ -11,7 +11,7 @@ export default function KYCPage(props) {
 
     useMemo(() => {
         MemberService.getMembers().then((res) => {
-            const userslist = res.data.data.results;
+            const userslist = res.results;
             setMembers(userslist);
             setPageLoading(false);
         });

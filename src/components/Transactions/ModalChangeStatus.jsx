@@ -1,25 +1,31 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
 import Select from 'react-select';
 import Loader from "react-js-loader";
+import spinningLoader from '../../assets/img/loading-buffering.gif'
 import { TransactionService, UserService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
+const loaderCSS ={
+    width: '20px'
+}
 const ModalChangeStatus = props => {
-    const { show, setShow, transaction} = props;
+    const { show, setShow, transaction } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
-    const [error, setError] = useState([]);
-    const [processing, setProcessing] = useState(false)
+    const [error, setError] = useState('');
+    const [processing, setProcessing] = useState(false);
+    const [pageLoading, setPageLoading] = useState(true)
     const [selectedStatus, setSelectedStatus] = useState('');
-    const { title, body,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
+    const { confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
-    useMemo(() => {
+    useEffect(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
+        setPageLoading(false)
     }, []);
 
     const statusOptions = [
@@ -32,7 +38,7 @@ const ModalChangeStatus = props => {
         setDisabled(true);
         setError('');
         setProcessing(true);
-console.log('Test submit status')
+        setPageLoading(true);
         const form = event.currentTarget;
 
         const data = { 
@@ -41,18 +47,9 @@ console.log('Test submit status')
             } ;
 
         if(selectedStatus){
-            // return confirmAlert({
-            //     title: 'Error',
-            //     message: 'Endpoint not provided',
-            //     buttons: [
-            //       {
-            //         label: 'Ok',
-            //       }
-            //     ]
-            //   });
-            TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
 
-                 if(response.data.success){
+            TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
+                if(response.data.success){
                      setProcessing(false)
                      setShow(false)
                      return confirmAlert({
@@ -65,19 +62,22 @@ console.log('Test submit status')
                         ]
                       });
                  }else{
-                     setProcessing(false)
-                     setError('Something went wrong while trying to update members status');
+                     setError(response.data.message);
+                     setPageLoading(false);
                  }
                 setDisabled(false);
+                setPageLoading(false);
              })
         }else{
             setDisabled(false);
-            setProcessing(false)
-                     setError('Please select transacrion status');
+            setError('Please select transacrion status');
+            setProcessing(false);
+            setPageLoading(false);
         }
-        setProcessing(false)
         setDisabled(false);
+        setPageLoading(false);
       }
+
     const handleClose = () => setShow(false);
 
     const updateTransactionStatus = (event) => {
@@ -97,6 +97,10 @@ console.log('Test submit status')
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success"> Update Transaction Status</h3>
                         <hr />
+                        { error ?
+                        <div className="alert alert-warning" role="alert">
+                        {error}
+                        </div> : ''}
                         <form onSubmit={onSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="transactionId">Transaction ID</label>
@@ -172,15 +176,15 @@ console.log('Test submit status')
                                 </button>
                             </Col>
                             <Col md={4}>
-                               {processing ? <Loader type="spinner-cub" bgColor={"#323c47"} color={'#FFFFFF'} size={30} /> : ''}
+                               {disabled ? <Loader type="spinner-cub" bgColor={"#323c47"} color={'#FFFFFF'} size={30} /> : ''}
                             </Col>
                             <Col md={4} >
                             <button
-                                        type="submit"
-                                        className="btn btn-success float-right"
-                                        disabled={processing}
+                                type="submit"
+                                className="btn btn-success float-right"
+                                disabled={processing}
                                     >
-                                    {processing ? 'Processing': 'Update'}
+                                    { processing ? <img src={spinningLoader} style={loaderCSS} /> : ''} {' Update'}
                                 </button>
                             </Col>
                             </Row>

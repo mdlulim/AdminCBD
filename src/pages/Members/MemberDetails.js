@@ -137,7 +137,7 @@ const MemberDetails = props => {
                                                 <tbody>
                                                 <tr><td>ID/Passport No </td><td> : {member.id_number}</td></tr>
                                                 <tr><td>Phone </td><td> : {member.mobile}</td></tr>
-                                                <tr><td>Email </td><td> : {member.email}</td></tr>
+                                                <tr><td>Email </td><td> :<a href={`mailto:${member.email}`}>{member.email}</a></td></tr>
                                                 <tr><td>KYC Level </td><td> : {kycLevel === -1?'unAssigned':kycLevel}</td></tr>
                                                 <tr><td>Type </td><td> : {member.group ? member.group.label : 'Member'}</td></tr>
                                                 <tr><td>Status </td><td><Status {...member} /></td></tr>

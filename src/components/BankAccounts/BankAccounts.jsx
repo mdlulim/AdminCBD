@@ -80,6 +80,63 @@ export default function BankAccounts(props) {
 
       setPageLoading(false);
     });
+    // table headings definition
+    const columns = [
+      {
+        name: 'Name',
+        selector: 'name',
+        sortable: true,
+        wrap: true,
+      }, {
+        name: 'AccountNo',
+        selector: 'number',
+        sortable: true,
+      }, {
+        name: 'BankName',
+        selector: 'bank_name',
+        sortable: true,
+      }, {
+        name: 'Type',
+        selector: 'type',
+        sortable: true,
+      }, {
+        name: 'Bank Code',
+        selector: 'bank_code',
+        sortable: true,
+      }, {
+        name: 'Mobile',
+        selector: 'mobile',
+        sortable: true,
+        cell: row => <div>
+          <strong>{row.user.mobile}</strong>
+        </div>
+      }, {
+        name: 'Status',
+        selector: 'status',
+        sortable: true,
+        cell: row => <Status {...row} />
+      }, {
+        name: 'Created Date',
+        selector: 'created',
+        sortable: true,
+        cell: row => <div>
+          <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
+          <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+        </div>
+      }, {
+        name: 'Actions',
+        sortable: true,
+        cell: row => <div>
+          {adminLevel === 5 ? <div style={iconPadding}>
+            <a
+              href={``}
+              className="btn btn-light btn-sm btn-icon"
+              disabled
+            > <span className="fa fa-pencil" />
+            </a></div> : ''}
+
+        </div>
+      }];
 
   }, [setPageLoading, pageLoading]);
   // table headings definition

@@ -136,7 +136,7 @@ export default function Transactions(props) {
     }
 
     TransactionService.getTransactions().then((res) => {
-      const transaList = res.data.data.results;
+      const transaList = res.results;
 
       if (id != null && id.length > 15) {
         const results = transaList.filter(item => item.id === id);
@@ -155,6 +155,9 @@ export default function Transactions(props) {
           const results = transaList.filter(item => item.subtype.toLowerCase() === "transfer");
           setTransactions(results);
           setFilteredTransactions(results);
+        }else if (transactionType === 'all') {
+          setTransactions(transaList);
+          setFilteredTransactions(transaList);
         }
       }
 
@@ -313,7 +316,12 @@ export default function Transactions(props) {
   return (
     <Card className="o-hidden mb-4">
       <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows} />
-      <ModalChangeStatus show={showUpdate} setShow={setShowUpdate} transaction={selectedTransaction} />
+      <ModalChangeStatus 
+      show={showUpdate} 
+      setShow={setShowUpdate} 
+      transaction={selectedTransaction} 
+      />
+      
       <TransactionDetails
         show={showApproveMember}
         setShow={setShowApproveMember}

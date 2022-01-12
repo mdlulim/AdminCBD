@@ -9,9 +9,12 @@ let headers = {
 
 if (SessionProvider.isValid()) {
   headers = {
-    'Authorization': `Bearer ${authToken}`,
-    'Content-Type': 'application/json',
-    'Access-Control-Max-Age': `600`
+      'Authorization'         : `Bearer ${authToken}`,
+      'Content-Type'          : 'application/json',
+      'Access-Control-Max-Age': `600`,
+      'X-Frame-Options'       : 'SAMEORIGIN',
+      'X-XSS-Protection'      : 1,
+      'X-Content-Type-Options': 'nosniff',
   }
 }
 

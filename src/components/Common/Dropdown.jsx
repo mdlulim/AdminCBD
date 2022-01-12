@@ -31,6 +31,10 @@ export default function Dropdown(props) {
                     className="dropdown-item"
                     data-demo-action="update"
                     onClick={e => {
+                        if(item.onClick && typeof item.onClick === 'function'){
+                            e.preventDefault();
+                            return item.onClick()
+                        }
                         if (!item.link) {
                             e.preventDefault();
                         }

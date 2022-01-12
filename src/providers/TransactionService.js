@@ -9,14 +9,18 @@ let headers = {
 
 if (SessionProvider.isValid()) {
   headers = {
-    'Authorization': `Bearer ${authToken}`,
-    'Content-Type': 'application/json',
+    'Authorization'   : `Bearer ${authToken}`,
+    'Content-Type'    : 'application/json',
+    'X-Frame-Options' : 'SAMEORIGIN',
+    'X-XSS-Protection': 1,
+    'X-Content-Type-Options': 'nosniff',
   }
 }
 
 class TransactionService {
 
     static async getTransactions() {
+      console.log(authToken)
       return await axios({
         mode: 'no-cors',
         method: 'GET',
@@ -122,7 +126,14 @@ class TransactionService {
         method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/pop/deposits/${txid}`,
-      });
+      }).then(json => json.data)
+      .then(res => {
+        const { success, data } = res;
+        if (success) {
+          return data || [];
+        }
+        return [];
+      })
     }
       static async getTransactionPOPFile(url) {
         return await axios({
