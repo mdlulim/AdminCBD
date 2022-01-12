@@ -61,6 +61,23 @@ class ProductService {
     });
   }
 
+  static async getProductSubCategories() {
+    console.log(authToken)
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories`,
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
+    });
+  }
+
   static async getProductCategory(id) {
     return await axios({
       mode: 'no-cors',

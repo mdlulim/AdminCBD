@@ -237,7 +237,7 @@ const PermissionsList = props => {
                                                 </div>
                                             </div>
                                         </form>
-                                    </div>
+                                 </div>
 
                                 </div>
                             </div>
