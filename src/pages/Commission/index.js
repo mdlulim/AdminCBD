@@ -17,11 +17,11 @@ export default function SystemSettings(props) {
         setPageLoading(false);
     }
     useEffect(() => {
-
         if (SessionProvider.isValid()) {
             const user = SessionProvider.get();
              setAdminLevel(user.permission_level)
          }
+         fetchData();
     }, []);
 
 
