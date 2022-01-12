@@ -151,7 +151,7 @@ export default function DashboardPage(props) {
 
         setFilteredTransactions(filteredItems);
       }
-    if (pageLoading) return <Loader.Default />;
+    // if (pageLoading) return <Loader.Default />;
     return (
         <AuthLayout
             {...props}
