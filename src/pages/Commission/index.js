@@ -14,7 +14,6 @@ export default function SystemSettings(props) {
     const [filteredSettings, setFilteredSettings] = useState([]);
 
     async function fetchData(){
-       
         setPageLoading(false);
     }
     useEffect(() => {
