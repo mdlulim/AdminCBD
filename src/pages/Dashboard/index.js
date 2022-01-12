@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 import { AuthLayout } from 'containers';
-import { Common, Dashboard, Overview, Members, Loader } from 'components';
+import { Common, Dashboard, Overview, Members } from 'components';
 import { MemberService, ProductService, TransactionService, AccountService, SessionProvider } from '../../providers';
 import { VectorMap } from '@south-paw/react-vector-maps';
 import world from '../../components/Dashboard/world.json';
@@ -96,7 +96,7 @@ export default function DashboardPage(props) {
 
         setFilteredTransactions(filteredItems);
       }
-    if (pageLoading) return <Loader.Default />;
+    // if (pageLoading) return <Loader.Default />;
     return (
         <AuthLayout
             {...props}

@@ -11,8 +11,12 @@ const AuthLayout = props => {
     const [sideNavMinimized, setSideNavMinimized] = useState(false);
     return (
         <>
-        {loading && <Loader.Default />}
-        <div className="page page--w-header">
+        {loading && 
+            <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent:'center'}}>
+                <Loader.Default />
+            </div>
+        }
+        <div className={`page page--w-header ${loading?"invisible":""}`}>
             <AuthHeader
                 {...props}
                 {...header}
