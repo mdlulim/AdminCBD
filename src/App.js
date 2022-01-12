@@ -49,6 +49,8 @@ import UserPermissions from 'pages/UserPermissions';
 import BankAccounts from 'pages/BankAccounts';
 import SendOTPBankAccounts from 'pages/BankAccounts/SendOPTBankAccount';
 import KYC from 'pages/KYC';
+import ProductConfiguration from './pages/Configurations/ProductConfiguration';
+
 const App = () => {
 	const settings = config;
 	const [authTokens, setAuthTokens] = useState();
@@ -101,6 +103,7 @@ const App = () => {
 					<Route exact path="/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/permissions" component={(props) => <UserPermissions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/commissions" component={(props) => <Commission config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/configurations/product" component={(props) => <ProductConfiguration config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/kyc" component={(props) => <KYC config={settings} {...props} setMenu={setMenu} />} />
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
 				</Switch>

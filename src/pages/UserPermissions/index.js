@@ -180,6 +180,9 @@ const PermissionsList = props => {
                                             <tr id="commissions">
                                                 <th scope="row">Commissions</th>
                                             </tr>
+                                            <tr id="product">
+                                                <th scope="row">Product</th>
+                                            </tr>
                                         </tbody>
                                         </table>
                                         </div>
