@@ -10,11 +10,11 @@ import { MainAccountService, ProductService, TransactionService } from '../../pr
 
 const inputWith = {
     width: '20%'
-  }
+}
 
-  const inputWithDate = {
+const inputWithDate = {
     width: '25%'
-  }
+}
 
 const CompanyAccountList = props => {
     const breadcrumb = { heading: "CompanyAccounts" };
@@ -30,6 +30,7 @@ const CompanyAccountList = props => {
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+    const [coinpaymentBalance, setCoinpaymentBalance] = useState({});
 
     const handleClose = () => setShow(false);
     const toggleTab = (e, tab) => {
@@ -37,7 +38,7 @@ const CompanyAccountList = props => {
         setActiveTab(tab);
     };
 
-    async function fetchData(){
+    async function fetchData() {
         var date = new Date();
         date.setDate(date.getDate() - 30);
         var dateString = date.toISOString().split('T')[0]; // "2016-06-08"
@@ -50,10 +51,12 @@ const CompanyAccountList = props => {
         setStartDate(startDate)
         setEndDate(endDate)
         const mainAccount = await MainAccountService.getMainAccount()
-            setMainAccount(mainAccount);
+        const coinpaymentBalance = await MainAccountService.getCoinpaymentsBalance();
+        setCoinpaymentBalance({ btc: coinpaymentBalance.BTC, eth: coinpaymentBalance.LTC })
+        setMainAccount(mainAccount);
         const dateRange = {
-            start_date  : startDate,
-            end_date    : endDate
+            start_date: startDate,
+            end_date: endDate
         };
         const types = await MainAccountService.getTransactionType(dateRange);
         const totals = await MainAccountService.getTransactionTotal(dateRange);
@@ -74,36 +77,38 @@ const CompanyAccountList = props => {
             <>
                 <Common.Dropdown
                     actions={[
-                        { label: 'Filter by Date Range',
-                        onClick: () => {
-                            setShow(true)
-                        }
+                        {
+                            label: 'Filter by Date Range',
+                            onClick: () => {
+                                setShow(true)
+                            }
                         },
                     ]}
                 />
                 {!pageLoading ?
-                <button
-                    className="btn btn-light d-none d-md-block float-right margin-right-5"
-                    id="dashboard-rp-customrange"
-                >
-                    <Moment date={startDate} format="D MMMM YYYY" /> - <Moment date={endDate} format="D MMMM YYYY" />
-                </button> : ''}
+                    <button
+                        className="btn btn-light d-none d-md-block float-right margin-right-5"
+                        id="dashboard-rp-customrange"
+                    >
+                        <Moment date={startDate} format="D MMMM YYYY" /> - <Moment date={endDate} format="D MMMM YYYY" />
+                    </button> : ''}
             </>
         );
     }
 
-    async function selectDataRange(){
-       setDisabled(true);
-       setPageLoading(true)
-         console.log(startDate)
-         console.log(endDate)
+    async function selectDataRange() {
+        setDisabled(true);
+        setPageLoading(true)
+        console.log(startDate)
+        console.log(endDate)
 
-         const dateRange = {
-            start_date  : startDate,
-            end_date    : endDate
+        const dateRange = {
+            start_date: startDate,
+            end_date: endDate
         };
         const types = await MainAccountService.getTransactionType(dateRange);
         const totals = await MainAccountService.getTransactionTotal(dateRange);
+
         setTotals(totals)
         setTransactions(types.results);
         setFilteredTransactions(types.results);
@@ -113,45 +118,60 @@ const CompanyAccountList = props => {
         setPageLoading(false)
     }
 
-	return (
+    return (
         <AuthLayout
-        {...props}
-        loading={pageLoading}
-        breadcrumb={{ active: "Main Account" }}
-        pageHeading={{
-            title: 'CBI Main Account',
-            caption: 'EXPLORE OVERVIEW MAIN ACCOUNT FOR CRYPTO BASED INNOVATION',
-            actions: <Filter />
-        }}>
+            {...props}
+            loading={pageLoading}
+            breadcrumb={{ active: "Main Account" }}
+            pageHeading={{
+                title: 'CBI Main Account',
+                caption: 'EXPLORE OVERVIEW MAIN ACCOUNT FOR CRYPTO BASED INNOVATION',
+                actions: <Filter />
+            }}>
             {!pageLoading &&
-              <>
-              <div className="form-row margin-bottom-20">
-                        <Col xs={12} lg={4}>
+                <>
+                    <div className="form-row margin-bottom-20">
+                        <Col xs={12} lg={3}>
                             <a href={``} >
-                             <Common.Widget
-                                icon="li-receipt"
-                                title="Main Account"
-                                subtitle="Summary Amount"
-                                informer={<><span className="text-bold text-success">{mainAccount ? parseFloat(mainAccount.available_balance).toFixed(4)+' '+mainAccount.currency_code: ''}</span> </>}
-                            /></a>
+                                <Common.Widget
+                                    icon="li-receipt"
+                                    title="Main Account"
+                                    subtitle="Summary Amount"
+                                    informer={<><span className="text-bold text-success">{mainAccount ? parseFloat(mainAccount.available_balance).toFixed(4) + ' ' + mainAccount.currency_code : ''}</span> </>}
+                                /></a>
                         </Col>
-                        <Col xs={12} lg={4}>
-                        <a href={``} >
-                            <Common.Widget
-                                icon="li-receipt"
-                                title="Transaction Fees"
-                                subtitle="Fees"
-                                informer={<><span className="text-bold text-success">{totals ? parseFloat(totals.total).toFixed(4)+' '+mainAccount.currency_code: ''}</span></>}
-                            /></a>
+                        <Col xs={12} lg={3}>
+                            <a href={``} >
+                                <Common.Widget
+                                    icon="li-receipt"
+                                    title="Transaction Fees"
+                                    subtitle="Fees"
+                                    informer={<><span className="text-bold text-success">{totals ? parseFloat(totals.total).toFixed(4) + ' ' + mainAccount.currency_code : ''}</span></>}
+                                /></a>
                         </Col>
-                        <Col xs={12} lg={4}>
-                        <a href={``} >
-                            <Common.Widget
-                                icon="li-receipt"
-                                title="Registration"
-                                subtitle="Fees"
-                                informer={<><span className="text-bold text-success">{totals ? parseFloat(totals.registration).toFixed(4)+' '+mainAccount.currency_code: ''}</span> </>}
-                            /></a>
+                        <Col xs={12} lg={3}>
+                            <a href={``} >
+                                <Common.Widget
+                                    icon="li-receipt"
+                                    title="Registration"
+                                    subtitle="Fees"
+                                    informer={<><span className="text-bold text-success">{totals ? parseFloat(totals.registration).toFixed(4) + ' ' + mainAccount.currency_code : ''}</span> </>}
+                                /></a>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                            {/* <a href={``} > */}
+                                <Common.Widget
+                                    icon="li-receipt"
+                                    title="Coinpayments"
+                                    subtitle="Balance"
+                                    informer={
+                                        <>
+                                            <span className="text-bold text-success mr-4">{coinpaymentBalance.btc ? parseFloat(coinpaymentBalance.btc.balancef).toFixed(4) + ' BTC' : ''}</span>
+                                            <span className="text-bold text-success">{coinpaymentBalance.btc ? parseFloat(coinpaymentBalance.eth.balancef).toFixed(4) + ' ETH' : ''}</span>
+                                        </>
+                                    }
+                                />
+                            {/* </a> */}
                         </Col>
                         {/* <Col xs={12} lg={3}>
                         <a href={``} >
@@ -163,9 +183,9 @@ const CompanyAccountList = props => {
                             /></a>
                         </Col> */}
                     </div>
-             <Card>
-                <CardBody className="padding-botton-0">
-                <ul className="nav nav-tabs nav-tabs__round mt-0">
+                    <Card>
+                        <CardBody className="padding-botton-0">
+                            <ul className="nav nav-tabs nav-tabs__round mt-0">
                                 <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'general' ? 'active' : ''}`}
@@ -231,7 +251,7 @@ const CompanyAccountList = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'general' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                             <MainAccount.TransactionFees transactions={filteredTransactions} totals={totals} />
+                                            <MainAccount.TransactionFees transactions={filteredTransactions} totals={totals} />
                                         </CardBody>
                                     </div>
                                 </div>
@@ -256,56 +276,56 @@ const CompanyAccountList = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                         </CardBody>
+                                        </CardBody>
                                     </div>
                                 </div>
                             </div>
-                </CardBody>
-            </Card>
-            <Modal show={show} onHide={handleClose} centered className="confirm-modal">
-        <Modal.Body>
-          <Row>
-            <Col>
-              <h3 className="text-success">Search by date range </h3>
-              <hr />
-              <div className="form-group">
-                <label htmlFor="from">From</label>
-                <DatePicker style={inputWithDate} className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">To</label>
-                <DatePicker style={inputWithDate} className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
-              </div>
-              <hr />
-              <Row>
-                <Col md={6}>
-                  <button
-                    className="btn btn-dark"
-                    onClick={e => {
-                      e.preventDefault();
-                      setShow(false);
-                    }}
-                  >
-                    {'Cancel'}
-                  </button>
-                </Col>
-                <Col md={6} >
-                  <button
-                    className="btn btn-success float-right"
-                    onClick={selectDataRange}
-                    disabled={disabled}
-                  >
-                    {'Search'}
-                  </button>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Modal.Body>
-      </Modal>
-         </>}
+                        </CardBody>
+                    </Card>
+                    <Modal show={show} onHide={handleClose} centered className="confirm-modal">
+                        <Modal.Body>
+                            <Row>
+                                <Col>
+                                    <h3 className="text-success">Search by date range </h3>
+                                    <hr />
+                                    <div className="form-group">
+                                        <label htmlFor="from">From</label>
+                                        <DatePicker style={inputWithDate} className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="email">To</label>
+                                        <DatePicker style={inputWithDate} className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
+                                    </div>
+                                    <hr />
+                                    <Row>
+                                        <Col md={6}>
+                                            <button
+                                                className="btn btn-dark"
+                                                onClick={e => {
+                                                    e.preventDefault();
+                                                    setShow(false);
+                                                }}
+                                            >
+                                                {'Cancel'}
+                                            </button>
+                                        </Col>
+                                        <Col md={6} >
+                                            <button
+                                                className="btn btn-success float-right"
+                                                onClick={selectDataRange}
+                                                disabled={disabled}
+                                            >
+                                                {'Search'}
+                                            </button>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Row>
+                        </Modal.Body>
+                    </Modal>
+                </>}
         </AuthLayout>
-	);
+    );
 };
 
 export default CompanyAccountList;
