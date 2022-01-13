@@ -6,6 +6,8 @@ import { UserService } from '../../providers';
 
 export default function UsersPage(props) {
     const [users, setUsers] = useState([]);
+    const [pageLoading, setPageLoading] = useState(true);
+
     useMemo(() => {
         UserService.getUsers().then((res) => {
           const userslist = res.data.data.results;
@@ -21,6 +23,7 @@ export default function UsersPage(props) {
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
                 active: "Users"
@@ -76,7 +79,7 @@ export default function UsersPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                <Users.Users />
+                <Users.Users setPageLoading={setPageLoading}/>
                 </CardBody>
             </Card>
         </AuthLayout>
