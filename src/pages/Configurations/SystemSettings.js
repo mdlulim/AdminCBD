@@ -6,7 +6,7 @@ import { AuthLayout } from 'containers';
 
 export default function SystemSettings(props) {
     const [activeTab, setActiveTab] = useState('general');
-
+    const [pageLoading, setPageLoading] = useState(true);
 
     const toggleTab = (e, tab) => {
         e.preventDefault();
@@ -15,6 +15,7 @@ export default function SystemSettings(props) {
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
                 active: "Configuration"
@@ -97,26 +98,26 @@ export default function SystemSettings(props) {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'general' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                        <GeneralSettings.GeneralSettings />
+                                        <GeneralSettings.GeneralSettings setPageLoading={setPageLoading} />
                                         </CardBody>
                                     </div>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
                                     <CardBody className="pl-0 pr-0 pb-0">
-                                        <Settings.TransactionFees />
+                                        <Settings.TransactionFees setPageLoading={setPageLoading} />
                                     </CardBody>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'banking-details' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                        <GeneralSettings.CampanyBankDetails />
+                                        <GeneralSettings.CampanyBankDetails setPageLoading={setPageLoading} />
                                         </CardBody>
                                     </div>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <GeneralSettings.KYCLimitsOverview />
+                                            <GeneralSettings.KYCLimitsOverview setPageLoading={setPageLoading} />
                                         </CardBody>
                                     </div>
                                 </div>

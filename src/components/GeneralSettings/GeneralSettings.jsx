@@ -34,6 +34,7 @@ const inputWith = {
 }
 
 export default function TransactionSettings(props) {
+  const { setPageLoading } = props;
   const [show, setShow] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -53,9 +54,11 @@ export default function TransactionSettings(props) {
           const settingslist = res.data.data.results;
           setSettings(settingslist);
           setFilteredSettings(settingslist);
+
+          setPageLoading(false)
         });
 
-    }, []);
+    }, [setPageLoading]);
     // table headings definition
 const columns = [{
     name: 'Category',

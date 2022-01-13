@@ -64,7 +64,7 @@ const Image = () => {
 };
 
 export default function Products(props) {
-  const { setPageLoading, pageLoading } = props;
+  const { setPageLoading } = props;
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showResend, setShowResend] = useState(false);
@@ -84,7 +84,7 @@ export default function Products(props) {
           setPageLoading(false)
       });
 
-  }, [setPageLoading, pageLoading]);
+  }, [setPageLoading]);
   // table headings definition
   const columns = [
     {
