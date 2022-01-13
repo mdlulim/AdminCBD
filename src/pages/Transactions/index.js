@@ -197,7 +197,7 @@ const TransactionList = props => {
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
 				<Col md={12}>
-                    <Transactions.Transactions transactionType={'all'} />
+                    <Transactions.Transactions transactionType={'all'} setPageLoading={setPageLoading} />
                 </Col>
 				</Col>
 			</Row>
