@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Common, Pagination, UserRoles } from 'components';
 import { AuthLayout } from 'containers';
 
 
 export default function UserRolesPage(props) {
+    const [pageLoading, setPageLoading] = useState(true);
+
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
                 active: "Users"
@@ -25,7 +28,7 @@ export default function UserRolesPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                <UserRoles.UserRoles />
+                <UserRoles.UserRoles setPageLoading={setPageLoading}/>
                    
                     
                 </CardBody>
