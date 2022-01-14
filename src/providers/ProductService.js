@@ -87,6 +87,22 @@ class ProductService {
     });
   }
 
+  static async getProductSubcategory(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories/${id}`,
+    }).then((res) =>{
+      if(res.data.success){
+        return res.data.data;
+      }else{
+        return {};
+      }
+      
+    });
+  }
+
   static async getProduct(id) {
     return await axios({
       mode: 'no-cors',
@@ -158,6 +174,19 @@ class ProductService {
       url: `${Config.API.BASE_URL}/products/${id}`,
     }).then((res) =>{
       const result = {status: res.data.status, message: res.data.message}
+      return result;
+    });
+  }
+
+  static async updateProductSubcategory(id,product){
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      data: product,
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories/${id}`,
+    }).then((res) =>{
+      const result = res.data;
       return result;
     });
   }
