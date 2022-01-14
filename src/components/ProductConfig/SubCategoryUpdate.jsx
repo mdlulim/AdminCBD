@@ -16,12 +16,22 @@ const SubCategoryUpdate = props => {
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
+
     const [value, onChange] = useState('10:00');
     const [selectedWeek, setSelectedWeek] = useState({});
     const [selectedDate, setSelectedDate] = useState({});
     const [selectedWhen, setSelectedWhen] = useState({});
     const [selectedMonth, setSelectedMonth] = useState({});
+
+    const [valueCal, onChangeCal] = useState('10:00');
+    const [selectedWeekCal, setSelectedWeekCal] = useState({});
+    const [selectedDateCal, setSelectedDateCal] = useState({});
+    const [selectedWhenCal, setSelectedWhenCal] = useState({});
+    const [selectedMonthCal, setSelectedMonthCal] = useState({});
+
     const [payouts, setPayout] = useState({});
+    const [calculation, setCalculation] = useState({});
+
     const [selectedCurrencyCode, setSelectedCurrencyCode] = useState('');
     const { title, body, processing, confirmButtonDisabled, confirmButton, cancelButton, showIcon, size, } = props;
     const [subcategory, setSubcategory] = useState({});
@@ -31,26 +41,57 @@ const SubCategoryUpdate = props => {
     useMemo(() => {
         //Get member details
         ProductService.getProductSubcategory(id).then((res) => {
-            //console.log(res.payout_settings.payout_type)
            setSubcategory(res);
            setPayout(res.payout_settings)
-           if (selectedWhen.value === 'Daily'){
-            selectedWhen(res.payout_settings.payout_type)
-            onChange(res.payout_settings.time)
-        }else if (selectedWhen.value === 'Weekly'){
-            selectedWhen(res.payout_settings.payout_type)
-            setSelectedWeek(res.payout_settings.day)
-            onChange(res.payout_settings.time)
-        }else if (selectedWhen.value === 'Monthly'){
-            selectedWhen(res.payout_settings.payout_type)
-            setSelectedDate(res.payout_settings.date)
-            onChange(res.payout_settings.time)
-        }else if (selectedWhen.value === 'Yearly'){
-            selectedWhen(res.payout_settings.payout_type)
-            setSelectedMonth(res.payout_settings.month)
-            setSelectedDate(res.payout_settings.date)
-            onChange(res.payout_settings.time)
-        }
+           setCalculation(res.calculation_settings)
+
+           let when = {}
+           let whenCal = {}
+           if(res.payout_settings){
+                when = optionsWhen.filter(option => option.value === res.payout_settings.payout_type);
+                when = when[0];
+                if (res.payout_settings.payout_type === 'Daily'){
+                    setSelectedWhen(when)
+                    onChange(res.payout_settings.time)
+                }else if (res.payout_settings.payout_type === 'Weekly'){
+                    setSelectedWhen(when)
+                    setSelectedWeek(optionsWeeks.filter(option => option.value === res.payout_settings.day))
+                    onChange(res.payout_settings.time)
+                }else if (res.payout_settings.payout_type === 'Monthly'){
+                    setSelectedWhen(when)
+                    setSelectedDate(optionDates.filter(option => option.value === res.payout_settings.date))
+                    onChange(res.payout_settings.time)
+                }else if (res.payout_settings.payout_type === 'Yearly'){
+                    setSelectedWhen(when)
+                    setSelectedMonth( optionMonths.filter(option => option.value === res.payout_settings.month)[0])
+                    setSelectedDate(optionDates.filter(option => option.value === res.payout_settings.date)[0])
+                    onChange(res.payout_settings.time)
+                }
+           }
+
+           if(res.calculation_settings){
+                whenCal = optionsWhen.filter(option => option.value === res.calculation_settings.payout_type);
+                whenCal = whenCal[0];
+
+                if (res.calculation_settings.payout_type === 'Daily'){
+                    setSelectedWhenCal(whenCal)
+                    onChangeCal(res.calculation_settings.time)
+                }else if (res.calculation_settings.payout_type === 'Weekly'){
+                    setSelectedWhenCal(whenCal)
+                    setSelectedWeekCal(optionsWeeks.filter(option => option.value === res.calculation_settings.day))
+                    onChangeCal(res.calculation_settings.time)
+                }else if (res.calculation_settings.payout_type === 'Monthly'){
+                    setSelectedWhenCal(whenCal)
+                    setSelectedDateCal(optionDates.filter(option => option.value === res.calculation_settings.date))
+                    onChange(res.calculation_settings.time)
+                }else if (res.calculation_settings.payout_type === 'Yearly'){
+                    setSelectedWhenCal(whenCal)
+                    setSelectedMonthCal( optionMonths.filter(option => option.value === res.calculation_settings.month)[0])
+                    setSelectedDateCal(optionDates.filter(option => option.value === res.calculation_settings.date)[0])
+                    onChangeCal(res.calculation_settings.time)
+                }
+            }
+
           });
 
  
@@ -127,6 +168,7 @@ const SubCategoryUpdate = props => {
         setDisabled(true);
         setError('');
 
+        console.log(selectedDate)
         const form = event.currentTarget;
         let educatorFee = {}
         if (selectedWhen.value === 'Daily'){
@@ -140,14 +182,12 @@ const SubCategoryUpdate = props => {
                 day: selectedWeek.value,
                 time: value,
             }
-
         }else if (selectedWhen.value === 'Monthly'){
             educatorFee = {
                 payout_type: selectedWhen.value,
                 date: selectedDate.value,
                 time: value,
             }
-
         }else if (selectedWhen.value === 'Yearly'){
             educatorFee = {
                 payout_type: selectedWhen.value,
@@ -155,18 +195,58 @@ const SubCategoryUpdate = props => {
                 date: selectedDate.value,
                 time: value,
             }
+        }
+
+        let calculatorFee = {}
+        if (selectedWhenCal.value === 'Daily'){
+            calculatorFee = {
+                payout_type: selectedWhenCal.value,
+                time: valueCal,
+            }
+        }else if (selectedWhenCal.value === 'Weekly'){
+            calculatorFee = {
+                payout_type: selectedWhenCal.value,
+                day: selectedWeekCal.value,
+                time: valueCal,
+            }
+
+        }else if (selectedWhenCal.value === 'Monthly'){
+            calculatorFee = {
+                payout_type: selectedWhenCal.value,
+                date: selectedDateCal.value,
+                time: valueCal,
+            }
+
+        }else if (selectedWhenCal.value === 'Yearly'){
+            calculatorFee = {
+                payout_type: selectedWhenCal.value,
+                month: selectedMonthCal.value,
+                date: selectedDateCal.value,
+                time: valueCal,
+            }
 
         }
 
-        const data = {
-            title: form.title.value,
-            code: subcategory.code,
-            description: form.description.value,
-            payout_settings: educatorFee
+        let data = {};
+        if(subcategory.has_payouts){
+             data = {
+                title: form.title.value,
+                code: subcategory.code,
+                description: form.description.value,
+                payout_settings: educatorFee,
+                calculation_settings: calculatorFee,
+            }
+        }else{
+             data = {
+                title: form.title.value,
+                code: subcategory.code,
+                description: form.description.value,
+                calculation_settings: calculatorFee,
+            }
         }
-        // console.log(data);
-        // setDisabled(false);
-        // return data;
+        //  console.log(data);
+        //  setDisabled(false);
+        //  return data;
         if (form.title.value && subcategory.code && form.description.value) {
             ProductService.updateProductSubcategory(subcategory.id, data).then((response) => {
                 console.log(response);
@@ -209,7 +289,6 @@ const SubCategoryUpdate = props => {
                         <Col xs={2} className="text-right mg-t-10 text-warning">
                             <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                         </Col>}
-                    
                         <form onSubmit={onSubmit}>
                             <Row>
                                 <Col>
@@ -222,7 +301,6 @@ const SubCategoryUpdate = props => {
                                         name="title"
                                         className="form-control form-control-m"
                                         defaultValue={subcategory.title }
-                                        
                                     />
                                     : ''}
                             </div>
@@ -243,9 +321,9 @@ const SubCategoryUpdate = props => {
                             </div>
                                 </Col>
                             </Row>
+                            {subcategory ?
                             <div className="form-group">
                                 <label htmlFor="email">Description</label>
-                                {subcategory ?
                                     <input
                                         type="text"
                                         id="description"
@@ -253,36 +331,39 @@ const SubCategoryUpdate = props => {
                                         className="form-control form-control-m"
                                         value={subcategory.description}
                                     />
-                                    : ''}
                             </div>
+                            : ''}
+{/* ===========================================Calculations======================================= */}
+
+                            <h2>Calculations</h2>
                             {/* defaultValue={statusOptions.filter(option => option.value === transaction.status)} */}
-                            {payouts.payout_type ?
+                             {subcategory ?
                                 <div>
-                                <label htmlFor="email">Select Option {payouts['payout_type']}</label>
+                                <label htmlFor="email">Select Option </label>
                                 <Select
                                     id="status"
                                     name="status"
                                     options={optionsWhen}
-                                    defaultValue={optionsWhen.filter(option => option.value === payouts['payout_type'])}
-                                    onChange={item => setSelectedWhen(item)}
+                                    defaultValue={calculation ? optionsWhen.filter(option => option.value === calculation.payout_type): ''}
+                                    onChange={item => setSelectedWhenCal(item)}
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
                                     />
 
                                 </div>
                                 : ''}
-                                {subcategory.payout_settings.payout_type === 'Daily' ?
+                               {selectedWhenCal.value === 'Daily' ?
                                 <div>
-                                <label htmlFor="email">Select Status</label>
+                                <label htmlFor="email">Select Time</label>
                                     <TimePicker
                                     className="form-control form-control-m"
-                                    onChange={onChange}
-                                    value={subcategory.payout_settings.time}
+                                    onChange={onChangeCal}
+                                    value={calculation ? calculation.time: valueCal}
                                   />
                                   </div>
                                 : ''
                             }
-                        {payouts.payout_type === 'Weekly' ?   
+                        {selectedWhenCal.value === 'Weekly' ?   
                             <Row>
                                 <Col>
                                 <div>
@@ -291,7 +372,8 @@ const SubCategoryUpdate = props => {
                                     id="status"
                                     name="status"
                                     options={optionsWeeks}
-                                    onChange={item => setSelectedWeek(item)}
+                                    defaultValue={calculation ? optionsWeeks.filter(option => option.value === calculation.day): ''}
+                                    onChange={item => setSelectedWeekCal(item)}
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
                                     />
@@ -303,13 +385,13 @@ const SubCategoryUpdate = props => {
                                         <label htmlFor="email">Select Time</label>
                                             <TimePicker
                                             className="form-control form-control-m"
-                                            onChange={onChange}
-                                            value={subcategory.payout_settings.time}
+                                            onChange={onChangeCal}
+                                            value={calculation ? calculation.time: valueCal}
                                         />
                                     </div>
                                 </Col>
                             </Row>
-                            : subcategory.payout_settings.payout_type === 'Weekly' ?   
+                            : selectedWhenCal.value === 'Weekly' ?
                             <Row>
                                 <Col>
                                 <div>
@@ -318,7 +400,8 @@ const SubCategoryUpdate = props => {
                                     id="status"
                                     name="status"
                                     options={optionsWeeks}
-                                    onChange={item => setSelectedWeek(item)}
+                                    defaultValue={calculation ? optionsWeeks.filter(option => option.value === calculation.day): ''}
+                                    onChange={item => setSelectedWeekCal(item)}
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
                                     />
@@ -330,13 +413,13 @@ const SubCategoryUpdate = props => {
                                         <label htmlFor="email">Select Time</label>
                                             <TimePicker
                                             className="form-control form-control-m"
-                                            onChange={onChange}
-                                            value={subcategory.payout_settings.time}
+                                            onChange={onChangeCal}
+                                            value={calculation ? calculation.time : valueCal}
                                         />
                                     </div>
                                 </Col>
                             </Row>
-                             : subcategory.payout_settings.payout_type === 'Monthly' ?   
+                             : selectedWhenCal.value === 'Monthly' ?   
                              <Row>
                                  <Col>
                                  <div>
@@ -345,6 +428,170 @@ const SubCategoryUpdate = props => {
                                      id="status"
                                      name="status"
                                      options={optionDates}
+                                     defaultValue={calculation ? optionDates.filter(option => option.value === calculation.date): ''}
+                                     onChange={item => setSelectedDateCal(item)}
+                                     className={`basic-multi-select form-control-m`}
+                                     classNamePrefix="select"
+                                     />
+ 
+                                 </div>
+                                 </Col>
+                                 <Col>
+                                     <div>
+                                         <label htmlFor="email">Select Time</label>
+                                             <TimePicker
+                                             className="form-control form-control-m"
+                                             onChange={onChangeCal}
+                                            value={calculation ? calculation.time : valueCal}
+                                         />
+                                     </div>
+                                 </Col>
+                             </Row>
+                            : selectedWhenCal.value === 'Yearly' ?
+                            <Row>
+                                <Col>
+                                <div>
+                                <label htmlFor="email">Select Month</label>
+                                <Select
+                                    id="status"
+                                    name="status"
+                                    options={optionMonths}
+                                    defaultValue={calculation ? optionMonths.filter(option => option.value === calculation.month): ''}
+                                    onChange={item => setSelectedMonthCal(item)}
+                                    className={`basic-multi-select form-control-m`}
+                                    classNamePrefix="select"
+                                    />
+
+                                </div>
+                                </Col>
+                                <Col>
+                                <div>
+                                <label htmlFor="email">Select Date</label>
+                                <Select
+                                    id="status"
+                                    name="status"
+                                    options={optionDates}
+                                    defaultValue={calculation ? optionDates.filter(option => option.value === calculation.payout_type): ''}
+                                    onChange={item => setSelectedDateCal(item)}
+                                    className={`basic-multi-select form-control-m`}
+                                    classNamePrefix="select"
+                                    />
+
+                                </div>
+                                </Col>
+                                <Col>
+                                    <div>
+                                        <label htmlFor="email">Select Time</label>
+                                            <TimePicker
+                                            className="form-control form-control-m"
+                                            onChange={onChangeCal}
+                                            value={calculation ? calculation.time : valueCal}
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
+                            :''}
+
+{/** ===========================================End Of Calculation======================================= */}
+
+
+
+{/**  ===========================================Payout Settings=========================================== */}
+                        {subcategory.has_payouts ?
+                        <>
+                        <br />
+                        <hr />
+                            <h2>Payout Settings</h2>
+                                <div>
+                        <label htmlFor="email">Select Option {payouts.payout_type}</label>
+                                <Select
+                                    id="status"
+                                    name="status"
+                                    options={optionsWhen}
+                                    defaultValue={payouts ? optionsWhen.filter(option => option.value === payouts.payout_type): ''}
+                                    onChange={item => setSelectedWhen(item)}
+                                    className={`basic-multi-select form-control-m`}
+                                    classNamePrefix="select"
+                                    />
+
+                                </div>
+                               {selectedWhen.value === 'Daily' ?
+                                <div>
+                                <label htmlFor="email">Select Time</label>
+                                    <TimePicker
+                                    className="form-control form-control-m"
+                                    onChange={onChange}
+                                    value={payouts ? payouts.time: value}
+                                  />
+                                  </div>
+                                : ''
+                            }
+                        {selectedWhen.value === 'Weekly' ?   
+                            <Row>
+                                <Col>
+                                <div>
+                                <label htmlFor="email">Select Day</label>
+                                <Select
+                                    id="status"
+                                    name="status"
+                                    options={optionsWeeks}
+                                    defaultValue={payouts ? optionsWeeks.filter(option => option.value === payouts.day): ''}
+                                    onChange={item => setSelectedWeek(item)}
+                                    className={`basic-multi-select form-control-m`}
+                                    classNamePrefix="select"
+                                    />
+
+                                </div>
+                                </Col>
+                                <Col>
+                                    <div>
+                                        <label htmlFor="email">Select Time</label>
+                                            <TimePicker
+                                            className="form-control form-control-m"
+                                            onChange={onChange}
+                                            value={payouts ? payouts.time: value}
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
+                            : selectedWhen.value === 'Weekly' ?
+                            <Row>
+                                <Col>
+                                <div>
+                                <label htmlFor="email">Select Day</label>
+                                <Select
+                                    id="status"
+                                    name="status"
+                                    options={optionsWeeks}
+                                    defaultValue={payouts ? optionsWeeks.filter(option => option.value === payouts.day): ''}
+                                    onChange={item => setSelectedWeek(item)}
+                                    className={`basic-multi-select form-control-m`}
+                                    classNamePrefix="select"
+                                    />
+
+                                </div>
+                                </Col>
+                                <Col>
+                                    <div>
+                                        <label htmlFor="email">Select Time</label>
+                                            <TimePicker
+                                            className="form-control form-control-m"
+                                            onChange={onChange}
+                                            value={payouts ? payouts.time: value}
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
+                             : selectedWhen.value === 'Monthly' ?   
+                             <Row>
+                                 <Col>
+                                 <div>
+                                 <label htmlFor="email">Select Date</label>
+                                 <Select
+                                     id="status"
+                                     name="status"
+                                     options={optionDates}
+                                     defaultValue={payouts ? optionDates.filter(option => option.value === payouts.date): ''}
                                      onChange={item => setSelectedDate(item)}
                                      className={`basic-multi-select form-control-m`}
                                      classNamePrefix="select"
@@ -358,12 +605,12 @@ const SubCategoryUpdate = props => {
                                              <TimePicker
                                              className="form-control form-control-m"
                                              onChange={onChange}
-                                            value={subcategory.payout_settings.time}
+                                            value={payouts ? payouts.time: value}
                                          />
                                      </div>
                                  </Col>
                              </Row>
-                            : selectedWhen.value === 'Yearly' ?   
+                            : selectedWhen.value === 'Yearly' ?
                             <Row>
                                 <Col>
                                 <div>
@@ -372,6 +619,7 @@ const SubCategoryUpdate = props => {
                                     id="status"
                                     name="status"
                                     options={optionMonths}
+                                    defaultValue={payouts ? optionMonths.filter(option => option.value === payouts.month): ''}
                                     onChange={item => setSelectedMonth(item)}
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
@@ -381,11 +629,12 @@ const SubCategoryUpdate = props => {
                                 </Col>
                                 <Col>
                                 <div>
-                                <label htmlFor="email">Select Day Of The Week</label>
+                                <label htmlFor="email">Select Date</label>
                                 <Select
                                     id="status"
                                     name="status"
                                     options={optionDates}
+                                    defaultValue={payouts ? optionDates.filter(option => option.value === payouts.date): ''}
                                     onChange={item => setSelectedDate(item)}
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
@@ -399,12 +648,14 @@ const SubCategoryUpdate = props => {
                                             <TimePicker
                                             className="form-control form-control-m"
                                             onChange={onChange}
-                                            value={value}
+                                            value={payouts ? payouts.time : value}
                                         />
                                     </div>
                                 </Col>
                             </Row>
                             :''}
+                            </> : ''}
+{/** ===========================================End of Payout Settings==================================== */}
                             <hr />
                             <Row>
                                 <Col md={6}>
@@ -425,7 +676,7 @@ const SubCategoryUpdate = props => {
                             </button>
                                 </Col>
                             </Row>
-                             </form> 
+                             </form>
             </CardBody>
         </Card>
     );
