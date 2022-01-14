@@ -33,7 +33,10 @@ export default function Dropdown(props) {
                     onClick={e => {
                         if(item.onClick && typeof item.onClick === 'function'){
                             e.preventDefault();
-                            return item.onClick()
+                            if (item.closeOnClick) {
+                                setExpanded(false);
+                            }
+                            return item.onClick();
                         }
                         if (!item.link) {
                             e.preventDefault();

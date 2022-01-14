@@ -1,60 +1,23 @@
-import { PagePermissionService, SessionProvider } from 'providers';
+import { SessionProvider } from 'providers';
 import React, { useEffect, useState, useMemo } from 'react';
 import menu from 'static/mainmenu.json';
 import Moment from 'react-moment';
 
-var vl =[];
-var member_page;
 const SubNavItem = props => {
-    const [hasAccess, setHasAccess] = useState(false);
-    const [perm, setPerm] = useState('');
-    var t='';
-    //var ul = localStorage.getItem('userLevel');
-
     const {
         link,
         title,
         parentLink,
     } = props;
-
-    useMemo(() => {
-        let user = {};
-        if (SessionProvider.isValid()) {
-            user = SessionProvider.get();
-        }else{
-            window.location = '/login';
-        }
-        let ul = user.permission_level;
-        PagePermissionService.getPagePermissionsByPage((title.toLowerCase()).replace(/\s/g, "")).then((res) => {
-            if(ul == 1){
-                setHasAccess(res.data.low);
-            }else if(ul == 2){
-                setHasAccess(res.data.basic);
-            }else if(ul == 3){
-                setHasAccess(res.data.medium);
-            }else if(ul == 4){
-                setHasAccess(res.data.high);
-            }else if(ul == 5){
-                setHasAccess(res.data.veryhigh);
-            }
-            if(title === 'User Permissions' || title === 'Users' || title === 'User Roles'  || title === 'Countries'  || title === 'Settings'  || title === 'Forms Configuration'){
-                setHasAccess(true);
-            }
-        });
-        }, []);
-         if(hasAccess == true){
-             vl.push(title);
-         }
     return (
-       
-        (hasAccess == true ? <li>
+        <li>
             <a
                 href={`${parentLink + link}`}
                 className="no-icon"
             >
                 <span className="text">{title}</span>
             </a>
-        </li> : '')
+        </li>
     );
 }
 
@@ -76,7 +39,6 @@ const NavItem = props => {
         activeClass,
         openableClass,
     } = props;
-    let cnt = 0;
     return (
         <li
             className={activeClass(link) + openableClass(childitems) + openClass(id)}
@@ -137,7 +99,12 @@ export default function AuthSidenav(props) {
     }, [match, setNavClass]);
 
     const activeClass = link => {
-        return (link && activeNav === link) ? 'active ' : '';
+        if (link && activeNav) {
+            const ilink = link.split('/')[1];
+            const anav  = activeNav.split('/')[1];
+            return (link && anav === ilink) ? 'active ' : '';
+        }
+        return '';
     };
 
     const openableClass = childitems => {
@@ -150,8 +117,9 @@ export default function AuthSidenav(props) {
 
     return (
         <div
-            className={`page-aside invert page-aside-animation-show ${minimized ? 'page-aside--minimized' : ''} ${hidden ? 'page-aside--hidden' : ''} ${navClass}`}
             id="page-aside"
+            className={`page-aside invert page-aside-animation-show ${minimized ? 'page-aside--minimized' : ''} ${hidden ? 'page-aside--hidden' : ''} ${navClass}`}
+            style={{ overflow: 'auto' }}
         >
             <div className="navigation navigation--condensed" id="navigation-default">
                 <div className="user user--bordered user--lg user--w-lineunder user--controls"> 

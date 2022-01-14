@@ -118,7 +118,27 @@
         }
     ],
     "system": [
-       
+        {
+            "id": "users",
+            "title": "Users",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/users",
+            "icon": "li-user-lock",
+            "childitems": [
+                {
+                    "id": "manage-roles",
+                    "title": "Manage Roles",
+                    "link": "/roles",
+                    "icon": null
+                },
+                {
+                    "id": "manage-users",
+                    "title": "Manage Users",
+                    "link": "",
+                    "icon": null
+                }
+            ]
+        },
         {
             "id": "configurations",
             "title": "Configurations",
@@ -133,30 +153,14 @@
                     "icon": null
                 },
                 {
-                    "id": "users",
-                    "title": "Users",
-                    "link": "/users",
-                    "icon": null
-                },
-                {
-                    "id": "roles",
-                    "title": "User Roles",
-                    "link": "/roles",
-                    "icon": null
-                },{
-                    "id": "permissions",
-                    "title": "User Permissions",
-                    "link": "/permissions",
-                    "icon": null
-                },
-                {
                     "id": "countries",
                     "title": "Countries",
                     "link": "/countries",
                     "icon": null
-                },{
+                },
+                {
                     "id": "forms",
-                    "title": "Forms Configuration",
+                    "title": "Forms",
                     "link": "/forms",
                     "icon": null
                 }

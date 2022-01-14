@@ -1,5 +1,12 @@
-.users-content {
-    .filters {
-        width: 100%;
+#users {
+    .nav {
+        .nav-item {
+            &:first-child {
+                .nav-link {
+                    border-left: none;
+                    border-top-left-radius: 0;
+                }
+            }
+        }
     }
 }

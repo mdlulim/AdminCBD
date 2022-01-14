@@ -188,6 +188,19 @@ a { color: $primary; }
     }
 }
 
+// daterange
+.daterangepicker {
+    &.dropdown-menu {
+
+        &.show {
+            display: block;
+            left: auto;
+            top: 40px;
+            right: 45px;
+        }
+    }
+}
+
 // ngx-pagination
 .ngx-pagination {
     display: flex;
@@ -313,4 +326,14 @@ a { color: $primary; }
 
 .ngx-pagination li:not(.pagination-previous):not(.pagination-next):not(.small-screen) a span {
     line-height: 100%;
+}
+
+// .react-confirm-alert
+.react-confirm-alert {
+    .react-confirm-alert-body {
+        h1 {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    }
 }
