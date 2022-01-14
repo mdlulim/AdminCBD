@@ -12,6 +12,7 @@ const FormsConfigurations = props => {
 	const [ loginForm, setLoginForm ] = useState({});
     const [ registerForm, setRegisterForm ] = useState({});
     const [ forgotPasswordForm, setForgotPasswordForm ] = useState({});
+    const [pageLoading, setPageLoading] = useState(true);
 
 	const toggleTab = (e, tab) => {
 		e.preventDefault();
@@ -177,6 +178,7 @@ const FormsConfigurations = props => {
 
 	return (
 		<AuthLayout {...props}
+        loading={pageLoading}
         breadcrumb={{
             items: [{ title: 'Dashboard', link: '/dashboard' }],
             active: "Form Configurations"
@@ -224,20 +226,20 @@ const FormsConfigurations = props => {
                                     <div className="tab-content">
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
                                             <CardBody className="pl-0 pr-0 pb-0">
-												<FormsConfig.ConfigLogin loginForm={loginForm} />
+												<FormsConfig.ConfigLogin loginForm={loginForm} setPageLoading={setPageLoading} />
                                             </CardBody>
                                         </div>
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
-                                                     <FormsConfig.ConfigRegistration registerForm={registerForm} />
+                                                     <FormsConfig.ConfigRegistration registerForm={registerForm} setPageLoading={setPageLoading} />
                                                 </CardBody>
                                             </div>
                                         </div>
 										<div role="tabpanel" className={`tab-pane show ${activeTab === 'transactions' ? 'active' : ''}`}>
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
-                                                <FormsConfig.ConfigForgotPassword forgotPasswordForm={forgotPasswordForm} />
+                                                <FormsConfig.ConfigForgotPassword forgotPasswordForm={forgotPasswordForm} setPageLoading={setPageLoading} />
                                                 </CardBody>
                                             </div>
                                         </div>
