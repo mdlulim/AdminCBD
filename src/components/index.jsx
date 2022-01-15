@@ -25,6 +25,8 @@ import Settings from './Settings';
 import GeneralSettings from './GeneralSettings';
 import BankAccounts from './BankAccounts';
 import MainAccount from './MainAccount';
+import Commission from './Commission';
+import ProductConfig from './ProductConfig';
 
 export {
     Breadcrumb,
@@ -54,4 +56,6 @@ export {
     GeneralSettings,
     BankAccounts,
     MainAccount,
+    Commission,
+    ProductConfig,
 };

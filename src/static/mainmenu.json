@@ -133,6 +133,17 @@
                     "icon": null
                 },
                 {
+                    "id": "commissions",
+                    "title": "Commissions",
+                    "link": "/commissions",
+                    "icon": null
+                },{
+                    "id": "product",
+                    "title": "Product Config",
+                    "link": "/product",
+                    "icon": null
+                },
+                {
                     "id": "users",
                     "title": "Users",
                     "link": "/users",
