@@ -159,6 +159,37 @@
                     "icon": null
                 },
                 {
+<<<<<<< HEAD
+=======
+                    "id": "commissions",
+                    "title": "Commissions",
+                    "link": "/commissions",
+                    "icon": null
+                },{
+                    "id": "product",
+                    "title": "Product Config",
+                    "link": "/product",
+                    "icon": null
+                },
+                {
+                    "id": "users",
+                    "title": "Users",
+                    "link": "/users",
+                    "icon": null
+                },
+                {
+                    "id": "roles",
+                    "title": "User Roles",
+                    "link": "/roles",
+                    "icon": null
+                },{
+                    "id": "permissions",
+                    "title": "User Permissions",
+                    "link": "/permissions",
+                    "icon": null
+                },
+                {
+>>>>>>> 1183753c1822b4824d5ad23e2659d9d162f1df91
                     "id": "countries",
                     "title": "Countries",
                     "link": "/countries",

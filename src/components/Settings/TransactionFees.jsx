@@ -61,6 +61,7 @@ const Status = ({ status }) => {
 };
 
 export default function TransactionFees(props) {
+  const { setPageLoading } = props;
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [fees, setFees] = useState([]);
@@ -74,9 +75,11 @@ export default function TransactionFees(props) {
           const feeslist = res.data.results;
           setFees(feeslist);
           setFilteredFees(feeslist);
+
+          setPageLoading(false)
         });
  
-      }, []);
+      }, [setPageLoading]);
     // table headings definition
 const columns = [ {
     name: 'Type',

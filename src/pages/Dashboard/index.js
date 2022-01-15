@@ -2,38 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 import { AuthLayout } from 'containers';
+import DatePicker from "react-datepicker";
+import { Modal } from 'react-bootstrap';
+import Moment from 'react-moment';
+import moment from 'moment';
 import { Common, Dashboard, Overview, Members, Loader } from 'components';
-import { MemberService, ProductService, TransactionService, AccountService, SessionProvider } from '../../providers';
+import { MainAccountService, MemberService, ProductService, TransactionService, AccountService, SessionProvider } from '../../providers';
 import { VectorMap } from '@south-paw/react-vector-maps';
 import world from '../../components/Dashboard/world.json';
-
-const Filter = () => {
-    return (
-        <>
-            <Common.Dropdown
-                actions={[
-                    { label: 'Filter by Date Range' },
-                    { label: 'Filter by Date' },
-                    { label: 'Filter Month' },
-                    { label: 'Filter Year' }
-                ]}
-            />
-            <button
-                className="btn btn-light d-none d-md-block float-right margin-right-5"
-                id="dashboard-rp-customrange"
-            >
-                September 22, 2021 - October 21, 2021
-            </button>
-        </>
-    );
-}
 
 const inputWith={
     width: '20%'
   }
+  const inputWithDate = {
+    width: '25%'
+  }
 
 export default function DashboardPage(props) {
+    const [show, setShow] = useState(false);
     const [members, setMembers] = useState([]);
+    const [disabled, setDisabled] = useState(false);
     const [pageLoading, setPageLoading] = useState(true);
     const [filteredMembers, setFilteredMembers] = useState([]);
     const [selectedMember, setSelectedMember] = useState({});
@@ -42,9 +30,25 @@ export default function DashboardPage(props) {
     const [mainAccount, setMainAccount] = useState({});
     const [adminLevel, setAdminLevel] = useState({});
     const [filteredTransactions, setFilteredTransactions] = useState([]);
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
     const history = useHistory();
 
+    const handleClose = () => setShow(false);
+
     async function fetchData(){
+        var date = new Date();
+        date.setDate(date.getDate() - 30);
+        var dateString = date.toISOString().split('T')[0]; // "2016-06-08"
+
+        const d = new Date();
+        let text = d.toString();
+
+        const startDate = moment().add(-30, 'days')._d;
+        const endDate = moment(text)._d;
+        setStartDate(startDate)
+        setEndDate(endDate)
+
         const members = await MemberService.getMembers();
             const memberslist = members.results;
             const temp=  memberslist.slice(Math.max(memberslist.length - 5), 0)
@@ -61,6 +65,13 @@ export default function DashboardPage(props) {
         const transaList = await TransactionService.getTransactions();
              setTransactions(transaList.results);
              setFilteredTransactions(transaList.results)
+        
+        const dateRange = {
+                start_date  : startDate,
+                end_date    : endDate
+            };
+        const types = await MainAccountService.getTransactionType(dateRange);
+        const totals = await MainAccountService.getTransactionTotal(dateRange);
 
         setPageLoading(false);
     }
@@ -84,6 +95,50 @@ export default function DashboardPage(props) {
         return countTypes.length;
     }
 
+    const Filter = () => {
+        return (
+            <>
+                <Common.Dropdown
+                    actions={[
+                        { label: 'Filter by Date Range',
+                        onClick: () => {
+                            setShow(true)
+                        }
+                        },
+                    ]}
+                />
+                <button
+                    className="btn btn-light d-none d-md-block float-right margin-right-5"
+                    id="dashboard-rp-customrange"
+                >
+                     <Moment date={startDate} format="D MMMM YYYY" /> - <Moment date={endDate} format="D MMMM YYYY" />
+                </button>
+            </>
+        );
+    }
+
+    async function selectDataRange(){
+        setDisabled(true);
+        setPageLoading(true)
+          console.log(startDate)
+          console.log(endDate)
+
+          const dateRange = {
+             start_date  : startDate,
+             end_date    : endDate
+         };
+
+        //  const types = await MainAccountService.getTransactionType(dateRange);
+        //  const totals = await MainAccountService.getTransactionTotal(dateRange);
+        //  setTotals(totals)
+        //  setTransactions(types.results);
+        //  setFilteredTransactions(types.results);
+
+         setDisabled(false);
+         setShow(false)
+         setPageLoading(false)
+     }
+
     const onSearchFilter = filterText => {
         const filteredItems = transactions.filter(item => (
             (item && item.user.first_name && item.user.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -96,7 +151,7 @@ export default function DashboardPage(props) {
 
         setFilteredTransactions(filteredItems);
       }
-    if (pageLoading) return <Loader.Default />;
+    // if (pageLoading) return <Loader.Default />;
     return (
         <AuthLayout
             {...props}
@@ -279,6 +334,47 @@ export default function DashboardPage(props) {
                     </Card>
                 </Col>
             </div>
+            <Modal show={show} onHide={handleClose} centered className="confirm-modal">
+        <Modal.Body>
+          <Row>
+            <Col>
+              <h3 className="text-success">Search by date range </h3>
+              <hr />
+              <div className="form-group">
+                <label htmlFor="from">From</label>
+                <DatePicker style={inputWithDate} className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">To</label>
+                <DatePicker style={inputWithDate} className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
+              </div>
+              <hr />
+              <Row>
+                <Col md={6}>
+                  <button
+                    className="btn btn-dark"
+                    onClick={e => {
+                      e.preventDefault();
+                      setShow(false);
+                    }}
+                  >
+                    {'Cancel'}
+                  </button>
+                </Col>
+                <Col md={6} >
+                  <button
+                    className="btn btn-success float-right"
+                    onClick={selectDataRange}
+                    disabled={disabled}
+                  >
+                    {'Search'}
+                  </button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Modal.Body>
+      </Modal>
             </>}
         </AuthLayout>
     );

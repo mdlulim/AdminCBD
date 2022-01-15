@@ -28,6 +28,22 @@ class SettingService {
       });
     }
 
+    static async getSettingsCommission() {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/settings/commission`,
+      }).then(json => json.data)
+      .then(res => {
+        const { success, data } = res;
+        if (success) {
+          return data || [];
+        }
+        return [];
+      })
+    }
+
     static async createSetting(data){
         return await axios({
           mode: 'no-cors',

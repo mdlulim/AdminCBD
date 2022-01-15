@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
 import { BankAccounts } from 'components';
 
 const BankAccountsList = props => {
 	const breadcrumb = { heading: "BankAccounts" };
+	const [pageLoading, setPageLoading] = useState(true);
+
 	return (
 		<AuthLayout {...props}
+		loading={pageLoading}
 		breadcrumb={{ active: "Bank Accounts" }}
 		pageHeading={{
 			title: 'Bank Accounts List',
@@ -15,7 +18,7 @@ const BankAccountsList = props => {
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
 					<Col md={12}>
-						<BankAccounts.BankAccounts />
+						<BankAccounts.BankAccounts pageLoading={pageLoading} setPageLoading={setPageLoading}/>
 					</Col>
 				</Col>
 			</Row>

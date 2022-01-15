@@ -1,12 +1,29 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Common, Settings, GeneralSettings } from 'components';
+import { Common, Commission } from 'components';
 import { AuthLayout } from 'containers';
-
+import { SettingService, SessionProvider} from '../../providers';
 
 export default function SystemSettings(props) {
     const [activeTab, setActiveTab] = useState('general');
+    const [show, setShow] = useState(false);
     const [pageLoading, setPageLoading] = useState(true);
+    const [settings, setSettings] = useState([]);
+    const [error, setError] = useState('');
+    const [adminLevel, setAdminLevel] = useState(0);
+    const [filteredSettings, setFilteredSettings] = useState([]);
+
+    async function fetchData(){
+        setPageLoading(false);
+    }
+    useEffect(() => {
+        if (SessionProvider.isValid()) {
+            const user = SessionProvider.get();
+             setAdminLevel(user.permission_level)
+         }
+         fetchData();
+    }, []);
+
 
     const toggleTab = (e, tab) => {
         e.preventDefault();
@@ -18,17 +35,17 @@ export default function SystemSettings(props) {
             loading={pageLoading}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
-                active: "Configuration"
+                active: "Commission Configuration"
             }}
             pageHeading={{
-                title: 'Manage Configuration',
-                caption: 'EXPLORE Configuration FOR CRYPTO BASED INNOVATION',
+                title: 'Manage Commission Configuration',
+                caption: 'EXPLORE Commission FOR CRYPTO BASED INNOVATION',
             }}
         >
             <Card>
                 <Common.Widget
                     icon="li-cog"
-                    title="Configurations"
+                    title="Commission Configuration"
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
@@ -40,10 +57,10 @@ export default function SystemSettings(props) {
                                         data-toggle="tab"
                                         href="/"
                                     >
-                                        General Settings
+                                        Commissiom Config
                                     </a>
                                 </li>
-                                <li className="nav-item">
+                                {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'referals' ? 'active' : ''}`}
                                         onClick={e => toggleTab(e, 'referals')}
@@ -72,7 +89,7 @@ export default function SystemSettings(props) {
                                     >
                                         KYC Limits
                                     </a>
-                                </li>
+                                </li> */}
                                 {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'banking-details' ? 'active' : ''}`}
@@ -98,26 +115,26 @@ export default function SystemSettings(props) {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'general' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                        <GeneralSettings.GeneralSettings setPageLoading={setPageLoading} />
+                                        <Commission.CommissionConfig />
                                         </CardBody>
                                     </div>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
                                     <CardBody className="pl-0 pr-0 pb-0">
-                                        <Settings.TransactionFees setPageLoading={setPageLoading} />
+                                        
                                     </CardBody>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'banking-details' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                        <GeneralSettings.CampanyBankDetails setPageLoading={setPageLoading} />
+                                        
                                         </CardBody>
                                     </div>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <GeneralSettings.KYCLimitsOverview setPageLoading={setPageLoading} />
+                                            
                                         </CardBody>
                                     </div>
                                 </div>
