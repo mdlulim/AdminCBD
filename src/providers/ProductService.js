@@ -87,6 +87,22 @@ class ProductService {
     });
   }
 
+  static async getProductSubcategory(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories/${id}`,
+    }).then((res) =>{
+      if(res.data.success){
+        return res.data.data;
+      }else{
+        return {};
+      }
+      
+    });
+  }
+
   static async getProduct(id) {
     return await axios({
       mode: 'no-cors',
@@ -162,6 +178,7 @@ class ProductService {
     });
   }
 
+<<<<<<< HEAD
   static async getCancelledProcucts(){
     return await axios({
       mode: 'no-cors',
@@ -183,5 +200,20 @@ class ProductService {
   }
 
 
+=======
+  static async updateProductSubcategory(id,product){
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      data: product,
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories/${id}`,
+    }).then((res) =>{
+      const result = res.data;
+      return result;
+    });
+  }
+
+>>>>>>> 7f2cb1b2304bd74eb1e39a4e55320cbebfcc1e2a
 }
 export default ProductService;

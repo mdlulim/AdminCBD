@@ -53,7 +53,6 @@ const ProductDetails = props => {
                     setShow(false)
                 }
             }
-            return 'Mdu';
             //setEditorState(ContentState.convertToHTML(productDetails.body));
            // setEditorState(EditorState.createWithContent(ContentState.createFromText(productDetails.body)));
         });

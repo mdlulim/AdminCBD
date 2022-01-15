@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody } from 'reactstrap';
 import Moment from 'react-moment';
-import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { Unlock,  Edit, Trash} from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
+import SubCategoryUpdate from '../ProductConfig/SubCategoryUpdate';
 import { ProductService } from '../../providers';
 // styles
 const customStyles = {
@@ -67,7 +67,7 @@ export default function SubCategoryOverview(props) {
     const [showAddNew, setShowAddNew] = useState(false);
     const [categories, setCategories] = useState([]);
     const [filteredCategories, setFilteredCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState({});
+    const [selectedSubcategory, setSelectedSubcategory] = useState({});
     const history = useHistory();
 
 
@@ -107,16 +107,16 @@ const columns = [
     sortable: true,
     cell: row => <div>
     <spam style={iconPadding}>
-    <a  href={`categories/${row.id}`}
-      className="btn btn-light btn-sm btn-icon"
-      
-    > <span className="fa fa-pencil" />
-    </a></spam>
+    <a
+          href={`/configurations/product/${row.id}`}
+          className="btn btn-light btn-sm btn-icon text-primary"
+        > <span className="li-cog" />
+        </a></spam>
   </div>
 }];
 
 const onSubmitUpdateCategory= data => {
-    setSelectedCategory(data);
+  setSelectedSubcategory(data);
     setShow(true);
     };
 
@@ -143,13 +143,13 @@ const onSubmitUpdateCategory= data => {
                         placeholder="Search..."
                         onKeyUp={e => onSearchFilter(e.target.value)}
                       />
-                    <div>
+                    {/* <div>
                             <a 
                             href={`categories/add`}
                             className="btn btn-secondary">
                               Add Category
                             </a>
-                    </div>
+                    </div> */}
                 </div>
             </CardBody>
             <DataTable
