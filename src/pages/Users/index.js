@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Col } from 'reactstrap';
+import { Card, CardBody, Col } from 'reactstrap';
 import { Common, Users } from 'components';
 import { AuthLayout } from 'containers';
 import { UserService } from 'providers';
@@ -14,12 +14,14 @@ const Actions = () => (
 );
 
 export default function UsersPage(props) {
+    const [roles, setRoles] = useState([]);
     const [users, setUsers] = useState([]);
     const [pageLoading, setPageLoading] = useState(true);
     const [filteredUsers, setFilteredUsers] = useState([]);
 
     async function fetchData() {
         const users = await UserService.getUsers();
+        const roles = await UserService.getRoles();
         if (users.results) {
             const data = users.results.map(item => ({
                 ...item,
@@ -29,6 +31,7 @@ export default function UsersPage(props) {
             setFilteredUsers(data);
             setUsers(data);
         }
+        setRoles(roles.results || []);
         setPageLoading(false);
     }
 
@@ -102,6 +105,58 @@ export default function UsersPage(props) {
                         subtitle="List of all system users"
                         wrapperClass="widget--items-middle"
                     />
+                    <CardBody>
+                        <div className="form-row">
+                            <Col xs={6} lg={4}>
+                                <input
+                                    type="text"
+                                    id="search"
+                                    name="search"
+                                    className="form-control form-control-m"
+                                    placeholder="Search by name, username or email..."
+                                />
+                            </Col>
+                            <Col xs={6} lg={2}>
+                                <select
+                                    id="group_id"
+                                    type="text"
+                                    name="group_id"
+                                    className="form-control"
+                                >
+                                    <option value="">Filter by Role</option>
+                                    {roles.map(item => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </Col>
+                            <Col xs={6} lg={2}>
+                                <select
+                                    id="status"
+                                    type="text"
+                                    name="status"
+                                    className="form-control"
+                                >
+                                    <option value="">Filter by Status</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Archived">Archived</option>
+                                    <option value="Bloacked">Bloacked</option>
+                                </select>
+                            </Col>
+                            {/* <Col xs={6} lg={4} className="d-none d-md-block text-right">
+                                <button
+                                    disabled
+                                    className="btn btn-secondary btn--icon btn--icon-stacked btn--anon d-none d-lg-block"
+                                >
+                                    <span class="fa fa-search" /> 
+                                    Search
+                                </button>
+                            </Col> */}
+                        </div>
+                    </CardBody>
+                    <hr className="margin-top-0 margin-bottom-0" />
                     <Users.List
                         users={users}
                         data={filteredUsers}

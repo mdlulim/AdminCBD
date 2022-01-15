@@ -57,6 +57,12 @@
                     "title": "Categories",
                     "link": "/categories",
                     "icon": null
+                },
+                {
+                    "id": "cancellations",
+                    "title": "Cancellations",
+                    "link": "/cancellations",
+                    "icon": null
                 }
             ]
         },

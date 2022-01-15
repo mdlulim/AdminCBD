@@ -74,6 +74,7 @@ export default function UserRolesPage(props) {
                         </Col>
                     </div>
                 </CardBody>
+                <hr className="margin-top-0 margin-bottom-0" />
                 <Users.Roles
                     roles={roles}
                     data={filteredRoles}
