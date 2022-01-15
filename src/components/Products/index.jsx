@@ -6,6 +6,7 @@ import UpdateProductDetails from './UpdateProductDetails';
 import MembersByProductID from './MembersByProductID';
 import Categories from './Categories';
 import ProductHistory from './ProductHistory'
+import Cancel from './Cancel'
 
 export default {
     Products,
@@ -16,4 +17,5 @@ export default {
     MembersByProductID,
     Categories,
     ProductHistory,
+    Cancel
 }

@@ -49,6 +49,7 @@ import UserPermissions from 'pages/UserPermissions';
 import BankAccounts from 'pages/BankAccounts';
 import SendOTPBankAccounts from 'pages/BankAccounts/SendOPTBankAccount';
 import KYC from 'pages/KYC';
+import ProductCancel from 'pages/Products/ProductCancel';
 import ProductConfiguration from './pages/Configurations/ProductConfiguration';
 
 const App = () => {
@@ -100,6 +101,7 @@ const App = () => {
 					<Route exact path="/categories/add" component={(props) => <CategoryNew config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/categories/:id" component={(props) => <CategoryUpdate config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/add" component={(props) => <ProductAddNew config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products/cancel" component={(props) => <ProductCancel config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/permissions" component={(props) => <UserPermissions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/commissions" component={(props) => <Commission config={settings} {...props} setMenu={setMenu} />} />

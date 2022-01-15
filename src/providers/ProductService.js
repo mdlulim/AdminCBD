@@ -162,5 +162,26 @@ class ProductService {
     });
   }
 
+  static async getCancelledProcucts(){
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/cancel`,
+    })
+  }
+
+
+  static async updateCancellationStatus(id, status){
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      data: {id, status},
+      headers,
+      url: `${Config.API.BASE_URL}/products/cancel`
+    })
+  }
+
+
 }
 export default ProductService;
