@@ -34,6 +34,34 @@ class ProductService {
     })
   }
 
+  static async getProductCancellations() {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/cancellations`,
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
+    })
+  }
+
+  static async updateCancellationRequest(type, data) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'POST',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/cancellations/${type}`,
+      data,
+    })
+      .then(json => json.data)
+      .then(res => res);
+  }
+
   static async getProductHistory() {
     //console.log(authToken)
     return await axios({

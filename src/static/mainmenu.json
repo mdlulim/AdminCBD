@@ -61,7 +61,7 @@
                 {
                     "id": "cancellations",
                     "title": "Cancellations",
-                    "link": "/cancellations",
+                    "link": "/products/cancellations",
                     "icon": null
                 }
             ]
@@ -103,7 +103,7 @@
             "title": "Bank Accounts",
             "description": "Manage bank accounts",
             "link": "/bank-accounts",
-            "icon": "li-cash-dollar",
+            "icon": "li-toggle",
             "childitems": []
         },
         {
@@ -111,7 +111,7 @@
             "title": "Main Account",
             "description": "manage company main account",
             "link": "/main-account",
-            "icon": "li-cash-dollar",
+            "icon": "li-wallet",
             "childitems": []
         },
         {
@@ -119,7 +119,7 @@
             "title": "KYC",
             "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
             "link": "/kyc",
-            "icon": "li-layers",
+            "icon": "li-profile",
             "childitems": []
         }
     ],
