@@ -178,7 +178,6 @@ class ProductService {
     });
   }
 
-<<<<<<< HEAD
   static async getCancelledProcucts(){
     return await axios({
       mode: 'no-cors',
@@ -200,7 +199,6 @@ class ProductService {
   }
 
 
-=======
   static async updateProductSubcategory(id,product){
     return await axios({
       mode: 'no-cors',
@@ -214,6 +212,5 @@ class ProductService {
     });
   }
 
->>>>>>> 7f2cb1b2304bd74eb1e39a4e55320cbebfcc1e2a
 }
 export default ProductService;

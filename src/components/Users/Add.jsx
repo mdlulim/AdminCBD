@@ -5,7 +5,6 @@ export default function AddUser(props) {
     const { roles } = props;
     return (
         <CardBody>
-            <form>
                 <Row>
                     <Col xs={12} sm={8}>
                         <Row className="form-group">
@@ -110,7 +109,7 @@ export default function AddUser(props) {
                                 <select
                                     id="type"
                                     type="text"
-                                    name="type"
+                                    name="status"
                                     className="form-control"
                                     defaultValue="Active"
                                 >
@@ -123,7 +122,6 @@ export default function AddUser(props) {
                         </Row>
                     </Col>
                 </Row>
-            </form>
         </CardBody>
     );
 }

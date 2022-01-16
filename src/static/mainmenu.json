@@ -159,8 +159,6 @@
                     "icon": null
                 },
                 {
-<<<<<<< HEAD
-=======
                     "id": "commissions",
                     "title": "Commissions",
                     "link": "/commissions",
@@ -189,7 +187,6 @@
                     "icon": null
                 },
                 {
->>>>>>> 1183753c1822b4824d5ad23e2659d9d162f1df91
                     "id": "countries",
                     "title": "Countries",
                     "link": "/countries",

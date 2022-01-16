@@ -24,12 +24,9 @@ import Settings from './Settings';
 import GeneralSettings from './GeneralSettings';
 import BankAccounts from './BankAccounts';
 import MainAccount from './MainAccount';
-<<<<<<< HEAD
 import Users from './Users';
-=======
 import Commission from './Commission';
 import ProductConfig from './ProductConfig';
->>>>>>> 1183753c1822b4824d5ad23e2659d9d162f1df91
 
 export {
     Breadcrumb,
@@ -58,10 +55,7 @@ export {
     GeneralSettings,
     BankAccounts,
     MainAccount,
-<<<<<<< HEAD
     Users,
-=======
     Commission,
     ProductConfig,
->>>>>>> 1183753c1822b4824d5ad23e2659d9d162f1df91
 };

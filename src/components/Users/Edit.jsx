@@ -206,7 +206,6 @@ export default function EditUser(props) {
                         title="Information"
                         active={activeTab === 'information'}
                     >
-                        <form>
                             <Row>
                                 <Col xs={12} sm={8}>
                                     <Row className="form-group">
@@ -293,9 +292,9 @@ export default function EditUser(props) {
                                         </label>
                                         <Col sm={10}>
                                             <select
-                                                id="type"
+                                                id="status"
                                                 type="text"
-                                                name="type"
+                                                name="status"
                                                 className="form-control"
                                                 defaultValue={status}
                                             >
@@ -377,7 +376,6 @@ export default function EditUser(props) {
                                     </div>
                                 </Col>
                             </Row>
-                        </form>
                     </NavTabContent>
                     <NavTabContent
                         id="permissions"

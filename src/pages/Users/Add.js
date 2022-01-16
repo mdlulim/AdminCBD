@@ -3,10 +3,14 @@ import { Card } from 'reactstrap';
 import { Common, Users } from 'components';
 import { AuthLayout } from 'containers';
 import { UserService } from 'providers';
+import { confirmAlert } from 'react-confirm-alert';
 
 export default function AddUserPage(props) {
     const [roles, setRoles] = useState([]);
     const [pageLoading, setPageLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [dissbled, setDisabled] = useState(false);
+    const [processing, setProcessing] = useState(false);
 
     async function fetchData() {
         const roles = await UserService.getRoles();
@@ -17,6 +21,54 @@ export default function AddUserPage(props) {
     useEffect(() => {
         fetchData();
     }, []);
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        if(!form.group_id.value){
+            setError('Validation error. Please select admin user role!')
+            setDisabled(false)
+            return 'Validation error. Please select admin user role'
+        }
+
+        
+        if(form.first_name.value === '' || form.last_name.value === '' || form.email.value === '' || form.username.value === '' || form.status.value === ''){
+            setError('Validation error. All field are required!')
+            setDisabled(false)
+            return 'All field are required!'
+        }
+        console.log('Name: '+form.first_name.value)
+        const role = roles.filter(option => option.id === form.group_id.value)[0];
+        const data = {
+                first_name  : form.first_name.value,
+                last_name   : form.last_name.value,
+                email       : form.email.value,
+                username    : form.username.value,
+                mobile      : form.mobile.value,
+                status      : form.status.value,
+                group_id    : form.group_id.value,
+                permissions : role.permissions,
+            };
+
+            UserService.createUser(data).then((response) => {
+                console.log(response)
+                if (response.success) {
+                    return confirmAlert({
+                        title: 'Succcess',
+                        message: response.message,
+                        buttons: [
+                            {
+                                label: 'Ok',
+                            }
+                        ]
+                    });
+                } else {
+                    setError(response.message);
+                }
+                setDisabled(false);
+                setProcessing(false);
+            })
+    }
 
     return (
         <AuthLayout
@@ -36,6 +88,11 @@ export default function AddUserPage(props) {
         >
             {!pageLoading &&
             <div id="users">
+                <form onSubmit={onSubmit}>
+                { error ? 
+				<div className="alert alert-warning" role="alert">
+				{error}
+				</div> : ''}
                 <Card className="margin-bottom-15">
                     <Common.Widget
                         icon="li-pencil5"
@@ -50,6 +107,7 @@ export default function AddUserPage(props) {
                         Save Changes
                     </button>
                 </div>
+             </form>
             </div>}
         </AuthLayout>
     );
