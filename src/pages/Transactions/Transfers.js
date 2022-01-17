@@ -28,10 +28,12 @@ const Filter = () => {
 }
 
 export default function Completed(props) {
-    
+    const [pageLoading, setPageLoading] = useState(true);
+
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{ active: "Transfers" }}
             pageHeading={{
                 title: 'Transfers Transactions',
@@ -41,7 +43,7 @@ export default function Completed(props) {
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Transactions transactionType={'transfers'} />
+                <Transactions.Transactions transactionType={'transfers'} setPageLoading={setPageLoading} />
                 </Col>
             </div>
         </AuthLayout>

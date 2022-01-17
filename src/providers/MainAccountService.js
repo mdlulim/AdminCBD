@@ -69,6 +69,22 @@ class MainAccountService {
         })
     }
 
+    static async getCoinpaymentsBalance() {
+      return await axios({
+        mode: 'no-cors',
+        method: 'GET',
+        headers: headers,
+        url: `${Config.API.BASE_URL_TRANSACTION}/coinpayments/balances`,
+      }).then(json => json.data)
+      .then(res => {
+        const { success, data } = res;
+        if (success) {
+          return data || [];
+        }
+        return [];
+      })
+  }
+
 }
 
 export default MainAccountService;

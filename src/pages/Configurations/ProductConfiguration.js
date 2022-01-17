@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { Common, Settings, GeneralSettings } from 'components';
+import { Common, Settings, ProductConfig } from 'components';
 import { AuthLayout } from 'containers';
 
 
-export default function SystemSettings(props) {
+export default function ProductConfiguration(props) {
     const [activeTab, setActiveTab] = useState('general');
-    const [pageLoading, setPageLoading] = useState(true);
+
 
     const toggleTab = (e, tab) => {
         e.preventDefault();
@@ -15,14 +15,13 @@ export default function SystemSettings(props) {
     return (
         <AuthLayout
             {...props}
-            loading={pageLoading}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
-                active: "Configuration"
+                active: "Product Configurations"
             }}
             pageHeading={{
-                title: 'Manage Configuration',
-                caption: 'EXPLORE Configuration FOR CRYPTO BASED INNOVATION',
+                title: 'Manage Product Configuration',
+                caption: 'EXPLORE PRODUCT CONFIGURATION FOR CRYPTO BASED INNOVATION',
             }}
         >
             <Card>
@@ -40,10 +39,10 @@ export default function SystemSettings(props) {
                                         data-toggle="tab"
                                         href="/"
                                     >
-                                        General Settings
+                                        Sub Categories
                                     </a>
                                 </li>
-                                <li className="nav-item">
+                                {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'referals' ? 'active' : ''}`}
                                         onClick={e => toggleTab(e, 'referals')}
@@ -62,8 +61,8 @@ export default function SystemSettings(props) {
                                     >
                                         Company Bank Details
                                     </a>
-                                </li>
-                                 <li className="nav-item">
+                                </li> */}
+                                 {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'kyc' ? 'active' : ''}`}
                                         onClick={e => toggleTab(e, 'kyc')}
@@ -72,7 +71,7 @@ export default function SystemSettings(props) {
                                     >
                                         KYC Limits
                                     </a>
-                                </li>
+                                </li> */}
                                 {/* <li className="nav-item">
                                     <a
                                         className={`nav-link show ${activeTab === 'banking-details' ? 'active' : ''}`}
@@ -98,26 +97,26 @@ export default function SystemSettings(props) {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'general' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                        <GeneralSettings.GeneralSettings setPageLoading={setPageLoading} />
+                                        <ProductConfig.SubCategoryOverview />
                                         </CardBody>
                                     </div>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
                                     <CardBody className="pl-0 pr-0 pb-0">
-                                        <Settings.TransactionFees setPageLoading={setPageLoading} />
+                                        {/* <Settings.TransactionFees /> */}
                                     </CardBody>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'banking-details' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                        <GeneralSettings.CampanyBankDetails setPageLoading={setPageLoading} />
+                                        {/* <GeneralSettings.CampanyBankDetails /> */}
                                         </CardBody>
                                     </div>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <GeneralSettings.KYCLimitsOverview setPageLoading={setPageLoading} />
+                                            {/* <GeneralSettings.KYCLimitsOverview /> */}
                                         </CardBody>
                                     </div>
                                 </div>

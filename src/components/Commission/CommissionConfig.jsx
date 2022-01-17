@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
-import GeneralSettingUpdate from './GeneralSettingUpdate';
-import GeneralSettingAddNew from './GeneralSettingAddNew';
+import GeneralSettingUpdate from '../GeneralSettings/GeneralSettingUpdate';
+import CommissionConfigAddNew from './CommissionConfigAddNew';
 import { SettingService, SessionProvider } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert';
 // styles
@@ -34,7 +34,6 @@ const inputWith = {
 }
 
 export default function TransactionSettings(props) {
-  const { setPageLoading } = props;
   const [show, setShow] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -45,26 +44,24 @@ export default function TransactionSettings(props) {
   const [selectedSetting, setSelectedSetting] = useState({});
   const history = useHistory();
 
-    useMemo(() => {
-        if (SessionProvider.isValid()) {
-            const user = SessionProvider.get();
-             setAdminLevel(user.permission_level)
-         }
-        SettingService.getSettings().then((res) => {
-          const settingslist = res.data.data.results;
-          setSettings(settingslist);
-          setFilteredSettings(settingslist);
+  async function fetchData(){
+    SettingService.getSettingsCommission().then((res) => {
+      const settingslist = res.results;
+      setSettings(settingslist);
+      setFilteredSettings(settingslist);
+    });
+}
+useEffect(() => {
 
-          setPageLoading(false)
-        });
+    if (SessionProvider.isValid()) {
+        const user = SessionProvider.get();
+         setAdminLevel(user.permission_level)
+     }
+    fetchData()
+}, []);
 
-    }, [setPageLoading]);
     // table headings definition
 const columns = [{
-    name: 'Category',
-    selector: 'category',
-    sortable: true,
-}, {
     name: 'Key',
     selector: 'key',
     sortable: true,
@@ -73,7 +70,7 @@ const columns = [{
     selector: 'title',
     sortable: true,
   }, {
-    name: 'Value',
+    name: 'Percentage',
     selector: 'value',
     sortable: true,
   },{
@@ -172,10 +169,10 @@ const columns = [{
   return (
     <Card className="o-hidden mb-4">
       <GeneralSettingUpdate show={show} setShow={setShow} setting={selectedSetting} />
-      <GeneralSettingAddNew show={showNew} setShow={setShowNew} />
+      <CommissionConfigAddNew show={showNew} setShow={setShowNew} />
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-          <span>Settings</span>
+          <span>Commission Structure</span>
           <span className="flex-grow-1" />
           <input
             style={inputWith}

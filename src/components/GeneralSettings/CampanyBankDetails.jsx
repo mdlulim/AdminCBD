@@ -52,6 +52,7 @@ const Status = ({ status }) => {
   };
 
 export default function BankAccounts(props) {
+  const { setPageLoading } = props;
     const [show, setShow] = useState(false);
     const [showBank, setShowBank] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
@@ -75,9 +76,11 @@ export default function BankAccounts(props) {
           const data = res.results;
           setBankAccounts(data);
           setFilteredBankAccounts(data);
+
+          setPageLoading(false)
       });
 
-      }, []);
+      }, [setPageLoading]);
     // table headings definition
 const columns = [
   {

@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Common, Pagination, Countries } from 'components';
 import { AuthLayout } from 'containers';
 
 
 export default function CountriesPage(props) {
+    const [pageLoading, setPageLoading] = useState(true);
+
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
                 active: "Countries"
@@ -25,7 +28,7 @@ export default function CountriesPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                 <Countries.Countries />
+                 <Countries.Countries setPageLoading={setPageLoading} />
               </CardBody>
             </Card>
         </AuthLayout>

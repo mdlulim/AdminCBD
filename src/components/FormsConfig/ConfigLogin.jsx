@@ -32,7 +32,7 @@ const inputWith={
 }
 
 export default function ConfigLogin(props) {
-    const { loginForm } = props;
+    const { loginForm, setPageLoading } = props;
     const [activeTab, setActiveTab] = useState('referals');
     const [checked, setChecked] = useState(false);
     const [fields, setFields] = useState([]);
@@ -53,7 +53,8 @@ export default function ConfigLogin(props) {
     // A super simple expandable component.
     useMemo(() => {
         setFields(loginForm.fields);
-    },[]);
+        setPageLoading(false)
+    },[setPageLoading]);
     const columns = [{
         name: 'ID',
         selector: 'id',
