@@ -123,6 +123,24 @@ const getProductTitle = props => {
     return `${product_code}: ${productTitle}`;
 };
 
+const PenaltyAmount = props => {
+    const { fees, currency_code } = props;
+    const { cancellation_penalty_fee } = fees;
+    return (
+        <CurrencyFormat
+            thousandSeparator=" "
+            displayType="text"
+            value={cancellation_penalty_fee || 0}
+            fixedDecimalScale
+            decimalScale={4}
+            renderText={value => (
+            <span>
+                {value} {currency_code}
+            </span>)}
+        />
+    );
+};
+
 export default function ProductCancellations(props) {
     const { register, handleSubmit, errors, reset } = useForm();
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -151,22 +169,9 @@ export default function ProductCancellations(props) {
         width: '250px',
         cell: row => <Product {...row.product} />
     }, {
-        name: 'Income Amount',
-        selector: 'income',
+        name: 'Penalty Amount',
         sortable: false,
-        cell: row => (
-            <CurrencyFormat
-                thousandSeparator=" "
-                displayType="text"
-                value={row.income || 0}
-                fixedDecimalScale
-                decimalScale={4}
-                renderText={value => (
-                <span>
-                    {value} {row.product.currency_code}
-                </span>)}
-            />
-        )
+        cell: row => <PenaltyAmount {...row.product} />
     }, {
         name: 'Date Created',
         selector: 'created',
