@@ -6,7 +6,6 @@ import Form from './Form';
 import HashLinkContainer from './HashLinkContainer';
 import Loader from './Loader';
 import Overview from './Overview';
-import Users from './Users';
 import Members from './Members';
 import MemberDetails from './Members';
 import Transactions from './Transactions';
@@ -25,6 +24,7 @@ import Settings from './Settings';
 import GeneralSettings from './GeneralSettings';
 import BankAccounts from './BankAccounts';
 import MainAccount from './MainAccount';
+import Users from './Users';
 import Commission from './Commission';
 import ProductConfig from './ProductConfig';
 
@@ -38,7 +38,6 @@ export {
     Loader,
     Overview,
     Transactions,
-    Users,
     Members,
     MemberDetails,
     PageHeading,
@@ -56,6 +55,7 @@ export {
     GeneralSettings,
     BankAccounts,
     MainAccount,
+    Users,
     Commission,
     ProductConfig,
 };

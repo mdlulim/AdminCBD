@@ -57,6 +57,12 @@
                     "title": "Categories",
                     "link": "/categories",
                     "icon": null
+                },
+                {
+                    "id": "cancellations",
+                    "title": "Cancellations",
+                    "link": "/products/cancellations",
+                    "icon": null
                 }
             ]
         },
@@ -97,7 +103,7 @@
             "title": "Bank Accounts",
             "description": "Manage bank accounts",
             "link": "/bank-accounts",
-            "icon": "li-cash-dollar",
+            "icon": "li-toggle",
             "childitems": []
         },
         {
@@ -105,7 +111,7 @@
             "title": "Main Account",
             "description": "manage company main account",
             "link": "/main-account",
-            "icon": "li-cash-dollar",
+            "icon": "li-wallet",
             "childitems": []
         },
         {
@@ -113,12 +119,32 @@
             "title": "KYC",
             "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
             "link": "/kyc",
-            "icon": "li-layers",
+            "icon": "li-profile",
             "childitems": []
         }
     ],
     "system": [
-       
+        {
+            "id": "users",
+            "title": "Users",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/users",
+            "icon": "li-user-lock",
+            "childitems": [
+                {
+                    "id": "manage-roles",
+                    "title": "Manage Roles",
+                    "link": "/roles",
+                    "icon": null
+                },
+                {
+                    "id": "manage-users",
+                    "title": "Manage Users",
+                    "link": "",
+                    "icon": null
+                }
+            ]
+        },
         {
             "id": "configurations",
             "title": "Configurations",
@@ -133,41 +159,14 @@
                     "icon": null
                 },
                 {
-                    "id": "commissions",
-                    "title": "Commissions",
-                    "link": "/commissions",
-                    "icon": null
-                },{
-                    "id": "product",
-                    "title": "Product Config",
-                    "link": "/product",
-                    "icon": null
-                },
-                {
-                    "id": "users",
-                    "title": "Users",
-                    "link": "/users",
-                    "icon": null
-                },
-                {
-                    "id": "roles",
-                    "title": "User Roles",
-                    "link": "/roles",
-                    "icon": null
-                },{
-                    "id": "permissions",
-                    "title": "User Permissions",
-                    "link": "/permissions",
-                    "icon": null
-                },
-                {
                     "id": "countries",
                     "title": "Countries",
                     "link": "/countries",
                     "icon": null
-                },{
+                },
+                {
                     "id": "forms",
-                    "title": "Forms Configuration",
+                    "title": "Forms",
                     "link": "/forms",
                     "icon": null
                 }

@@ -9,9 +9,9 @@ let headers = {
 
 if (SessionProvider.isValid()) {
   headers = {
-    'Authorization'   : `Bearer ${authToken}`,
-    'Content-Type'    : 'application/json',
-    'X-Frame-Options' : 'SAMEORIGIN',
+    'Authorization': `Bearer ${authToken}`,
+    'Content-Type': 'application/json',
+    'X-Frame-Options': 'SAMEORIGIN',
     'X-XSS-Protection': 1,
     'X-Content-Type-Options': 'nosniff',
   }
@@ -19,78 +19,154 @@ if (SessionProvider.isValid()) {
 
 class UserService {
 
-    static async getUsers() {
-      return await axios({
-        mode: 'no-cors',
-        method: 'GET',
-        headers: headers,
-        url: `${Config.API.BASE_URL}/users?group=admin`,
+  static async getUsers() {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users?group=admin`,
+    })
+      .then((json) => json.data)
+      .then(res => res.data)
+      .catch((err) => {
+        if (err.response) return err.response.data;
+        return err;
       });
-    }
+  }
 
-    static async getUsersall() {
-      return await axios({
-        mode: 'no-cors',
-        method: 'GET',
-        headers: headers,
-        url: `${Config.API.BASE_URL}/users`,
+  static async getUsersall() {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users`,
+    });
+  }
+
+  static async getUserByEmail(email) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users/email/${email}`,
+    });
+  }
+
+  static async addAdminUser(data) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'POST',
+      headers: headers,
+      data: data,
+      url: `${Config.API.BASE_URL}/users?group=admin`,
+    }).then((res) => {
+      const result = res;
+      return result;
+    });
+  }
+
+  static async updateAdminUser(id, data) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      headers: headers,
+      data: data,
+      url: `${Config.API.BASE_URL}/users/${id}`,
+    }).then((res) => {
+      const result = res;
+      return result;
+    });
+  }
+
+  static async getUser(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users/${id}`,
+    })
+      .then((json) => json.data)
+      .then(res => res.data)
+      .catch((err) => {
+        if (err.response) return err.response.data;
+        return err;
       });
-    }
+  }
 
-    static async getUserByEmail(email) {
-      return await axios({
-        mode: 'no-cors',
-        method: 'GET',
-        headers: headers,
-        url: `${Config.API.BASE_URL}/users/email/${email}`,
+  static async archiveUser(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users/${id}/archive`,
+    });
+  }
+
+  static async getRoles() {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/groups?channel=admin`,
+    })
+      .then((json) => json.data)
+      .then(res => res.data)
+      .catch((err) => {
+        if (err.response) return err.response.data;
+        return err;
       });
-    }
+  }
 
-    static async addAdminUser(data){
-        return await axios({
-          mode: 'no-cors',
-          method: 'POST',
-          headers: headers,
-          data:data,
-          url: `${Config.API.BASE_URL}/users?group=admin`,
-        }).then((res) =>{
-          const result = res;
-          return result;
-        });
-      }
+  static async addRoles(data) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'POST',
+      headers: headers,
+      data: data,
+      url: `${Config.API.BASE_URL}/groups`,
+    }).then((res) => {
+      const result = res;
+      return result;
+    });
+  }
 
-      static async updateAdminUser(id, data){
-        return await axios({
-          mode: 'no-cors',
-          method: 'PUT',
-          headers: headers,
-          data:data,
-          url: `${Config.API.BASE_URL}/users/${id}`,
-        }).then((res) =>{
-          const result = res;
-          return result;
-        });
-      }
+  static async updateRoles(id, data) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      headers: headers,
+      data: data,
+      url: `${Config.API.BASE_URL}/groups/${id}`,
+    }).then((res) => {
+      const result = res;
+      return result;
+    });
+  }
 
-    static async getUser(id) {
-      return await axios({
-        mode: 'no-cors',
-        method: 'GET',
-        headers: headers,
-        url: `${Config.API.BASE_URL}/admin/users/${id}`,
+  static async getRole(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/groups/${id}`,
+    })
+      .then((json) => json.data)
+      .then(res => res.data)
+      .catch((err) => {
+        if (err.response) return err.response.data;
+        return err;
       });
-    }
+  }
 
-    static async archiveUser(id) {
-      return await axios({
-        mode: 'no-cors',
-        method: 'PUT',
-        headers: headers,
-        url: `${Config.API.BASE_URL}/users/${id}/archive`,
-      });
-    }
+  static async archiveRole(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/groups/${id}/archive`,
+    });
+  }
 
-    
 }
 
 export default UserService;

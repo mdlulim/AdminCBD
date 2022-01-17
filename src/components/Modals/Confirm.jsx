@@ -6,9 +6,8 @@ import { FeatherIcon } from 'components';
 
 const ConfirmModal = props => {
     const {
-        title,
-        body,
         show,
+        title,
         setShow,
         processing,
         confirmButtonDisabled,
@@ -29,22 +28,25 @@ const ConfirmModal = props => {
                         <FeatherIcon icon="alert-triangle" width="48" height="48" classes="mg-t-0" />
                     </Col>}
                     <Col xs={showIcon ? 10 : 12}>
-                        <h3>{title}</h3>
-                        <div className="mg-b-15">{body}</div>
-                        <button
-                            className="btn btn-primary"
-                            onClick={confirmButton.onClick}
-                            disabled={confirmButtonDisabled || processing}
-                        >
-                            {processing ? 'Processing...' : confirmButton.text}
-                        </button>
-                        <button
-                            className="btn btn-dark"
-                            onClick={handleClose}
-                            disabled={processing}
-                        >
-                            {cancelButton.text}
-                        </button>
+                        {props.children ? props.children :
+                        <>
+                            <h3>{title}</h3>
+                            <button
+                                type="submit"
+                                className="btn btn-secondary"
+                                onClick={confirmButton.onClick}
+                                disabled={confirmButtonDisabled || processing}
+                            >
+                                {processing ? 'Processing...' : confirmButton.text}
+                            </button>
+                            <button
+                                className="btn btn-link margin-left-5 text-muted"
+                                onClick={handleClose}
+                                disabled={processing}
+                            >
+                                {cancelButton.text}
+                            </button>
+                        </>}
                     </Col>
                 </Row>
             </Modal.Body>

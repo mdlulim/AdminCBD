@@ -1,4 +1,15 @@
-import Users from './Users';
+import Add from './Add';
+import AddRole from './AddRole';
+import Edit from './Edit';
+import EditRole from './EditRole';
+import List from './List';
+import Roles from './Roles';
+
 export default {
-    Users,
+    Add,
+    AddRole,
+    Edit,
+    EditRole,
+    List,
+    Roles,
 }
