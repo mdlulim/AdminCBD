@@ -11,9 +11,11 @@ export default function ProductCancellationModal(props) {
         setShow,
         product,
         created,
-        status,
         income,
+        reason,
         cancellation_date,
+        cancellation_status,
+        cancellation_approver,
         cancellation_approved_by,
     } = props;
     const {
@@ -36,19 +38,19 @@ export default function ProductCancellationModal(props) {
                 </p>
                 <Card className="border-0 margin-bottom-0">
                     <CardBody className="padding-0">
-                        <div className="card-inner-container">
+                        <div className="card-inner-container margin-bottom-0">
                             <div className="form-row">
                                 <Col xs={12} md={6} className="margin-top-10 margin-bottom-10">
-                                    <span className="text-muted">Requested by</span>
+                                    <span className="text-muted">Requested by:</span>
                                     <p>
                                         <strong>{referral_id} - {first_name} {last_name}</strong><br/>
                                         {email}<br/>
                                         Requested on {moment(cancellation_date).format('DD MMM YYYY hh:mma')}<br/>
-                                        <strong>Status:</strong> {status}<br/>
+                                        <strong>Cancellation Status:</strong> {cancellation_status}<br/>
                                     </p>
                                 </Col>
                                 <Col xs={12} md={6} className="margin-top-10 margin-bottom-10 text-right">
-                                    <span className="text-muted">Product information</span>
+                                    <span className="text-muted">Product information:</span>
                                     <p>
                                         <strong>{product_code} - {title}</strong><br/>
                                         {description}<br/>
@@ -70,9 +72,21 @@ export default function ProductCancellationModal(props) {
                             </div>
                         </div>
                     </CardBody>
-                    {cancellation_approved_by &&
-                    <CardBody className="padding-0 padding-top-20">
-
+                    {cancellation_approved_by && cancellation_approver &&
+                    <CardBody className="padding-0 padding-top-15 margin-bottom-20">
+                        <span className="text-muted">
+                            {cancellation_status.toLowerCase() === 'complete' ? 'Approved' : 'Rejected'}
+                            &nbsp;by:</span>
+                        <h4>
+                            {cancellation_approver.first_name} {cancellation_approver.last_name}
+                        </h4>
+                        <p className="subtitle">
+                            {cancellation_approver.group.label}
+                        </p>
+                        {cancellation_status.toLowerCase() === 'rejected' &&
+                        <p className="subtitle">
+                            <strong>Rejected Reason:</strong> {reason}
+                        </p>}
                     </CardBody>}
                 </Card>
                 <button

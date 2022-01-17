@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { ProductService } from 'providers';
-import Modals from 'components/Modals';
+import CurrencyFormat from 'react-currency-format';
 import DataTable from 'react-data-table-component';
+import Modals from 'components/Modals';
 import Moment from 'react-moment';
 import useForm from 'react-hook-form';
 import Swal from 'sweetalert2';
@@ -48,11 +49,11 @@ const Status = ({ cancellation_status }) => {
     );
 };
 
-const isDisabled = ({ status }) => {
+const isDisabled = ({ cancellation_status }) => {
     let disabled = false;
-    switch (status.toLowerCase()) {
-        case 'cancellation complete':
-        case 'cancellation rejected':
+    switch (cancellation_status.toLowerCase()) {
+        case 'complete':
+        case 'rejected':
             disabled = true;
             break;
 
@@ -153,6 +154,19 @@ export default function ProductCancellations(props) {
         name: 'Income Amount',
         selector: 'income',
         sortable: false,
+        cell: row => (
+            <CurrencyFormat
+                thousandSeparator=" "
+                displayType="text"
+                value={row.income || 0}
+                fixedDecimalScale
+                decimalScale={4}
+                renderText={value => (
+                <span>
+                    {value} {row.product.currency_code}
+                </span>)}
+            />
+        )
     }, {
         name: 'Date Created',
         selector: 'created',
@@ -346,7 +360,7 @@ export default function ProductCancellations(props) {
                             id="reason"
                             name="reason"
                             className={`form-control ${errors.reason ? 'is-invalid' : ''}`}
-                            ref={register({ required: true })}
+                            ref={register({ required: type === 'reject' })}
                             disabled={processing}
                             rows={4}
                         />
