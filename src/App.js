@@ -21,6 +21,8 @@ import Users from 'pages/Users';
 import AddRole from './pages/Users/AddRole';
 import EditRole from './pages/Users/EditRole';
 import Roles from './pages/Users/Roles';
+import Reports from './pages/Reports';
+import ReportDetails from './pages/Reports/Details';
 import Countries from './pages/Configurations/Countries';
 import Currencies from './pages/Configurations/Currencies';
 import Commission from './pages/Commission';
@@ -83,6 +85,9 @@ const App = () => {
 					<Route exact path="/users/:id" component={(props) => <EditUser config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/users/roles/add" component={(props) => <AddRole config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/users/roles/:id" component={(props) => <EditRole config={settings} {...props} setMenu={setMenu} />} />
+
+					<Route exact path="/reports" component={(props) => <Reports config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/reports/:id" component={(props) => <ReportDetails config={settings} {...props} setMenu={setMenu} />} />
 
 					<Route exact path="/configurations/settings" component={(props) => <SystemSettings config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/countries" component={(props) => <Countries config={settings} {...props} setMenu={setMenu} />} />
