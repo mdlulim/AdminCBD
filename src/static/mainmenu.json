@@ -121,6 +121,14 @@
             "link": "/kyc",
             "icon": "li-profile",
             "childitems": []
+        },
+        {
+            "id": "reports",
+            "title": "Reports",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/reports",
+            "icon": "li-chart-growth",
+            "childitems": []
         }
     ],
     "system": [
