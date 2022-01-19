@@ -1,4 +1,4 @@
-import { SessionProvider } from 'providers';
+import { SessionProvider, UserService } from 'providers';
 import React, { useEffect, useState, useMemo } from 'react';
 import menu from 'static/mainmenu.json';
 import Moment from 'react-moment';
@@ -21,11 +21,6 @@ const SubNavItem = props => {
     );
 }
 
-// sessionStorage.setItem('members', member_page);
-
-// window.sessionStorage.setItem("items",vl);
-// localStorage.setItem('vlist', vl);
-
 const NavItem = props => {
     const {
         id,
@@ -38,7 +33,10 @@ const NavItem = props => {
         openClass,
         activeClass,
         openableClass,
+        role
     } = props;
+
+    // console.log(role, '-------------', childitems)
     return (
         <li
             className={activeClass(link) + openableClass(childitems) + openClass(id)}
@@ -56,14 +54,15 @@ const NavItem = props => {
                 <span className="text">{title}</span>
             </a>
             {childitems && childitems.length > 0 &&
-            <ul>
-                {childitems.map(childitem => (
-                <SubNavItem
-                    key={`${id}-${childitem.id}`}
-                    {...childitem}
-                    parentLink={link}
-                />))}
-            </ul>}
+                <ul>
+                    {childitems.map(childitem => (
+                        role && role.childitems &&
+                        <SubNavItem
+                            key={`${id}-${childitem.id}`}
+                            {...childitem}
+                            parentLink={link}
+                        />))}
+                </ul>}
         </li>
     );
 };
@@ -76,13 +75,27 @@ export default function AuthSidenav(props) {
     const [showProfileDropdown, setShowProfileDropdown] = useState(false);
     const [showProfileDropdown2, setShowProfileDropdown2] = useState(false);
     const [user, setUser] = useState({});
-    
+    const [role, setRole] = useState({})
+
+    const fetchData = async () => {
+        const role = await UserService.getUserRole();
+        console.log(role)
+        setRole(role)
+
+        // Object.keys(menu).map(section => {
+        //     menu[section].map(item => {
+        //         console.log(item.id, " --------- ", role.permissions[item.id].allow_access)
+        //     })
+        // }
+        // )
+    }
+
     useEffect(() => {
         let user = {};
         if (SessionProvider.isValid()) {
             user = SessionProvider.get();
             setUser(user)
-        }else{
+        } else {
             window.location = '/login';
         }
         const { path } = match;
@@ -96,12 +109,14 @@ export default function AuthSidenav(props) {
                 setNavClass('');
             }
         });
+
+        fetchData()
     }, [match, setNavClass]);
 
     const activeClass = link => {
         if (link && activeNav) {
             const ilink = link.split('/')[1];
-            const anav  = activeNav.split('/')[1];
+            const anav = activeNav.split('/')[1];
             return (link && anav === ilink) ? 'active ' : '';
         }
         return '';
@@ -122,14 +137,14 @@ export default function AuthSidenav(props) {
             style={{ overflow: 'auto' }}
         >
             <div className="navigation navigation--condensed" id="navigation-default">
-                <div className="user user--bordered user--lg user--w-lineunder user--controls"> 
+                <div className="user user--bordered user--lg user--w-lineunder user--controls">
                     <img src="/assets/img/users/user_1.jpeg" className="mCS_img_loaded" />
                     <div className="user__name">
-                        <strong>{user.first_name+' '+user.last_name}</strong><br />
-    <span className="text-muted">{user.group_name}</span>
+                        <strong>{user.first_name + ' ' + user.last_name}</strong><br />
+                        <span className="text-muted">{user.group_name}</span>
                         <div className="user__controls">
                             <div className={`dropdown ${showProfileDropdown ? 'show' : ''}`}>
-                                <button 
+                                <button
                                     className="btn btn-light btn-sm btn-icon"
                                     aria-expanded={showProfileDropdown}
                                     data-toggle="dropdown"
@@ -150,7 +165,7 @@ export default function AuthSidenav(props) {
                         </div>
                     </div>
                     <div className="user__lineunder">
-    <div className="text">Last visit <Moment date={user.time} format="hh:mm:ss" /></div>
+                        <div className="text">Last visit <Moment date={user.time} format="hh:mm:ss" /></div>
                         <div className="buttons">
                             <div className={`dropdown ${showProfileDropdown2 ? 'show' : ''}`}>
                                 <button
@@ -180,19 +195,24 @@ export default function AuthSidenav(props) {
                     </div>
                 </div>
                 {Object.keys(menu).map(section => (
-                <ul key={section}>
-                    <li className="title">{section}</li>
-                    {menu[section].map(item => (
-                    <NavItem
-                        key={item.id}
-                        {...item}
-                        openItem={openItem}
-                        openClass={openClass}
-                        activeClass={activeClass}
-                        openableClass={openableClass}
-                        setOpenItem={setOpenItem}
-                    />))}
-                </ul>))}
+                    <ul key={section}>
+                        <li className="title">{section}</li>
+                        {
+                            menu[section].map(item => (
+                                role && role.permissions && role.permissions[item.id].allow_access &&
+                                <NavItem
+                                    key={item.id}
+                                    {...item}
+                                    openItem={openItem}
+                                    openClass={openClass}
+                                    activeClass={activeClass}
+                                    openableClass={openableClass}
+                                    setOpenItem={setOpenItem}
+                                    role={role.permissions[item.id]}
+                                />
+                            ))
+                        }
+                    </ul>))}
             </div>
         </div>
     );

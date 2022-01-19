@@ -158,6 +158,21 @@ class UserService {
       });
   }
 
+  static async getUserRole(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/group`,
+    })
+      .then((json) => json.data)
+      .then(res => res.data)
+      .catch((err) => {
+        if (err.response) return err.response.data;
+        return err;
+      });
+  }
+
   static async archiveRole(id) {
     return await axios({
       mode: 'no-cors',

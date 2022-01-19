@@ -41,6 +41,7 @@ export default function EditUserPage(props) {
     async function fetchData() {
         const user = await UserService.getUser(id);
         const roles = await UserService.getRoles();
+
         setRoles(roles.results || []);
         if (user && user.id) {
             setUser(user);
@@ -87,11 +88,11 @@ export default function EditUserPage(props) {
                     />
                     <Users.Edit {...user} roles={roles} />
                 </Card>
-                <div className="text-right margin-bottom-20">
+                {/* <div className="text-right margin-bottom-20">
                     <button className="btn btn-secondary">
                         Save Changes
                     </button>
-                </div>
+                </div> */}
             </div>}
         </AuthLayout>
     );

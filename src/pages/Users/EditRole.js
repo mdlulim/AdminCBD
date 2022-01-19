@@ -43,9 +43,11 @@ export default function EditRolesPage(props) {
             setRole(role);
             setFixedPanelContent(<PermissionSummary {...role} />);
         }
+
+        console.log(role, ' ++++++++++++++')
         setPageLoading(false);
     }
-
+    
     useEffect(() => {
         fetchData();
     }, []);
@@ -86,11 +88,6 @@ export default function EditRolesPage(props) {
                     />
                     <Users.EditRole {...role} />
                 </Card>
-                <div className="text-right margin-bottom-20">
-                    <button className="btn btn-secondary">
-                        Save Changes
-                    </button>
-                </div>
             </div>}
         </AuthLayout>
     );

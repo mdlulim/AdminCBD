@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { CardBody, Col, Row } from 'reactstrap';
+import useForm from "react-hook-form";
+import { UserService } from 'providers';
 
 const NavTabLink = ({
     id,
@@ -28,7 +30,7 @@ const NavTabLink = ({
 );
 
 const NavTabContent = props => {
-    const { active } = props;
+    const { active, parent } = props;
     return (
         <div className={`tab-pane fade ${active ? 'active show' : ''}`}>
             {props.children}
@@ -41,8 +43,49 @@ export default function AddRole(props) {
         roles,
         parent,
         handleParentChange,
+        pageLoading,
+        setPageLoading
     } = props;
     const [activeTab, setActiveTab] = useState('information');
+    const { register, handleSubmit, errors } = useForm();
+
+    const onSubmit = async (data) => {
+        setPageLoading(true)
+        let permissionObject = {}
+        Object.keys(parent.permissions).map((key, index) => {
+            permissionObject[key] = {
+                'allow_access': data[parent.permissions[key].title + '_allow_access'],
+                childitems: [],
+                title: parent.permissions[key].title
+            }
+
+            parent.permissions[key].childitems.map((child) => {
+
+                permissionObject[key]['childitems'].push(
+                    {
+                        title: child.title,
+                        read_access: data[parent.permissions[key].title + child.title + '_read'],
+                        create_access: data[parent.permissions[key].title + child.title + '_create'],
+                        delete_access: data[parent.permissions[key].title + child.title + '_delete'],
+                        update_access: data[parent.permissions[key].title + child.title + '_update'],
+                    }
+                )
+            })
+        })
+
+        let finalObject = {
+            permissions: permissionObject,
+            name: data.name,
+            label: data.name,
+            description: data.description,
+            created: Date.now(),
+            channel: 'admin'
+        }
+
+        const res = await UserService.addRoles(finalObject)
+        setPageLoading(false)
+        // console.log(finalObject)
+    };
 
     return (
         <div>
@@ -62,476 +105,259 @@ export default function AddRole(props) {
                     active={activeTab === 'permissions'}
                 />
             </ul>
-            <CardBody>
-                <div className="tab-content" id="overview">
-                    <NavTabContent
-                        id="information"
-                        name="information"
-                        title="Information"
-                        active={activeTab === 'information'}
-                    >
-                        <form>
-                            <input
-                                type="hidden"
-                                name="channel"
-                                defaultValue="admin"
-                            />
-                            <Row className="form-group">
-                                <label className="col-sm-2 col-form-label">
-                                    Parent Role
-                                </label>
-                                <Col sm={10}>
-                                    <select
-                                        id="parent_id"
-                                        type="text"
-                                        name="parent_id"
-                                        className="form-control"
-                                        defaultValue={(parent && parent.id) ? parent.id : 'System'}
-                                    >
-                                        <option value="">Select Parent Role</option>
-                                        {roles.map(item => (
-                                            <option value={item.id}>
-                                                {item.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <label className="col-sm-2 col-form-label">
-                                    Type
-                                    <span className="text-danger">*</span>
-                                </label>
-                                <Col sm={10}>
-                                    <select
-                                        id="type"
-                                        type="text"
-                                        name="type"
-                                        className="form-control"
-                                        value={(parent && parent.type) ? parent.type : 'System'}
-                                        onChange={e => console.log(e.target.value)}
-                                    >
-                                        <option value="System">System</option>
-                                        <option value="Custom">Custom</option>
-                                    </select>
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <label className="col-sm-2 col-form-label">
-                                    Name
-                                    <span className="text-danger">*</span>
-                                </label>
-                                <Col sm={10}>
-                                    <input
-                                        id="name"
-                                        type="text"
-                                        name="name"
-                                        className="form-control"
-                                    />
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <label className="col-sm-2 col-form-label">
-                                    Description
-                                    <span className="text-danger">*</span>
-                                </label>
-                                <Col sm={10}>
-                                    <input
-                                        type="text"
-                                        id="description"
-                                        name="description"
-                                        className="form-control"
-                                    />
-                                </Col>
-                            </Row>
-                        </form>
-                    </NavTabContent>
-                    <NavTabContent
-                        id="permissions"
-                        name="permissions"
-                        title="Permissions"
-                        active={activeTab === 'permissions'}
-                    >
-                        <h4>Transactions</h4>
-                        <p className="subtitle margin-bottom-20">
-                            Use this configurations below to define transactions permissions
-                        </p>
-                        <div className="d-flex">
-                            <div className="margin-right-30">
-                                <div className="custom-control custom-checkbox">
-                                    <input
-                                        id="perm1"
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        defaultChecked
-                                    />
-                                    <label className="custom-control-label" htmlFor="perm1">
-                                        Access Transactions Module
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <CardBody>
+                    <div className="tab-content" id="overview">
+                        <NavTabContent
+                            id="information"
+                            name="information"
+                            title="Information"
+                            active={activeTab === 'information'}
+                        >
+                            <div >
+                                <input
+                                    type="hidden"
+                                    name="channel"
+                                    defaultValue="admin"
+                                />
+                                <Row className="form-group">
+                                    <label className="col-sm-2 col-form-label">
+                                        Parent Role
                                     </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="table-responsive">
-                            <table className="table margin-bottom-0">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">&nbsp;</th>
-                                        <th scope="col" width="12%">None</th>
-                                        <th scope="col" width="12%">Create</th>
-                                        <th scope="col" width="12%">Read</th>
-                                        <th scope="col" width="12%">Update</th>
-                                        <th scope="col" width="12%">Delete</th>
-                                        <th scope="col" width="12%">All</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">Deposits</th>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt1"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt1">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt2"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                    defaultChecked
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt2">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt3"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                    defaultChecked
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt3">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt4"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                    defaultChecked
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt4">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt5"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                    defaultChecked
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt5">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt6"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                    defaultChecked
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt6">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Withdrawals</th>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt11"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                    defaultChecked
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt11">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt21"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt21">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt31"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt31">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt41"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt41">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt51"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt51">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt61"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt61">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Transfers</th>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt111"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                    defaultChecked
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt111">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt211"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt211">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt311"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt311">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt411"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt411">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt511"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt511">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="custom-control custom-checkbox">
-                                                <input
-                                                    id="opt611"
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                />
-                                                <label className="custom-control-label" htmlFor="opt611">
-                                                    &nbsp;
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="divider-text divider-text--xs margin-top-20 margin-bottom-20">
-                            &nbsp;
-                        </div>
-                        <h4 className="margin-top-20">Reports</h4>
-                        <p className="subtitle margin-bottom-20">
-                            Use this configurations below to define reports permissions
-                        </p>
-                        <div className="d-flex">
-                            <div className="margin-right-30">
-                                <div className="custom-control custom-checkbox">
-                                    <input
-                                        id="perm11"
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        defaultChecked
-                                    />
-                                    <label className="custom-control-label" htmlFor="perm11">
-                                        Run Transaction Reports
+                                    <Col sm={10}>
+                                        <select
+                                            type="text"
+                                            className="form-control"
+                                            name="parent_id"
+                                            ref={register}
+                                            defaultValue={(parent && parent.id) ? parent.id : 'System'}
+                                            onChange={(e) => { handleParentChange(e.target.value) }}
+                                        >
+                                            <option value="">Select Parent Role</option>
+                                            {roles.map(item => (
+                                                <option value={item.id}>
+                                                    {item.label}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </Col>
+                                </Row>
+                                <Row className="form-group">
+                                    <label className="col-sm-2 col-form-label">
+                                        Type
+                                        <span className="text-danger">*</span>
                                     </label>
-                                </div>
-                            </div>
-                            <div className="margin-right-30">
-                                <div className="custom-control custom-checkbox">
-                                    <input
-                                        id="perm21"
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        defaultChecked
-                                    />
-                                    <label className="custom-control-label" htmlFor="perm21">
-                                        Run Member Reports
+                                    <Col sm={10}>
+                                        <select
+                                            id="type"
+                                            type="text"
+                                            name="type"
+                                            className="form-control"
+                                            ref={register}
+                                            defaultValue={(parent && parent.type) ? parent.type : 'System'}
+                                            onChange={e => console.log(e.target.value)}
+                                        >
+                                            <option value="System">System</option>
+                                            <option value="Custom">Custom</option>
+                                        </select>
+                                    </Col>
+                                </Row>
+                                <Row className="form-group">
+                                    <label className="col-sm-2 col-form-label">
+                                        Name
+                                        <span className="text-danger">*</span>
                                     </label>
-                                </div>
-                            </div>
-                            <div className="margin-right-30">
-                                <div className="custom-control custom-checkbox">
-                                    <input
-                                        id="perm31"
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        defaultChecked
-                                    />
-                                    <label className="custom-control-label" htmlFor="perm31">
-                                        Run Product Reports
+                                    <Col sm={10}>
+                                        <input
+                                            id="name"
+                                            type="text"
+                                            name="name"
+                                            className="form-control"
+                                            ref={register}
+                                            required
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="form-group">
+                                    <label className="col-sm-2 col-form-label">
+                                        Description
+                                        <span className="text-danger">*</span>
                                     </label>
-                                </div>
+                                    <Col sm={10}>
+                                        <input
+                                            type="text"
+                                            id="description"
+                                            name="description"
+                                            className="form-control"
+                                            ref={register}
+                                            required
+                                        />
+                                    </Col>
+                                </Row>
                             </div>
-                            <div>
-                                <div className="custom-control custom-checkbox">
-                                    <input
-                                        id="perm41"
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        defaultChecked
-                                    />
-                                    <label className="custom-control-label" htmlFor="perm41">
-                                        Run Management Reports
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="divider-text divider-text--xs margin-top-20 margin-bottom-20">
-                            &nbsp;
-                        </div>
-                        <h4 className="margin-top-20">Self-Admin</h4>
-                        <p className="subtitle margin-bottom-20">
-                            Use this configurations below to define self-admin permissions
-                        </p>
-                        <div className="d-flex">
-                            <div className="margin-right-30">
-                                <div className="custom-control custom-checkbox">
-                                    <input
-                                        id="perm111"
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        defaultChecked
-                                    />
-                                    <label className="custom-control-label" htmlFor="perm111">
-                                        Access the Self-Admin Module
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="margin-right-30">
-                                <div className="custom-control custom-checkbox">
-                                    <input
-                                        id="perm211"
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        defaultChecked
-                                    />
-                                    <label className="custom-control-label" htmlFor="perm211">
-                                        Archive rows/entities
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="margin-right-30">
-                                <div className="custom-control custom-checkbox">
-                                    <input
-                                        id="perm311"
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        defaultChecked
-                                    />
-                                    <label className="custom-control-label" htmlFor="perm311">
-                                        Delete activities and notes
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </NavTabContent>
+                        </NavTabContent>
+                        <NavTabContent
+                            id="permissions"
+                            name="permissions"
+                            title="Permissions"
+                            active={activeTab === 'permissions'}
+                        >
+                            {parent &&
+                                <>
+                                    {Object.keys(parent.permissions).map((key, index) => {
+                                        return <>
+                                            <h4>{parent.permissions[key].title}</h4>
+                                            <p className="subtitle margin-bottom-20">
+                                                Use this configurations below to define transactions permissions
+                                            </p>
+                                            <div className="d-flex">
+                                                <div className="margin-right-30">
+                                                    <div className="custom-control custom-checkbox">
+                                                        <input
+                                                            id={parent.permissions[key].title + '_allow_access'}
+                                                            type="checkbox"
+                                                            className="custom-control-input"
+                                                            defaultChecked={parent.permissions[key].allow_access}
+                                                            name={parent.permissions[key].title + '_allow_access'}
+                                                            ref={register}
+
+                                                        />
+                                                        <label className="custom-control-label" htmlFor={parent.permissions[key].title + '_allow_access'}>
+                                                            Access {parent.permissions[key].title} Module
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="table-responsive">
+                                                <table className="table margin-bottom-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">&nbsp;</th>
+                                                            <th scope="col" width="12%">None</th>
+                                                            <th scope="col" width="12%">Create</th>
+                                                            <th scope="col" width="12%">Read</th>
+                                                            <th scope="col" width="12%">Update</th>
+                                                            <th scope="col" width="12%">Delete</th>
+                                                            <th scope="col" width="12%">All</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            parent.permissions[key].childitems.map((child) => {
+                                                                return <tr>
+                                                                    <th scope="row">{child.title}</th>
+                                                                    <td>
+                                                                        <div className="custom-control custom-checkbox">
+                                                                            <input
+                                                                                id={parent.permissions[key].title + child.title + '_null_access'}
+                                                                                type="checkbox"
+                                                                                className="custom-control-input"
+                                                                                name={parent.permissions[key].title + child.title + '_null_access'}
+                                                                                ref={register}
+                                                                            />
+                                                                            <label className="custom-control-label" htmlFor={parent.permissions[key].title + child.title + '_null_access'}>
+                                                                                &nbsp;
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div className="custom-control custom-checkbox">
+                                                                            <input
+                                                                                id={parent.permissions[key].title + child.title + '_create'}
+                                                                                type="checkbox"
+                                                                                className="custom-control-input"
+                                                                                defaultChecked={child.create_access}
+                                                                                name={parent.permissions[key].title + child.title + '_create'}
+                                                                                ref={register}
+                                                                            />
+                                                                            <label className="custom-control-label" htmlFor={parent.permissions[key].title + child.title + '_create'}>
+                                                                                &nbsp;
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div className="custom-control custom-checkbox">
+                                                                            <input
+                                                                                id={parent.permissions[key].title + child.title + '_read'}
+                                                                                type="checkbox"
+                                                                                className="custom-control-input"
+                                                                                defaultChecked={child.read_access}
+                                                                                name={parent.permissions[key].title + child.title + '_read'}
+                                                                                ref={register}
+                                                                            />
+                                                                            <label className="custom-control-label" htmlFor={parent.permissions[key].title + child.title + '_read'}>
+                                                                                &nbsp;
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div className="custom-control custom-checkbox">
+                                                                            <input
+                                                                                id={parent.permissions[key].title + child.title + '_update'}
+                                                                                type="checkbox"
+                                                                                className="custom-control-input"
+                                                                                defaultChecked={child.update_access}
+                                                                                name={parent.permissions[key].title + child.title + '_update'}
+                                                                                ref={register}
+                                                                            />
+                                                                            <label className="custom-control-label" htmlFor={parent.permissions[key].title + child.title + '_update'}>
+                                                                                &nbsp;
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div className="custom-control custom-checkbox">
+                                                                            <input
+                                                                                id={parent.permissions[key].title + child.title + '_delete'}
+                                                                                type="checkbox"
+                                                                                className="custom-control-input"
+                                                                                defaultChecked={child.delete_access}
+                                                                                name={parent.permissions[key].title + child.title + '_delete'}
+                                                                                ref={register}
+                                                                            />
+                                                                            <label className="custom-control-label" htmlFor={parent.permissions[key].title + child.title + '_delete'}>
+                                                                                &nbsp;
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div className="custom-control custom-checkbox">
+                                                                            <input
+                                                                                id={parent.permissions[key].title + child.title + '_full'}
+                                                                                type="checkbox"
+                                                                                className="custom-control-input"
+                                                                                defaultChecked={child.access === 'full' ? true : false}
+                                                                                name={parent.permissions[key].title + child.title + '_full'}
+                                                                                ref={register}
+                                                                            />
+                                                                            <label className="custom-control-label" htmlFor={parent.permissions[key].title + child.title + '_full'}>
+                                                                                &nbsp;
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            })
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div className="divider-text divider-text--xs margin-top-20 margin-bottom-20">
+                                                &nbsp;
+                                            </div>
+                                        </>
+                                    })}
+                                </>
+
+                            }
+                        </NavTabContent>
+                    </div>
+                </CardBody>
+                <div className="text-right margin-bottom-20 mr-4">
+                    <button className="btn btn-secondary" disabled={pageLoading}>
+                        Save Changes
+                    </button>
                 </div>
-            </CardBody>
+            </form>
         </div>
     );
 }

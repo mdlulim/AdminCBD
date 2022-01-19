@@ -4,6 +4,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { UserService } from 'providers';
 
 // styles
 const customStyles = {
@@ -86,8 +87,9 @@ export default function UsersRoles(props) {
             buttons: [
                 {
                     label: 'Confirm and continue',
-                    onClick: () => {
-                        console.log(data)
+                    onClick: async () => {
+                        const res = await UserService.archiveRole(data.id)
+                        console.log(res)
                     }
                 },
                 {
