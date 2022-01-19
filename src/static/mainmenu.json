@@ -47,21 +47,26 @@
                     "icon": null
                 },
                 {
-                    "id": "history",
-                    "title": "Product History",
-                    "link": "/products/history",
-                    "icon": null
-                },
-                {
                     "id": "categories",
                     "title": "Categories",
                     "link": "/categories",
                     "icon": null
                 },
                 {
+                    "id": "subcategories",
+                    "title": "Subcategories",
+                    "link": "/subcategories",
+                    "icon": null
+                },
+                {
                     "id": "cancellations",
                     "title": "Cancellations",
                     "link": "/cancellations",
+                    "icon": null
+                },{
+                    "id": "history",
+                    "title": "Product History",
+                    "link": "/products/history",
                     "icon": null
                 }
             ]
@@ -162,11 +167,6 @@
                     "id": "commissions",
                     "title": "Commissions",
                     "link": "/commissions",
-                    "icon": null
-                },{
-                    "id": "product",
-                    "title": "Product Config",
-                    "link": "/product",
                     "icon": null
                 },
                 {

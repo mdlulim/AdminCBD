@@ -38,9 +38,8 @@ const ProductDetails = props => {
     useMemo(() => {
         //Get member details
         ProductService.getProduct(id).then((res) => {
-           console.log(res.data);
            
-            const productDetails = res.data.data;
+            const productDetails = res;
             if(productDetails){
                 setProduct(productDetails);
                 setSelectedProductType(productDetails.type);

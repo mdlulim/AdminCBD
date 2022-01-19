@@ -58,11 +58,17 @@ class ProductService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products/categories`,
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
     });
   }
 
   static async getProductSubCategories() {
-    console.log(authToken)
     return await axios({
       mode: 'no-cors',
       method: 'GET',
@@ -109,6 +115,13 @@ class ProductService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products/${id}`,
+    }).then((res) =>{
+      if(res.data.success){
+        return res.data.data;
+      }else{
+        return {};
+      }
+      
     });
   }
 

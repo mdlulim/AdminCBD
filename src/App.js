@@ -112,7 +112,7 @@ const App = () => {
 					<Route exact path="/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/permissions" component={(props) => <UserPermissions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/commissions" component={(props) => <Commission config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/configurations/product" component={(props) => <ProductConfiguration config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/subcategories" component={(props) => <ProductConfiguration config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/product/:id" component={(props) => <ProductSubcategoryUpdate config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/kyc" component={(props) => <KYC config={settings} {...props} setMenu={setMenu} />} />
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
