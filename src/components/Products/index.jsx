@@ -1,3 +1,4 @@
+import Cancellations from './Cancellations';
 import Products from './Products';
 import ProductAddNew from './ProductAddNew';
 import ProductsByMember from './ProductsByMember';
@@ -9,6 +10,7 @@ import ProductHistory from './ProductHistory'
 import Cancel from './Cancel'
 
 export default {
+    Cancellations,
     Products,
     ProductAddNew,
     ProductsByMember,

@@ -121,6 +121,7 @@
     "smoothscroll-polyfill": "^0.4.4",
     "sortablejs": "^1.13.0",
     "styled-components": "^5.1.1",
+    "sweetalert2": "^11.3.5",
     "xlsx": "^0.17.4"
   },
   "scripts": {

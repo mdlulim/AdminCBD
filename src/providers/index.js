@@ -16,6 +16,7 @@ import AccountService from './AccountService';
 import PagePermissionService from './PagePermissionService';
 import FeeService from './FeeService';
 import FileStorageProvider from './FileStorageProvider';
+import ReportService from './ReportService';
 import SettingService from './SettingService';
 import CompanyService from './CompanyService';
 import BankAccountService from './BankAccountService';
@@ -41,6 +42,7 @@ export {
     PagePermissionService,
     FeeService,
     FileStorageProvider,
+    ReportService,
     SettingService,
     CompanyService,
     BankAccountService,

@@ -21,11 +21,11 @@ const customStyles = {
     },
 };
 
-export default function UsersRoles(props) {
+export default function ReportList(props) {
     const { data } = props;
     const columns = [{
         name: 'Name',
-        selector: 'label',
+        selector: 'name',
         sortable: true,
         wrap: true,
     }, {
@@ -35,25 +35,27 @@ export default function UsersRoles(props) {
     }, {
         name: 'Type',
         selector: 'type',
+        width: '170px',
         sortable: true,
+        wrap: true,
     }, {
         name: 'Date Created',
         selector: 'created',
         sortable: true,
-        cell: row => <div><Moment format="MMM D, YYYY">{row.created}</Moment></div>
+        width: '170px',
+        cell: row => (
+            <div>
+                <strong><Moment format="MMM D, YYYY">{row.created}</Moment></strong>&nbsp;
+                <span className="text-muted">
+                    <Moment format="hh:mm a">{row.created}</Moment>
+                </span>
+            </div>
+        )
     }, {
         name: 'Creted By',
         sortable: false,
-        cell: row => <>{row.creator ? <>{row.creator.first_name} {row.creator.last_name}</> : '-'}</>
-    }, {
-        name: 'Date Modified',
-        selector: 'updated',
-        sortable: true,
-        cell: row => <>{row.updated ? <Moment format="MMM D, YYYY">{row.updated}</Moment> : '-'}</>
-    }, {
-        name: 'Updated By',
-        sortable: false,
-        cell: row => <>{row.updator ? <>{row.updator.first_name} {row.updator.last_name}</> : '-'}</>
+        wrap: true,
+        cell: row => <>{row.report_creator ? <>{row.report_creator.first_name} {row.report_creator.last_name}</> : '-'}</>
     }, {
         name: 'Actions',
         sortable: true,
@@ -61,15 +63,21 @@ export default function UsersRoles(props) {
         cell: row => (
             <div>
                 <a
-                    href={`/users/roles/${row.id}`}
+                    href={`/reports/${row.id}`}
                     className="btn btn-secondary btn-icon btn-sm margin-right-10"
                 >
-                    <span className="fa fa-pencil" />
+                    <span className="fa fa-eye" />
                 </a>
+                {/* <a
+                    href={`/users/roles/${row.id}`}
+                    className="btn btn-outline-secondary btn-icon btn-sm margin-right-10"
+                >
+                    <span className="fa fa-pencil" />
+                </a> */}
                 <button
                     type="button"
                     className="btn btn-danger btn-icon btn-sm"
-                    onClick={() => handleDeleteRole(row)}
+                    onClick={() => handleDeleteReport(row)}
                 >
                     <span className="fa fa-trash-o" />
                 </button>
@@ -77,11 +85,11 @@ export default function UsersRoles(props) {
         )
     }];
 
-    async function handleDeleteRole(data) {
-        const { label } = data;
+    async function handleDeleteReport(data) {
+        const { name } = data;
         return confirmAlert({
             title: 'Confirm Delete',
-            message: <div>Are you sure you want to delete <strong>{label}</strong>?</div>,
+            message: <div>Are you sure you want to delete <strong>{name}</strong>?</div>,
             buttons: [
                 {
                     label: 'Confirm and continue',

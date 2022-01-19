@@ -61,7 +61,7 @@
                 {
                     "id": "cancellations",
                     "title": "Cancellations",
-                    "link": "/cancellations",
+                    "link": "/products/cancellations",
                     "icon": null
                 },{
                     "id": "history",
@@ -108,7 +108,7 @@
             "title": "Bank Accounts",
             "description": "Manage bank accounts",
             "link": "/bank-accounts",
-            "icon": "li-cash-dollar",
+            "icon": "li-toggle",
             "childitems": []
         },
         {
@@ -116,7 +116,7 @@
             "title": "Main Account",
             "description": "manage company main account",
             "link": "/main-account",
-            "icon": "li-cash-dollar",
+            "icon": "li-wallet",
             "childitems": []
         },
         {
@@ -124,7 +124,15 @@
             "title": "KYC",
             "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
             "link": "/kyc",
-            "icon": "li-layers",
+            "icon": "li-profile",
+            "childitems": []
+        },
+        {
+            "id": "reports",
+            "title": "Reports",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/reports",
+            "icon": "li-chart-growth",
             "childitems": []
         }
     ],
@@ -161,29 +169,6 @@
                     "id": "Settings",
                     "title": "Settings",
                     "link": "/settings",
-                    "icon": null
-                },
-                {
-                    "id": "commissions",
-                    "title": "Commissions",
-                    "link": "/commissions",
-                    "icon": null
-                },
-                {
-                    "id": "users",
-                    "title": "Users",
-                    "link": "/users",
-                    "icon": null
-                },
-                {
-                    "id": "roles",
-                    "title": "User Roles",
-                    "link": "/roles",
-                    "icon": null
-                },{
-                    "id": "permissions",
-                    "title": "User Permissions",
-                    "link": "/permissions",
                     "icon": null
                 },
                 {

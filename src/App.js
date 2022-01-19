@@ -21,6 +21,8 @@ import Users from 'pages/Users';
 import AddRole from './pages/Users/AddRole';
 import EditRole from './pages/Users/EditRole';
 import Roles from './pages/Users/Roles';
+import Reports from './pages/Reports';
+import ReportDetails from './pages/Reports/Details';
 import Countries from './pages/Configurations/Countries';
 import Currencies from './pages/Configurations/Currencies';
 import Commission from './pages/Commission';
@@ -39,6 +41,7 @@ import Widthdrawals from 'pages/Transactions/Widthdrawals';
 import Transfers from 'pages/Transactions/Transfers';
 import MakeTransferPage from 'pages/Transactions/MakeTransferPage';
 import Products from 'pages/Products';
+import ProductCancellations from 'pages/Products/Cancellations';
 import ProductHistory from 'pages/Products/ProductHistory';
 import ProductCategories from 'pages/ProductCategory';
 import CategoryNew from 'pages/ProductCategory/CategoryNew';
@@ -84,6 +87,9 @@ const App = () => {
 					<Route exact path="/users/roles/add" component={(props) => <AddRole config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/users/roles/:id" component={(props) => <EditRole config={settings} {...props} setMenu={setMenu} />} />
 
+					<Route exact path="/reports" component={(props) => <Reports config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/reports/:id" component={(props) => <ReportDetails config={settings} {...props} setMenu={setMenu} />} />
+
 					<Route exact path="/configurations/settings" component={(props) => <SystemSettings config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/countries" component={(props) => <Countries config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/configurations/currencies" component={(props) => <Currencies config={settings} {...props} setMenu={setMenu} />} />
@@ -103,6 +109,7 @@ const App = () => {
 					<Route exact path="/transactions/withdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/transfers/transfer" component={(props) => <MakeTransferPage config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products/cancellations" component={(props) => <ProductCancellations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/history" component={(props) => <ProductHistory config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/categories" component={(props) => <ProductCategories config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/categories/add" component={(props) => <CategoryNew config={settings} {...props} setMenu={setMenu} />} />
