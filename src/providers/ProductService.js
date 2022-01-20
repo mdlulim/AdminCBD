@@ -86,11 +86,17 @@ class ProductService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products/categories`,
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
     });
   }
 
   static async getProductSubCategories() {
-    console.log(authToken)
     return await axios({
       mode: 'no-cors',
       method: 'GET',
@@ -115,12 +121,35 @@ class ProductService {
     });
   }
 
+  static async getProductSubcategory(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories/${id}`,
+    }).then((res) =>{
+      if(res.data.success){
+        return res.data.data;
+      }else{
+        return {};
+      }
+      
+    });
+  }
+
   static async getProduct(id) {
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products/${id}`,
+    }).then((res) =>{
+      if(res.data.success){
+        return res.data.data;
+      }else{
+        return {};
+      }
+      
     });
   }
 
@@ -210,6 +239,19 @@ class ProductService {
     })
   }
 
+
+  static async updateProductSubcategory(id,product){
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      data: product,
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories/${id}`,
+    }).then((res) =>{
+      const result = res.data;
+      return result;
+    });
+  }
 
 }
 export default ProductService;

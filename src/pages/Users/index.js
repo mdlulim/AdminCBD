@@ -18,6 +18,7 @@ export default function UsersPage(props) {
     const [users, setUsers] = useState([]);
     const [pageLoading, setPageLoading] = useState(true);
     const [filteredUsers, setFilteredUsers] = useState([]);
+    const [searchSelectedTole, setSearchSelectedTole] = useState('');
 
     async function fetchData() {
         const users = await UserService.getUsers();
@@ -43,6 +44,36 @@ export default function UsersPage(props) {
         const countTypes = users.filter(user => user.status === type);
         return countTypes.length;
     };
+
+    const onSearchFilter = filterText => {
+        const filteredItems = users.filter(item => (
+          (item && item.full_name && item.full_name.toLowerCase().includes(filterText.toLowerCase())) ||
+          (item && item.username && item.username.toLowerCase().includes(filterText.toLowerCase())) ||
+          (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase()))
+        ));
+        setFilteredUsers(filteredItems);
+      }
+
+      const onSearchByRoleType = (event) =>{
+       const role_id = event.target.value;
+        if(role_id){
+            const role = roles.filter(option => option.id === role_id)[0];
+            const listUsers = users.filter(option => option.group.label === role.label);
+            setFilteredUsers(listUsers)
+        }else{
+            setFilteredUsers(users)
+        }
+      }
+
+      const onSearchByStatus = (event) =>{
+        const status = event.target.value;
+         if(status){
+             const listUsers = users.filter(option => option.status === status);
+             setFilteredUsers(listUsers)
+         }else{
+             setFilteredUsers(users)
+         }
+       }
 
     return (
         <AuthLayout
@@ -114,6 +145,7 @@ export default function UsersPage(props) {
                                     name="search"
                                     className="form-control form-control-m"
                                     placeholder="Search by name, username or email..."
+                                    onKeyUp={e => onSearchFilter(e.target.value)}
                                 />
                             </Col>
                             <Col xs={6} lg={2}>
@@ -122,6 +154,7 @@ export default function UsersPage(props) {
                                     type="text"
                                     name="group_id"
                                     className="form-control"
+                                    onChange={onSearchByRoleType}
                                 >
                                     <option value="">Filter by Role</option>
                                     {roles.map(item => (
@@ -137,6 +170,7 @@ export default function UsersPage(props) {
                                     type="text"
                                     name="status"
                                     className="form-control"
+                                    onChange={onSearchByStatus}
                                 >
                                     <option value="">Filter by Status</option>
                                     <option value="Pending">Pending</option>

@@ -34,43 +34,41 @@ const ProductAddNew = props => {
     const [product, setProduct] = useState({});
     const [productCategories, setProductCategories] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [subcategories, setSubcategories] = useState([]);
+    const [filteredSubcategories, setFilteredSubcategories] = useState([]);
     const [products, setProducts] = useState([]);
     const { processing,confirmButtonDisabled, confirmButton,} = props;
     const [selectedCurrency, setSelectedCurrency] = useState('CBI');
     const [selectedProductType, setSelectedProductType] = useState('');
+    const [selectedSubcategory, setSelectedSubcategory] = useState({});
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [resetProduct, setRecentProduct] = useState({});
+    const [allowCancellation, setAllowCancellation] = useState(false);
     const [ postData, setPostData ] = useState({});
     const params = useParams();
     const { id } = params;
 
-    useMemo(() => {
-        //Get member details
-        
-        ProductService.getProducts().then((res) => {
-            if(res.data.success){
-              const productlist = res.data.data.results;
-              //console.log(productlist)
-              setProducts(productlist);
-              setRecentProduct(productlist[0]);
-            }
-            
-          });
+    async function fetchData(){
+        const poductsList = await ProductService.getProducts();
+        setProducts(poductsList.results);
+        setRecentProduct(poductsList.results[0]);
 
-        ProductService.getProductCategories().then((res) => {
-           // console.log(res.data.data.results)
-            if(res.data.success){
-              const productlist = res.data.data.results;
-              setCategories(productlist);
-              let temp = [];
-              productlist.filter(item => (
-                    temp.push({ value: item.code, label: item.title })
-                    //setProductCategories(productCategories => [{value:item.code, label:item.title}])
-                ))
-              setProductCategories(temp);
-            }
-          });
-      }, []);
+        const categoryList = await ProductService.getProductCategories();
+        setCategories(categoryList.results);
+        let temp = [];
+        categoryList.results.filter(item => (
+                temp.push({ value: item.code, label: item.title, id: item.id })
+            ))
+        setProductCategories(temp);
+
+        const subcategoryList = await ProductService.getProductSubCategories();
+        setSubcategories(subcategoryList.results)
+    }
+
+    useMemo(() => {
+        fetchData()
+    },[]);
+        
 		const toggleTab = (e, tab) => {
 			e.preventDefault();
 			setActiveTab(tab);
@@ -89,6 +87,16 @@ const ProductAddNew = props => {
                 { value: 'Achived', label: 'Achived' }
               ];
 
+        async function onChangeCategorySelect(data){
+            const sub = subcategories.filter(option => option.code === data.value);
+            let temp = [];
+            sub.filter(item => (
+                    temp.push({ value: item.code, label: item.title, id: item.id, allow_cancellations: item.allow_cancellations })
+                ))
+            //setSubcategories(sub)
+            setFilteredSubcategories(temp)
+        // const title = form.title.value;
+        }
         const onSubmitCBI = (event) => {
             event.preventDefault();
             setDisabled(true);
@@ -162,9 +170,8 @@ const ProductAddNew = props => {
                             type: selectedProductType,
                             price: parseFloat(form.price.value),
                         }
-                        console.log(productData);
+
                      ProductService.addProduct(productData).then((response) =>{
-                        console.log(response);
                         if(response.status){
                             setShow(true);
                             confirmAlert({
@@ -211,6 +218,7 @@ const ProductAddNew = props => {
             const data ={
                 body: currentContentAsHTML,
                 category_id: category.id,
+                subcategory_id: selectedSubcategory.id,
                 category_title: category.title,
                 currency_code: selectedCurrency,
                 product_code: productCode,
@@ -218,21 +226,21 @@ const ProductAddNew = props => {
                 title: form.title.value,
                 type: selectedProductType,
                 price: 0,
-                bbt_value: parseFloat(form.bbt_value.value),
                 fees: {
                 educator_percentage: parseFloat(form.educator_persantage_fee.value),
                 registration_fee: parseFloat(form.registration_fee.value),
                 slippage_percentage_buy: parseFloat(form.slippage_persantage_buy.value),
                 slippage_percentage_sell: parseFloat(form.slippage_persantage_sell.value),
+                cancellation_fee: parseFloat(form.cancellation_fee.value),
              }
             }
-            console.log(data);
             create(data)
 
         }else if(selectedProductType === 'FX'){
             const data ={
                 body: currentContentAsHTML,
                 category_id: category.id,
+                subcategory_id: selectedSubcategory.id,
                 category_title: category.title,
                 currency_code: selectedCurrency,
                 educator_percentage: 4,
@@ -240,19 +248,20 @@ const ProductAddNew = props => {
                 fees: {
                     educator_percentage: parseFloat(form.educator_percentage.value),
                     registration_percentage: parseFloat(form.registration_percentage.value),
+                    cancellation_fee: allowCancellation ? parseFloat(form.cancellation_fee.value): null,
                 },
                 status: selectedStatus,
                 title: form.title.value,
                 type: selectedProductType,
                 price: parseFloat(form.price.value),
             }
-            console.log(data);
             create(data)
 
         }else if(selectedProductType === 'FP'){
             const data ={
                     body            : currentContentAsHTML,
                     category_id     : category.id,
+                    subcategory_id: selectedSubcategory.id,
                     category_title  : category.title,
                     currency_code   : selectedCurrency,
                     investment_period: parseFloat(form.investment_period.value),
@@ -262,26 +271,23 @@ const ProductAddNew = props => {
                     type             : selectedProductType,
                     status           : selectedStatus,
                     fees             : {
-                                        daily_interes   : parseFloat(form.estimated_daily_interest.value),
+                                        daily_interest  : parseFloat(form.estimated_daily_interest.value),
                                         gross_return    : parseFloat(form.minimum_gross_return.value),
+                                        cancellation_fee: allowCancellation ? parseFloat(form.cancellation_fee.value): null,
                                     },
                     title            : form.title.value
                 }
-                console.log(data);
                 create(data)
         }
 
     }
 
-    
     const create = (data) =>{
          const title = data.title;
          let permakey =title.split(' ').join('-').trim().toLowerCase();
          let productExist = products.filter(product => product.permakey === permakey);
-         console.log(productExist.length)
         if(!productExist.length){
             ProductService.addProduct(data).then((response) =>{
-                console.log(response);
                 if(response.status){
                     setShow(true);
                     confirmAlert({
@@ -322,16 +328,17 @@ const ProductAddNew = props => {
 				<div className="alert alert-warning" role="alert">
 				{error}
 				</div> : ''}
-				<Col lg={8}>
+				<Col lg={12}>
                                 <Row >
-                                <Col md={12}>
-                            <label htmlFor="product_type">Product Type</label>
+                                <Col md={6}>
+                            <label htmlFor="product_type">Product Category *</label>
                             <Select
                                 id="product_type"
                                 name="product_type"
                                 options={productCategories}
                                 onChange={item => {
                                     setSelectedProductType(item.value);
+                                    onChangeCategorySelect(item)
                                     if(item.value === 'FX'){
                                         setShow(false)
                                         setShowFixedPlan(true)
@@ -351,8 +358,23 @@ const ProductAddNew = props => {
                                 required
                                 />
                         </Col>
-                                <Col md={6}>
-                                        <label htmlFor="name">Product Title</label>
+                        <Col md={6}>
+                            <label htmlFor="product_type">Subcategory *</label>
+                            <Select
+                                id="product_type"
+                                name="product_type"
+                                options={filteredSubcategories}
+                                onChange={item => {
+                                    setSelectedSubcategory(item)
+                                    setAllowCancellation(item.allow_cancellations)
+                                }}
+                                className={`basic-multi-select form-control-m`}
+                                classNamePrefix="select"
+                                required
+                                />
+                        </Col>
+                                <Col md={12}>
+                                        <label htmlFor="name">Product Title *</label>
                                         <input
                                             type="text"
                                             id="title"
@@ -362,7 +384,7 @@ const ProductAddNew = props => {
                                         /> 
                                 </Col>
                                 <Col md={6}>
-                                        <label htmlFor="currency">Select Currency</label>
+                                        <label htmlFor="currency">Select Currency *</label>
                                         <Select
                                             id="currency"
 											name="currency"
@@ -375,23 +397,7 @@ const ProductAddNew = props => {
                                             />
                                 </Col>
                                 {selectedProductType === "CBIX7" ?
-                                <Col md={6}>
-                                        <label htmlFor="name">BBT Value (CBI)</label>
-                                        <input
-                                            type="text"
-                                            id="bbt_value"
-                                            name="bbt_value"
-											className="form-control form-control-m"
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorAmount(true)
-												}else{
-													setErrorAmount(false)
-												}
-                                            }}
-                                        />
-										<label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label>
-                                </Col>:
+                                '':
                                 <Col md={6}>
                                 <label htmlFor="name">Product Amount (CBI)</label>
                                 <input
@@ -591,8 +597,26 @@ const ProductAddNew = props => {
 											}}
                                         />
                                 </Col>
+                                { allowCancellation ?
                                 <Col md={6}>
-                                        <label htmlFor="status">Status</label>
+                                        <label htmlFor="name">Cancellation Fee (%) *</label>
+                                        <input
+                                            type="text"
+                                            id="cancellation_fee"
+                                            name="cancellation_fee"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+												}
+                                            }}
+                                            required
+                                        />
+                                </Col> : ''}
+                                <Col md={6}>
+                                        <label htmlFor="status">Status *</label>
                                         <Select
                                             id="status"
                                             name="status"
@@ -600,10 +624,11 @@ const ProductAddNew = props => {
                                             onChange={item => setSelectedStatus(item.value)}
                                             className={`basic-multi-select form-control-m`}
                                             classNamePrefix="select"
+                                            required
                                             />
                                 </Col>
                                 <Col md={12}>
-                                <label htmlFor="name">Description</label>
+                                <label htmlFor="name">Description </label>
                                 <Editor
                                         editorState={editorState}
                                         toolbarClassName="toolbarClassName"

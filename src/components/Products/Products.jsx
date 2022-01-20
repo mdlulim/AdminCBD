@@ -78,6 +78,7 @@ export default function Products(props) {
 
       ProductService.getProducts().then((res) => {
           const productlist = res.results;
+          console.log(productlist)
           setProducts(productlist);
           setFilteredProducts(productlist);
 

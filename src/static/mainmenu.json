@@ -47,21 +47,26 @@
                     "icon": null
                 },
                 {
-                    "id": "history",
-                    "title": "Product History",
-                    "link": "/products/history",
-                    "icon": null
-                },
-                {
                     "id": "categories",
                     "title": "Categories",
                     "link": "/categories",
                     "icon": null
                 },
                 {
+                    "id": "subcategories",
+                    "title": "Subcategories",
+                    "link": "/subcategories",
+                    "icon": null
+                },
+                {
                     "id": "cancellations",
                     "title": "Cancellations",
                     "link": "/products/cancellations",
+                    "icon": null
+                },{
+                    "id": "history",
+                    "title": "Product History",
+                    "link": "/products/history",
                     "icon": null
                 }
             ]

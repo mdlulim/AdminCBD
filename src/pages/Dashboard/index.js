@@ -57,10 +57,8 @@ export default function DashboardPage(props) {
 
         const mainAccount = await AccountService.getMainAccount()
             setMainAccount(mainAccount);
-            console.log(mainAccount)
         const poductsList = await ProductService.getProducts();
               setProducts(poductsList.results);
-              console.log(poductsList)
 
         const transaList = await TransactionService.getTransactions();
              setTransactions(transaList.results);
@@ -120,8 +118,6 @@ export default function DashboardPage(props) {
     async function selectDataRange(){
         setDisabled(true);
         setPageLoading(true)
-          console.log(startDate)
-          console.log(endDate)
 
           const dateRange = {
              start_date  : startDate,

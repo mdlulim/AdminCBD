@@ -52,20 +52,20 @@ class UserService {
     });
   }
 
-  static async addAdminUser(data) {
+  static async createUser(data) {
     return await axios({
       mode: 'no-cors',
       method: 'POST',
       headers: headers,
       data: data,
-      url: `${Config.API.BASE_URL}/users?group=admin`,
+      url: `${Config.API.BASE_URL}/users`,
     }).then((res) => {
-      const result = res;
+      const result = res.data;
       return result;
     });
   }
 
-  static async updateAdminUser(id, data) {
+  static async updateUser(id, data) {
     return await axios({
       mode: 'no-cors',
       method: 'PUT',
@@ -73,7 +73,7 @@ class UserService {
       data: data,
       url: `${Config.API.BASE_URL}/users/${id}`,
     }).then((res) => {
-      const result = res;
+      const result = res.data;
       return result;
     });
   }

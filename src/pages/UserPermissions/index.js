@@ -204,6 +204,10 @@ const PermissionsList = props => {
                                                                 <tr id="products">
                                                                     <th scope="row">Bank Accounts</th>
                                                                 </tr>
+                                                                <tr id="productconfiguration">
+                                                                    <th scope="row">Productcon Figuration</th>
+                                                                </tr>
+                                                                
                                                             </tbody>
                                                         </table>
                                                     </div>
