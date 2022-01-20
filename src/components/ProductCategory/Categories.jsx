@@ -71,54 +71,58 @@ export default function Products(props) {
   const [selectedCategory, setSelectedCategory] = useState({});
   const history = useHistory();
 
+  async function fetchData() {
+    const categories = await ProductService.getProductCategories();
+    setCategories(categories.results || []);
+    setFilteredCategories(categories.results || []);
+    setPageLoading(false);
+  }
 
   useMemo(() => {
-
-    ProductService.getProductCategories().then((res) => {
-      if (res.data.success) {
-        const productlist = res.data.data.results;
-        setCategories(productlist);
-        setFilteredCategories(productlist);
-      }
-
-      setPageLoading(false);
-    });
-
+    fetchData();
   }, []);
+
   // table headings definition
   const columns = [
     {
       name: 'Title',
       selector: 'title',
       sortable: true,
+      width: '200px',
       wrap: true,
     }, {
       name: 'Description',
       selector: 'description',
       sortable: true,
+      wrap: true,
     }, {
       name: 'Code',
       selector: 'code',
       sortable: true,
+      width: '100px',
     }, {
       name: 'Created Date',
       selector: 'created',
       sortable: true,
+      width: '180px',
       cell: row => <div>
-        <strong><Moment date={row.created} format="D MMM YYYY" /></strong><br />
-        <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+        <strong><Moment date={row.created} format="DD MMM, YYYY" /></strong>&nbsp;
+        <span className="text-muted"><Moment date={row.created} format="hh:mma" /></span>
       </div>
     }, {
       name: 'Actions',
       sortable: true,
-      cell: row => <div>
-        <span style={iconPadding}>
-          <a href={`categories/${row.id}`}
-            className="btn btn-light btn-sm btn-icon"
+      width: '80px',
+      cell: row => (
+        <div className="text-right">
+          <span style={iconPadding}>
+            <a href={`categories/${row.id}`}
+              className="btn btn-light btn-sm btn-icon"
 
-          > <span className="fa fa-pencil" />
-          </a></span>
-      </div>
+            > <span className="fa fa-pencil" />
+            </a></span>
+        </div>
+      )
     }];
 
   const onSubmitUpdateCategory = data => {

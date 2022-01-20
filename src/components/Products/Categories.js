@@ -142,7 +142,6 @@ export default function Products(props) {
   return (
     <Card className="o-hidden mb-4">
       <ModalUpdateCategories show={show} setShow={setShow} category={selectedCategory} />
-
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
           <span>Product Categories</span>

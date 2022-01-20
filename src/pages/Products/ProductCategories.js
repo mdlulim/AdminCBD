@@ -5,7 +5,7 @@ import { Products } from 'components';
 
 let baseURL = window.location.origin;
 let page = (window.location.pathname.split('/').pop()).toLowerCase();
-    
+
 // if(page === 'categories'){
 //     let mi = session.payload.vlist;
 //     if(!mi.includes("Categories")){
@@ -18,17 +18,13 @@ const ProductsCategories = props => {
 	const breadcrumb = { heading: "Product Categories" };
 	return (
 		<AuthLayout {...props}
-		breadcrumb={{ active: "Categories" }}
-		pageHeading={{
-			title: 'Categories List',
-			caption: 'EXPLORE OVERVIEW CATEGORIES FOR CRYPTO BASED INNOVATION'
-		}}>
+			breadcrumb={{ active: "Categories" }}
+			pageHeading={{
+				title: 'Categories List',
+				caption: 'EXPLORE OVERVIEW CATEGORIES FOR CRYPTO BASED INNOVATION'
+			}}>
 			<Row className="mt-4">
-				<Col lg={12} xl={12}>
-				<Col md={12}>
-                    <Products.Categories />
-                </Col>
-				</Col>
+				<Products.Categories />
 			</Row>
 		</AuthLayout>
 	);

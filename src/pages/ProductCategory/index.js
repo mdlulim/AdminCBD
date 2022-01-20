@@ -4,22 +4,31 @@ import { AuthLayout } from 'containers';
 import { ProductCategory } from 'components';
 
 const ProductCategories = props => {
-	const breadcrumb = { heading: "Product Categories" };
 	const [pageLoading, setPageLoading] = useState(true);
 
 	return (
 		<AuthLayout {...props}
 		loading={pageLoading}
-		breadcrumb={{ active: "Categories" }}
+		breadcrumb={{
+			items: [{
+				title: 'Dashboard',
+				link: '/dashboard',
+			}, {
+				title: 'Products',
+				link: '/products',
+			}],
+			active: "Categories"
+		}}
 		pageHeading={{
 			title: 'Categories List',
 			caption: 'EXPLORE OVERVIEW CATEGORIES FOR CRYPTO BASED INNOVATION'
 		}}>
-			<Row className="mt-4">
+			<Row>
 				<Col lg={12} xl={12}>
-				<Col md={12}>
-                    <ProductCategory.Categories pageLoading={pageLoading} setPageLoading={setPageLoading}/>
-                </Col>
+                    <ProductCategory.Categories
+						pageLoading={pageLoading}
+						setPageLoading={setPageLoading}
+					/>
 				</Col>
 			</Row>
 		</AuthLayout>
