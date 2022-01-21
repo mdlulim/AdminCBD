@@ -80,7 +80,6 @@ class ProductService {
   }
 
   static async getProductCategories() {
-    console.log(authToken)
     return await axios({
       mode: 'no-cors',
       method: 'GET',
@@ -240,7 +239,7 @@ class ProductService {
   }
 
 
-  static async updateProductSubcategory(id,product){
+  static async updateProductSubcategory(id, product){
     return await axios({
       mode: 'no-cors',
       method: 'PUT',
