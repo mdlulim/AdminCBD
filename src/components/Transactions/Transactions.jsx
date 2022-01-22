@@ -409,7 +409,7 @@ export default function Transactions(props) {
                 separator=","
                 wrapColumnChar=""
                 // columns={columns}
-                data={csvTransactions}
+                datas={csvTransactions}
               >
                 <button style={{ display: 'none' }} ref={csvDownloaderClick}></button>
               </CsvDownloader>
