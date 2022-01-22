@@ -49,13 +49,13 @@
                 {
                     "id": "categories",
                     "title": "Categories",
-                    "link": "/categories",
+                    "link": "/products/categories",
                     "icon": null
                 },
                 {
                     "id": "subcategories",
                     "title": "Subcategories",
-                    "link": "/subcategories",
+                    "link": "/products/subcategories",
                     "icon": null
                 },
                 {
