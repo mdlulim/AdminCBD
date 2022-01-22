@@ -1,6 +1,8 @@
 import React from 'react';
 import DataTable from 'react-data-table-component';
+import Moment from 'react-moment';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+
 
 // styles
 const customStyles = {
@@ -22,18 +24,31 @@ const customStyles = {
 export default function DetailsTable(props) {
     const { data } = props;
     const columns = [{
-        name: 'Column 1',
-        selector: 'column_1',
+        name: 'Full Names',
+        selector: 'first_name',
+        sortable: true,
+        cell: row => <div>{row.first_name} {row.last_name}</div>
+    }, {
+        name: 'Username',
+        selector: 'username',
         sortable: true,
     }, {
-        name: 'Column 2',
-        selector: 'column_2',
+        name: 'Frequency',
+        selector: 'frequency',
+        sortable: true,
+    },{
+        name: 'Status',
+        selector: 'status',
         sortable: true,
     }, {
-        name: 'Column 3',
-        selector: 'column_3',
+        name: 'Last Payment Date',
+        selector: 'last_payment_date',
         sortable: true,
-    }];
+        cell: row => <div>
+          <strong> { row.last_payment_date ? <Moment date={row.last_payment_date} format="D MMM YYYY" />: ''}</strong><br />
+          <span className="text-muted">{ row.last_payment_date ? <Moment date={row.last_payment_date} format="hh:mm:ss" />: ''}</span>
+        </div>
+      }];
 
     return (
         <DataTable

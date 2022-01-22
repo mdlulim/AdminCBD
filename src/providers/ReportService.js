@@ -49,5 +49,20 @@ class ReportService {
                 return {};
             })
     }
+    static async generateReports(id) {
+        return await axios({
+            mode: 'no-cors',
+            method: 'GET',
+            headers: headers,
+            url: `${Config.API.BASE_URL}/reports/${id}/generate`,
+        }).then(json => json.data)
+            .then(res => {
+                const { success, data } = res;
+                if (success) {
+                    return data || [];
+                }
+                return [];
+            })
+    }
 }
 export default ReportService;
