@@ -28,7 +28,7 @@ export default function MembersPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                    <Members.Members status={'pending'} setPageLoading={setPageLoading} />
+                    <Members.Members status={'Pending'} setPageLoading={setPageLoading} />
                 </CardBody>
             </Card>
         </AuthLayout>

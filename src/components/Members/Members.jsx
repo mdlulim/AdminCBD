@@ -77,8 +77,15 @@ export default function Members(props) {
 
   async function fetchData() {
     const memberslist = await MemberService.getMembers();
-    setMembers(memberslist.results);
-    setFilteredMembers(memberslist.results);
+    if(status != 'all'){
+      const results = memberslist.results.filter(item => item.status === status);
+      setMembers(results);
+      setFilteredMembers(results);
+    }else{
+      setMembers(memberslist.results);
+      setFilteredMembers(memberslist.results);
+    }
+    
     setPageLoading(false);
   }
 
@@ -179,11 +186,14 @@ export default function Members(props) {
       const transaList = res.data.data.results;
       if (transaList.length) {
         TransactionService.getTransactionPOP(transaList[0].txid).then((res) => {
-          const pop = res.data.data.rows;
-          const url = pop[0].file;
-          TransactionService.getTransactionPOPFile(url).then((res) => {
-            setSelectedTransPOP(res.data);
-          })
+          console.log(res.data);
+          if(res.data){
+              const pop = res.data.data.rows;
+              const url = pop[0].file;
+              TransactionService.getTransactionPOPFile(url).then((res) => {
+                setSelectedTransPOP(res.data);
+              })
+          }
         });
 
         setTransaction(transaList[0])
