@@ -42,6 +42,7 @@ export default function EditUserPage(props) {
         const user = await UserService.getUser(id);
         const roles = await UserService.getRoles();
 
+
         setRoles(roles.results || []);
         if (user && user.id) {
             setUser(user);

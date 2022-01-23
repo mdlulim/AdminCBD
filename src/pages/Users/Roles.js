@@ -44,42 +44,42 @@ export default function UserRolesPage(props) {
             }}
         >
             {!pageLoading &&
-            <Card id="users">
-                <Common.Widget
-                    icon="li-cog"
-                    title="Roles"
-                    subtitle="List of all system user roles"
-                    wrapperClass="widget--items-middle"
-                />
-                <CardBody>
-                    <div className="form-row">
-                        <Col xs={6} lg={4}>
-                            <input
-                                type="text"
-                                id="search"
-                                name="search"
-                                className="form-control form-control-m"
-                                placeholder="Search by name, description or type..."
-                            />
-                        </Col>
-                        <Col xs={6} lg={6} className="d-none d-md-block" />
-                        <Col xs={6} lg={2} className="d-none d-md-block text-right">
-                            {/* <button
+                <Card id="users">
+                    <Common.Widget
+                        icon="li-cog"
+                        title="Roles"
+                        subtitle="List of all system user roles"
+                        wrapperClass="widget--items-middle"
+                    />
+                    <CardBody>
+                        <div className="form-row">
+                            <Col xs={6} lg={4}>
+                                <input
+                                    type="text"
+                                    id="search"
+                                    name="search"
+                                    className="form-control form-control-m"
+                                    placeholder="Search by name, description or type..."
+                                />
+                            </Col>
+                            <Col xs={6} lg={6} className="d-none d-md-block" />
+                            <Col xs={6} lg={2} className="d-none d-md-block text-right">
+                                {/* <button
                                 disabled
                                 className="btn btn-secondary btn--icon btn--icon-stacked btn--anon d-none d-lg-block"
                             >
                                 <span class="fa fa-download" /> 
                                 Download CSV&nbsp;&nbsp;
                             </button> */}
-                        </Col>
-                    </div>
-                </CardBody>
-                <hr className="margin-top-0 margin-bottom-0" />
-                <Users.Roles
-                    roles={roles}
-                    data={filteredRoles}
-                />
-            </Card>}
+                            </Col>
+                        </div>
+                    </CardBody>
+                    <hr className="margin-top-0 margin-bottom-0" />
+                    <Users.Roles
+                        roles={roles}
+                        data={filteredRoles}
+                    />
+                </Card>}
         </AuthLayout>
     );
 } 

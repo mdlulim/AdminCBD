@@ -43,6 +43,15 @@ class UserService {
     });
   }
 
+  static async getUsersByRole(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users?group_id=${id}`,
+    });
+  }
+
   static async getUserByEmail(email) {
     return await axios({
       mode: 'no-cors',

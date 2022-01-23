@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CardBody, Col, Row } from 'reactstrap';
 import moment from 'moment';
 import useForm from "react-hook-form";
+import Select from 'react-select';
 import 'react-datepicker/dist/react-datepicker.css';
 import { UserService } from 'providers';
 
@@ -51,41 +52,99 @@ export default function EditRole(props) {
         updator,
         description,
         permissions,
-        id
+        id,
+        setPageLoading
 
     } = props;
     const [selectedUser, setSelectedUser] = useState('');
     const [activeTab, setActiveTab] = useState('overview');
     const [dateAssigned, setDateAssigned] = useState(new Date());
     const { register, handleSubmit, errors } = useForm();
+    const [users, setUsers] = useState({});
+    const [roleUsers, setRoleUsers] = useState([]);
+    const [userOptions, setUserOptions] = useState([])
 
-    async function handleFindUser(val) {
-        setSelectedUser(val);
+
+    const handleFindUser = filterText => {
+        const filteredItem = users.filter(item => (
+            (item && item.email && item.email.toLowerCase().includes(filterText.toLowerCase()))
+        ));
+        setSelectedUser(filteredItem);
+    }
+
+    function onCheckChange(value) {
+        console.log(value, ' _____________')
+    }
+
+    const removeUser = async (id) => {
+        console.log(id)
+        const res = await UserService.updateAdminUser(id, { group_id: '903824d6-740f-4220-9e10-49bd805ad1be', permissions: null})
+        console.log(res)
     }
 
 
     const onSubmit = async (data) => {
-        // setPageLoading(true)
+        setPageLoading(true)
         let permissionObject = {}
         Object.keys(permissions).map((key, index) => {
             permissionObject[key] = {
-                'allow_access': data[permissions[key].title + '_allow_access'],
-                childitems: [],
-                title: permissions[key].title
+                allow_access: data[permissions[key].title + '_allow_access'],
+                childitems: {},
+                title: permissions[key].title,
+                id: permissions[key].id,
+                icon: permissions[key].icon,
+                link: permissions[key].link,
+                parent: permissions[key].parent,
+                description: permissions[key].description,
+                type: permissions[key].type
             }
+            if (permissions[key].type === 'crud') {
 
-            permissions[key].childitems.map((child) => {
+                if (permissions[key].childitems) {
+                    Object.keys(permissions[key].childitems).map((child_key, index) => {
+                        permissionObject[key]['childitems'][child_key] =
+                        {
+                            title: permissions[key].childitems[child_key].title,
+                            read_access: data[permissions[key].title + permissions[key].childitems[child_key].title + '_read'],
+                            create_access: data[permissions[key].title + permissions[key].childitems[child_key].title + '_create'],
+                            delete_access: data[permissions[key].title + permissions[key].childitems[child_key].title + '_delete'],
+                            update_access: data[permissions[key].title + permissions[key].childitems[child_key].title + '_update'],
+                            access: data[permissions[key].title + permissions[key].childitems[child_key].title + '_full'] ? 'full' : 'partial',
+                            id: permissions[key].childitems[child_key].id,
+                            icon: permissions[key].childitems[child_key].icon,
+                            link: permissions[key].childitems[child_key].link
+                        }
 
-                permissionObject[key]['childitems'].push(
-                    {
-                        title: child.title,
-                        read_access: data[permissions[key].title + child.title + '_read'],
-                        create_access: data[permissions[key].title + child.title + '_create'],
-                        delete_access: data[permissions[key].title + child.title + '_delete'],
-                        update_access: data[permissions[key].title + child.title + '_update'],
+                    })
+                } else {
+                    permissionObject[key] = {
+                        ...permissionObject[key],
+                        read_access: data[permissions[key].title + '_read'],
+                        create_access: data[permissions[key].title + '_create'],
+                        delete_access: data[permissions[key].title + '_delete'],
+                        update_access: data[permissions[key].title + '_update'],
+                        access: data[permissions[key].title + '_full'] ? 'full' : 'partial',
+                        id: permissions[key].id,
+                        icon: permissions[key].icon,
+                        link: permissions[key].link,
+                        parent: permissions[key].parent,
+                        description: permissions[key].description,
+                        type: permissions[key].type
                     }
-                )
-            })
+                    delete permissionObject[key].childitems
+                }
+            } else {
+                Object.keys(permissions[key].childitems).map((child_key, index) => {
+                    permissionObject[key]['childitems'][child_key] =
+                    {
+                        title: permissions[key].childitems[child_key].title,
+                        allow_access: data[permissions[key].title + permissions[key].childitems[child_key].title + '_allow_access'],
+                        id: permissions[key].childitems[child_key].id,
+                        icon: permissions[key].childitems[child_key].icon,
+                        link: permissions[key].childitems[child_key].link,
+                    }
+                })
+            }
         })
 
         let finalObject = {
@@ -95,9 +154,38 @@ export default function EditRole(props) {
             updated: Date.now(),
         }
 
+        // console.log(finalObject)
+        // console.log(permissions)
         const res = await UserService.updateRoles(id, finalObject)
         console.log(res)
     };
+
+    const fetch = async () => {
+        const users = await UserService.getUsers();
+        const roleUsers = await UserService.getUsersByRole(id)
+
+        if (roleUsers.data.success) {
+            setRoleUsers(roleUsers.data.data.results)
+        }
+
+        console.log(roleUsers, ' ===================')
+        const options = users.results.map((option => {
+            return { value: option.email, label: option.email }
+        }))
+        setUserOptions(options)
+        setUsers(users.results)
+    }
+    useEffect(() => {
+        fetch()
+
+    }, [])
+
+    const assignRole = async () => {
+        const res = await UserService.updateAdminUser(selectedUser[0].id, { group_id: id, permissions })
+        // console.log(selectedUser[0].id, ' yyyyyyyyyyyyyy ', id, '------------',permissions)
+        console.log(res)
+
+    }
 
 
     return (
@@ -242,6 +330,11 @@ export default function EditRole(props) {
                                     />
                                 </Col>
                             </Row>
+                            <div className="text-right margin-bottom-20">
+                                <button className="btn btn-secondary">
+                                    Save Changes
+                                </button>
+                            </div>
                         </NavTabContent>
                         <NavTabContent
                             id="permissions"
@@ -268,6 +361,7 @@ export default function EditRole(props) {
                                                             defaultChecked={permissions[key].allow_access}
                                                             name={permissions[key].title + '_allow_access'}
                                                             ref={register}
+                                                            onChange={e => console.log(e.target.value)}
 
                                                         />
                                                         <label className="custom-control-label" htmlFor={permissions[key].title + '_allow_access'}>
@@ -276,126 +370,282 @@ export default function EditRole(props) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="table-responsive">
-                                                <table className="table margin-bottom-0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">&nbsp;</th>
-                                                            <th scope="col" width="12%">None</th>
-                                                            <th scope="col" width="12%">Create</th>
-                                                            <th scope="col" width="12%">Read</th>
-                                                            <th scope="col" width="12%">Update</th>
-                                                            <th scope="col" width="12%">Delete</th>
-                                                            <th scope="col" width="12%">All</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {
-                                                            permissions[key].childitems.map((child) => {
-                                                                return <tr>
-                                                                    <th scope="row">{child.title}</th>
-                                                                    <td>
-                                                                        <div className="custom-control custom-checkbox">
-                                                                            <input
-                                                                                id={permissions[key].title + child.title + '_null_access'}
-                                                                                type="checkbox"
-                                                                                className="custom-control-input"
-                                                                                name={permissions[key].title + child.title + '_null_access'}
-                                                                                ref={register}
-                                                                            />
-                                                                            <label className="custom-control-label" htmlFor={permissions[key].title + child.title + '_null_access'}>
-                                                                                &nbsp;
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="custom-control custom-checkbox">
-                                                                            <input
-                                                                                id={permissions[key].title + child.title + '_create'}
-                                                                                type="checkbox"
-                                                                                className="custom-control-input"
-                                                                                defaultChecked={child.create_access}
-                                                                                name={permissions[key].title + child.title + '_create'}
-                                                                                ref={register}
-                                                                            />
-                                                                            <label className="custom-control-label" htmlFor={permissions[key].title + child.title + '_create'}>
-                                                                                &nbsp;
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="custom-control custom-checkbox">
-                                                                            <input
-                                                                                id={permissions[key].title + child.title + '_read'}
-                                                                                type="checkbox"
-                                                                                className="custom-control-input"
-                                                                                defaultChecked={child.read_access}
-                                                                                name={permissions[key].title + child.title + '_read'}
-                                                                                ref={register}
-                                                                            />
-                                                                            <label className="custom-control-label" htmlFor={permissions[key].title + child.title + '_read'}>
-                                                                                &nbsp;
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="custom-control custom-checkbox">
-                                                                            <input
-                                                                                id={permissions[key].title + child.title + '_update'}
-                                                                                type="checkbox"
-                                                                                className="custom-control-input"
-                                                                                defaultChecked={child.update_access}
-                                                                                name={permissions[key].title + child.title + '_update'}
-                                                                                ref={register}
-                                                                            />
-                                                                            <label className="custom-control-label" htmlFor={permissions[key].title + child.title + '_update'}>
-                                                                                &nbsp;
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="custom-control custom-checkbox">
-                                                                            <input
-                                                                                id={permissions[key].title + child.title + '_delete'}
-                                                                                type="checkbox"
-                                                                                className="custom-control-input"
-                                                                                defaultChecked={child.delete_access}
-                                                                                name={permissions[key].title + child.title + '_delete'}
-                                                                                ref={register}
-                                                                            />
-                                                                            <label className="custom-control-label" htmlFor={permissions[key].title + child.title + '_delete'}>
-                                                                                &nbsp;
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="custom-control custom-checkbox">
-                                                                            <input
-                                                                                id={permissions[key].title + child.title + '_full'}
-                                                                                type="checkbox"
-                                                                                className="custom-control-input"
-                                                                                defaultChecked={child.access === 'full' ? true : false}
-                                                                                name={permissions[key].title + child.title + '_full'}
-                                                                                ref={register}
-                                                                            />
-                                                                            <label className="custom-control-label" htmlFor={permissions[key].title + child.title + '_full'}>
-                                                                                &nbsp;
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
+                                            {permissions[key].type === 'crud' ?
+                                                <>
+                                                    <div className="table-responsive">
+                                                        <table className="table margin-bottom-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">&nbsp;</th>
+                                                                    <th scope="col" width="12%">None</th>
+                                                                    <th scope="col" width="12%">Create</th>
+                                                                    <th scope="col" width="12%">Read</th>
+                                                                    <th scope="col" width="12%">Update</th>
+                                                                    <th scope="col" width="12%">Delete</th>
+                                                                    <th scope="col" width="12%">All</th>
                                                                 </tr>
-                                                            })
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div className="divider-text divider-text--xs margin-top-20 margin-bottom-20">
-                                                &nbsp;
-                                            </div>
+                                                            </thead>
+                                                            <tbody>
+                                                                {permissions[key].childitems ?
+                                                                    Object.keys(permissions[key].childitems).map((child_key, index) => {
+                                                                        return <tr>
+                                                                            <th scope="row">{permissions[key].childitems[child_key].title}</th>
+                                                                            <td>
+                                                                                <div className="custom-control custom-checkbox">
+                                                                                    <input
+                                                                                        id={permissions[key].title + permissions[key].childitems[child_key].title + '_null_access'}
+                                                                                        type="checkbox"
+                                                                                        className="custom-control-input"
+                                                                                        name={permissions[key].title + permissions[key].childitems[child_key].title + '_null_access'}
+                                                                                        ref={register}
+                                                                                        onChange={() => { permissions[key].childitems[child_key].create_access = false }}
+                                                                                        defaultChecked={
+                                                                                            !permissions[key].childitems[child_key].create_access &&
+                                                                                                !permissions[key].childitems[child_key].read_access &&
+                                                                                                !permissions[key].childitems[child_key].update_access &&
+                                                                                                !permissions[key].childitems[child_key].delete_access ? true : false
+                                                                                        }
+                                                                                    />
+                                                                                    <label className="custom-control-label" htmlFor={permissions[key].title + permissions[key].childitems[child_key].title + '_null_access'}>
+                                                                                        &nbsp;
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="custom-control custom-checkbox">
+                                                                                    <input
+                                                                                        id={permissions[key].title + permissions[key].childitems[child_key].title + '_create'}
+                                                                                        type="checkbox"
+                                                                                        className="custom-control-input"
+                                                                                        defaultChecked={permissions[key].childitems[child_key].create_access}
+                                                                                        name={permissions[key].title + permissions[key].childitems[child_key].title + '_create'}
+                                                                                        ref={register}
+                                                                                    />
+                                                                                    <label className="custom-control-label" htmlFor={permissions[key].title + permissions[key].childitems[child_key].title + '_create'}>
+                                                                                        &nbsp;
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="custom-control custom-checkbox">
+                                                                                    <input
+                                                                                        id={permissions[key].title + permissions[key].childitems[child_key].title + '_read'}
+                                                                                        type="checkbox"
+                                                                                        className="custom-control-input"
+                                                                                        defaultChecked={permissions[key].childitems[child_key].read_access}
+                                                                                        name={permissions[key].title + permissions[key].childitems[child_key].title + '_read'}
+                                                                                        ref={register}
+                                                                                    />
+                                                                                    <label className="custom-control-label" htmlFor={permissions[key].title + permissions[key].childitems[child_key].title + '_read'}>
+                                                                                        &nbsp;
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="custom-control custom-checkbox">
+                                                                                    <input
+                                                                                        id={permissions[key].title + permissions[key].childitems[child_key].title + '_update'}
+                                                                                        type="checkbox"
+                                                                                        className="custom-control-input"
+                                                                                        defaultChecked={permissions[key].childitems[child_key].update_access}
+                                                                                        name={permissions[key].title + permissions[key].childitems[child_key].title + '_update'}
+                                                                                        ref={register}
+                                                                                    />
+                                                                                    <label className="custom-control-label" htmlFor={permissions[key].title + permissions[key].childitems[child_key].title + '_update'}>
+                                                                                        &nbsp;
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="custom-control custom-checkbox">
+                                                                                    <input
+                                                                                        id={permissions[key].title + permissions[key].childitems[child_key].title + '_delete'}
+                                                                                        type="checkbox"
+                                                                                        className="custom-control-input"
+                                                                                        defaultChecked={permissions[key].childitems[child_key].delete_access}
+                                                                                        name={permissions[key].title + permissions[key].childitems[child_key].title + '_delete'}
+                                                                                        ref={register}
+                                                                                    />
+                                                                                    <label className="custom-control-label" htmlFor={permissions[key].title + permissions[key].childitems[child_key].title + '_delete'}>
+                                                                                        &nbsp;
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="custom-control custom-checkbox">
+                                                                                    <input
+                                                                                        id={permissions[key].title + permissions[key].childitems[child_key].title + '_full'}
+                                                                                        type="checkbox"
+                                                                                        className="custom-control-input"
+                                                                                        defaultChecked={
+                                                                                            permissions[key].childitems[child_key].create_access &&
+                                                                                                permissions[key].childitems[child_key].read_access &&
+                                                                                                permissions[key].childitems[child_key].update_access &&
+                                                                                                permissions[key].childitems[child_key].delete_access ? true : false
+                                                                                        }
+                                                                                        name={permissions[key].title + permissions[key].childitems[child_key].title + '_full'}
+                                                                                        ref={register}
+                                                                                    />
+                                                                                    <label className="custom-control-label" htmlFor={permissions[key].title + permissions[key].childitems[child_key].title + '_full'}>
+                                                                                        &nbsp;
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    })
+                                                                    :
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            <div className="custom-control custom-checkbox">
+                                                                                <input
+                                                                                    id={permissions[key].title + '_null_access'}
+                                                                                    type="checkbox"
+                                                                                    className="custom-control-input"
+                                                                                    name={permissions[key].title + '_null_access'}
+                                                                                    ref={register}
+                                                                                    defaultChecked={
+                                                                                        !permissions[key].create_access &&
+                                                                                            !permissions[key].read_access &&
+                                                                                            !permissions[key].update_access &&
+                                                                                            !permissions[key].delete_access ? true : false
+                                                                                    }
+                                                                                />
+                                                                                <label className="custom-control-label" htmlFor={permissions[key].title + '_null_access'}>
+                                                                                    &nbsp;
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="custom-control custom-checkbox">
+                                                                                <input
+                                                                                    id={permissions[key].title + '_create'}
+                                                                                    type="checkbox"
+                                                                                    className="custom-control-input"
+                                                                                    defaultChecked={permissions[key].create_access}
+                                                                                    name={permissions[key].title + '_create'}
+                                                                                    ref={register}
+                                                                                />
+                                                                                <label className="custom-control-label" htmlFor={permissions[key].title + '_create'}>
+                                                                                    &nbsp;
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="custom-control custom-checkbox">
+                                                                                <input
+                                                                                    id={permissions[key].title + '_read'}
+                                                                                    type="checkbox"
+                                                                                    className="custom-control-input"
+                                                                                    defaultChecked={permissions[key].read_access}
+                                                                                    name={permissions[key].title + '_read'}
+                                                                                    ref={register}
+                                                                                />
+                                                                                <label className="custom-control-label" htmlFor={permissions[key].title + '_read'}>
+                                                                                    &nbsp;
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="custom-control custom-checkbox">
+                                                                                <input
+                                                                                    id={permissions[key].title + '_update'}
+                                                                                    type="checkbox"
+                                                                                    className="custom-control-input"
+                                                                                    defaultChecked={permissions[key].update_access}
+                                                                                    name={permissions[key].title + '_update'}
+                                                                                    ref={register}
+                                                                                />
+                                                                                <label className="custom-control-label" htmlFor={permissions[key].title + '_update'}>
+                                                                                    &nbsp;
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="custom-control custom-checkbox">
+                                                                                <input
+                                                                                    id={permissions[key].title + '_delete'}
+                                                                                    type="checkbox"
+                                                                                    className="custom-control-input"
+                                                                                    defaultChecked={permissions[key].delete_access}
+                                                                                    name={permissions[key].title + '_delete'}
+                                                                                    ref={register}
+                                                                                />
+                                                                                <label className="custom-control-label" htmlFor={permissions[key].title + '_delete'}>
+                                                                                    &nbsp;
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="custom-control custom-checkbox">
+                                                                                <input
+                                                                                    id={permissions[key].title + '_full'}
+                                                                                    type="checkbox"
+                                                                                    className="custom-control-input"
+                                                                                    defaultChecked={
+                                                                                        permissions[key].create_access &&
+                                                                                            permissions[key].read_access &&
+                                                                                            permissions[key].update_access &&
+                                                                                            permissions[key].delete_access ? true : false
+                                                                                    }
+                                                                                    name={permissions[key].title + '_full'}
+                                                                                    ref={register}
+                                                                                />
+                                                                                <label className="custom-control-label" htmlFor={permissions[key].title + '_full'}>
+                                                                                    &nbsp;
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div className="divider-text divider-text--xs margin-top-20 margin-bottom-20">
+                                                        &nbsp;
+                                                    </div>
+                                                </>
+
+                                                :
+                                                <div>
+                                                    <div style={{ display: 'flex' }}>
+                                                        {Object.keys(permissions[key].childitems).map((child_key, index) => {
+                                                            // {permissions[key].childitems[child_key].map((child) => {
+                                                            return <>
+                                                                <div className="margin-right-30">
+                                                                    <div className="custom-control custom-checkbox">
+                                                                        <input
+                                                                            id={permissions[key].title + permissions[key].childitems[child_key].title + '_allow_access'}
+                                                                            type="checkbox"
+                                                                            className="custom-control-input"
+                                                                            defaultChecked={permissions[key].childitems[child_key].allow_access}
+                                                                            name={permissions[key].title + permissions[key].childitems[child_key].title + '_allow_access'}
+                                                                            ref={register}
+
+                                                                        />
+                                                                        <label className="custom-control-label" htmlFor={permissions[key].title + permissions[key].childitems[child_key].title + '_allow_access'}>
+                                                                            {permissions[key].childitems[child_key].title}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </>
+                                                        })}
+                                                    </div>
+                                                    <div className="divider-text divider-text--xs margin-top-20 margin-bottom-20">
+                                                        &nbsp;
+                                                    </div>
+                                                </div>
+                                            }
                                         </>
                                     })}
-                                </>
 
+                                    <div className="text-right margin-bottom-20">
+                                        <button className="btn btn-secondary">
+                                            Save Changes
+                                        </button>
+                                    </div>
+                                </>
                             }
                         </NavTabContent>
                         <NavTabContent
@@ -407,15 +657,18 @@ export default function EditRole(props) {
                             <div className="margin-bottom-20">
                                 <div className="form-row">
                                     <div className="form-group col-md-6">
+
+
                                         <label>Username<span className="text-danger">*</span></label>
-                                        <input
-                                            type="text"
-                                            id="_suburb"
-                                            name="_suburb"
-                                            className="form-control"
-                                            onChange={e => handleFindUser(e.target.value)}
-                                            placeholder="Enter 4 or more characters"
-                                            value={selectedUser}
+                                        <Select
+                                            id="product_type"
+                                            name="product_type"
+                                            options={userOptions}
+                                            onChange={item => {
+                                                handleFindUser(item.value)
+                                            }}
+                                            className={`basic-multi-select form-control-m`}
+                                            classNamePrefix="select"
                                         />
                                     </div>
                                     <div className="form-group col-md-6">
@@ -440,7 +693,8 @@ export default function EditRole(props) {
                                     <button
                                         type="button"
                                         className="btn btn-outline-secondary"
-                                        disabled
+                                        disabled={!selectedUser}
+                                        onClick={assignRole}
                                     >
                                         Assign to role
                                     </button>
@@ -462,41 +716,40 @@ export default function EditRole(props) {
                                             </th>
                                             <th scope="col">Name</th>
                                             <th scope="col">Email/Username</th>
-                                            <th scope="col">Date Assigned</th>
+                                            {/* <th scope="col">Date Assigned</th> */}
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <label className="custom-control custom-checkbox">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="custom-control-input"
-                                                    />
-                                                    <span className="custom-control-label" />
-                                                </label>
-                                            </td>
-                                            <th scope="row">Thembinkosi Klein</th>
-                                            <td>thembinkosi@cbiglobal.io</td>
-                                            <td>22 November 2021</td>
-                                            <td width="40">
-                                                <button className="btn btn-outline-danger btn-sm btn-icon">
-                                                    <span className="fa fa-trash-o" />
-                                                </button>
-                                            </td>
-                                        </tr>
+
+                                        {roleUsers.length > 0 && roleUsers.map(user => {
+                                            return <tr>
+                                                <td>
+                                                    <label className="custom-control custom-checkbox">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="custom-control-input"
+                                                        />
+                                                        <span className="custom-control-label" />
+                                                    </label>
+                                                </td>
+                                                <th scope="row">{user.first_name} {user.last_name}</th>
+                                                <td>{user.email}</td>
+                                                {/* <td>22 November 2021</td> */}
+                                                <td width="40">
+                                                    <div className="btn btn-outline-danger btn-sm btn-icon" onClick={() => { removeUser(user.id) }}>
+                                                        <span className="fa fa-trash-o" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        })}
+
                                     </tbody>
                                 </table>
                             </div>
                         </NavTabContent>
                     </div>
                 </CardBody>
-                <div className="text-right margin-bottom-20 mr-4">
-                    <button className="btn btn-secondary">
-                        Save Changes
-                    </button>
-                </div>
             </form>
         </div>
     );

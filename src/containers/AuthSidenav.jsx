@@ -36,7 +36,6 @@ const NavItem = props => {
         role
     } = props;
 
-    // console.log(role, '-------------', childitems)
     return (
         <li
             className={activeClass(link) + openableClass(childitems) + openClass(id)}
@@ -53,10 +52,10 @@ const NavItem = props => {
                 <span className={`icon ${icon}`}></span>
                 <span className="text">{title}</span>
             </a>
-            {childitems && childitems.length > 0 &&
+            {childitems && childitems.length > 0 && 
                 <ul>
                     {childitems.map(childitem => (
-                        role && role.childitems &&
+                        role && role.childitems && role.childitems[childitem.id] && role.childitems[childitem.id].read_access &&
                         <SubNavItem
                             key={`${id}-${childitem.id}`}
                             {...childitem}
@@ -79,7 +78,6 @@ export default function AuthSidenav(props) {
 
     const fetchData = async () => {
         const role = await UserService.getUserRole();
-        console.log(role)
         setRole(role)
 
         // Object.keys(menu).map(section => {
