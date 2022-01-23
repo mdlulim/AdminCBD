@@ -230,8 +230,7 @@ export default function Transactions(props) {
       (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.subtype && item.subtype.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
+      (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredTransactions(filteredItems);
   }
@@ -396,6 +395,7 @@ export default function Transactions(props) {
                     } else {
                       setCsvTransactions(filteredTransactions)
                       setForBank(false)
+                      
                       csvDownloaderClick.current.click()
                     }
                   }}
