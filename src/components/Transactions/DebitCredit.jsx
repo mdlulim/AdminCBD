@@ -79,8 +79,6 @@ const Status = ({ status }) => {
 
 export default function MakeTransfer(props) {
     const [disabled, setDisabled] = useState(false);
-    const [transactions, setTransactions] = useState([]);
-    const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [selectedFromAccount, setSelectedFromAccount] = useState({});
     const [members, setMembers] = useState([]);
     const [selectedTxType, setSelectedTxTy] = useState({})
@@ -151,7 +149,7 @@ const recieverWallet = (item) =>{
     return (
         <Card className="o-hidden mb-4">
             <CardBody>
-            <form onSubmit={onSubmit}>
+         
             <Row>
                  <Col>
                 <div className="row g-3">
@@ -216,16 +214,8 @@ const recieverWallet = (item) =>{
                     </div>
                     </div>
                 </div>
-                <button
-                    type="submit"
-                    className="btn btn-info float-right"
-                            >
-                            {processing ? 'Processing...' : 'Submit'}
-                        </button>
-               
             </Col>
             </Row>
-            </form>
             </CardBody>
         </Card>
     );

@@ -32,6 +32,7 @@ const Filter = () => {
 export default function DebitCredit(props) {
     const [mainAccount, setMainAccount] = useState({});
     const [pageLoading, setPageLoading] = useState(true);
+    const [processing, setProcessing] = useState(false);
 
     async function fetchData() {
         const res = await AccountService.getMainAccount();
@@ -44,6 +45,10 @@ export default function DebitCredit(props) {
         fetchData()
 
       }, []);
+
+      const onSubmit2 = (data) => {
+            console.log("Test submit");
+      }
     return (
         <AuthLayout
             {...props}
@@ -56,16 +61,25 @@ export default function DebitCredit(props) {
             }}
         >
              {!pageLoading &&
-            <Card id="reports">
-                <Common.Widget
-                    icon="li-wallet"
-                    title="Debit Or Credit"
-                    subtitle="User Account"
-                    wrapperClass="widget--items-middle"
-                />
-                <hr className="margin-top-0 margin-bottom-0" />
-                <Transactions.DebitCredit />
-            </Card>}
+                    <Card id="reports">
+                          <form onSubmit={onSubmit2}>
+                        <Common.Widget
+                            icon="li-wallet"
+                            title="Debit Or Credit"
+                            subtitle="User Account"
+                            wrapperClass="widget--items-middle"
+                        />
+                        <hr className="margin-top-0 margin-bottom-0" />
+                       
+                        <button
+                    type="submit"
+                    className="btn btn-info float-right"
+                            >
+                            {processing ? 'Processing...' : 'Submit'}
+                        </button>
+                        <hr />
+                </form>
+                    </Card>}
         </AuthLayout>
     );
 }
