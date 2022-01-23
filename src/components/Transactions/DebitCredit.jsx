@@ -6,7 +6,7 @@ import DataTable from 'react-data-table-component';
 import { Modal } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
-import { TransactionService, MemberService, UserService } from '../../providers';
+import { AccountService, UserService, MemberService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
 import { Eye,  Edit,UserMinus} from 'react-feather';
 import { Icon } from '@material-ui/core';
@@ -116,54 +116,47 @@ export default function MakeTransfer(props) {
 const TransType = [ { name: 'credit',  label: 'Credit' },
                     { name: 'debit', label: 'Debit' }
                   ]
-const onTransfarSubmit= data => {
-  return confirmAlert({
-    title: 'Succcess',
-    message: 'Country was successfully Unblacklisted',
-    buttons: [
-      {
-        label: 'Ok',
-      }
-    ]
-  });
-  }
+const onSubmit= data => {
 
-  const makeTransfer = (data) =>{
-      //console.log(data)
-  }
+  console.log(data)
+  return data;
+  AccountService.debitCredit(data).then((response) =>{
+      if(response.data.success){
+            return confirmAlert({
+                title: 'Succcess',
+                message: 'Transaction was successfully updated',
+                buttons: [
+                {
+                    label: 'Ok',
+                }
+                ]
+            });
+      }
+ 
+  });
+
+}
 
 
 const recieverWallet = (item) =>{
     //Get member details
     MemberService.getMemberWallet(item.value).then((res) => {
-       const walletDetails = res.data.data;
+       const walletDetails = res;
        setWalletSender(walletDetails);
      });
      const userFee = fees.filter(fee => fee.name === item.group.name)[0];
      setUserType(userFee);
 }
 
-  const onSearchFilter = filterText => {
-    const filteredItems = transactions.filter(item => (
-      (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
-    ));
-    setFilteredTransactions(filteredItems);
-  }
-
     return (
         <Card className="o-hidden mb-4">
             <CardBody>
-           
+            <form onSubmit={onSubmit}>
             <Row>
                  <Col>
-            <h1>Credit/Debit User Account</h1>
-            {/* <span>Please use form below to specify details about your  transfer, and press submit button</span> */}
-            <hr />
-            <form onSubmit={onTransfarSubmit}>
                 <div className="row g-3">
                     <div className="col">
-                    <label for="inputEmail4" class="form-label">Specify reciepent by name or refferal</label>
+                    <label for="inputEmail4" class="form-label">Specify reciepent by name or refferal 1</label>
                     <Select
                                     id="status"
                                     name="status"
@@ -197,7 +190,7 @@ const recieverWallet = (item) =>{
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
                                     />
-                    <label for="inputEmail4" className="form-label">Enter CBI amount</label>
+                    <label for="inputEmail4" className="form-label">Amount In CBI</label>
                     <div className="input-group">
                         <input type="text" 
                         className="form-control" 
@@ -223,15 +216,16 @@ const recieverWallet = (item) =>{
                     </div>
                     </div>
                 </div>
-                <hr/>
                 <button
-                className="btn btn-primary"
-                disabled={disabled}>
-                            {processing ? 'Processing...' : 'SUBMIT QUEST'}
+                    type="submit"
+                    className="btn btn-info float-right"
+                            >
+                            {processing ? 'Processing...' : 'Submit'}
                         </button>
-                </form>
+               
             </Col>
             </Row>
+            </form>
             </CardBody>
         </Card>
     );

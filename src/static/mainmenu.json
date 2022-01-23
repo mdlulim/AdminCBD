@@ -101,6 +101,12 @@
                     "title": "Transfers",
                     "link": "/transfers",
                     "icon": null
+                },
+                {
+                    "id": "debit-or-credit",
+                    "title": "Debit/Credit",
+                    "link": "/debit-credit",
+                    "icon": null
                 }
             ]
         },{

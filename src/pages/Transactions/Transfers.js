@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
-import MakeTransfer from '../../components/Transactions/MakeTransfer';
+import MakeTransfer from '../../components/Transactions/DebitCredit';
 import { Common, Transactions } from 'components';
 
 const Filter = () => {
