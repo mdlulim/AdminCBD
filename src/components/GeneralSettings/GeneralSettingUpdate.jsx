@@ -40,6 +40,8 @@ const ModalChangeStatus = props => {
         setDisabled(true);
         setError('');
         let value = '';
+        const form = event.currentTarget;
+
         if(setting.key === 'otp_validity'){
             if(selectedMinite === ''){
                 value = setting.value;
@@ -50,7 +52,6 @@ const ModalChangeStatus = props => {
             value = form.tx_value.value ;
         }
 
-        const form = event.currentTarget;
         const data = {
             title: form.title.value,
             category: setting.category,
@@ -70,7 +71,12 @@ const ModalChangeStatus = props => {
                           {
                             label: 'Ok',
                             onClick: () => {
-                                window.location = '/configurations/settings';
+                                if(setting.category === 'commission'){
+                                    window.location = '/configurations/commissions';
+                                }else{
+                                    window.location = '/configurations/settings';
+                                }
+                                
                             }
                           }
                         ]
@@ -162,7 +168,7 @@ const ModalChangeStatus = props => {
                                      />
                             </div>
                                     : <div className="form-group">
-                                        <label htmlFor="value"> {setting.title} Value</label>
+                                        <label htmlFor="value">{setting.category === 'commission'? 'Commission Percentage': setting.title+' Value' }</label>
                                         <input
                                         type="text"
                                         id="tx_value"

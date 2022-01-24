@@ -74,7 +74,6 @@ export default function UpdateProductDetails(props) {
     const [disabled, setDisabled] = useState(false);
     const [activeTab, setActiveTab] = useState('referals');
     const [selectedGroup, setSelectedGroup] = useState('');
-    
     const [show, setShow] = useState(true);
     const [showCBIx7, setShowCBIx7] = useState(true);
     const [showFixedPlan, setShowFixedPlan] = useState(true);
@@ -91,44 +90,48 @@ export default function UpdateProductDetails(props) {
     const [products, setProducts] = useState([]);
     const [productCategories, setProductCategories] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [subcategories, setSubcategories] = useState([]);
+    const [filteredSubcategories, setFilteredSubcategories] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('');
     const { processing,confirmButtonDisabled, confirmButton,} = props;
     const [selectedCurrency, setSelectedCurrency] = useState('');
     const [selectedProductType, setSelectedProductType] = useState('');
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [ fees, setFees ] = useState({});
+    const [allowCancellation, setAllowCancellation] = useState(false);
+    const [selectedSubcategory, setSelectedSubcategory] = useState({});
     const params = useParams();
     const { id } = params;
 
+    async function fetchData(){
+        const poductsList = await ProductService.getProducts();
+        setProducts(poductsList.results);
 
-    useMemo(() => {
+        const categoryList = await ProductService.getProductCategories();
+        setCategories(categoryList.results);
+        let temp = [];
+        categoryList.results.filter(item => (
+                temp.push({ value: item.code, label: item.title, id: item.id })
+            ))
+        setProductCategories(temp);
 
-        ProductService.getProducts().then((res) => {
-            if(res.data.success){
-              const productlist = res.data.data.results;
-              setProducts(productlist);
-            }
-          });
+        const subcategoryList = await ProductService.getProductSubCategories();
+        setSubcategories(subcategoryList.results);
+        
 
-        ProductService.getProductCategories().then((res) => {
-             if(res.data.success){
-               const categoriesList = res.data.data.results;
-               setCategories(categoriesList);
-               let temp = [];
-               categoriesList.filter(item => (
-                     temp.push({ value: item.code, label: item.title })
-                    // console.log(item)
-                     //setProductCategories(productCategories => [{value:item.code, label:item.title}])
-                 ))
-               setProductCategories(temp);
-             }
-           });
-
-       //Get member details
-       ProductService.getProduct(id).then((res) => {
-         const productDetails = res.data.data;
-         console.log(res.data.data);
-         setProduct(productDetails);
+        const productDetails = await ProductService.getProduct(id);
+        const subcategoryFiltered= subcategoryList.results.filter(option => option.id === productDetails.subcategory_id);
+         let temp2 = [];
+         subcategoryFiltered.filter(item => (
+               temp2.push({ value: item.code, label: item.title, id: item.id, allow_cancellations: item.allow_cancellations })
+            ));
+            console.log(productDetails)
+        // //setSubcategories(sub)
+        setSelectedSubcategory({ value: subcategoryFiltered[0].code, label: subcategoryFiltered[0].title, id: subcategoryFiltered[0].id, allow_cancellations: subcategoryFiltered[0].allow_cancellations })
+        setAllowCancellation(subcategoryFiltered[0].allow_cancellations);
+           setProduct(productDetails);
+           setFilteredSubcategories(temp2)
+         //  setSelectedSubcategory(subcategoryList.filter(product => product.permakey === permakey));
             setSelectedProductType(productDetails.type);
             setSelectedCurrency(productDetails.currency_code);
             setEducatorFee(productDetails.educator_fee);
@@ -146,6 +149,7 @@ export default function UpdateProductDetails(props) {
                 setFees({
                         educator_percentage: parseFloat(productDetails.fees.educator_percentage),
                         registration_percentage: parseFloat(productDetails.fees.registration_percentage),
+                        cancellation_fee: subcategoryFiltered[0].allow_cancellations ? parseFloat(productDetails.fees.cancellation_fee) : '',
                         })
                     }
             }else if (productDetails.type === "CBIX7"){
@@ -158,6 +162,7 @@ export default function UpdateProductDetails(props) {
                     registration_fee: parseFloat(productDetails.fees.registration_fee),
                     slippage_percentage_buy: parseFloat(productDetails.fees.slippage_percentage_buy),
                     slippage_percentage_sell: parseFloat(productDetails.fees.slippage_percentage_sell),
+                    cancellation_fee: subcategoryFiltered[0].allow_cancellations ? parseFloat(productDetails.fees.cancellation_fee) : '',
                     })
             }
             }else if (productDetails.type === "FP"){
@@ -168,12 +173,18 @@ export default function UpdateProductDetails(props) {
                     setFees({
                         daily_interest  : parseFloat(productDetails.fees.daily_interest),
                         gross_return    : parseFloat(productDetails.fees.gross_return),
+                        cancellation_fee: subcategoryFiltered[0].allow_cancellations ? parseFloat(productDetails.fees.cancellation_fee) : '',
                         })
                 }
             }
-         //setEditorState(ContentState.convertToHTML(productDetails.body));
-        // setEditorState(EditorState.createWithContent(ContentState.createFromText(productDetails.body)));
-     });
+    }
+
+
+    useMemo(() => {
+
+        ProductService.getProductCategories().then((res) => {
+            fetchData()
+           });
 
       }, []);
     // table headings definition
@@ -192,6 +203,10 @@ export default function UpdateProductDetails(props) {
             { value: 'CBI',  label: 'CBI' },
           ];
 
+          const hasCancellationList = [
+            { value: 'false',  label: 'False' },
+            { value: 'true',  label: 'true' },
+          ];
           const statusOptions = [
             { value: 'Published',  label: 'Published' },
             { value: 'Achived', label: 'Achived' }
@@ -289,6 +304,7 @@ export default function UpdateProductDetails(props) {
                     fees             : {
                         daily_interest  : parseFloat(form.daily_interest.value),
                         gross_return    : parseFloat(form.gross_return.value),
+                        cancellation_fee: parseFloat(form.cancellation_fee.value),
                     }
                 }
                 update(data)
@@ -313,14 +329,14 @@ export default function UpdateProductDetails(props) {
     }
     return (
         <Row>
-                    <Col md={6} lg={6} xl={6}>
+                    <Col md={12} lg={12}>
                     <form onSubmit={onSubmitUpdate}>
                     { error ?
                         <div className="alert alert-warning" role="alert">
                         {error}
                         </div> : ''}
                                 <Row>
-                                <Col md={12}>
+                                <Col md={6}>
                                         <label htmlFor="product_type">Product Type</label>
                                         <Select
                                             id="product_type"
@@ -343,6 +359,23 @@ export default function UpdateProductDetails(props) {
                                             />
                                 </Col>
                                 <Col md={6}>
+                            <label htmlFor="product_type">Subcategory *</label>
+                            <Select
+                                id="product_type"
+                                name="product_type"
+                                value={product ? filteredSubcategories.filter(option => option.value === selectedSubcategory.value): ''}
+                                options={filteredSubcategories}
+                                onChange={item => {
+                                    setSelectedSubcategory(item)
+                                    console.log(item)
+                                    setAllowCancellation(item.allow_cancellations)
+                                }}
+                                className={`basic-multi-select form-control-m`}
+                                classNamePrefix="select"
+                                required
+                                />
+                        </Col>
+                                <Col md={12}>
                                         <label htmlFor="name">product Title</label>
                                         <input
                                             type="text"
@@ -366,24 +399,7 @@ export default function UpdateProductDetails(props) {
                                             />
                                 </Col>
                                 {selectedProductType === "CBIX7" ?
-                                <Col md={6}>
-                                        <label htmlFor="name">BBT Value (CBI)</label>
-                                        <input
-                                            type="text"
-                                            id="bbt_value"
-                                            name="bbt_value"
-                                            className="form-control form-control-m"
-                                            defaultValue={product ? product.bbt_value: ''}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorAmount(true)
-												}else{
-													setErrorAmount(false)
-												}
-                                            }}
-                                        />
-										<label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label>
-                                </Col>:
+                            '':
                                 <Col md={6}>
                                         <label htmlFor="name">Product Amount (CBI)</label>
                                         <input
@@ -472,7 +488,7 @@ export default function UpdateProductDetails(props) {
                                         />
                                 </Col>
                                 <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Investment Period (%)</label>
+                                        <label htmlFor="name">Investment Period (Weeks)</label>
                                         <input
                                             type="text"
                                             id="investment_period"
@@ -578,6 +594,25 @@ export default function UpdateProductDetails(props) {
 										<label hidden={errorSlippage} className="text-danger" htmlFor="name">Please enter a valid percentage</label>
                                 </Col>
   {/** =========================================================Fixed Plan================================================ */}
+                            { allowCancellation ?
+                                <Col md={6}>
+                                        <label htmlFor="name">Cancellation Fee (%) *</label>
+                                        <input
+                                            type="text"
+                                            id="cancellation_fee"
+                                            name="cancellation_fee"
+											className="form-control form-control-m"
+											onChange={event => {
+												if(!isNaN(+event.target.value)){
+													setErrorReg(true)
+												}else{
+													setErrorReg(false)
+												}
+                                            }}
+                                            defaultValue={fees.cancellation_fee}
+                                            required
+                                        />
+                                </Col> : ''}
                                 <Col md={6}>
                                         <label htmlFor="status">Status</label>
                                         <Select
@@ -613,48 +648,6 @@ export default function UpdateProductDetails(props) {
                                 </Row>
                                 </form>
                     </Col>
-                    <Col item lg={6} md={6} sm={6}>
-                            <Card className="mb-3">
-                                <CardBody>
-                                <div className="card-title mb-0">Performance</div>
-                                <Products.LineChart
-                                chartData={{
-                                    labels: ['Jul 2021', 'Aug 2021', 'Sept 2021', 'Oct 2021'],
-                                    datasets: [
-                                    {
-                                        label: '# Product Price',
-                                        data: [509, 590, 480, 767],
-                                        backgroundColor: [
-                                        '#86abc9',
-                                        '#2196f3',
-                                        '#d22346',
-                                        'rgba(249, 194, 50, 1)',
-                                        ],
-                                        borderColor: [
-                                        'rgba(249, 194, 50, 1)',
-                                        '#f8f9fa',
-                                        '#d22346',
-                                        'rgba(249, 194, 38, 0.44)',
-                                        ],
-                                        borderWidth: 1,
-                                    },
-                                    ],
-                                }}
-                                options={{
-                                    plugins: {
-                                    legend: {
-                                        display: false
-                                    }
-                                    }
-                                }}
-                                />
-                                <hr />
-                                {/* <p>The returns displayed do not include the fees and expenses that are charged. 
-                                    Please refer to our fees page and additional 
-                                    important disclaimers and risk disclosures.</p> */}
-                                </CardBody>
-                            </Card>
-                        </Col>
         </Row>
         
     );

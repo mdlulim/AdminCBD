@@ -98,7 +98,7 @@ const Money = (row) => {
 
 
 export default function Transactions(props) {
-  const { transactionType, permissions } = props;
+  const { transactionType, setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [showBulk, setShowBulk] = useState(false);
@@ -160,9 +160,11 @@ export default function Transactions(props) {
           setFilteredTransactions(transaList);
         }
       }
+
+      setPageLoading(false);
     });
 
-  }, []);
+  }, [setPageLoading]);
 
 
 

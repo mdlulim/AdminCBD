@@ -38,9 +38,8 @@ const ProductDetails = props => {
     useMemo(() => {
         //Get member details
         ProductService.getProduct(id).then((res) => {
-           console.log(res.data);
            
-            const productDetails = res.data.data;
+            const productDetails = res;
             if(productDetails){
                 setProduct(productDetails);
                 setSelectedProductType(productDetails.type);
@@ -53,7 +52,6 @@ const ProductDetails = props => {
                     setShow(false)
                 }
             }
-            return 'Mdu';
             //setEditorState(ContentState.convertToHTML(productDetails.body));
            // setEditorState(EditorState.createWithContent(ContentState.createFromText(productDetails.body)));
         });

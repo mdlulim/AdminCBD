@@ -34,6 +34,34 @@ class ProductService {
     })
   }
 
+  static async getProductCancellations() {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/cancellations`,
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
+    })
+  }
+
+  static async updateCancellationRequest(type, data) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'POST',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/cancellations/${type}`,
+      data,
+    })
+      .then(json => json.data)
+      .then(res => res);
+  }
+
   static async getProductHistory() {
     //console.log(authToken)
     return await axios({
@@ -52,12 +80,34 @@ class ProductService {
   }
 
   static async getProductCategories() {
-    console.log(authToken)
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products/categories`,
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
+    });
+  }
+
+  static async getProductSubCategories() {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories`,
+    }).then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
+      }
+      return [];
     });
   }
 
@@ -70,12 +120,35 @@ class ProductService {
     });
   }
 
+  static async getProductSubcategory(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories/${id}`,
+    }).then((res) =>{
+      if(res.data.success){
+        return res.data.data;
+      }else{
+        return {};
+      }
+      
+    });
+  }
+
   static async getProduct(id) {
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products/${id}`,
+    }).then((res) =>{
+      if(res.data.success){
+        return res.data.data;
+      }else{
+        return {};
+      }
+      
     });
   }
 
@@ -141,6 +214,40 @@ class ProductService {
       url: `${Config.API.BASE_URL}/products/${id}`,
     }).then((res) =>{
       const result = {status: res.data.status, message: res.data.message}
+      return result;
+    });
+  }
+
+  static async getCancelledProcucts(){
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/cancel`,
+    })
+  }
+
+
+  static async updateCancellationStatus(id, status){
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      data: {id, status},
+      headers,
+      url: `${Config.API.BASE_URL}/products/cancel`
+    })
+  }
+
+
+  static async updateProductSubcategory(id, product){
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      data: product,
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories/${id}`,
+    }).then((res) =>{
+      const result = res.data;
       return result;
     });
   }

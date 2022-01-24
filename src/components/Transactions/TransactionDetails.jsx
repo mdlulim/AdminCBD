@@ -57,9 +57,8 @@ const TransactionDetails = props => {
         }
 
         if (selectedStatus.value === "Completed") {
-            console.log(processing ? 'yes': 'No');
             TransactionService.approveDeposit(transaction.id, data2).then((response) => {
-
+                 console.log(response.data)
                 if (response.data.success === true) {
                     // MemberService.updateStatus(transaction.user_id, 'Active').then((response) => {
                     //     console.log(response);
@@ -78,15 +77,16 @@ const TransactionDetails = props => {
                 } else {
                     setDisabled(false);
                     setProcessing(false);
-                    return confirmAlert({
-                        title: 'Error Message',
-                        message: response.data.message,
-                        buttons: [
-                            {
-                                label: 'Ok',
-                            }
-                        ]
-                    });
+                    setError(response.data.message)
+                    // return confirmAlert({
+                    //     title: 'Error Message',
+                    //     message: response.data.message,
+                    //     buttons: [
+                    //         {
+                    //             label: 'Ok',
+                    //         }
+                    //     ]
+                    // });
                    // setError('Something went wrong while trying to update members status');
                 }
             })
@@ -139,6 +139,10 @@ const TransactionDetails = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success">Transaction Details</h3>
                         <hr />
+                        { error ?
+                        <div className="alert alert-warning" role="alert">
+                        {error}
+                        </div> : ''}
                         <form onSubmit={onSubmit}>
                             <div className="form-row">
                                 <div className="col">

@@ -2,19 +2,15 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { Common, Pagination, Members } from 'components';
 import { AuthLayout } from 'containers';
-import { MemberService } from '../../providers';
 
-
-let baseURL = window.location.origin;
-
-    let page = (window.location.pathname.split('/').pop()).toLowerCase();
 
 export default function MembersPage(props) {
-    const [members, setMembers] = useState([]);
+    const [pageLoading, setPageLoading] = useState(true);
 
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
                 active: "Pending Members"
@@ -32,7 +28,7 @@ export default function MembersPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                    <Members.Members status={'pending'} />
+                    <Members.Members status={'Pending'} setPageLoading={setPageLoading} />
                 </CardBody>
             </Card>
         </AuthLayout>

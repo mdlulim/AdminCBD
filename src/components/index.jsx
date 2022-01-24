@@ -21,10 +21,13 @@ import FormsConfig from './FormsConfig';
 import KYC from './KYC';
 import ProductCategory from './ProductCategory';
 import Settings from './Settings';
+import Reports from './Reports';
 import GeneralSettings from './GeneralSettings';
 import BankAccounts from './BankAccounts';
 import MainAccount from './MainAccount';
 import Users from './Users';
+import Commission from './Commission';
+import ProductConfig from './ProductConfig';
 
 export {
     Breadcrumb,
@@ -50,8 +53,11 @@ export {
     KYC,
     ProductCategory,
     Settings,
+    Reports,
     GeneralSettings,
     BankAccounts,
     MainAccount,
     Users,
+    Commission,
+    ProductConfig,
 };

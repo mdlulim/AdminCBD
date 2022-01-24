@@ -1,5 +1,4 @@
 import React from 'react';
-import { Edit, Settings } from 'react-feather';
 import { confirmAlert } from 'react-confirm-alert';
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';

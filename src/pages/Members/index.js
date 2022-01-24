@@ -7,30 +7,26 @@ import { MemberService } from '../../providers';
 
 let baseURL = window.location.origin;
 
-    let page = (window.location.pathname.split('/').pop()).toLowerCase();
+let page = (window.location.pathname.split('/').pop()).toLowerCase();
 
 export default function MembersPage(props) {
     const [members, setMembers] = useState([]);
     const [pageLoading, setPageLoading] = useState(true);
 
-    async function fetchData(){
+    async function fetchData() {
         const memberslist = await MemberService.getMembers();
-            setMembers(memberslist.results);
-            setPageLoading(false);
+        setMembers(memberslist.results);
+        setPageLoading(false);
     }
 
     useEffect(() => {
         fetchData()
-    }, [
-        setPageLoading,
-    ]);
+    }, [setPageLoading]);
 
     const countMembers = (type) => {
         const countTypes = members.filter(member => member.status === type);
         return countTypes.length;
     }
-
-    if (pageLoading) return <Loader.Default />;
 
     return (
         <AuthLayout
@@ -87,11 +83,11 @@ export default function MembersPage(props) {
                 <Common.Widget
                     icon="li-users"
                     title="Members"
-                    subtitle={'Total Members '+members.length}
+                    subtitle={'Total Members ' + members.length}
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                    <Members.Members status={'add'} pageLoading={pageLoading} setPageLoading={setPageLoading} {...props}/>
+                    <Members.Members status={'all'} pageLoading={pageLoading} setPageLoading={setPageLoading} {...props}/>
                 </CardBody>
             </Card>
         </AuthLayout>

@@ -66,7 +66,7 @@ const Status = ({ status }) => {
 };
 
 export default function WealthCreaters(props) {
-  const { permissions } = props;
+  const { setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [wealthCreaters, setWealthCreaters] = useState([]);
@@ -79,6 +79,7 @@ export default function WealthCreaters(props) {
       const wealthCreaterslist = res.data.data.results;
       setWealthCreaters(wealthCreaterslist);
       setFilteredWealthCreaters(wealthCreaterslist);
+      setPageLoading(false)
     });
 
 

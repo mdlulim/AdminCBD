@@ -3,6 +3,7 @@ import { Card } from 'reactstrap';
 import { Common, Users } from 'components';
 import { AuthLayout } from 'containers';
 import { UserService } from 'providers';
+import { confirmAlert } from 'react-confirm-alert';
 
 const Filter = ({ id, setShowFixedPanel }) => (
     <Common.Dropdown
@@ -35,6 +36,9 @@ export default function EditUserPage(props) {
     const [user, setUser] = useState({});
     const [roles, setRoles] = useState([]);
     const [pageLoading, setPageLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [dissbled, setDisabled] = useState(false);
+    const [processing, setProcessing] = useState(false);
     const [showFixedPanel, setShowFixedPanel] = useState(false);
     const [fixedPanelContent, setFixedPanelContent] = useState(null);
 
@@ -54,6 +58,53 @@ export default function EditUserPage(props) {
     useEffect(() => {
         fetchData();
     }, []);
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        if(!form.group_id.value){
+            setError('Validation error. Please select admin user role!')
+            setDisabled(false)
+            return 'Validation error. Please select admin user role'
+        }
+
+        if(form.first_name.value === '' || form.last_name.value === '' || form.email.value === '' || form.username.value === '' || form.status.value === ''){
+            setError('Validation error. All field are required!')
+            setDisabled(false)
+            return 'All field are required!'
+        }
+
+        const role = roles.filter(option => option.id === form.group_id.value)[0];
+        const data = {
+                first_name  : form.first_name.value,
+                last_name   : form.last_name.value,
+                email       : form.email.value,
+                username    : form.username.value,
+                mobile      : form.mobile.value,
+                status      : form.status.value,
+                group_id    : form.group_id.value,
+                permissions : user.permissions ? user.permissions : role.permissions,
+            };
+
+            UserService.updateUser(user.id, data).then((response) => {
+                console.log(response)
+                if (response.success) {
+                    return confirmAlert({
+                        title: 'Succcess',
+                        message: 'User was successfully updated',
+                        buttons: [
+                            {
+                                label: 'Ok',
+                            }
+                        ]
+                    });
+                } else {
+                    setError(response.message);
+                }
+                setDisabled(false);
+                setProcessing(false);
+            })
+    }
 
     return (
         <AuthLayout
@@ -79,6 +130,7 @@ export default function EditUserPage(props) {
             }}
         >
             {!pageLoading &&
+             <form onSubmit={onSubmit}>
             <div id="users">
                 <Card className="margin-bottom-15">
                     <Common.Widget
@@ -89,12 +141,14 @@ export default function EditUserPage(props) {
                     />
                     <Users.Edit {...user} roles={roles} />
                 </Card>
-                {/* <div className="text-right margin-bottom-20">
-                    <button className="btn btn-secondary">
+                <div className="text-right margin-bottom-20">
+                    <button type="submit" className="btn btn-secondary">
                         Save Changes
                     </button>
-                </div> */}
-            </div>}
+                </div>
+            </div>
+            </form>
+            }
         </AuthLayout>
     );
 } 

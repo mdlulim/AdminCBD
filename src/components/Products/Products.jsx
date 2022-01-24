@@ -8,6 +8,8 @@ import { useHistory } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
 import DeleteProductAlert from './DeleteProductAlert';
 import { ProductService } from '../../providers';
+import { Loader } from 'components';
+
 // styles
 const customStyles = {
 
@@ -62,7 +64,7 @@ const Image = () => {
 };
 
 export default function Products(props) {
-  const { permissions } = props;
+  const { setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showResend, setShowResend] = useState(false);
@@ -74,13 +76,16 @@ export default function Products(props) {
 
   useMemo(() => {
 
-    ProductService.getProducts().then((res) => {
-      const productlist = res.results;
-      setProducts(productlist);
-      setFilteredProducts(productlist);
-    });
+      ProductService.getProducts().then((res) => {
+          const productlist = res.results;
+          console.log(productlist)
+          setProducts(productlist);
+          setFilteredProducts(productlist);
 
-  }, []);
+          setPageLoading(false)
+      });
+
+  }, [setPageLoading]);
   // table headings definition
   const columns = [
     {
@@ -178,7 +183,7 @@ export default function Products(props) {
     setFilteredProducts(filteredItems);
   }
 
-
+  // if (pageLoading) return <Loader.Default />;
   return (
     <Card className="o-hidden mb-4">
       <DeleteProductAlert show={showDelete} setShow={setShowDelete} product={selectedProduct} />

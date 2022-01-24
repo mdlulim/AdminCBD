@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
 import { Products } from 'components';
@@ -14,8 +14,11 @@ let page = (window.location.pathname.split('/').pop()).toLowerCase();
 // }
 const ProductHistory = props => {
 	const breadcrumb = { heading: "Products History" };
+	const [pageLoading, setPageLoading] = useState(true);
+
 	return (
 		<AuthLayout {...props}
+		loading={pageLoading}
 		breadcrumb={{ active: "Products History" }}
 		pageHeading={{
 			title: 'Products History',
@@ -24,7 +27,7 @@ const ProductHistory = props => {
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
 				<Col md={12}>
-                    <Products.ProductHistory />
+                    <Products.ProductHistory pageLoading={pageLoading} setPageLoading={setPageLoading}/>
                 </Col>
 				</Col>
 			</Row>

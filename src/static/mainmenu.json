@@ -47,21 +47,26 @@
                     "icon": null
                 },
                 {
-                    "id": "history",
-                    "title": "Product History",
-                    "link": "/products/history",
+                    "id": "categories",
+                    "title": "Categories",
+                    "link": "/products/categories",
                     "icon": null
                 },
                 {
-                    "id": "categories",
-                    "title": "Categories",
-                    "link": "/categories",
+                    "id": "subcategories",
+                    "title": "Subcategories",
+                    "link": "/products/subcategories",
                     "icon": null
                 },
                 {
                     "id": "cancellations",
                     "title": "Cancellations",
-                    "link": "/cancellations",
+                    "link": "/products/cancellations",
+                    "icon": null
+                },{
+                    "id": "history",
+                    "title": "Product History",
+                    "link": "/products/history",
                     "icon": null
                 }
             ]
@@ -103,7 +108,7 @@
             "title": "Bank Accounts",
             "description": "Manage bank accounts",
             "link": "/bank-accounts",
-            "icon": "li-cash-dollar",
+            "icon": "li-toggle",
             "childitems": []
         },
         {
@@ -111,7 +116,7 @@
             "title": "Main Account",
             "description": "manage company main account",
             "link": "/main-account",
-            "icon": "li-cash-dollar",
+            "icon": "li-wallet",
             "childitems": []
         },
         {
@@ -119,7 +124,15 @@
             "title": "KYC",
             "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
             "link": "/kyc",
-            "icon": "li-layers",
+            "icon": "li-profile",
+            "childitems": []
+        },
+        {
+            "id": "reports",
+            "title": "Reports",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/reports",
+            "icon": "li-chart-growth",
             "childitems": []
         }
     ],

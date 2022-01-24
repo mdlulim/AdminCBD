@@ -1,18 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import Moment from 'react-moment';
-import { HashLinkContainer } from 'components';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
 import TransactionDetails from '../Transactions/TransactionDetails';
-import DeleteAlert from './DeleteAlert';
 import { MemberService, TransactionService } from '../../providers';
 //import FeatherIcon from '../FeatherIcon';
-import { Eye, Edit, UserMinus } from 'react-feather';
-import { Icon } from '@material-ui/core';
-import PropTypes from 'prop-types';
 // styles
 const customStyles = {
 
@@ -69,9 +64,8 @@ const Status = ({ status }) => {
 };
 
 export default function Members(props) {
-  const { status, permissions } = props;
+  const { status, setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
-  const [pageLoading, setPageLoading] = useState(true);
   const [showTransaction, setShowTransaction] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [members, setMembers] = useState([]);
@@ -83,17 +77,22 @@ export default function Members(props) {
 
   async function fetchData() {
     const memberslist = await MemberService.getMembers();
-    setMembers(memberslist.results);
-    setFilteredMembers(memberslist.results);
-    //  setPageLoading(false);
+    if(status != 'all'){
+      const results = memberslist.results.filter(item => item.status === status);
+      setMembers(results);
+      setFilteredMembers(results);
+    }else{
+      setMembers(memberslist.results);
+      setFilteredMembers(memberslist.results);
+    }
+    
+    setPageLoading(false);
   }
 
   useMemo(() => {
     fetchData();
 
-  }, [
-    setPageLoading,
-  ]);
+  }, [setPageLoading,]);
   // table headings definition
   const columns = [{
     name: '',
@@ -190,11 +189,14 @@ export default function Members(props) {
       const transaList = res.data.data.results;
       if (transaList.length) {
         TransactionService.getTransactionPOP(transaList[0].txid).then((res) => {
-          const pop = res.data.data.rows;
-          const url = pop[0].file;
-          TransactionService.getTransactionPOPFile(url).then((res) => {
-            setSelectedTransPOP(res.data);
-          })
+          console.log(res.data);
+          if(res.data){
+              const pop = res.data.data.rows;
+              const url = pop[0].file;
+              TransactionService.getTransactionPOPFile(url).then((res) => {
+                setSelectedTransPOP(res.data);
+              })
+          }
         });
 
         setTransaction(transaList[0])
