@@ -86,6 +86,7 @@ export default function AuthSidenav(props) {
         if (SessionProvider.isValid()) {
             user = SessionProvider.get();
             setUser(user)
+            fetchData()
         } else {
             window.location = '/login';
         }
@@ -100,8 +101,6 @@ export default function AuthSidenav(props) {
                 setNavClass('');
             }
         });
-
-        fetchData()
     }, [match, setNavClass]);
 
     const activeClass = link => {
