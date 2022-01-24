@@ -28,6 +28,7 @@ const ProductCategories = props => {
                     <ProductCategory.Categories
 						pageLoading={pageLoading}
 						setPageLoading={setPageLoading}
+						{...props}
 					/>
 				</Col>
 			</Row>

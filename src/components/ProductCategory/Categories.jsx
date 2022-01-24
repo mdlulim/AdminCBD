@@ -61,7 +61,7 @@ const Image = () => {
 };
 
 export default function Products(props) {
-  const { setPageLoading, pageLoading } = props;
+  const { setPageLoading, pageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showResend, setShowResend] = useState(false);
@@ -115,12 +115,15 @@ export default function Products(props) {
       width: '80px',
       cell: row => (
         <div className="text-right">
-          <span style={iconPadding}>
-            <a href={`categories/${row.id}`}
-              className="btn btn-light btn-sm btn-icon"
+          {permissions && permissions.update_access &&
+            <span style={iconPadding}>
+              <a href={`categories/${row.id}`}
+                className="btn btn-light btn-sm btn-icon"
 
-            > <span className="fa fa-pencil" />
-            </a></span>
+              > <span className="fa fa-pencil" />
+              </a>
+            </span>
+          }
         </div>
       )
     }];
@@ -153,15 +156,18 @@ export default function Products(props) {
             placeholder="Search..."
             onKeyUp={e => onSearchFilter(e.target.value)}
           />
-          <div>
-            <a
-              href={`categories/add`}
-              className="btn btn-secondary">
-              Add Category
-            </a>
-          </div>
-        </div>
-      </CardBody>
+          {
+            permissions && permissions.create_access &&
+            <div>
+              <a
+                href={`categories/add`}
+                className="btn btn-secondary">
+                Add Category
+              </a>
+            </div>
+          }
+        </div >
+      </CardBody >
       <DataTable
         data={filteredCategories}
         columns={columns}
@@ -171,6 +177,6 @@ export default function Products(props) {
         highlightOnHover
         pagination
       />
-    </Card>
+    </Card >
   );
 }

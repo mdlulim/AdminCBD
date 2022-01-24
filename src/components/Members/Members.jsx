@@ -64,7 +64,7 @@ const Status = ({ status }) => {
 };
 
 export default function Members(props) {
-  const { status, setPageLoading } = props;
+  const { status, setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showTransaction, setShowTransaction] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -148,25 +148,28 @@ export default function Members(props) {
       >
         <span className="fa fa-eye" />
       </a></div>
-      <div style={iconPadding}>
-        {row.status === 'Pending' ?
-          <a
-            href={`#`}
-            className="btn btn-light btn-sm btn-icon"
-            onClick={e => {
-              e.preventDefault();
-              onSubmitApproveMember(row);
-            }}
-          > <span className="fa fa-pencil" />
-          </a> : <a
-            href={`#`}
-            className="btn btn-light btn-sm btn-icon"
-            onClick={e => {
-              e.preventDefault();
-              onSubmitChangeStatus(row);
-            }}
-          > <span className="fa fa-pencil" />
-          </a>} </div>
+      {permissions && permissions.update_access &&
+        <div style={iconPadding}>
+          {row.status === 'Pending' ?
+            <a
+              href={`#`}
+              className="btn btn-light btn-sm btn-icon"
+              onClick={e => {
+                e.preventDefault();
+                onSubmitApproveMember(row);
+              }}
+            > <span className="fa fa-pencil" />
+            </a> : <a
+              href={`#`}
+              className="btn btn-light btn-sm btn-icon"
+              onClick={e => {
+                e.preventDefault();
+                onSubmitChangeStatus(row);
+              }}
+            > <span className="fa fa-pencil" />
+            </a>}
+        </div>
+      }
     </div>
   }];
 

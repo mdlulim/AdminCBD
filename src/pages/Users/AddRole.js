@@ -15,11 +15,13 @@ export default function AddRolesPage(props) {
         const { search } = location;
         const parsed = queryString.parse(search);
         const roles = await UserService.getRoles();
+
         setRoles(roles.results || []);
         if (parsed.parent) {
             const role = await UserService.getRole(parsed.parent);
             setParentRole((role && role.id) ? role : null);
         }
+
         setPageLoading(false);
     }
 
@@ -63,13 +65,10 @@ export default function AddRolesPage(props) {
                         roles={roles}
                         parent={parentRole}
                         handleParentChange={handleParentChange}
+                        pageLoading={pageLoading}
+                        setPageLoading={setPageLoading}
                     />
                 </Card>
-                <div className="text-right margin-bottom-20">
-                    <button className="btn btn-secondary">
-                        Save Changes
-                    </button>
-                </div>
             </div>}
         </AuthLayout>
     );

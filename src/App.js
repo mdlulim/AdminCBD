@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { BrowserRouter as Router,Route,Redirect,Switch} from 'react-router-dom';
 
 import { AuthContext } from 'context/auth';
@@ -52,6 +52,7 @@ import UserPermissions from 'pages/UserPermissions';
 import BankAccounts from 'pages/BankAccounts';
 import SendOTPBankAccounts from 'pages/BankAccounts/SendOPTBankAccount';
 import KYC from 'pages/KYC';
+import { UserService } from 'providers';
 import ProductCancel from 'pages/Products/ProductCancel';
 import ProductSubCategories from './pages/Products/SubCategories';
 import ProductUpdateSubCategory from './pages/Products/UpdateSubCategory';
@@ -61,11 +62,23 @@ const App = () => {
 	const settings = config;
 	const [authTokens, setAuthTokens] = useState();
 	const [menu, setMenu] = useState([]);
+	const [role, setRole] = useState(null)
 
 	const setTokens = (data) => {
 		localStorage.setItem('tokens', JSON.stringify(data));
 		setAuthTokens(data);
 	}
+
+	const fetchData = async () => {
+        const role = await UserService.getUserRole();
+        setRole(role)
+		// console.log(role, " =========")
+    }
+
+	useMemo(()=>{
+		fetchData()
+	},[])
+
 
 	return (
 		<AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
@@ -76,13 +89,13 @@ const App = () => {
 					<Route exact path="/forgot-password" component={(props) => <AuthForgotPassword config={settings} {...props} setMenu={setMenu} />} />
 					<PrivateRoute exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/pending" component={(props) => <MembersPending config={settings} {...props} menu={menu} />} />
-					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} menu={menu} />} />
+					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} menu={menu} />} permissions={role?role.permissions.members.childitems.members:null}/>
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/leads" component={(props) => <Leads config={settings} {...props} menu={menu} />} />
-					<Route exact path="/members/wealth-creators" component={(props) => <WealthCreater config={settings} {...props} menu={menu} />} />
+					<Route exact path="/members/wealth-creators" component={(props) => <WealthCreater config={settings} {...props} menu={menu} permissions={role?role.permissions.members.childitems['wealth-creators']:null}/>} />
 
-					<Route exact path="/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/users/roles" component={(props) => <Roles config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/users" component={(props) => <Users config={settings} {...props} setMenu={setMenu} permissions={role?role.permissions.users.childitems['manage-users']:null}/>} />
+					<Route exact path="/users/roles" component={(props) => <Roles config={settings} {...props} setMenu={setMenu} permissions={role?role.permissions.users.childitems['manage-roles']:null}/>} />
 					<Route exact path="/users/add" component={(props) => <AddUser config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/users/:id" component={(props) => <EditUser config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/users/roles/add" component={(props) => <AddRole config={settings} {...props} setMenu={setMenu} />} />
@@ -101,21 +114,27 @@ const App = () => {
 					<Route exact path="/bank-accounts/:id" component={(props) => <SendOTPBankAccounts config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/transactions/:id" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/main-account" component={(props) => <CompanyAccount config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/transactions/deposits" component={(props) => <Deposits config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/transactions/deposits" component={(props) => <Deposits config={settings} {...props} setMenu={setMenu} permissions={role?role.permissions.transactions.childitems.deposits:null} />} />
 					{/* <Route exact path="/transactions/rejected" component={(props) => <Canceled config={settings} {...props} setMenu={setMenu} />} /> */}
 					<Route exact path="/transactions/import" component={(props) => <TransactionImport config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/transactions/transfers" component={(props) => <Transfers config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/transactions/transfers" component={(props) => <Transfers config={settings} {...props} setMenu={setMenu} />} permissions={role?role.permissions.transactions.childitems.transfers:null} />
 					{/* <Route exact path="/transactions/completed" component={(props) => <Completed config={settings} {...props} setMenu={setMenu} />} /> */}
 					{/* <Route exact path="/transactions/pending" component={(props) => <Pending config={settings} {...props} setMenu={setMenu} />} /> */}
+<<<<<<< HEAD
 					<Route exact path="/transactions/withdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions/debit-credit" component={(props) => <DebitCredit config={settings} {...props} setMenu={setMenu} />} />
 
 					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} />} />
+=======
+					<Route exact path="/transactions/withdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} permissions={role?role.permissions.transactions.childitems.withdrawals:null}/>
+					<Route exact path="/transactions/transfers/transfer" component={(props) => <MakeTransferPage config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} permissions={role?role.permissions.products.childitems.products:null} />} />
+>>>>>>> 08b2ededf4777f4f849c50ecb49a4b7c9ae19252
 					<Route exact path="/products/cancellations" component={(props) => <ProductCancellations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/history" component={(props) => <ProductHistory config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/products/categories" component={(props) => <ProductCategories config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/products/categories/add" component={(props) => <CategoryNew config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/products/categories/:id" component={(props) => <CategoryUpdate config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/categories" component={(props) => <ProductCategories config={settings} {...props} setMenu={setMenu} permissions={role?role.permissions.products.childitems.categories:null} />} />
+					<Route exact path="/categories/add" component={(props) => <CategoryNew config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/categories/:id" component={(props) => <CategoryUpdate config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/add" component={(props) => <ProductAddNew config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/cancel" component={(props) => <ProductCancel config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/subcategories" component={(props) => <ProductSubCategories config={settings} {...props} setMenu={setMenu} />} />

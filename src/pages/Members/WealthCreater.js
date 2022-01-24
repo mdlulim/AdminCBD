@@ -39,7 +39,7 @@ export default function WealthCreatersPage(props) {
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Members.WealthCreaters setPageLoading={setPageLoading}/>
+                <Members.WealthCreaters setPageLoading={setPageLoading} {...props}/>
                 </Col>
             </div>
         </AuthLayout>

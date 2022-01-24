@@ -28,7 +28,7 @@ const ProductsList = props => {
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
 					<Col md={12}>
-						<Products.Products pageLoading={pageLoading} setPageLoading={setPageLoading} />
+						<Products.Products pageLoading={pageLoading} setPageLoading={setPageLoading} {...props}/>
 					</Col>
 				</Col>
 			</Row>

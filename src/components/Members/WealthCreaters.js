@@ -66,7 +66,7 @@ const Status = ({ status }) => {
 };
 
 export default function WealthCreaters(props) {
-  const { setPageLoading } = props;
+  const { setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [wealthCreaters, setWealthCreaters] = useState([]);
@@ -131,17 +131,21 @@ export default function WealthCreaters(props) {
         className="btn btn-secondary btn-sm btn-icon ml-2"
       >
         <span className="fa fa-eye" />
-      </a></div>
-      <div style={iconPadding}>
-        <a
-          href={`#`}
-          className="btn btn-light btn-sm btn-icon"
-          onClick={e => {
-            e.preventDefault();
-            onSubmitChangeStatus(row);
-          }}
-        > <span className="fa fa-pencil" />
-        </a></div>
+      </a>
+      </div>
+      {permissions && permissions.update_access &&
+        <div style={iconPadding}>
+          <a
+            href={`#`}
+            className="btn btn-light btn-sm btn-icon"
+            onClick={e => {
+              e.preventDefault();
+              onSubmitChangeStatus(row);
+            }}
+          > <span className="fa fa-pencil" />
+          </a>
+        </div>
+      }
     </div>
   }];
 
@@ -168,7 +172,7 @@ export default function WealthCreaters(props) {
       <ModalChangeStatus show={show} setShow={setShow} member={selectedWealthCreater} />
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-          <span>CBI WealthCreaters</span>
+          <span>CBI Wealth Creators</span>
           <span className="flex-grow-1" />
           <input
             style={inputWith}

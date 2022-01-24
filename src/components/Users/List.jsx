@@ -44,7 +44,7 @@ const isDisabled = item => {
 }
 
 export default function UsersRoles(props) {
-    const { data } = props;
+    const { data, permissions } = props;
     const columns = [{
         name: 'Full Name',
         selector: 'full_name',
@@ -91,17 +91,19 @@ export default function UsersRoles(props) {
         width: '160px',
         cell: row => (
             <div>
-                <a
-                    href={`/users/${row.id}`}
-                    className={`btn btn-secondary btn-icon btn-sm margin-right-10 ${isDisabled(row) ? 'disabled' : ''}`}
-                    onClick={e => {
-                        if (isDisabled(row)) {
-                            e.preventDefault();
-                        }
-                    }}
-                >
-                    <span className="fa fa-pencil" />
-                </a>
+                {permissions && permissions.update_access &&
+                    <a
+                        href={`/users/${row.id}`}
+                        className={`btn btn-secondary btn-icon btn-sm margin-right-10 ${isDisabled(row) ? 'disabled' : ''}`}
+                        onClick={e => {
+                            if (isDisabled(row)) {
+                                e.preventDefault();
+                            }
+                        }}
+                    >
+                        <span className="fa fa-pencil" />
+                    </a>
+                }
                 <button
                     type="button"
                     className="btn btn-primary btn-icon btn-sm margin-right-10"
@@ -110,14 +112,16 @@ export default function UsersRoles(props) {
                 >
                     <span className="fa fa-send" />
                 </button>
-                <button
-                    type="button"
-                    className="btn btn-danger btn-icon btn-sm"
-                    onClick={() => handleDeleteUser(row)}
-                    disabled={isDisabled(row)}
-                >
-                    <span className="fa fa-trash-o" />
-                </button>
+                {permissions && permissions.delete_access &&
+                    <button
+                        type="button"
+                        className="btn btn-danger btn-icon btn-sm"
+                        onClick={() => handleDeleteUser(row)}
+                        disabled={isDisabled(row)}
+                    >
+                        <span className="fa fa-trash-o" />
+                    </button>
+                }
             </div>
         )
     }];

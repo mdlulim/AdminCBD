@@ -43,6 +43,7 @@ export default function EditRolesPage(props) {
             setRole(role);
             setFixedPanelContent(<PermissionSummary {...role} />);
         }
+
         setPageLoading(false);
     }
 
@@ -53,6 +54,7 @@ export default function EditRolesPage(props) {
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{
                 active: "Edit",
                 items: [{
@@ -75,23 +77,20 @@ export default function EditRolesPage(props) {
                 actions: <Filter id={id} setShowFixedPanel={setShowFixedPanel} />
             }}
         >
-            {!pageLoading &&
-            <div id="users">
-                <Card className="margin-bottom-15">
-                    <Common.Widget
-                        icon="li-pencil5"
-                        title={role.label}
-                        subtitle={role.description}
-                        wrapperClass="widget--items-middle"
-                    />
-                    <Users.EditRole {...role} />
-                </Card>
-                <div className="text-right margin-bottom-20">
-                    <button className="btn btn-secondary">
-                        Save Changes
-                    </button>
+            {
+                !pageLoading &&
+                <div id="users">
+                    <Card className="margin-bottom-15">
+                        <Common.Widget
+                            icon="li-pencil5"
+                            title={role.label}
+                            subtitle={role.description}
+                            wrapperClass="widget--items-middle"
+                        />
+                        <Users.EditRole {...role} setPageLoading={setPageLoading} />
+                    </Card>
                 </div>
-            </div>}
+            }
         </AuthLayout>
     );
 } 

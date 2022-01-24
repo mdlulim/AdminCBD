@@ -43,7 +43,7 @@ export default function Completed(props) {
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Transactions transactionType={'transfers'} setPageLoading={setPageLoading} />
+                <Transactions.Transactions transactionType={'transfers'} setPageLoading={setPageLoading} {...props}/>
                 </Col>
             </div>
         </AuthLayout>
