@@ -13,18 +13,22 @@
         "description": "manage your CBI Members",
         "link": "/members",
         "icon": "i-Business-ManWoman",
-        "childitems": [{
-            "id": "members",
-            "title": "Members",
-            "link": "/members",
-            "icon": "i-MaleFemale"
-        },{
-            "id": "wealth-creaters",
-            "title": "Wealth Creaters",
-            "link": "/wealth-creaters",
-            "icon": "i-MaleFemale"
-        }]
-    },{
+        "childitems": [
+            {
+                "id": "members",
+                "title": "Members",
+                "link": "/members",
+                "icon": "i-MaleFemale"
+            },
+            {
+                "id": "wealth-creaters",
+                "title": "Wealth Creaters",
+                "link": "/wealth-creaters",
+                "icon": "i-MaleFemale"
+            }
+        ]
+    },
+    {
         "id": "leads",
         "title": "Leads",
         "description": "Manage Leads",
@@ -39,23 +43,27 @@
         "link": "/transactions",
         "icon": "i-Money",
         "childitems": []
-    }, {
+    },
+    {
         "id": "products",
         "title": "Products",
         "description": "Manage Products",
         "link": "/products",
         "icon": "i-Shopping-Bag",
-        "childitems": [{
-            "id": "products",
-            "title": "Manage Products",
-            "link": "/products",
-            "icon": "i-Shopping-Bag"
-        },{
-            "id": "group",
-            "title": "Manage Group",
-            "link": "/group",
-            "icon": "i-Share"
-        }]
+        "childitems": [
+            {
+                "id": "products",
+                "title": "Manage Products",
+                "link": "/products",
+                "icon": "i-Shopping-Bag"
+            },
+            {
+                "id": "group",
+                "title": "Manage Group",
+                "link": "/group",
+                "icon": "i-Share"
+            }
+        ]
     },
     {
         "id": "configurations",
@@ -63,23 +71,25 @@
         "description": "Configurations",
         "link": "/configurations",
         "icon": "i-Gears-2",
-        "childitems": [{
-            "id": "users",
-            "title": "Manage Admin Users",
-            "link": "/users",
-            "icon": "i-Business-ManWoman"
-        },{
-        "id": "roles",
-        "title": "Manage User Roles",
-        "link": "/roles",
-        "icon": "i-Gear"
-        },{
-            "id": "forms",
-            "title": "Manage Forms",
-            "link": "/forms",
-            "icon": "i-Gear"
-         }
-        
-    ]
+        "childitems": [
+            {
+                "id": "users",
+                "title": "Manage Admin Users",
+                "link": "/users",
+                "icon": "i-Business-ManWoman"
+            },
+            {
+                "id": "roles",
+                "title": "Manage User Roles",
+                "link": "/roles",
+                "icon": "i-Gear"
+            },
+            {
+                "id": "forms",
+                "title": "Manage Forms",
+                "link": "/forms",
+                "icon": "i-Gear"
+            }
+        ]
     }
 ]

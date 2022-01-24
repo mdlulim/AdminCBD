@@ -98,7 +98,7 @@ const Money = (row) => {
 
 
 export default function Transactions(props) {
-  const { transactionType } = props;
+  const { transactionType, permissions } = props;
   const [show, setShow] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [showBulk, setShowBulk] = useState(false);
@@ -155,7 +155,7 @@ export default function Transactions(props) {
           const results = transaList.filter(item => item.subtype.toLowerCase() === "transfer");
           setTransactions(results);
           setFilteredTransactions(results);
-        }else if (transactionType === 'all') {
+        } else if (transactionType === 'all') {
           setTransactions(transaList);
           setFilteredTransactions(transaList);
         }
@@ -210,15 +210,17 @@ export default function Transactions(props) {
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-      <button
-        className="btn btn-secondary btn-sm btn-icon"
-        disabled={adminLevel != 5 ? row.status == "Completed" ? true : '' : false}
-        onClick={e => {
-          e.preventDefault();
-          onUpdateDeposit(row)
-        }}
-      > <span className="fa fa-pencil" />
-      </button>
+      {permissions && permissions.update_access &&
+        <button
+          className="btn btn-secondary btn-sm btn-icon"
+          disabled={adminLevel != 5 ? row.status == "Completed" ? true : '' : false}
+          onClick={e => {
+            e.preventDefault();
+            onUpdateDeposit(row)
+          }}
+        > <span className="fa fa-pencil" />
+        </button>
+      }
     </div>
   }];
 
@@ -313,12 +315,12 @@ export default function Transactions(props) {
   return (
     <Card className="o-hidden mb-4">
       <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows} />
-      <ModalChangeStatus 
-      show={showUpdate} 
-      setShow={setShowUpdate} 
-      transaction={selectedTransaction} 
+      <ModalChangeStatus
+        show={showUpdate}
+        setShow={setShowUpdate}
+        transaction={selectedTransaction}
       />
-      
+
       <TransactionDetails
         show={showApproveMember}
         setShow={setShowApproveMember}
@@ -348,14 +350,16 @@ export default function Transactions(props) {
                 }}>
                 Search By Date
               </button> */}
-              <button
+              {permissions && permissions.update_access &&
+                <button
 
-                className={`btn ${forBank?'btn-secondary':'btn-light'} m-2`}
-                type="button"
-                disabled={activeFilter === 'Pending' ? false : true}
-                onClick={() => { setForBank(!forBank) }}>
-                For Processing
-              </button>
+                  className={`btn ${forBank ? 'btn-secondary' : 'btn-light'} m-2`}
+                  type="button"
+                  disabled={activeFilter === 'Pending' ? false : true}
+                  onClick={() => { setForBank(!forBank) }}>
+                  For Processing
+                </button>
+              }
 
 
               <Input
@@ -395,7 +399,7 @@ export default function Transactions(props) {
                     } else {
                       setCsvTransactions(filteredTransactions)
                       setForBank(false)
-                      
+
                       csvDownloaderClick.current.click()
                     }
                   }}

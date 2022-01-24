@@ -36,7 +36,7 @@ export default function WealthCreatersPage(props) {
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Members.WealthCreaters />
+                <Members.WealthCreaters {...props}/>
                 </Col>
             </div>
         </AuthLayout>

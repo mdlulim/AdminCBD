@@ -69,10 +69,10 @@ const Status = ({ status }) => {
 };
 
 export default function Members(props) {
-  const { status } = props;
+  const { status, permissions } = props;
   const [show, setShow] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
-  const [ showTransaction, setShowTransaction ] = useState(false);
+  const [showTransaction, setShowTransaction] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [members, setMembers] = useState([]);
   const [selectedTransPOP, setSelectedTransPOP] = useState('');
@@ -81,21 +81,21 @@ export default function Members(props) {
   const [transaction, setTransaction] = useState({});
   const history = useHistory();
 
-  async function fetchData(){
+  async function fetchData() {
     const memberslist = await MemberService.getMembers();
-        setMembers(memberslist.results);
-        setFilteredMembers(memberslist.results);
-  //  setPageLoading(false);
-}
+    setMembers(memberslist.results);
+    setFilteredMembers(memberslist.results);
+    //  setPageLoading(false);
+  }
 
-    useMemo(() => {
-      fetchData();
+  useMemo(() => {
+    fetchData();
 
-      }, [
-        setPageLoading,
-      ]);
-    // table headings definition
-const columns = [{
+  }, [
+    setPageLoading,
+  ]);
+  // table headings definition
+  const columns = [{
     name: '',
     sortable: false,
     width: '80px',
@@ -117,7 +117,7 @@ const columns = [{
     name: 'Referral',
     selector: 'referral_id',
     sortable: true,
-  },{
+  }, {
     name: 'Mobile',
     selector: 'mobile',
     sortable: true,
@@ -149,25 +149,28 @@ const columns = [{
       >
         <span className="fa fa-eye" />
       </a></div>
-      <div style={iconPadding}>
-        {row.status === 'Pending'?
-        <a
-          href={`#`}
-          className="btn btn-light btn-sm btn-icon"
-          onClick={e => {
-            e.preventDefault();
-            onSubmitApproveMember(row);
-          }}
-        > <span className="fa fa-pencil" />
-        </a>:<a
-          href={`#`}
-          className="btn btn-light btn-sm btn-icon"
-          onClick={e => {
-            e.preventDefault();
-            onSubmitChangeStatus(row);
-          }}
-        > <span className="fa fa-pencil" />
-        </a>} </div>
+      {permissions && permissions.update_access &&
+        <div style={iconPadding}>
+          {row.status === 'Pending' ?
+            <a
+              href={`#`}
+              className="btn btn-light btn-sm btn-icon"
+              onClick={e => {
+                e.preventDefault();
+                onSubmitApproveMember(row);
+              }}
+            > <span className="fa fa-pencil" />
+            </a> : <a
+              href={`#`}
+              className="btn btn-light btn-sm btn-icon"
+              onClick={e => {
+                e.preventDefault();
+                onSubmitChangeStatus(row);
+              }}
+            > <span className="fa fa-pencil" />
+            </a>}
+        </div>
+      }
     </div>
   }];
 
@@ -185,31 +188,31 @@ const columns = [{
   const onSubmitApproveMember = data => {
     TransactionService.getMemberTransactions(data.id).then((res) => {
       const transaList = res.data.data.results;
-      if(transaList.length){
-         TransactionService.getTransactionPOP(transaList[0].txid).then((res) => {
-            const pop = res.data.data.rows;
-            const url = pop[0].file;
-             TransactionService.getTransactionPOPFile(url).then((res) => {
-                 setSelectedTransPOP(res.data);
-             })
-          });
+      if (transaList.length) {
+        TransactionService.getTransactionPOP(transaList[0].txid).then((res) => {
+          const pop = res.data.data.rows;
+          const url = pop[0].file;
+          TransactionService.getTransactionPOPFile(url).then((res) => {
+            setSelectedTransPOP(res.data);
+          })
+        });
 
-         setTransaction(transaList[0])
-         setShowTransaction(true)
-      }else{
-       return confirmAlert({
-             title: 'Transaction ',
-             message: 'There is no pending transaction for '+data.first_name+' '+data.last_name+'!',
-             buttons: [
-               {
-                 label: 'Ok',
-               }
-             ]
-         });
+        setTransaction(transaList[0])
+        setShowTransaction(true)
+      } else {
+        return confirmAlert({
+          title: 'Transaction ',
+          message: 'There is no pending transaction for ' + data.first_name + ' ' + data.last_name + '!',
+          buttons: [
+            {
+              label: 'Ok',
+            }
+          ]
+        });
       }
-     // setTransactions(transaList);
-     // setFilteredTransactions(transaList);
-   });
+      // setTransactions(transaList);
+      // setFilteredTransactions(transaList);
+    });
     setSelectedMember(data);
     setShowDelete(true);
   };
@@ -237,11 +240,11 @@ const columns = [{
   return (
     <Card className="o-hidden mb-4">
       <ModalChangeStatus show={show} setShow={setShow} member={selectedMember} />
-      <TransactionDetails 
-      show={showTransaction} 
-      setShow={setShowTransaction} 
-      transaction={transaction}
-      pop={selectedTransPOP} />
+      <TransactionDetails
+        show={showTransaction}
+        setShow={setShowTransaction}
+        transaction={transaction}
+        pop={selectedTransPOP} />
       {/* <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedMember} /> */}
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">

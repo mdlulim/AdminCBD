@@ -79,13 +79,6 @@ export default function AuthSidenav(props) {
     const fetchData = async () => {
         const role = await UserService.getUserRole();
         setRole(role)
-
-        // Object.keys(menu).map(section => {
-        //     menu[section].map(item => {
-        //         console.log(item.id, " --------- ", role.permissions[item.id].allow_access)
-        //     })
-        // }
-        // )
     }
 
     useEffect(() => {

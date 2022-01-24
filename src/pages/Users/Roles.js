@@ -4,14 +4,19 @@ import { Common, Users } from 'components';
 import { AuthLayout } from 'containers';
 import { UserService } from 'providers';
 
-const Actions = () => (
-    <a
-        href="/users/roles/add"
-        className="btn btn-primary btn--icon btn--icon-stacked btn--anon d-none d-lg-block"
-    >
-        <span class="fa fa-plus" /> Add new role
-    </a>
-);
+const Actions = (props) => {
+    const { permissions } = props;
+    return <span>
+        {permissions && permissions.update_access &&
+            <a
+                href="/users/roles/add"
+                className="btn btn-primary btn--icon btn--icon-stacked btn--anon d-none d-lg-block"
+            >
+                <span class="fa fa-plus" /> Add new role
+            </a>
+        }
+    </span>
+};
 
 export default function UserRolesPage(props) {
     const [roles, setRoles] = useState([]);
@@ -40,7 +45,7 @@ export default function UserRolesPage(props) {
             pageHeading={{
                 title: 'Manage User Roles',
                 caption: 'EXPLORE USER ROLES FOR CRYPTO BASED INNOVATION',
-                actions: <Actions />
+                actions: <Actions  {...props}/>
             }}
         >
             {!pageLoading &&
@@ -78,6 +83,7 @@ export default function UserRolesPage(props) {
                     <Users.Roles
                         roles={roles}
                         data={filteredRoles}
+                        {...props}
                     />
                 </Card>}
         </AuthLayout>

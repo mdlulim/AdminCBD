@@ -46,7 +46,7 @@ export default function Deposits(props) {
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Transactions transactionType={'deposit'} />
+                <Transactions.Transactions transactionType={'deposit'} {...props}/>
                 </Col>
             </div>
         </AuthLayout>

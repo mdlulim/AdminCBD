@@ -15,7 +15,7 @@ const ProductsList = props => {
 			<Row className="mt-4">
 				<Col lg={12} xl={12}>
 					<Col md={12}>
-						<Products.Products />
+						<Products.Products {...props} />
 					</Col>
 				</Col>
 			</Row>

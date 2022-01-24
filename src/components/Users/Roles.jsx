@@ -24,7 +24,7 @@ const customStyles = {
 };
 
 export default function UsersRoles(props) {
-    const { data } = props;
+    const { data, permissions } = props;
     const columns = [{
         name: 'Name',
         selector: 'label',
@@ -62,19 +62,23 @@ export default function UsersRoles(props) {
         width: '120px',
         cell: row => (
             <div>
-                <a
-                    href={`/users/roles/${row.id}`}
-                    className="btn btn-secondary btn-icon btn-sm margin-right-10"
-                >
-                    <span className="fa fa-pencil" />
-                </a>
-                <button
-                    type="button"
-                    className="btn btn-danger btn-icon btn-sm"
-                    onClick={() => handleDeleteRole(row)}
-                >
-                    <span className="fa fa-trash-o" />
-                </button>
+                {permissions && permissions.update_access &&
+                    <a
+                        href={`/users/roles/${row.id}`}
+                        className="btn btn-secondary btn-icon btn-sm margin-right-10"
+                    >
+                        <span className="fa fa-pencil" />
+                    </a>
+                }
+                {permissions && permissions.delete_access &&
+                    <button
+                        type="button"
+                        className="btn btn-danger btn-icon btn-sm"
+                        onClick={() => handleDeleteRole(row)}
+                    >
+                        <span className="fa fa-trash-o" />
+                    </button>
+                }
             </div>
         )
     }];

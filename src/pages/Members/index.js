@@ -91,7 +91,7 @@ export default function MembersPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                    <Members.Members status={'add'} pageLoading={pageLoading} setPageLoading={setPageLoading} />
+                    <Members.Members status={'add'} pageLoading={pageLoading} setPageLoading={setPageLoading} {...props}/>
                 </CardBody>
             </Card>
         </AuthLayout>
