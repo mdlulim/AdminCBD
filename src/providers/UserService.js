@@ -167,11 +167,21 @@ class UserService {
       });
   }
 
-  static async getUserRole(id) {
+  static async getUserRole(token=null) {
+    let header = headers
+    if (token) {
+      header = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'X-Frame-Options': 'SAMEORIGIN',
+        'X-XSS-Protection': 1,
+        'X-Content-Type-Options': 'nosniff',
+      }
+    }
     return await axios({
       mode: 'no-cors',
       method: 'GET',
-      headers: headers,
+      headers: header,
       url: `${Config.API.BASE_URL}/group`,
     })
       .then((json) => json.data)

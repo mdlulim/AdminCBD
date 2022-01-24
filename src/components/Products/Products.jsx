@@ -7,7 +7,7 @@ import { Unlock, Edit, Trash } from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
 import DeleteProductAlert from './DeleteProductAlert';
-import { ProductService } from '../../providers';
+import { ProductService, SessionProvider } from '../../providers';
 import { Loader } from 'components';
 
 // styles
@@ -75,6 +75,8 @@ export default function Products(props) {
   const history = useHistory();
 
   useMemo(() => {
+
+    console.log(SessionProvider.get())
 
       ProductService.getProducts().then((res) => {
           const productlist = res.results;
