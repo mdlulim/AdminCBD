@@ -46,9 +46,6 @@ export default function DebitCredit(props) {
 
       }, []);
 
-      const onSubmit2 = (data) => {
-            console.log("Test submit");
-      }
     return (
         <AuthLayout
             {...props}
@@ -62,7 +59,6 @@ export default function DebitCredit(props) {
         >
              {!pageLoading &&
                     <Card id="reports">
-                          <form onSubmit={onSubmit2}>
                         <Common.Widget
                             icon="li-wallet"
                             title="Debit Or Credit"
@@ -70,15 +66,7 @@ export default function DebitCredit(props) {
                             wrapperClass="widget--items-middle"
                         />
                         <hr className="margin-top-0 margin-bottom-0" />
-                       
-                        <button
-                    type="submit"
-                    className="btn btn-info float-right"
-                            >
-                            {processing ? 'Processing...' : 'Submit'}
-                        </button>
-                        <hr />
-                </form>
+                        <Transactions.DebitCredit />
                     </Card>}
         </AuthLayout>
     );
