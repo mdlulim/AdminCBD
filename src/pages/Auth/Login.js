@@ -47,7 +47,9 @@ export default function LoginPage(props) {
             setLoading(false);
             setDisabled(false);
         });
-
+        //const geoLocation = GeoLocationService.getClientLocation();;
+        //const geoLocation = GeoLocationService.getClientLocation();;
+        //const geoLocation = GeoLocationService.getClientLocation();;
         //const geoLocation = GeoLocationService.getClientLocation();;
     }
 
