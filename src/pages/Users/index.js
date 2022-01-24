@@ -142,40 +142,7 @@ export default function UsersPage(props) {
                             wrapperClass="widget--items-middle"
                         />
                     </Card>
-                    <Col xs={12} lg={3}>
-                        <Common.Widget
-                            icon="li-user-lock"
-                            title="Active"
-                            subtitle="Active users"
-                            informer={<><span className="text-bold text-success">{countUsers('Active')}</span></>}
-                            invert={false}
-                        />
-                    </Col>
-                    <Col xs={12} lg={3}>
-                        <Common.Widget
-                            icon="li-user-lock"
-                            title="Blocked"
-                            subtitle="Blocked users"
-                            informer={<><span className="text-bold text-warning">{countUsers('Blocked')}</span></>}
-                            invert={false}
-                        />
-                    </Col>
-                    <Col xs={12} lg={3}>
-                        <Common.Widget
-                            icon="li-user-minus"
-                            title="Archived"
-                            subtitle="Archived users"
-                            informer={<span className="text-bold text-danger">{countUsers('Archived')}</span>}
-                            invert={false}
-                        />
-                    </Col>
                     <Card>
-                        <Common.Widget
-                            icon="li-users"
-                            title="System Users"
-                            subtitle="List of all system users"
-                            wrapperClass="widget--items-middle"
-                        />
                         <CardBody>
                             <div className="form-row">
                                 <Col xs={6} lg={4}>
