@@ -3,6 +3,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { UserService } from 'providers';
 
 // styles
 const customStyles = {
@@ -22,7 +23,7 @@ const customStyles = {
 };
 
 export default function UsersRoles(props) {
-    const { data } = props;
+    const { data, permissions } = props;
     const columns = [{
         name: 'Name',
         selector: 'label',
@@ -60,19 +61,23 @@ export default function UsersRoles(props) {
         width: '120px',
         cell: row => (
             <div>
-                <a
-                    href={`/users/roles/${row.id}`}
-                    className="btn btn-secondary btn-icon btn-sm margin-right-10"
-                >
-                    <span className="fa fa-pencil" />
-                </a>
-                <button
-                    type="button"
-                    className="btn btn-danger btn-icon btn-sm"
-                    onClick={() => handleDeleteRole(row)}
-                >
-                    <span className="fa fa-trash-o" />
-                </button>
+                {permissions && permissions.update_access &&
+                    <a
+                        href={`/users/roles/${row.id}`}
+                        className="btn btn-secondary btn-icon btn-sm margin-right-10"
+                    >
+                        <span className="fa fa-pencil" />
+                    </a>
+                }
+                {permissions && permissions.delete_access &&
+                    <button
+                        type="button"
+                        className="btn btn-danger btn-icon btn-sm"
+                        onClick={() => handleDeleteRole(row)}
+                    >
+                        <span className="fa fa-trash-o" />
+                    </button>
+                }
             </div>
         )
     }];
@@ -85,8 +90,9 @@ export default function UsersRoles(props) {
             buttons: [
                 {
                     label: 'Confirm and continue',
-                    onClick: () => {
-                        console.log(data)
+                    onClick: async () => {
+                        const res = await UserService.archiveRole(data.id)
+                        console.log(res)
                     }
                 },
                 {

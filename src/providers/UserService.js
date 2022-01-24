@@ -43,6 +43,15 @@ class UserService {
     });
   }
 
+  static async getUsersByRole(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/users?group_id=${id}`,
+    });
+  }
+
   static async getUserByEmail(email) {
     return await axios({
       mode: 'no-cors',
@@ -149,6 +158,21 @@ class UserService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/groups/${id}`,
+    })
+      .then((json) => json.data)
+      .then(res => res.data)
+      .catch((err) => {
+        if (err.response) return err.response.data;
+        return err;
+      });
+  }
+
+  static async getUserRole(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/group`,
     })
       .then((json) => json.data)
       .then(res => res.data)

@@ -64,7 +64,7 @@ const Image = () => {
 };
 
 export default function Products(props) {
-  const { setPageLoading } = props;
+  const { setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showResend, setShowResend] = useState(false);
@@ -74,7 +74,7 @@ export default function Products(props) {
   const [selectedProduct, setSelectedProduct] = useState({});
   const history = useHistory();
 
-    useMemo(() => {
+  useMemo(() => {
 
       ProductService.getProducts().then((res) => {
           const productlist = res.results;
@@ -129,12 +129,16 @@ export default function Products(props) {
       name: 'Actions',
       sortable: true,
       cell: row => <div>
-        <spam style={iconPadding}>
+        { permissions && permissions.update_access &&
+          <span style={iconPadding}>
           <a
             href={`products/${row.id}`}
             className="btn btn-secondary btn-sm btn-icon"
-          ><span className="fa fa-pencil" />
-          </a></spam>
+          >
+            <span className="fa fa-pencil" />
+          </a>
+        </span>
+        }
         {/* <spam style={iconPadding}><a
       href={`#`}
       className="btn btn-secondary btn-sm btn-icon"
@@ -195,13 +199,15 @@ export default function Products(props) {
             placeholder="Search..."
             onKeyUp={e => onSearchFilter(e.target.value)}
           />
-          <div>
-            <a
-              href={`products/add`}
-              className="btn btn-secondary">
-              Add Product
-            </a>
-          </div>
+          {permissions && permissions.create_access &&
+            <div>
+              <a
+                href={`products/add`}
+                className="btn btn-secondary">
+                Add Product
+              </a>
+            </div>
+          }
         </div>
       </CardBody>
       <DataTable

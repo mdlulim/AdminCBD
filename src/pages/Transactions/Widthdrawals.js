@@ -49,7 +49,7 @@ export default function Width(props) {
         >
             <div className="form-row">
                 <Col xs={12} lg={12}>
-                <Transactions.Transactions transactionType={'withdrawals'} setPageLoading={setPageLoading} />
+                <Transactions.Transactions transactionType={'withdrawals'} setPageLoading={setPageLoading} {...props}/>
                 </Col>
             </div>
         </AuthLayout>
