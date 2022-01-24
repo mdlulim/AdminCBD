@@ -334,33 +334,6 @@ export default function DashboardPage(props) {
                                 </Col>
                             </div>
                         </Col>
-                        <Col xs={12} lg={3}>
-                            <Card>
-                                <a href={`/transactions`} >
-                                    <Common.Widget
-                                        icon="li-bag"
-                                        title="Transactions"
-                                        subtitle="Latest transctions"
-                                        informer={<><span className="text-bold text-success">{countTransaction('Completed')}</span> / <span className="text-bold text-warning">{countTransaction('Pending')}</span></>}
-                                    /></a>
-                                <div className="form-group" style={{ 'padding': 10 }}>
-                                    <input
-                                        type={inputWith}
-                                        type="text"
-                                        name="search"
-                                        className={`form-control form-control-m`}
-                                        placeholder="Search by User ID, Trans ID, Trans Type"
-                                        onKeyUp={e => onSearchFilter(e.target.value)}
-                                    />
-                                </div>
-                                <CardBody className="padding-left-0">
-
-                                    <Common.Timeline
-                                        items={filteredTransactions.slice(0, 5)}
-                                    />
-                                </CardBody>
-                            </Card>
-                        </Col>
                     </div>
                     <Modal show={show} onHide={handleClose} centered className="confirm-modal">
                         <Modal.Body>
