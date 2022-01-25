@@ -4,7 +4,8 @@ import { confirmAlert } from 'react-confirm-alert';
 import moment from 'moment';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import useForm from "react-hook-form";
-import { UserService } from 'providers';
+import { PermissionLevelService } from 'providers';
+
 
 const NavTabLink = ({
     id,
@@ -57,7 +58,8 @@ export default function EditUser(props) {
         roles,
         group_id,
         permissions,
-        id
+        id,
+        onInfoSubmit
     } = props;
     const [activeTab, setActiveTab] = useState('overview');
     const { register, handleSubmit, errors } = useForm();
@@ -149,11 +151,9 @@ export default function EditUser(props) {
             updated: Date.now(),
         }
 
-        console.log(finalObject)
-        // const res = await UserService.updateAdminUser(id, finalObject)
-        // console.log(res)
+        const res = await PermissionLevelService.updateAdminUser(id, finalObject)
+        console.log(res)
     };
-
 
     return (
         <div>
@@ -286,6 +286,8 @@ export default function EditUser(props) {
                         title="Information"
                         active={activeTab === 'information'}
                     >
+                        <form onSubmit={onInfoSubmit}>
+
                             <Row>
                                 <Col xs={12} sm={8}>
                                     <Row className="form-group">
@@ -456,6 +458,12 @@ export default function EditUser(props) {
                                     </div>
                                 </Col>
                             </Row>
+                            <div className="text-right margin-bottom-20">
+                                <button type="submit" className="btn btn-secondary">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
                     </NavTabContent>
                     <NavTabContent
                         id="permissions"
@@ -523,9 +531,9 @@ export default function EditUser(props) {
                                                                                         onChange={() => { permissions[key].childitems[child_key].create_access = false }}
                                                                                         defaultChecked={
                                                                                             !permissions[key].childitems[child_key].create_access &&
-                                                                                            !permissions[key].childitems[child_key].read_access &&
-                                                                                            !permissions[key].childitems[child_key].update_access &&
-                                                                                            !permissions[key].childitems[child_key].delete_access? true: false
+                                                                                                !permissions[key].childitems[child_key].read_access &&
+                                                                                                !permissions[key].childitems[child_key].update_access &&
+                                                                                                !permissions[key].childitems[child_key].delete_access ? true : false
                                                                                         }
                                                                                     />
                                                                                     <label className="custom-control-label" htmlFor={permissions[key].title + permissions[key].childitems[child_key].title + '_null_access'}>
@@ -601,10 +609,10 @@ export default function EditUser(props) {
                                                                                         className="custom-control-input"
                                                                                         defaultChecked={
                                                                                             permissions[key].childitems[child_key].create_access &&
-                                                                                            permissions[key].childitems[child_key].read_access &&
-                                                                                            permissions[key].childitems[child_key].update_access &&
-                                                                                            permissions[key].childitems[child_key].delete_access? true: false
-                                                                                        }                                                                                        name={permissions[key].title + permissions[key].childitems[child_key].title + '_full'}
+                                                                                                permissions[key].childitems[child_key].read_access &&
+                                                                                                permissions[key].childitems[child_key].update_access &&
+                                                                                                permissions[key].childitems[child_key].delete_access ? true : false
+                                                                                        } name={permissions[key].title + permissions[key].childitems[child_key].title + '_full'}
                                                                                         ref={register}
                                                                                     />
                                                                                     <label className="custom-control-label" htmlFor={permissions[key].title + permissions[key].childitems[child_key].title + '_full'}>
@@ -627,9 +635,9 @@ export default function EditUser(props) {
                                                                                     ref={register}
                                                                                     defaultChecked={
                                                                                         !permissions[key].create_access &&
-                                                                                        !permissions[key].read_access &&
-                                                                                        !permissions[key].update_access &&
-                                                                                        !permissions[key].delete_access? true: false
+                                                                                            !permissions[key].read_access &&
+                                                                                            !permissions[key].update_access &&
+                                                                                            !permissions[key].delete_access ? true : false
                                                                                     }
                                                                                 />
                                                                                 <label className="custom-control-label" htmlFor={permissions[key].title + '_null_access'}>
@@ -705,10 +713,10 @@ export default function EditUser(props) {
                                                                                     className="custom-control-input"
                                                                                     defaultChecked={
                                                                                         !permissions[key].create_access &&
-                                                                                        !permissions[key].read_access &&
-                                                                                        !permissions[key].update_access &&
-                                                                                        !permissions[key].delete_access? true: false
-                                                                                    }                                                                                    name={permissions[key].title + '_full'}
+                                                                                            !permissions[key].read_access &&
+                                                                                            !permissions[key].update_access &&
+                                                                                            !permissions[key].delete_access ? true : false
+                                                                                    } name={permissions[key].title + '_full'}
                                                                                     ref={register}
                                                                                 />
                                                                                 <label className="custom-control-label" htmlFor={permissions[key].title + '_full'}>

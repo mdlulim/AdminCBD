@@ -61,7 +61,7 @@ const Status = ({ status }) => {
 };
 
 export default function TransactionFees(props) {
-  const { setPageLoading } = props;
+  const { setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [fees, setFees] = useState([]);
@@ -69,23 +69,23 @@ export default function TransactionFees(props) {
   const [selectedFee, setSelectedFee] = useState({});
   const history = useHistory();
 
-    useMemo(() => {
-        FeeService.getFees().then((res) => {
-          console.log(res.data.results)
-          const feeslist = res.data.results;
-          setFees(feeslist);
-          setFilteredFees(feeslist);
+  useMemo(() => {
+    FeeService.getFees().then((res) => {
+      console.log(res.data.results)
+      const feeslist = res.data.results;
+      setFees(feeslist);
+      setFilteredFees(feeslist);
 
-          setPageLoading(false)
-        });
- 
-      }, [setPageLoading]);
-    // table headings definition
-const columns = [ {
+      setPageLoading(false)
+    });
+
+  }, [setPageLoading]);
+  // table headings definition
+  const columns = [{
     name: 'Type',
     selector: 'tx_type',
     sortable: true,
-}, {
+  }, {
     name: 'Value',
     selector: 'value',
     sortable: true,
@@ -93,7 +93,7 @@ const columns = [ {
     name: 'Percentage',
     selector: 'percentage',
     sortable: true,
-  },{
+  }, {
     name: 'Subtype',
     selector: 'subtype',
     sortable: true,
@@ -122,16 +122,19 @@ const columns = [ {
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-      <div style={iconPadding}>
-        <a
-          href={`#`}
-          className="btn btn-light btn-sm btn-icon"
-          onClick={e => {
-            e.preventDefault();
-            onSubmitChangeStatus(row);
-          }}
-        > <span className="fa fa-pencil" />
-        </a></div>
+      {permissions && permissions.update_access &&
+        <div style={iconPadding}>
+          <a
+            href={`#`}
+            className="btn btn-light btn-sm btn-icon"
+            onClick={e => {
+              e.preventDefault();
+              onSubmitChangeStatus(row);
+            }}
+          > <span className="fa fa-pencil" />
+          </a>
+        </div>
+      }
     </div>
   }];
 

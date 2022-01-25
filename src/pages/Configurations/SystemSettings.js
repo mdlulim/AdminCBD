@@ -98,26 +98,26 @@ export default function SystemSettings(props) {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'general' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                        <GeneralSettings.GeneralSettings setPageLoading={setPageLoading} />
+                                        <GeneralSettings.GeneralSettings setPageLoading={setPageLoading} {...props}/>
                                         </CardBody>
                                     </div>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
                                     <CardBody className="pl-0 pr-0 pb-0">
-                                        <Settings.TransactionFees setPageLoading={setPageLoading} />
+                                        <Settings.TransactionFees setPageLoading={setPageLoading} {...props}/>
                                     </CardBody>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'banking-details' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                        <GeneralSettings.CampanyBankDetails setPageLoading={setPageLoading} />
+                                        <GeneralSettings.CampanyBankDetails setPageLoading={setPageLoading} {...props}/>
                                         </CardBody>
                                     </div>
                                 </div>
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <GeneralSettings.KYCLimitsOverview setPageLoading={setPageLoading} />
+                                            <GeneralSettings.KYCLimitsOverview setPageLoading={setPageLoading} {...props}/>
                                         </CardBody>
                                     </div>
                                 </div>

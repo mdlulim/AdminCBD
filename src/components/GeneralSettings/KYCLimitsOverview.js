@@ -52,22 +52,16 @@ const Status = ({ status }) => {
 };
 
 export default function BankAccounts(props) {
-  const { setPageLoading } = props;
+  const { setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showKYCLimit, setShowKYCLimit] = useState(false);
   const [kycLimits, setKYCLimits] = useState([]);
-  const [adminLevel, setAdminLevel] = useState(0);
   const [filteredKYCLimits, setFilteredKYCLimits] = useState([]);
   const [selectedKYCLimit, setSelectedKYCLimit] = useState({});
   const history = useHistory();
 
 
   useMemo(() => {
-
-    if (SessionProvider.isValid()) {
-      const user = SessionProvider.get();
-      setAdminLevel(user.permission_level)
-    }
     KYCService.getKYCLimits().then((res) => {
       const data = res.results;
       setKYCLimits(data);
@@ -92,17 +86,20 @@ export default function BankAccounts(props) {
       name: 'Actions',
       sortable: true,
       cell: row => <div>
-        {adminLevel === 5 ? <div style={iconPadding}>
-          <a
-            href={`#`}
-            className="btn btn-light btn-sm btn-icon"
-            onClick={e => {
-              e.preventDefault();
-              setSelectedKYCLimit(row)
-              setShowKYCLimit(true)
-            }}
-          > <span className="fa fa-pencil" />
-          </a></div> : ''}
+        {permissions && permissions.update_access &&
+          <div style={iconPadding}>
+            <a
+              href={`#`}
+              className="btn btn-light btn-sm btn-icon"
+              onClick={e => {
+                e.preventDefault();
+                setSelectedKYCLimit(row)
+                setShowKYCLimit(true)
+              }}
+            > <span className="fa fa-pencil" />
+            </a>
+          </div>
+        }
       </div>
     }];
 
@@ -131,15 +128,6 @@ export default function BankAccounts(props) {
             placeholder="Search..."
             onKeyUp={e => onSearchFilter(e.target.value)}
           />
-          <div>
-            {/* <button
-                      onClick={e => {
-                          setShow(true)
-                      }}
-                      className="btn btn-secondary">
-                          Add New
-                      </button> */}
-          </div>
         </div>
       </CardBody>
       <DataTable
