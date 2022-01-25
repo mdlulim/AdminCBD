@@ -51,7 +51,7 @@ const Status = ({ blacklisted }) => {
 };
 
 export default function Countries(props) {
-  const { setPageLoading } = props;
+  const { setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showAddNew, setShowAddNew] = useState(false);
@@ -59,6 +59,8 @@ export default function Countries(props) {
   const [selectedCountry, setSelectedCountry] = useState({});
   const [filteredCountries, setFilteredCountries] = useState([]);
   const history = useHistory();
+
+  console.log(permissions, ' ++++++++++++++++')
 
   useMemo(() => {
     CountryService.getCountries().then((res) => {
@@ -90,26 +92,33 @@ export default function Countries(props) {
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-      <spam style={iconPadding}>
-        <a
-          href={`#`}
-          className="btn btn-lg btn-info btn-sm"
-          onClick={e => {
-            e.preventDefault();
-            onSubmitUnblacklist(row);
-          }}
-        ><Edit width={16} height={16} />
-        </a></spam>
-      <spam style={iconPadding}><a
-        href={`#`}
-        className="btn btn-lg btn-danger btn-sm"
-        onClick={e => {
-          e.preventDefault();
-          onSubmitblacklist(row);
-        }}
-      >
-        <Trash width={16} height={16} />
-      </a></spam>
+      {permissions && permissions.update_access &&
+        <span style={iconPadding}>
+          <a
+            href={`#`}
+            className="btn btn-lg btn-info btn-sm"
+            onClick={e => {
+              e.preventDefault();
+              onSubmitUnblacklist(row);
+            }}
+          ><Edit width={16} height={16} />
+          </a>
+        </span>
+      }
+      {permissions && !permissions.delete_access &&
+        <span style={iconPadding}>
+          <a
+            href={`#`}
+            className="btn btn-lg btn-danger btn-sm"
+            onClick={e => {
+              e.preventDefault();
+              onSubmitblacklist(row);
+            }}
+          >
+            <Trash width={16} height={16} />
+          </a>
+        </span>
+      }
     </div>
   }];
 

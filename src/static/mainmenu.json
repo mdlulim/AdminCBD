@@ -172,7 +172,7 @@
             "icon": "li-equalizer",
             "childitems": [
                 {
-                    "id": "Settings",
+                    "id": "settings",
                     "title": "Settings",
                     "link": "/settings",
                     "icon": null

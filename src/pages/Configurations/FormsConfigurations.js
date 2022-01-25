@@ -226,20 +226,20 @@ const FormsConfigurations = props => {
                                     <div className="tab-content">
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
                                             <CardBody className="pl-0 pr-0 pb-0">
-												<FormsConfig.ConfigLogin loginForm={loginForm} setPageLoading={setPageLoading} />
+												<FormsConfig.ConfigLogin loginForm={loginForm} setPageLoading={setPageLoading} {...props}/>
                                             </CardBody>
                                         </div>
                                         <div role="tabpanel" className={`tab-pane show ${activeTab === 'products' ? 'active' : ''}`}>
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
-                                                     <FormsConfig.ConfigRegistration registerForm={registerForm} setPageLoading={setPageLoading} />
+                                                     <FormsConfig.ConfigRegistration registerForm={registerForm} setPageLoading={setPageLoading} {...props}/>
                                                 </CardBody>
                                             </div>
                                         </div>
 										<div role="tabpanel" className={`tab-pane show ${activeTab === 'transactions' ? 'active' : ''}`}>
                                             <div className="profile-setting__card">
                                                 <CardBody className="pl-0 pr-0 pb-0">
-                                                <FormsConfig.ConfigForgotPassword forgotPasswordForm={forgotPasswordForm} setPageLoading={setPageLoading} />
+                                                <FormsConfig.ConfigForgotPassword forgotPasswordForm={forgotPasswordForm} setPageLoading={setPageLoading} {...props}/>
                                                 </CardBody>
                                             </div>
                                         </div>

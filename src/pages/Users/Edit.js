@@ -46,10 +46,10 @@ export default function EditUserPage(props) {
         const user = await UserService.getUser(id);
         const roles = await UserService.getRoles();
 
-
         setRoles(roles.results || []);
         if (user && user.id) {
             setUser(user);
+            console.log(user, ' $$$$$$$$$$$$$$$$$$$$$')
             setFixedPanelContent(<PermissionSummary {...user} />);
         }
         setPageLoading(false);
@@ -60,50 +60,51 @@ export default function EditUserPage(props) {
     }, []);
 
     const onSubmit = (event) => {
-        event.preventDefault();
-        const form = event.currentTarget;
-        if(!form.group_id.value){
-            setError('Validation error. Please select admin user role!')
-            setDisabled(false)
-            return 'Validation error. Please select admin user role'
-        }
+        console.log("8888888888")
+        // event.preventDefault();
+        // const form = event.currentTarget;
+        // if(!form.group_id.value){
+        //     setError('Validation error. Please select admin user role!')
+        //     setDisabled(false)
+        //     return 'Validation error. Please select admin user role'
+        // }
 
-        if(form.first_name.value === '' || form.last_name.value === '' || form.email.value === '' || form.username.value === '' || form.status.value === ''){
-            setError('Validation error. All field are required!')
-            setDisabled(false)
-            return 'All field are required!'
-        }
+        // if(form.first_name.value === '' || form.last_name.value === '' || form.email.value === '' || form.username.value === '' || form.status.value === ''){
+        //     setError('Validation error. All field are required!')
+        //     setDisabled(false)
+        //     return 'All field are required!'
+        // }
 
-        const role = roles.filter(option => option.id === form.group_id.value)[0];
-        const data = {
-                first_name  : form.first_name.value,
-                last_name   : form.last_name.value,
-                email       : form.email.value,
-                username    : form.username.value,
-                mobile      : form.mobile.value,
-                status      : form.status.value,
-                group_id    : form.group_id.value,
-                permissions : user.permissions ? user.permissions : role.permissions,
-            };
+        // const role = roles.filter(option => option.id === form.group_id.value)[0];
+        // const data = {
+        //         first_name  : form.first_name.value,
+        //         last_name   : form.last_name.value,
+        //         email       : form.email.value,
+        //         username    : form.username.value,
+        //         mobile      : form.mobile.value,
+        //         status      : form.status.value,
+        //         group_id    : form.group_id.value,
+        //         permissions : user.permissions ? user.permissions : role.permissions,
+        //     };
 
-            UserService.updateUser(user.id, data).then((response) => {
-                console.log(response)
-                if (response.success) {
-                    return confirmAlert({
-                        title: 'Succcess',
-                        message: 'User was successfully updated',
-                        buttons: [
-                            {
-                                label: 'Ok',
-                            }
-                        ]
-                    });
-                } else {
-                    setError(response.message);
-                }
-                setDisabled(false);
-                setProcessing(false);
-            })
+        //     UserService.updateUser(user.id, data).then((response) => {
+        //         console.log(response)
+        //         if (response.success) {
+        //             return confirmAlert({
+        //                 title: 'Succcess',
+        //                 message: 'User was successfully updated',
+        //                 buttons: [
+        //                     {
+        //                         label: 'Ok',
+        //                     }
+        //                 ]
+        //             });
+        //         } else {
+        //             setError(response.message);
+        //         }
+        //         setDisabled(false);
+        //         setProcessing(false);
+        //     })
     }
 
     return (
@@ -130,7 +131,7 @@ export default function EditUserPage(props) {
             }}
         >
             {!pageLoading &&
-             <form onSubmit={onSubmit}>
+             
             <div id="users">
                 <Card className="margin-bottom-15">
                     <Common.Widget
@@ -139,15 +140,9 @@ export default function EditUserPage(props) {
                         subtitle={user.group.label}
                         wrapperClass="widget--items-middle"
                     />
-                    <Users.Edit {...user} roles={roles} />
+                    <Users.Edit {...user} roles={roles} onInfoSubmit={onSubmit} />
                 </Card>
-                <div className="text-right margin-bottom-20">
-                    <button type="submit" className="btn btn-secondary">
-                        Save Changes
-                    </button>
-                </div>
             </div>
-            </form>
             }
         </AuthLayout>
     );

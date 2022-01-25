@@ -28,7 +28,7 @@ export default function CountriesPage(props) {
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
-                 <Countries.Countries setPageLoading={setPageLoading} />
+                 <Countries.Countries setPageLoading={setPageLoading} {...props}/>
               </CardBody>
             </Card>
         </AuthLayout>

@@ -34,37 +34,32 @@ const inputWith = {
 }
 
 export default function TransactionSettings(props) {
-  const { setPageLoading } = props;
+  const { setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [settings, setSettings] = useState([]);
   const [error, setError] = useState('');
-  const [adminLevel, setAdminLevel] = useState(0);
   const [filteredSettings, setFilteredSettings] = useState([]);
   const [selectedSetting, setSelectedSetting] = useState({});
   const history = useHistory();
 
-    useMemo(() => {
-        if (SessionProvider.isValid()) {
-            const user = SessionProvider.get();
-             setAdminLevel(user.permission_level)
-         }
-        SettingService.getSettings().then((res) => {
-          const settingslist = res.data.data.results;
-          setSettings(settingslist);
-          setFilteredSettings(settingslist);
+  useMemo(() => {
+    SettingService.getSettings().then((res) => {
+      const settingslist = res.data.data.results;
+      setSettings(settingslist);
+      setFilteredSettings(settingslist);
 
-          setPageLoading(false)
-        });
+      setPageLoading(false)
+    });
 
-    }, [setPageLoading]);
-    // table headings definition
-const columns = [{
+  }, [setPageLoading]);
+  // table headings definition
+  const columns = [{
     name: 'Category',
     selector: 'category',
     sortable: true,
-}, {
+  }, {
     name: 'Key',
     selector: 'key',
     sortable: true,
@@ -76,7 +71,7 @@ const columns = [{
     name: 'Value',
     selector: 'value',
     sortable: true,
-  },{
+  }, {
     name: 'Sub Category',
     selector: 'subcategory',
     sortable: true,
@@ -84,38 +79,43 @@ const columns = [{
     name: 'Actions',
     sortable: true,
     cell: row => <div>
-      <div style={iconPadding}>
-        <a
-          href={`#`}
-          className="btn btn-light btn-sm btn-icon"
-          onClick={e => {
-            e.preventDefault();
-            onSubmitChangeStatus(row);
-          }}
-        > <span className="fa fa-pencil" />
-        </a></div>
-        { adminLevel === 5 ?<div style={iconPadding}>
-        <a
-          href={`#`}
-          className="btn btn-light btn-sm btn-icon"
-          onClick={e => {
-            e.preventDefault();
-            return confirmAlert({
+      {permissions && permissions.update_access &&
+        <div style={iconPadding}>
+          <a
+            href={`#`}
+            className="btn btn-light btn-sm btn-icon"
+            onClick={e => {
+              e.preventDefault();
+              onSubmitChangeStatus(row);
+            }}
+          > <span className="fa fa-pencil" />
+          </a>
+        </div>
+      }
+      {permissions && permissions.update_access ?
+        <div style={iconPadding}>
+          <a
+            href={`#`}
+            className="btn btn-light btn-sm btn-icon"
+            onClick={e => {
+              e.preventDefault();
+              return confirmAlert({
                 title: 'Confirmation',
                 message: 'Are you sure you want to delete this setting?',
                 buttons: [
                   {
                     label: 'Ok',
                     onClick: () => {
-                        onSubmitDeleteSetting(row)
+                      onSubmitDeleteSetting(row)
                     }
                   }
                 ]
-            });
-           // onSubmitChangeStatus(row);
-          }}
-        > <span className="fa fa-trash" />
-        </a></div>: ''}
+              });
+              // onSubmitChangeStatus(row);
+            }}
+          > <span className="fa fa-trash" />
+          </a>
+        </div> : ''}
     </div>
   }];
 
@@ -126,29 +126,29 @@ const columns = [{
   };
 
   const onSubmitDeleteSetting = data => {
-      if(data.id){
-        SettingService.destroySetting(data.id).then((response) => {
-            if (response.data.success) {
-                setShow(false)
-                return confirmAlert({
-                    title: 'Succcess',
-                    message: 'Setting was successfully updated',
-                    buttons: [
-                      {
-                        label: 'Ok',
-                        onClick: () => {
-                            window.location = '/configurations/settings';
-                        }
-                      }
-                    ]
-                });
-            } else {
-                setError(response.data.message);
-            }
-        })
-      }
+    if (data.id) {
+      SettingService.destroySetting(data.id).then((response) => {
+        if (response.data.success) {
+          setShow(false)
+          return confirmAlert({
+            title: 'Succcess',
+            message: 'Setting was successfully updated',
+            buttons: [
+              {
+                label: 'Ok',
+                onClick: () => {
+                  window.location = '/configurations/settings';
+                }
+              }
+            ]
+          });
+        } else {
+          setError(response.data.message);
+        }
+      })
+    }
 
-   // setSelectedSetting(data);
+    // setSelectedSetting(data);
     //setShowDelete(true);
   };
 
@@ -159,11 +159,11 @@ const columns = [{
 
   const onSearchFilter = filterText => {
     const filteredItems = settings.filter(item => (
-        (item && item.title && item.title.toLowerCase().includes(filterText.toLowerCase())) ||
-        (item && item.category && item.category.toLowerCase().includes(filterText.toLowerCase())) ||
-        (item && item.value && item.value.toLowerCase().includes(filterText.toLowerCase())) ||
-        (item && item.key && item.key.toLowerCase().includes(filterText.toLowerCase())) ||
-        (item && item.subcategory && item.subcategory.toLowerCase().includes(filterText.toLowerCase()))
+      (item && item.title && item.title.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.category && item.category.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.value && item.value.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.key && item.key.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.subcategory && item.subcategory.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredSettings(filteredItems);
   }
@@ -185,15 +185,17 @@ const columns = [{
             placeholder="Search..."
             onKeyUp={e => onSearchFilter(e.target.value)}
           />
-          <div>
-                <button
+          {permissions && permissions.create_access &&
+            <div>
+              <button
                 onClick={e => {
-                    setShowNew(true)
+                  setShowNew(true)
                 }}
                 className="btn btn-secondary">
-                    Add New
-                </button>
-        </div>
+                Add New
+              </button>
+            </div>
+          }
         </div>
       </CardBody>
       <DataTable
