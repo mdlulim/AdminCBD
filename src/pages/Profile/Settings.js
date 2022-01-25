@@ -75,7 +75,7 @@ export default function Settings(props) {
                             <div className={`tab-pane fade ${active === 1 ? 'active show' : ''}`} id="settings-tab">
                                 <Row className="margin-bottom-20">
                                     <Col xs={6} lg={9}>
-                                        <h4 className="margin-bottom-10">Password</h4>
+                                        <h4 className="margin-bottom-5">Password</h4>
                                         <p className="text-muted">
                                             To make change your existing password click on change password button.
                                         </p>
@@ -83,6 +83,7 @@ export default function Settings(props) {
                                     <Col xs={6} lg={3} className="text-right">
                                         <button
                                             className="btn btn-light"
+                                            onClick={() => setShowChangePassword(true)}
                                         >
                                             Change Password
                                         </button>
@@ -91,7 +92,7 @@ export default function Settings(props) {
                                 <hr />
                                 <Row className="margin-bottom-20">
                                     <Col xs={6} lg={9}>
-                                        <h4 className="margin-bottom-10">Username</h4>
+                                        <h4 className="margin-bottom-5">Username</h4>
                                         <p className="text-muted">
                                             Your username is <strong>{profile.username}</strong>
                                         </p>
@@ -101,7 +102,7 @@ export default function Settings(props) {
                                 <hr />
                                 <Row className="margin-bottom-20">
                                     <Col xs={6} lg={9}>
-                                        <h4 className="margin-bottom-10">Email Address</h4>
+                                        <h4 className="margin-bottom-5">Email Address</h4>
                                         <p className="text-muted">
                                             Your email address is <strong>{profile.email}</strong>
                                         </p>
