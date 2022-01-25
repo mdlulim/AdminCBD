@@ -60,7 +60,6 @@ export default function Countries(props) {
   const [filteredCountries, setFilteredCountries] = useState([]);
   const history = useHistory();
 
-  console.log(permissions, ' ++++++++++++++++')
 
   useMemo(() => {
     CountryService.getCountries().then((res) => {
@@ -105,7 +104,7 @@ export default function Countries(props) {
           </a>
         </span>
       }
-      {permissions && !permissions.delete_access &&
+      {permissions && permissions.delete_access &&
         <span style={iconPadding}>
           <a
             href={`#`}
