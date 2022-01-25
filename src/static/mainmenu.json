@@ -101,6 +101,12 @@
                     "title": "Transfers",
                     "link": "/transfers",
                     "icon": null
+                },
+                {
+                    "id": "debit-or-credit",
+                    "title": "Debit/Credit",
+                    "link": "/debit-credit",
+                    "icon": null
                 }
             ]
         },{
@@ -166,7 +172,7 @@
             "icon": "li-equalizer",
             "childitems": [
                 {
-                    "id": "Settings",
+                    "id": "settings",
                     "title": "Settings",
                     "link": "/settings",
                     "icon": null

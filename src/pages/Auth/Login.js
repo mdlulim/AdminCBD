@@ -7,6 +7,7 @@ import { UserService, SessionProvider } from 'providers';
 import jwt from 'jwt-decode';
 import { Loader } from 'components';
 export default function LoginPage(props) {
+    const { setRole } = props;
     const [show, setShow] = useState(false)
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -31,9 +32,13 @@ export default function LoginPage(props) {
         const geoLocation= {
                 IPv4: "123456"
             };
-            AuthAervice.login(user, password, device,geoLocation).then((response) =>{
+            AuthAervice.login(user, password, device,geoLocation).then(async (response) =>{
             if(response.data.success === true && response.data.data.admin === true){
                 SessionProvider.set(response.data.data.token);
+
+                const role = await UserService.getUserRole(response.data.data.token);
+                setRole(role)
+
                 window.location = '/dashboard';
             }else{
                 setShow(false)

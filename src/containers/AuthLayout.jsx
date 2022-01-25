@@ -9,6 +9,7 @@ const AuthLayout = props => {
     const { breadcrumb, header, sidenav, pageHeading, loading } = props;
     const [sideNavHidden, setSideNavHidden] = useState(false);
     const [sideNavMinimized, setSideNavMinimized] = useState(false);
+
     return (
         <>
         {loading && 

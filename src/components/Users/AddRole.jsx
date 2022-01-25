@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CardBody, Col, Row } from 'reactstrap';
 import useForm from "react-hook-form";
 import { UserService } from 'providers';
+import Swal from 'sweetalert2';
 
 const NavTabLink = ({
     id,
@@ -43,7 +44,6 @@ export default function AddRole(props) {
         roles,
         parent,
         handleParentChange,
-        pageLoading,
         setPageLoading
     } = props;
     const [activeTab, setActiveTab] = useState('information');
@@ -124,7 +124,23 @@ export default function AddRole(props) {
 
         const res = await UserService.addRoles(finalObject)
         setPageLoading(false)
-        console.log(res)
+        if (res.data.success) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Request processed successfully!',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return
+        }
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Failed to process request, please try again!',
+            showConfirmButton: false,
+            timer: 4000
+        });
     };
 
     return (
@@ -546,7 +562,7 @@ export default function AddRole(props) {
                     </div>
                 </CardBody>
                 <div className="text-right margin-bottom-20 mr-4">
-                    <button className="btn btn-secondary" disabled={pageLoading}>
+                    <button className="btn btn-secondary">
                         Save Changes
                     </button>
                 </div>

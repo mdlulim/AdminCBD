@@ -95,7 +95,7 @@ export default function UpdateProductDetails(props) {
     const [selectedStatus, setSelectedStatus] = useState('');
     const { processing,confirmButtonDisabled, confirmButton,} = props;
     const [selectedCurrency, setSelectedCurrency] = useState('');
-    const [selectedProductType, setSelectedProductType] = useState('');
+    const [selectedProductType, setSelectedProductType] = useState({});
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [ fees, setFees ] = useState({});
     const [allowCancellation, setAllowCancellation] = useState(false);
@@ -132,7 +132,14 @@ export default function UpdateProductDetails(props) {
            setProduct(productDetails);
            setFilteredSubcategories(temp2)
          //  setSelectedSubcategory(subcategoryList.filter(product => product.permakey === permakey));
-            setSelectedProductType(productDetails.type);
+         console.log(productDetails.type)
+
+         const categories1 = await ProductService.getProductCategories();
+         const category = categories1.results.filter(option => option.code === productDetails.type)[0];
+         
+            if(category){
+                setSelectedProductType({ value: category.code, label: category.title, id: category.id });
+            }
             setSelectedCurrency(productDetails.currency_code);
             setEducatorFee(productDetails.educator_fee);
             setAmountFee(productDetails.price)
