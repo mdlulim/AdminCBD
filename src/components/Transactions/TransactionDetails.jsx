@@ -58,11 +58,8 @@ const TransactionDetails = props => {
 
         if (selectedStatus.value === "Completed") {
             TransactionService.approveDeposit(transaction.id, data2).then((response) => {
-                 console.log(response.data)
+                console.log(response.data)
                 if (response.data.success === true) {
-                    // MemberService.updateStatus(transaction.user_id, 'Active').then((response) => {
-                    //     console.log(response);
-                    // })
                     setShow(false)
                     setProcessing(false);
                     return confirmAlert({

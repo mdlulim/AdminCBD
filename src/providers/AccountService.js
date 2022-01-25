@@ -50,6 +50,19 @@ class AccountService {
         return [];
       });
     }
+
+    static async debitCredit(data){
+      return await axios({
+        mode: 'no-cors',
+        method: 'POST',
+        headers: headers,
+        data:data,
+        url: `${Config.API.BASE_URL}/transfer`,
+      }).then((res) =>{
+        const result = res;
+        return result;
+      });
+    }
 }
 
 export default AccountService;

@@ -39,7 +39,7 @@ import TransactionImport from 'pages/Transactions/TransactionImport';
 import Deposits from 'pages/Transactions/Deposits';
 import Widthdrawals from 'pages/Transactions/Widthdrawals';
 import Transfers from 'pages/Transactions/Transfers';
-import MakeTransferPage from 'pages/Transactions/MakeTransferPage';
+import DebitCredit from 'pages/Transactions/DebitCredit';
 import Products from 'pages/Products';
 import ProductCancellations from 'pages/Products/Cancellations';
 import ProductHistory from 'pages/Products/ProductHistory';
@@ -124,9 +124,9 @@ const App = () => {
 					<Route exact path="/transactions/transfers" component={(props) => <Transfers config={settings} {...props} setMenu={setMenu} />} permissions={role ? role.permissions.transactions.childitems.transfers : null} />
 					{/* <Route exact path="/transactions/completed" component={(props) => <Completed config={settings} {...props} setMenu={setMenu} />} /> */}
 					{/* <Route exact path="/transactions/pending" component={(props) => <Pending config={settings} {...props} setMenu={setMenu} />} /> */}
-					<Route exact path="/transactions/withdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} permissions={role ? role.permissions.transactions.childitems.withdrawals : null} />
-					<Route exact path="/transactions/transfers/transfer" component={(props) => <MakeTransferPage config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.products.childitems.products : null} />} />
+					<Route exact path="/transactions/withdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} permissions={role?role.permissions.transactions.childitems.withdrawals:null}/>
+					<Route exact path="/transactions/debit-credit" component={(props) => <DebitCredit config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} permissions={role?role.permissions.products.childitems.products:null} />} />
 					<Route exact path="/products/cancellations" component={(props) => <ProductCancellations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/history" component={(props) => <ProductHistory config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/categories" component={(props) => <ProductCategories config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.products.childitems.categories : null} />} />
