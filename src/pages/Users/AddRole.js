@@ -37,6 +37,7 @@ export default function AddRolesPage(props) {
     return (
         <AuthLayout
             {...props}
+            loading={pageLoading}
             breadcrumb={{
                 active: "Add",
                 items: [{
@@ -65,7 +66,6 @@ export default function AddRolesPage(props) {
                         roles={roles}
                         parent={parentRole}
                         handleParentChange={handleParentChange}
-                        pageLoading={pageLoading}
                         setPageLoading={setPageLoading}
                     />
                 </Card>

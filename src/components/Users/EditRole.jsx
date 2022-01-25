@@ -4,7 +4,8 @@ import moment from 'moment';
 import useForm from "react-hook-form";
 import Select from 'react-select';
 import 'react-datepicker/dist/react-datepicker.css';
-import { UserService } from 'providers';
+import { PermissionLevelService, UserService } from 'providers';
+import Swal from 'sweetalert2';
 
 
 const NavTabLink = ({
@@ -78,8 +79,25 @@ export default function EditRole(props) {
 
     const removeUser = async (id) => {
         console.log(id)
-        const res = await UserService.updateAdminUser(id, { group_id: '903824d6-740f-4220-9e10-49bd805ad1be', permissions: null})
-        console.log(res)
+        const res = await PermissionLevelService.updateAdminUser(id, { group_id: '903824d6-740f-4220-9e10-49bd805ad1be', permissions: null })
+        if (res.data.success) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Request processed successfully!',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            window.location.reload();
+            return
+        }
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Failed to process request, please try again!',
+            showConfirmButton: false,
+            timer: 4000
+        });
     }
 
 
@@ -154,10 +172,25 @@ export default function EditRole(props) {
             updated: Date.now(),
         }
 
-        // console.log(finalObject)
-        // console.log(permissions)
         const res = await UserService.updateRoles(id, finalObject)
-        console.log(res)
+        if (res.data.success) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Request processed successfully!',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return
+        }
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Failed to process request, please try again!',
+            showConfirmButton: false,
+            timer: 4000
+        });
+        setPageLoading(false)
     };
 
     const fetch = async () => {
@@ -181,9 +214,29 @@ export default function EditRole(props) {
     }, [])
 
     const assignRole = async () => {
-        const res = await UserService.updateAdminUser(selectedUser[0].id, { group_id: id, permissions })
-        // console.log(selectedUser[0].id, ' yyyyyyyyyyyyyy ', id, '------------',permissions)
-        console.log(res)
+        if (selectedUser) {
+            setPageLoading(true)
+            const res = await PermissionLevelService.updateAdminUser(selectedUser[0].id, { group_id: id, permissions })
+            if (res.data.success) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Request processed successfully!',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                window.location.reload();
+                return
+            }
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'Failed to process request, please try again!',
+                showConfirmButton: false,
+                timer: 4000
+            });
+            setPageLoading(false)
+        }
 
     }
 
@@ -657,8 +710,6 @@ export default function EditRole(props) {
                             <div className="margin-bottom-20">
                                 <div className="form-row">
                                     <div className="form-group col-md-6">
-
-
                                         <label>Username<span className="text-danger">*</span></label>
                                         <Select
                                             id="product_type"
@@ -690,14 +741,13 @@ export default function EditRole(props) {
                                     </div>
                                 </div>
                                 <div>
-                                    <button
-                                        type="button"
+                                    <div
                                         className="btn btn-outline-secondary"
                                         disabled={!selectedUser}
                                         onClick={assignRole}
                                     >
                                         Assign to role
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                             <div className="divider divider--sm" />
