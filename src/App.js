@@ -107,9 +107,9 @@ const App = () => {
 					<Route exact path="/reports/:id" component={(props) => <ReportDetails config={settings} {...props} setMenu={setMenu} />} />
 
 					<Route exact path="/configurations/settings" component={(props) => <SystemSettings config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.configurations.childitems.settings : null} />} />
-					<Route exact path="/configurations/countries" component={(props) => <Countries config={settings} {...props} setMenu={setMenu} />} permissions={role ? role.permissions.configurations.childitems.countries : null}/>
+					<Route exact path="/configurations/countries" component={(props) => <Countries config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.configurations.childitems.countries : null} />} />
 					<Route exact path="/configurations/currencies" component={(props) => <Currencies config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/configurations/forms" component={(props) => <FormsConfigurations config={settings} {...props} setMenu={setMenu} />} permissions={role ? role.permissions.configurations.childitems.forms : null}/>
+					<Route exact path="/configurations/forms" component={(props) => <FormsConfigurations config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.configurations.childitems.forms : null} />} />
 					<Route exact path="/configurations" component={(props) => <Configurations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/transactions" component={(props) => <Transactions config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/bank-accounts" component={(props) => <BankAccounts config={settings} {...props} setMenu={setMenu} />} />
