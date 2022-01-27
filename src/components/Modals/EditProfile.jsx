@@ -26,7 +26,19 @@ export default function EditProfile(props) {
             console.log(ext)
             
             const { success, filename } = await FileStorageProvider.upload('admin', 'profile', selectedFile, Date.now() + '.' + ext);
-            if (!success) {
+            if (success) {
+                const data = {
+                    profile_path: filename,
+                }
+                const result = await UserService.updateUser(id, data);
+                if(result.success){
+                    setSuccess('Image was successfully updated');
+                    setError('');
+                }else{
+                    setSuccess('');
+                    setError(result.message);
+                }
+            }else{
                 setError("Failed to upload address docs", true);
                 throw true;
             }
