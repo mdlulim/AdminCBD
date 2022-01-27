@@ -8,12 +8,15 @@ export default function SubCategoryConfigurations(props) {
     const { match } = props;
     const { params } = match;
     const { id } = params;
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(2);
     const [subcategory, setSubcategory] = useState(null);
     const [pageLoading, setPageLoading] = useState(true);
+    const [calcHistory, setCalcHistory] = useState(null);
 
     async function fetchData() {
         const subcategory = await ProductService.getProductSubcategory(id);
+        const calcHistory = await ProductService.getSubcategoryCalculations(id);
+        setCalcHistory(calcHistory);
         setSubcategory(subcategory);
         setPageLoading(false);
     }
@@ -59,7 +62,19 @@ export default function SubCategoryConfigurations(props) {
                                         setStep(1);
                                     }}
                                 >
-                                   {subcategory.title} Indicators
+                                   <strong>{subcategory.title} Indicators</strong>
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    href="/"
+                                    className={`nav-link ${step === 2 ? 'active selected' : 'done'}`}
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setStep(2);
+                                    }}
+                                >
+                                   <strong>{subcategory.title} Calculations</strong>
                                 </a>
                             </li>
                         </ul>
@@ -70,6 +85,13 @@ export default function SubCategoryConfigurations(props) {
                         {step === 1 &&
                         <Products.Indicators
                             {...subcategory}
+                            fetchData={fetchData}
+                            setPageLoading={setPageLoading}
+                        />}
+                        {step === 2 &&
+                        <Products.Calculations
+                            {...subcategory}
+                            fetchData={fetchData}
                             setPageLoading={setPageLoading}
                         />}
                     </div>

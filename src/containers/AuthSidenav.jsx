@@ -147,9 +147,9 @@ export default function AuthSidenav(props) {
                                     className={`dropdown-menu dropdown-menu-right ${showProfileDropdown ? 'show' : ''}`}
                                     aria-labelledby="dropdownMenuButton"
                                 >
-                                    <a className="dropdown-item" href="/">Profile</a>
-                                    <a className="dropdown-item" href="/">Settings</a>
-                                    <div className="dropdown-divider"></div>
+                                    <a className="dropdown-item" href="/profile">Profile</a>
+                                    <a className="dropdown-item" href="/settings">Settings</a>
+                                    <div className="dropdown-divider" />
                                 </div>
                             </div>
                         </div>
@@ -166,10 +166,8 @@ export default function AuthSidenav(props) {
                                     onClick={() => setShowProfileDropdown2(!showProfileDropdown2)}
                                 />
                                 <div className={`dropdown-menu ${showProfileDropdown2 ? 'show' : ''}`} aria-labelledby="dropdownMenuButton">
-                                    <a className="dropdown-item" href="/">Profile</a>
-                                    <a className="dropdown-item" href="/">Projects</a>
-                                    <a className="dropdown-item" href="/">Invoices</a>
-                                    <a className="dropdown-item" href="/">Settings</a>
+                                    <a className="dropdown-item" href="/profile">Profile</a>
+                                    <a className="dropdown-item" href="/settings">Settings</a>
                                     <div className="dropdown-divider"></div>
                                     <a className="dropdown-item" href="/">Log out</a>
                                 </div>

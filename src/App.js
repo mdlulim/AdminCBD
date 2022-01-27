@@ -59,6 +59,9 @@ import ProductUpdateSubCategory from './pages/Products/UpdateSubCategory';
 import ProductSubCategoryConfigs from './pages/Products/SubCategoryConfig';
 import { SessionProvider } from 'providers';
 
+import Profile from 'pages/Profile';
+import ProfileSettings from 'pages/Profile/Settings';
+
 const App = () => {
 	const settings = config;
 	const [authTokens, setAuthTokens] = useState();
@@ -89,7 +92,12 @@ const App = () => {
 					<Redirect exact from="/" to="/dashboard" />
 					<Route exact path="/login" component={(props) => <AuthLogin config={settings} {...props} setMenu={setMenu} setRole={setRole} />} />
 					<Route exact path="/forgot-password" component={(props) => <AuthForgotPassword config={settings} {...props} setMenu={setMenu} />} />
+
+					<PrivateRoute exact path="/profile" component={(props) => <Profile config={settings} {...props} menu={menu} />} />
+					<PrivateRoute exact path="/settings" component={(props) => <ProfileSettings config={settings} {...props} menu={menu} />} />
+
 					<PrivateRoute exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} />
+
 					<Route exact path="/members/pending" component={(props) => <MembersPending config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} menu={menu} />} permissions={role ? role.permissions.members.childitems.members : null} />
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />

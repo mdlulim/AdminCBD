@@ -52,10 +52,6 @@ export default function LoginPage(props) {
             setLoading(false);
             setDisabled(false);
         });
-        //const geoLocation = GeoLocationService.getClientLocation();;
-        //const geoLocation = GeoLocationService.getClientLocation();;
-        //const geoLocation = GeoLocationService.getClientLocation();;
-        //const geoLocation = GeoLocationService.getClientLocation();;
     }
 
     return (
@@ -99,33 +95,13 @@ export default function LoginPage(props) {
                         <Col xs={2} />
                         <Col xs={8}>
                             <button disabled={disabled} type="submit" className="btn btn-secondary btn-block">
-                                Login to account
+                                {disabled ? 'Processing request...' : 'Login to account'}
                             </button>
-                            {/* <div className="App">
-                                <div className={"row"}>
-                                <div className={"item"}>
-                                    <Loader type="spinner-cub" bgColor={"#FFFFFF"} title={"spinner-cub"} color={'#FFFFFF'} size={80} />
-                                </div>
-                                </div>
-                            </div> */}
                         </Col>
                     </div>
                 </div>
             </form>
             <div className="divider" />
-            <div className="form-group text-center">
-                <div className="form-row">
-                    {/* <Col xs={4}>
-                        <a href="/" className="text-muted">About us</a>
-                    </Col>
-                    <Col xs={4}>
-                        <a href="/" className="text-muted">Contacts</a>
-                    </Col>
-                    <Col xs={4}>
-                        <a href="/" className="text-muted">Support</a>
-                    </Col> */}
-                </div>
-            </div>
             </>
         </AuthPages>
     );

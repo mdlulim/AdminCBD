@@ -35,7 +35,7 @@ const getBalance = props => {
 }
 
 export default function Indicators(props) {
-    const { id, title, indicators, setPageLoading } = props;
+    const { id, title, indicators, setPageLoading, fetchData } = props;
     const { register, handleSubmit, errors } = useForm();
     const { main_pool, compound_pool, reserve_pool, last_updated } = indicators;
     const mainPool = getBalance({ ...main_pool, last_updated });
@@ -60,7 +60,10 @@ export default function Indicators(props) {
                             compound_pool_balance_yesterday,
                             reserve_pool_balance_yesterday,
                         } = data;
+                        const { last_payout, last_calculation } = indicators;
                         const postData = {
+                            last_payout,
+                            last_calculation,
                             last_updated: today,
                             main_pool: {
                                 balance_current: parseFloat(main_pool_balance_today),
@@ -82,13 +85,16 @@ export default function Indicators(props) {
                         const { success } = response;
                         setPageLoading(false);
                         if (success) {
-                            return Swal.fire({
+                            Swal.fire({
                                 position: 'center',
                                 icon: 'success',
                                 title: 'Configurations updated successfully!',
                                 showConfirmButton: false,
                                 timer: 4000
                             });
+                            return setTimeout(async function () {
+                                fetchData();
+                            }, 4000);
                         }
                         Swal.fire({
                             position: 'center',
