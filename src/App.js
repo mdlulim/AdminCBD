@@ -52,6 +52,7 @@ import UserPermissions from 'pages/UserPermissions';
 import BankAccounts from 'pages/BankAccounts';
 import SendOTPBankAccounts from 'pages/BankAccounts/SendOPTBankAccount';
 import KYC from 'pages/KYC';
+import Broadcast from 'pages/broadcast';
 import { UserService } from 'providers';
 import ProductCancel from 'pages/Products/ProductCancel';
 import ProductSubCategories from './pages/Products/SubCategories';
@@ -142,6 +143,7 @@ const App = () => {
 					{/* <Route exact path="/configurations/product/:id" component={(props) => <ProductSubcategoryUpdate config={settings} {...props} setMenu={setMenu} />} /> */}
 
 					<Route exact path="/kyc" component={(props) => <KYC config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/broadcast" component={(props) => <Broadcast config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.broadcast: null} />} />
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
 				</Switch>
 			</Router>

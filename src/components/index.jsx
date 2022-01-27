@@ -28,6 +28,7 @@ import MainAccount from './MainAccount';
 import Users from './Users';
 import Commission from './Commission';
 import ProductConfig from './ProductConfig';
+import Broadcast from './Broadcast'
 
 export {
     Breadcrumb,
@@ -60,4 +61,5 @@ export {
     Users,
     Commission,
     ProductConfig,
+    Broadcast,
 };

@@ -22,6 +22,7 @@ import CompanyService from './CompanyService';
 import BankAccountService from './BankAccountService';
 import MainAccountService from './MainAccountService';
 import CompanyBankAccountService from './CompanyBankAccountService';
+import BroadcastService from './BroadcastService';
 
 export {
     SessionProvider,
@@ -48,4 +49,5 @@ export {
     BankAccountService,
     MainAccountService,
     CompanyBankAccountService,
+    BroadcastService,
 };
