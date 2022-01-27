@@ -143,7 +143,7 @@ export default function Broadcast(props) {
 
   return (
     <Card className="o-hidden mb-4">
-      <BroadcastModal show={showModal} setShow={setShowModal} broadcast={selectedBroadcast} />
+      <BroadcastModal show={showModal} setShow={setShowModal} broadcast={selectedBroadcast} setPageLoading={setPageLoading}/>
 
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
