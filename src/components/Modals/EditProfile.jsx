@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useState} from 'react';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
+import { UserService } from 'providers';
 
 export default function EditProfile(props) {
-    const {
-        show,
-        setShow,
-        first_name,
-        last_name,
-        mobile,
-        email,
-    } = props;
+    const { show, setShow, id, first_name, last_name, mobile, email,} = props;
+    const [ error, setError] = useState('');
+    const [ success, setSuccess] = useState('');
+    const handleClose = () => {
+        setShow(false)
+        window.location = '/profile';
+    };
 
-    const handleClose = () => setShow(false);
+    async function  onSubmit(event){
+        event.preventDefault();
+        const form = event.currentTarget;
+        const data = {
+            first_name  : form.first_name.value ? form.first_name.value : first_name,
+            last_name   : form.last_name.value ? form.last_name.value : last_name,
+            mobile      : form.mobile.value ? form.mobile.value: mobile,
+        }
+
+        const result = await UserService.updateUser(id, data);
+        if(result.success){
+            setSuccess('User was successfully modified');
+            setError('');
+        }else{
+            setSuccess('');
+            setError(result.message);
+        }
+    }
 
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size="lg">
@@ -22,8 +39,19 @@ export default function EditProfile(props) {
                 </h4>
             </Modal.Header>
             <Modal.Body>
-                <form id="change-password-form">
+                <form id="change-password-form" onSubmit={onSubmit}>
                     <Row>
+                    <Col xs={12}>
+                    { error ?
+                        <div className="alert alert-warning" role="alert" >
+                        {error}
+                        </div>: ''}
+
+                        { success ?
+                        <div className="alert alert-success" role="alert" >
+                        {success}
+                        </div>: ''}
+                        </Col>
                         <Col xs={9}>
                             <p className="text-muted margin-bottom-20">
                                 Use form below to update your profile. The email address and username are used
@@ -34,6 +62,7 @@ export default function EditProfile(props) {
                                 <label>First name</label>
                                 <input
                                     type="text"
+                                    name="first_name"
                                     className="form-control"
                                     placeholder="Enter your first name"
                                     defaultValue={first_name}
@@ -43,6 +72,7 @@ export default function EditProfile(props) {
                                 <label>Last name</label>
                                 <input
                                     type="text"
+                                    name="last_name"
                                     className="form-control"
                                     placeholder="Enter your last name"
                                     defaultValue={last_name}
@@ -52,6 +82,7 @@ export default function EditProfile(props) {
                                 <label>Email address</label>
                                 <input
                                     type="email"
+                                    name="email"
                                     className="form-control"
                                     defaultValue={email}
                                     readOnly
@@ -61,6 +92,7 @@ export default function EditProfile(props) {
                                 <label>Phone number</label>
                                 <input
                                     type="tel"
+                                    name="mobile"
                                     className="form-control"
                                     placeholder="Enter your mobile number (optional)"
                                     defaultValue={mobile}

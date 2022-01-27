@@ -1,6 +1,6 @@
 import SessionProvider from './SessionProvider';
 import AuthService from './AuthService';
-import GeoLocationService from './GeoLocationService';
+import GeoLocationProvider from './GeoLocationProvider';
 import UserRolesService from './UserRolesService';
 import UserService from './UserService';
 import ProductService from './ProductService';
@@ -23,11 +23,12 @@ import BankAccountService from './BankAccountService';
 import MainAccountService from './MainAccountService';
 import CompanyBankAccountService from './CompanyBankAccountService';
 import ProfileProvider from './ProfileProvider';
+import ActivityService from './ActivityService';
 
 export {
     SessionProvider,
     AuthService,
-    GeoLocationService,
+    GeoLocationProvider,
     UserRolesService,
     UserService,
     ProductService,
@@ -50,4 +51,5 @@ export {
     MainAccountService,
     CompanyBankAccountService,
     ProfileProvider,
+    ActivityService,
 };

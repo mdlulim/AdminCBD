@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
-import { ProfileProvider } from 'providers';
+import { ProfileProvider, ActivityService } from 'providers';
 import { Modals, Profile } from 'components';
 
 export default function ProfilePage(props) {
     const [profile, setProfile] = useState({});
+    const [activities, setActivities] = useState([]);
     const [pageLoading, setPageLoading] = useState(true);
     const [showEditProfile, setShowEditProfile] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
@@ -14,6 +15,9 @@ export default function ProfilePage(props) {
         const profile = await ProfileProvider.me();
         setProfile(profile);
         setPageLoading(false);
+
+        const activites = await ActivityService.getActivitiesByUser(profile.id);
+        setActivities(activites.results)
     }
 
     useEffect(() => {
@@ -38,7 +42,7 @@ export default function ProfilePage(props) {
                 <Modals.ChangePassword
                     show={showChangePassword}
                     setShow={setShowChangePassword}
-                    {...profile}
+                    profile={profile}
                 />
                 <Modals.EditProfile
                     show={showEditProfile}
@@ -98,14 +102,7 @@ export default function ProfilePage(props) {
                         </Card>
                     </Col>
                     <Col xs={12} lg={9}>
-                        <Profile.Timeline
-                            items={[
-                                { id: '1', title: 'Test 1' },
-                                { id: '2', title: 'Test 2' },
-                                { id: '3', title: 'Test 3' },
-                                { id: '4', title: 'Test 4' }
-                            ]}
-                        />
+                        <Profile.Timeline activities={activities} />
                     </Col>
                 </Row>
             </>}
