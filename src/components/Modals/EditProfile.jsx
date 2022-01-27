@@ -1,16 +1,37 @@
 import React, { useState} from 'react';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
-import { UserService } from 'providers';
+import { UserService, FileStorageProvider } from 'providers';
 
 export default function EditProfile(props) {
     const { show, setShow, id, first_name, last_name, mobile, email,} = props;
     const [ error, setError] = useState('');
     const [ success, setSuccess] = useState('');
+    const [ uploadedImage, setUploadedImage] = useState('');
     const handleClose = () => {
         setShow(false)
         window.location = '/profile';
     };
+
+    async function  onFileChange(event){
+        setUploadedImage({ selectedFile: event.target.files[0] });
+
+    };
+
+      async function  uploadProfileImage(){
+        const selectedFile = uploadedImage.selectedFile;
+       
+        if (selectedFile) {
+            const ext = selectedFile.type.split('/')[1];
+            console.log(ext)
+            
+            const { success, filename } = await FileStorageProvider.upload('admin', 'profile', selectedFile, Date.now() + '.' + ext);
+            if (!success) {
+                setError("Failed to upload address docs", true);
+                throw true;
+            }
+         }
+    }
 
     async function  onSubmit(event){
         event.preventDefault();
@@ -106,9 +127,11 @@ export default function EditProfile(props) {
                                     <span className="fa fa-plus" />
                                 </a>
                             </div>
+                            <input type="file" onChange={onFileChange} />
                             <button
                                 type="button"
                                 className="btn btn-light btn-block margin-top-10"
+                                onClick={uploadProfileImage}
                             >
                                 Upload Photo
                             </button>

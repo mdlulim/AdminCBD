@@ -31,18 +31,17 @@ export default function ChangePassword(props) {
             geoinfo: '',
             device: '',
         }
-        //console.log(data2)
-        //return data
+
         UserService.passwordChange(data2).then((res) => {
-            console.log(res);
-            // if (response.success) {
-            //     setSuccess('User was successfully modified');
-            //     setError('');
-            //     reset();
-            // } else {
-            //     setSuccess('');
-            //     setError(response.message);
-            // }
+            console.log(res.data);
+            if (res.data.success) {
+                setSuccess('Your password wassuccessfully modified');
+                setError('');
+                reset();
+            } else {
+                setSuccess('');
+                setError(res.data.message);
+            }
         }).catch()
        
     }
@@ -87,6 +86,7 @@ export default function ChangePassword(props) {
                             placeholder="Enter your current password"
                             ref={register({ required: true })}
                         />
+                        {errors.old_password && <span className="help-block invalid-feedback">Please enter a valid old password</span>}
                     </div>
                     <div className="form-group">
                         <label>New password</label>
@@ -98,6 +98,7 @@ export default function ChangePassword(props) {
                             ref={register({ required: true })}
                         />
                         <span className="form-text">Minimum 8 characters, at least 1 uppercase, 1 lowercase, 1 special character, 1 number, 1 letter.</span>
+                        {errors.new_password1 && <span className="help-block invalid-feedback">Please enter a valid new password</span>}
                     </div>
                     <div className="form-group">
                         <label>Verify password</label>
@@ -105,9 +106,10 @@ export default function ChangePassword(props) {
                             type="password"
                             name="new_password2"
                             className={`form-control ${errors.new_password2 ? 'is-invalid' : ''}`}
-                            placeholder="Repeat your new password"
+                            placeholder="Confirm password"
                             ref={register({ required: true })}
                         />
+                        {errors.new_password2 && <span className="help-block invalid-feedback">Please enter a valid confirmed password</span>}
                     </div>
                 </form>
             </Modal.Body>

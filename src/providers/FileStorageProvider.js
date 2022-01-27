@@ -23,7 +23,7 @@ class FileStorageProvider {
         const form = new FormData();
         form.append('upload', file);
         headers['Content-Type'] = file.type;
-        return axios.post(`${baseurl}/upload/${category}/${type}${(filename)?`?filename=${filename}`:''}`, form, {
+        return axios.post(`${baseurl}upload/${category}/${type}${(filename)?`?filename=${filename}`:''}`, form, {
             headers,
         })
             .then((json) => json.data)
@@ -32,29 +32,13 @@ class FileStorageProvider {
                 if (err.response) return err.response.data;
                 return err;
             });
-    }; 
-
-    static async batch_upload(category, type, file, filename = null) {
-        const form = new FormData();
-        form.append('upload', file);
-        headers['Content-Type'] = file.type;
-        return axios.post(`${baseurl}/batch-upload/${category}/${type}${(filename)?`?filename=${filename}`:''}`, form, {
-            headers,
-        })
-            .then((json) => json.data)
-            .then(res => {console.log(res, " response from server"); return res})
-            .catch((err) => {
-                console.log(err, " error from server")
-                if (err.response) return err.response.data;
-                return err;
-            });
-    }; 
+    };
 
     static async filepath(filename) {
         return await axios({
             mode: 'no-cors',
             method: 'GET',
-            url: `${baseurl}/file?filename=${filename}`,
+            url: `${baseurl}file?filename=${filename}`,
             crossdomain: true,
             headers,
         })
@@ -65,25 +49,6 @@ class FileStorageProvider {
                 return err;
             });
     };
-
-    static async update_status(data) {
-        return await axios({
-            mode: 'no-cors',
-            method: 'POST',
-            url: `${Config.API.BASE_URL_BATCH}/set-status`,
-            data,
-            crossdomain: true,
-            headers,
-        })
-            .then((json) => json.data)
-            .then(res => res)
-            .catch((err) => {
-                if (err.response) return err.response.data;
-                return err;
-            });
-    };
-
-
 }
 
 export default FileStorageProvider;
