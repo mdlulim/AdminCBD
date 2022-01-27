@@ -18,7 +18,7 @@ if (SessionProvider.isValid()) {
 }
 
 class BroadcastService {
-    static async getBroadcasts() {
+    static async get() {
         return await axios({
           mode: 'no-cors',
           method: 'GET',
@@ -32,6 +32,29 @@ class BroadcastService {
           }
           return [];
         });
+      }
+
+      static async update(id, data) {
+        return await axios({
+          mode: 'no-cors',
+          method: 'PUT',
+          data,
+          headers: headers,
+          url: `${Config.API.BASE_URL}/broadcast/${id}`,
+        }).then(json => json.data)
+        .then(res => {
+          return res;
+        });
+      }
+
+      static async create(data) {
+        return await axios({
+          mode: 'no-cors',
+          method: 'POST',
+          headers: headers,
+          data,
+          url: `${Config.API.BASE_URL}/broadcast`,
+        })
       }
 }
 

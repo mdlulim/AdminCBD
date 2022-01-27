@@ -2,8 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody } from 'reactstrap';
 import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
-// import DeleteProductAlert from './DeleteProductAlert';
-import { BroadcastService, SessionProvider } from '../../providers';
+import BroadcastModal from './broadcastModal'
+import { BroadcastService } from '../../providers';
 
 // styles
 const customStyles = {
@@ -46,34 +46,23 @@ const Status = ({ status }) => {
   );
 };
 
-const Image = () => {
-  return (
-    <img
-      alt=""
-      height="32px"
-      style={{ borderRadius: 4 }}
-      width="32px"
-      src={require("images/1.jpeg")}
-    />
-  );
-};
 
 export default function Broadcast(props) {
   const { setPageLoading, permissions } = props;
-  const [showDelete, setShowDelete] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [broadcast, setBroadcasts] = useState([]);
+  const [filteredBroadcast, setFilteredBroadcasts] = useState([]);
+  const [selectedBroadcast, setSelectedBroadcast] = useState({});
 
   useMemo(() => {
-    BroadcastService.getBroadcasts().then((res) => {
-          const productlist = res.results;
-          console.log(productlist)
-          setProducts(productlist);
-          setFilteredProducts(productlist);
+    BroadcastService.get().then((res) => {
+      const productlist = res.results;
+      console.log(productlist)
+      setBroadcasts(productlist);
+      setFilteredBroadcasts(productlist);
 
-          setPageLoading(false)
-      });
+      setPageLoading(false)
+    });
 
   }, [setPageLoading]);
   // table headings definition
@@ -84,29 +73,9 @@ export default function Broadcast(props) {
       sortable: true,
       wrap: true,
     }, {
-      name: 'Type',
-      selector: 'type',
+      name: 'Summary',
+      selector: 'summary',
       sortable: true,
-    }, {
-      name: 'Educator Fee',
-      selector: 'educator_fee',
-      sortable: true,
-      cell: row => <div>{row.educator_fee ? row.currency_code + ' ' + row.educator_fee : ''} {row.educator_percentage ? row.educator_percentage + ' %' : ''}</div>
-    }, {
-      name: 'Registration Fee',
-      selector: 'registration_fee',
-      sortable: true,
-      cell: row => <div>{row.registration_fee ? row.currency_code + ' ' + row.registration_fee : ''} {row.educator_percentage ? row.educator_percentage + ' %' : ''}</div>
-    }, {
-      name: 'Product Amount',
-      selector: 'price',
-      sortable: true,
-      cell: row => <div>{row.currency_code}  {row.price}</div>
-    }, {
-      name: 'Status',
-      selector: 'status',
-      sortable: true,
-      cell: row => <Status {...row} />
     }, {
       name: 'Created Date',
       selector: 'created',
@@ -116,18 +85,38 @@ export default function Broadcast(props) {
         <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
       </div>
     }, {
+      name: 'Expiry Date',
+      selector: 'created',
+      sortable: true,
+      cell: row => <div>
+        <strong><Moment date={row.expiry} format="D MMM YYYY" /></strong><br />
+        <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+      </div>
+    }, {
+      name: 'Published Date',
+      selector: 'created',
+      sortable: true,
+      cell: row => <div>
+        <strong><Moment date={row.published} format="D MMM YYYY" /></strong><br />
+        <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+      </div>
+    }, {
+      name: 'Status',
+      selector: 'status',
+      sortable: true,
+      cell: row => <Status {...row} />
+    }, {
       name: 'Actions',
       sortable: true,
       cell: row => <div>
-        { permissions && permissions.update_access &&
+        {permissions && permissions.update_access &&
           <span style={iconPadding}>
-          <a
-            href={`products/${row.id}`}
-            className="btn btn-secondary btn-sm btn-icon"
-          >
-            <span className="fa fa-pencil" />
-          </a>
-        </span>
+            <span
+              className="btn btn-secondary btn-sm btn-icon"
+            >
+              <span className="fa fa-pencil" onClick={()=>{setSelectedBroadcast(row); setShowModal(true)}}/>
+            </span>
+          </span>
         }
         {/* <spam style={iconPadding}><a
       href={`#`}
@@ -144,18 +133,17 @@ export default function Broadcast(props) {
     }];
 
   const onSearchFilter = filterText => {
-    const filteredItems = products.filter(item => (
+    const filteredItems = broadcast.filter(item => (
       (item && item.title && item.title.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
     ));
-    setFilteredProducts(filteredItems);
+    setFilteredBroadcasts(filteredItems);
   }
 
-  // if (pageLoading) return <Loader.Default />;
   return (
     <Card className="o-hidden mb-4">
-      {/* <DeleteProductAlert show={showDelete} setShow={setShowDelete} product={selectedProduct} /> */}
+      <BroadcastModal show={showModal} setShow={setShowModal} broadcast={selectedBroadcast} />
 
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
@@ -170,17 +158,16 @@ export default function Broadcast(props) {
           />
           {permissions && permissions.create_access &&
             <div>
-              <a
-                href={`products/add`}
-                className="btn btn-secondary">
+              <span
+                className="btn btn-secondary"  onClick={()=>{setSelectedBroadcast({}); setShowModal(true)}}>
                 Add Broadcast
-              </a>
+              </span> 
             </div>
           }
         </div>
       </CardBody>
       <DataTable
-        data={filteredProducts}
+        data={filteredBroadcast}
         columns={columns}
         customStyles={customStyles}
         noHeader
