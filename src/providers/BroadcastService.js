@@ -18,12 +18,12 @@ if (SessionProvider.isValid()) {
 }
 
 class BroadcastService {
-    static async get() {
+    static async get(id) {
         return await axios({
           mode: 'no-cors',
           method: 'GET',
           headers: headers,
-          url: `${Config.API.BASE_URL}/broadcast`,
+          url: `${Config.API.BASE_URL}/broadcast?id=${id}`,
         }).then(json => json.data)
         .then(res => {
           const { success, data } = res;
@@ -55,6 +55,22 @@ class BroadcastService {
           data,
           url: `${Config.API.BASE_URL}/broadcast`,
         })
+      }
+
+      static async getAudience() {
+        return await axios({
+          mode: 'no-cors',
+          method: 'GET',
+          headers: headers,
+          url: `${Config.API.BASE_URL}/audience?channel=frontend`,
+        }).then(json => json.data)
+        .then(res => {
+          const { success, data } = res;
+          if (success) {
+            return data || [];
+          }
+          return [];
+        });
       }
 }
 

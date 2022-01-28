@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import useForm from 'react-hook-form';
@@ -8,50 +7,79 @@ import { EditorState } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
+import DatePicker from 'react-datepicker';
+import Swal from 'sweetalert2';
 
+const broadcastAlert = (success) => {
+    if (success) {
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Request processed successfully!',
+            showConfirmButton: false,
+            timer: 3000
+        });
+        window.location.reload();
+        return
+    }
+    Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Failed to process request, please try again!',
+        showConfirmButton: false,
+        timer: 4000
+    });
+}
 const BroadcastModal = props => {
     const {
         setShow,
         show,
         broadcast,
-        setPageLoading
-
+        audience,
     } = props;
 
     const { handleSubmit, register } = useForm()
+    const [loading, setLoading] = useState(false)
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
 
     const onSubmit = (data) => {
-        setPageLoading(true)
+        setLoading(true)
         data.body = convertToHTML(editorState.getCurrentContent())
+        data.published = startDate
+        data.expiry = endDate
 
         if (broadcast && broadcast.id) {
             //user is editing a broadcast message
             console.log(data, ' editing')
-            data.audience = ['0caf5844-f5b8-4491-beb6-1132db1d7ffb,c85ef2f9-d1dc-451d-b36d-9f0b111c1882']
-            BroadcastService.update(data)
-                .then((res) => {
-                    console.log(res)
-                    setPageLoading(false)
-                }).catch(err => {
-                    console.log(err)
-                    setPageLoading(false)
-                })
+            // BroadcastService.update(broadcast.id, data)
+            //     .then((res) => {
+            //         console.log(res)
+            //         setLoading(false)
+            //         setShow(false)
+            // broadcastAlert(res.data.success)
+            //     }).catch(err => {
+            //         console.log(err)
+            //         setLoading(false)
+            // broadcastAlert(false)
+            //     })
 
         } else {
             console.log(data, ' creating')
-            data.audience = ['0caf5844-f5b8-4491-beb6-1132db1d7ffb,c85ef2f9-d1dc-451d-b36d-9f0b111c1882']
             BroadcastService.create(data)
                 .then((res) => {
-                    console.log(res)
-                    setPageLoading(false)
+                    setLoading(false)
+                    setShow(false)
+                    broadcastAlert(res.data.success)
                 }).catch(err => {
-                    console.log(err)
-                    setPageLoading(false)
+                    setLoading(false)
+                    broadcastAlert(false)
                 })
         }
 
     }
+
 
     const handleClose = () => {
         setShow(false);
@@ -62,7 +90,7 @@ const BroadcastModal = props => {
     };
 
     return (
-        <Modal show={show} onHide={handleClose} centered className="confirm-modal">
+        <Modal show={show} onHide={handleClose} size="lg" centered className="confirm-modal">
             <Modal.Body>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Row>
@@ -92,7 +120,7 @@ const BroadcastModal = props => {
                     </Row>
                     <Row>
                         <Col md={12}>
-                            <div className="form-group">
+                            <div className="form-group" style={{ minHeight: '300px' }}>
                                 <label htmlFor="body" className="form-control-label">
                                     Body
                                 </label>
@@ -102,26 +130,26 @@ const BroadcastModal = props => {
                                     wrapperClassName="wrapperClassName"
                                     editorClassName="editorClassName"
                                     onEditorStateChange={onEditorStateChange}
+                                    defaultContentState={'<p>Text</p>'}
                                 />
-                                {/* <textarea ref={register} name='body' defaultValue={broadcast && broadcast.body?broadcast.body:''} className='form-control' /> */}
                             </div>
                         </Col>
                     </Row>
                     <Row>
                         <Col md={6}>
                             <div className="form-group">
-                                <label htmlFor="expiry" className="form-control-label">
-                                    Expiration Date
+                                <label htmlFor="published" className="form-control-label">
+                                    Publish Date
                                 </label>
-                                <input type="date" ref={register} name='expiry' defaultValue={broadcast && broadcast.expiry ? broadcast.expiry : ''} className='form-control' />
+                                <DatePicker className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
                             </div>
                         </Col>
                         <Col md={6}>
                             <div className="form-group">
-                                <label htmlFor="published" className="form-control-label">
-                                    Publish Date
+                                <label htmlFor="expiry" className="form-control-label">
+                                    Expiration Date
                                 </label>
-                                <input type="date" ref={register} name='expiry' defaultValue={broadcast && broadcast.expiry ? broadcast.expiry : ''} className='form-control' />
+                                <DatePicker className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
                             </div>
                         </Col>
                     </Row>
@@ -131,7 +159,14 @@ const BroadcastModal = props => {
                                 <label htmlFor="audience" className="form-control-label">
                                     Audience
                                 </label>
-                                <input type="text" ref={register} name='audience' defaultValue={''} className='form-control' />
+
+                                <select ref={register} name='audience' multiple className='form-control'>
+                                    {
+                                        audience.map((item) => {
+                                            return <option key={item.id} selected={(broadcast && broadcast.audience && broadcast.audience.includes(item.id)) ? true : false} value={item.id}>{item.label}</option>
+                                        })
+                                    }
+                                </select>
                             </div>
                         </Col>
                         <Col md={6}>
@@ -140,7 +175,8 @@ const BroadcastModal = props => {
                                     Status
                                 </label>
 
-                                <select ref={register} name='status' defaultValue={broadcast && broadcast.status ? broadcast.status : ''} className='form-control' >
+                                {/* defaultValue={broadcast && broadcast.status ? broadcast.status : ''} */}
+                                <select ref={register} name='status' className='form-control' >
                                     <option value="Published">Published</option>
                                     <option value="Draft">Draft</option>
                                     <option value="Archived">Archived</option>
@@ -150,8 +186,8 @@ const BroadcastModal = props => {
                     </Row>
                     <Row>
                         <Col>
-                            <button className="btn btn-primary btn-rounded float-right">
-                                Save
+                            <button disabled={loading} className="btn btn-primary btn-rounded float-right">
+                                {loading ? 'Processing...' : 'Save'}
                             </button>
                         </Col>
                     </Row>
@@ -159,26 +195,6 @@ const BroadcastModal = props => {
             </Modal.Body>
         </Modal>
     );
-};
-
-BroadcastModal.propTypes = {
-    show: PropTypes.bool.isRequired,
-    setShow: PropTypes.func.isRequired,
-    title: PropTypes.string,
-    body: PropTypes.any,
-    type: PropTypes.string,
-    callback: PropTypes.func,
-    confirmButton: PropTypes.shape({}),
-    cancelButton: PropTypes.shape({}),
-    closeButtonText: PropTypes.string,
-};
-
-BroadcastModal.defaultProps = {
-    title: 'Alert',
-    body: <p />,
-    type: 'warning',
-    callback: null,
-    closeButtonText: 'OK',
 };
 
 export default BroadcastModal;

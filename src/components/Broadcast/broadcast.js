@@ -55,14 +55,12 @@ export default function Broadcast(props) {
   const [selectedBroadcast, setSelectedBroadcast] = useState({});
 
   useMemo(() => {
-    BroadcastService.get().then((res) => {
-      const productlist = res.results;
-      console.log(productlist)
-      setBroadcasts(productlist);
-      setFilteredBroadcasts(productlist);
-
+    BroadcastService.get()
+    .then((res) => {
+      setBroadcasts(res.results);
+      setFilteredBroadcasts(res.results);
       setPageLoading(false)
-    });
+    })
 
   }, [setPageLoading]);
   // table headings definition
@@ -85,19 +83,19 @@ export default function Broadcast(props) {
         <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
       </div>
     }, {
-      name: 'Expiry Date',
-      selector: 'created',
-      sortable: true,
-      cell: row => <div>
-        <strong><Moment date={row.expiry} format="D MMM YYYY" /></strong><br />
-        <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
-      </div>
-    }, {
       name: 'Published Date',
       selector: 'created',
       sortable: true,
       cell: row => <div>
         <strong><Moment date={row.published} format="D MMM YYYY" /></strong><br />
+        <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
+      </div>
+    }, {
+      name: 'Expiry Date',
+      selector: 'created',
+      sortable: true,
+      cell: row => <div>
+        <strong><Moment date={row.expiry} format="D MMM YYYY" /></strong><br />
         <span className="text-muted"><Moment date={row.created} format="hh:mm:ss" /></span>
       </div>
     }, {
@@ -111,11 +109,11 @@ export default function Broadcast(props) {
       cell: row => <div>
         {permissions && permissions.update_access &&
           <span style={iconPadding}>
-            <span
+            <a href={`broadcast/edit/${row.id}`}
               className="btn btn-secondary btn-sm btn-icon"
             >
               <span className="fa fa-pencil" onClick={()=>{setSelectedBroadcast(row); setShowModal(true)}}/>
-            </span>
+            </a>
           </span>
         }
         {/* <spam style={iconPadding}><a
@@ -143,7 +141,7 @@ export default function Broadcast(props) {
 
   return (
     <Card className="o-hidden mb-4">
-      <BroadcastModal show={showModal} setShow={setShowModal} broadcast={selectedBroadcast} setPageLoading={setPageLoading}/>
+      {/* <BroadcastModal show={showModal} setShow={setShowModal} broadcast={selectedBroadcast} audience={audience}/> */}
 
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
@@ -158,10 +156,10 @@ export default function Broadcast(props) {
           />
           {permissions && permissions.create_access &&
             <div>
-              <span
+              <a href={`broadcast/add`}
                 className="btn btn-secondary"  onClick={()=>{setSelectedBroadcast({}); setShowModal(true)}}>
                 Add Broadcast
-              </span> 
+              </a> 
             </div>
           }
         </div>
