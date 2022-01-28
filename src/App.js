@@ -53,6 +53,8 @@ import BankAccounts from 'pages/BankAccounts';
 import SendOTPBankAccounts from 'pages/BankAccounts/SendOPTBankAccount';
 import KYC from 'pages/KYC';
 import Broadcast from 'pages/broadcast';
+import AddBroadcast from 'pages/broadcast/add';
+import EditBroadcast from 'pages/broadcast/edit';
 import { UserService } from 'providers';
 import ProductCancel from 'pages/Products/ProductCancel';
 import ProductSubCategories from './pages/Products/SubCategories';
@@ -144,6 +146,8 @@ const App = () => {
 
 					<Route exact path="/kyc" component={(props) => <KYC config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/broadcast" component={(props) => <Broadcast config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.broadcast: null} />} />
+					<Route exact path="/broadcast/edit/:id" component={(props) => <EditBroadcast config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.broadcast: null} />} />
+					<Route exact path="/broadcast/add" component={(props) => <AddBroadcast config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.broadcast: null} />} />
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
 				</Switch>
 			</Router>
