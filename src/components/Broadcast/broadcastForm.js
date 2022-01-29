@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, CardBody } from 'reactstrap';
 import useForm from 'react-hook-form';
 import { BroadcastService } from '../../providers';
 import { EditorState } from 'draft-js';
@@ -8,6 +8,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
 import DatePicker from 'react-datepicker';
 import Swal from 'sweetalert2';
+import FileUpload from '../FileUpload'
 
 const broadcastAlert = (success) => {
     if (success) {
@@ -30,6 +31,42 @@ const broadcastAlert = (success) => {
     });
 }
 
+const NavTabLink = ({
+    id,
+    name,
+    title,
+    active,
+    setActiveTab,
+}) => (
+    <li className="nav-item">
+        <a
+            role="tab"
+            id={`tab-${id}`}
+            data-toggle="tab"
+            href={`#tab-${id}`}
+            aria-controls={name}
+            aria-selected={active}
+            className={`nav-link text-bold ${active ? 'active show' : ''}`}
+            onClick={e => {
+                setActiveTab(id);
+                e.preventDefault();
+            }}
+        >
+            {title}
+        </a>
+    </li>
+);
+
+const NavTabContent = props => {
+    const { active } = props;
+
+    return (
+        <div className={`tab-pane fade ${active ? 'active show' : ''}`}>
+            {props.children}
+        </div>
+    );
+}
+
 const BroadcastForm = props => {
     const {
         broadcast,
@@ -42,14 +79,16 @@ const BroadcastForm = props => {
 
     const { handleSubmit, register } = useForm()
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
+    const [activeTab, setActiveTab] = useState('text');
+    const [files, setFiles] = useState([])
+    const [fileNotSelected, setFileNotSelected] = useState(false);
     const [audience, setAudience] = useState([]);
 
     useMemo(() => {
         BroadcastService.getAudience()
             .then(res => {
                 setAudience(res.results)
-                setPageLoading(false)
+                // setPageLoading(false)
             })
     }, [])
 
@@ -92,106 +131,146 @@ const BroadcastForm = props => {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <Row>
-                <Col>
-                    <h2>Broadcast message</h2>
-                </Col>
-            </Row>
-            <Row>
-                <Col md={12}>
-                    <div className="form-group">
-                        <label htmlFor="title" className="form-control-label">
-                            Title
-                        </label>
-                        <input type="text" ref={register} name='title' defaultValue={broadcast && broadcast.title ? broadcast.title : ''} className='form-control' />
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col md={12}>
-                    <div className="form-group">
-                        <label htmlFor="summary" className="form-control-label">
-                            Summary
-                        </label>
-                        <input type="text" ref={register} name='summary' defaultValue={broadcast && broadcast.summary ? broadcast.summary : ''} className='form-control' />
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col md={12}>
-                    <div className="form-group" style={{ minHeight: '300px' }}>
-                        <label htmlFor="body" className="form-control-label">
-                            Body
-                        </label>
-                        <Editor
-                            editorState={editorState}
-                            toolbarClassName="toolbarClassName"
-                            wrapperClassName="wrapperClassName"
-                            editorClassName="editorClassName"
-                            onEditorStateChange={onEditorStateChange}
-                            defaultContentState={'<p>Text</p>'}
-                        />
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col md={6}>
-                    <div className="form-group">
-                        <label htmlFor="published" className="form-control-label">
-                            Publish Date
-                        </label>
-                        <DatePicker className={`form-control form-control-m`} selected={startDate?startDate:new Date()} onChange={(date) => setStartDate(date)} />
-                    </div>
-                </Col>
-                <Col md={6}>
-                    <div className="form-group">
-                        <label htmlFor="expiry" className="form-control-label">
-                            Expiration Date
-                        </label>
-                        <DatePicker className={`form-control form-control-m`} selected={endDate?endDate:new Date()} onChange={(date) => setEndDate(date)} />
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col md={6}>
-                    <div className="form-group">
-                        <label htmlFor="audience" className="form-control-label">
-                            Audience
-                        </label>
+        <div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Row>
+                    <Col md={12}>
+                        <div className="form-group">
+                            <label htmlFor="title" className="form-control-label">
+                                Title
+                            </label>
+                            <input type="text" ref={register} name='title' defaultValue={broadcast && broadcast.title ? broadcast.title : ''} className='form-control' />
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={12}>
+                        <div className="form-group">
+                            <label htmlFor="summary" className="form-control-label">
+                                Summary
+                            </label>
+                            <input type="text" ref={register} name='summary' defaultValue={broadcast && broadcast.summary ? broadcast.summary : ''} className='form-control' />
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={6}>
+                        <div className="form-group">
+                            <label htmlFor="published" className="form-control-label">
+                                Publish Date
+                            </label>
+                            <DatePicker className={`form-control form-control-m`} selected={startDate ? startDate : new Date()} onChange={(date) => setStartDate(date)} />
+                        </div>
+                    </Col>
+                    <Col md={6}>
+                        <div className="form-group">
+                            <label htmlFor="expiry" className="form-control-label">
+                                Expiration Date
+                            </label>
+                            <DatePicker className={`form-control form-control-m`} selected={endDate ? endDate : new Date()} onChange={(date) => setEndDate(date)} />
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={6}>
+                        <div className="form-group">
+                            <label htmlFor="audience" className="form-control-label">
+                                Audience
+                            </label>
 
-                        <select ref={register} name='audience' multiple className='form-control'>
-                            {
-                                audience.map((item) => {
-                                    return <option key={item.id} selected={(broadcast && broadcast.audience && broadcast.audience.includes(item.id)) ? true : false} value={item.id}>{item.label}</option>
-                                })
-                            }
-                        </select>
-                    </div>
-                </Col>
-                <Col md={6}>
-                    <div className="form-group">
-                        <label htmlFor="status" className="form-control-label">
-                            Status
-                        </label>
+                            <select ref={register} name='audience' multiple className='form-control'>
+                                {
+                                    audience.map((item) => {
+                                        return <option key={item.id} selected={(broadcast && broadcast.audience && broadcast.audience.includes(item.id)) ? true : false} value={item.id}>{item.label}</option>
+                                    })
+                                }
+                            </select>
+                        </div>
+                    </Col>
+                    <Col md={6}>
+                        <div className="form-group">
+                            <label htmlFor="status" className="form-control-label">
+                                Status
+                            </label>
 
-                        {/* defaultValue={broadcast && broadcast.status ? broadcast.status : ''} */}
-                        <select ref={register} name='status' className='form-control' >
-                            <option value="Published">Published</option>
-                            <option value="Draft">Draft</option>
-                            <option value="Archived">Archived</option>
-                        </select>
+                            {/* defaultValue={broadcast && broadcast.status ? broadcast.status : ''} */}
+                            <select ref={register} name='status' className='form-control' >
+                                <option value="Published">Published</option>
+                                <option value="Draft">Draft</option>
+                                <option value="Archived">Archived</option>
+                            </select>
+                        </div>
+                    </Col>
+                </Row>
+                <ul className="nav nav-tabs margin-top-20" id="myTab" role="tablist">
+                    <NavTabLink
+                        id="text"
+                        name="text"
+                        title="Text"
+                        setActiveTab={setActiveTab}
+                        active={activeTab === 'text'}
+                    />
+                    <NavTabLink
+                        id="image"
+                        name="image"
+                        title="Image"
+                        setActiveTab={setActiveTab}
+                        active={activeTab === 'image'}
+                    />
+                </ul>
+                <CardBody>
+                    <div className="tab-content" id="text">
+                        <NavTabContent
+                            id="text"
+                            name="text"
+                            title="Text"
+                            active={activeTab === 'text'}
+                        >
+
+                            <Row>
+                                <Col md={12}>
+                                    <div className="form-group" style={{ minHeight: '200px' }}>
+                                        <label htmlFor="body" className="form-control-label">
+                                            Body
+                                        </label>
+                                        <Editor
+                                            editorState={editorState}
+                                            toolbarClassName="toolbarClassName"
+                                            wrapperClassName="wrapperClassName"
+                                            editorClassName="editorClassName"
+                                            onEditorStateChange={onEditorStateChange}
+                                            defaultContentState={'<p>Text</p>'}
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
+                        </NavTabContent>
+                        <NavTabContent
+                            id="image"
+                            name="image"
+                            title="Image"
+                            active={activeTab === 'image'}
+                        >
+                            <Col xs={12}  className="py-4">
+                                <FileUpload
+                                    fileNotSelected={fileNotSelected}
+                                    files={files}
+                                    setFiles={setFiles}
+                                    toastBody="File has been selected, please submit to process the file and transaction."
+                                />
+                            </Col>
+                        </NavTabContent>
                     </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <button className="btn btn-primary btn-rounded float-right">
-                        Save
-                    </button>
-                </Col>
-            </Row>
-        </form>
+                </CardBody>
+                <Row>
+                    <Col>
+                        <button className="btn btn-primary btn-rounded float-right">
+                            Save
+                        </button>
+                    </Col>
+                </Row>
+            </form>
+        </div>
     );
 };
 
