@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { AuthLayout } from 'containers';
-import { ProfileProvider, ActivityService } from 'providers';
+import { ProfileProvider, ActivityService, UserService, TransactionService } from 'providers';
 import { Modals, Profile } from 'components';
 
 export default function ProfilePage(props) {
@@ -10,6 +10,8 @@ export default function ProfilePage(props) {
     const [pageLoading, setPageLoading] = useState(true);
     const [showEditProfile, setShowEditProfile] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
+    const [profilePicture, setProfilePicture] = useState('')
+
 
     async function fetchData() {
         const profile = await ProfileProvider.me();
@@ -18,6 +20,11 @@ export default function ProfilePage(props) {
 
         const activites = await ActivityService.getActivitiesByUser(profile.id);
         setActivities(activites.results)
+
+        const userDetails = await UserService.getUser(profile.id)
+        
+        const  profilePic = await  TransactionService.getTransactionPOPFile(userDetails.profile_path);
+        setProfilePicture(profilePic.data)
     }
 
     useEffect(() => {
@@ -54,8 +61,8 @@ export default function ProfilePage(props) {
                         <Card>
                             <CardBody className="padding-bottom-10">
                                 <div className="user user--bordered user--xlg margin-bottom-20">
-                                    <img src="/assets/img/users/user_1.jpeg" alt="Profile" />
-                                    <div className="user__name">
+                                    <img src={profilePicture ? profilePicture :`/assets/img/users/user_1.jpeg`} alt="Profile" />
+                                   <div className="user__name">
                                         <strong>{profile.first_name} {profile.last_name}</strong>
                                         <br/>
                                         <span className="text-muted">
@@ -102,7 +109,7 @@ export default function ProfilePage(props) {
                         </Card>
                     </Col>
                     <Col xs={12} lg={9}>
-                        <Profile.Timeline activities={activities} />
+                        <Profile.Timeline activities={activities} profilePicture={profilePicture} />
                     </Col>
                 </Row>
             </>}

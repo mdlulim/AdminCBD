@@ -76,11 +76,8 @@ export default function Products(props) {
 
   useMemo(() => {
 
-    console.log(SessionProvider.get())
-
       ProductService.getProducts().then((res) => {
           const productlist = res.results;
-          console.log(productlist)
           setProducts(productlist);
           setFilteredProducts(productlist);
 
