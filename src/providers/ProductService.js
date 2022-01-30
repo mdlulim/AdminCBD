@@ -126,7 +126,8 @@ class ProductService {
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products/subcategories/${id}`,
-    }).then((res) =>{
+    })
+    .then((res) =>{
       if(res.data.success){
         return res.data.data;
       }else{
@@ -136,19 +137,36 @@ class ProductService {
     });
   }
 
+  static async getSubcategoryCalculations(id) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/subcategories/${id}/calculations`,
+    })
+    .then((res) =>{
+      if(res.data.success){
+        return res.data.data;
+      }else{
+        return {};
+      }
+    });
+  }
+
   static async getProduct(id) {
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
       url: `${Config.API.BASE_URL}/products/${id}`,
-    }).then((res) =>{
-      if(res.data.success){
-        return res.data.data;
-      }else{
-        return {};
+    })
+    .then(json => json.data)
+    .then(res => {
+      const { success, data } = res;
+      if (success) {
+        return data || [];
       }
-      
+      return [];
     });
   }
 

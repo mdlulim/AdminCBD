@@ -29,6 +29,8 @@ import Users from './Users';
 import Commission from './Commission';
 import ProductConfig from './ProductConfig';
 import Broadcast from './Broadcast'
+import Profile from './Profile';
+import Modals from './Modals';
 
 export {
     Breadcrumb,
@@ -62,4 +64,6 @@ export {
     Commission,
     ProductConfig,
     Broadcast,
+    Profile,
+    Modals,
 };

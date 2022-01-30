@@ -201,6 +201,19 @@ class UserService {
     });
   }
 
+  static async passwordChange(data){
+    return await axios({
+      mode: 'no-cors',
+      method: 'POST',
+      headers: headers,
+      data:data,
+      url: `${Config.API.BASE_URL_LOGIN}/password/change`,
+    }).then((res) =>{
+      const result = res;
+      return result;
+    });
+  }
+
 }
 
 export default UserService;

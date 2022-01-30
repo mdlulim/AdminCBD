@@ -328,6 +328,13 @@ a { color: $primary; }
     line-height: 100%;
 }
 
+.h-120px {
+    height: 120px !important;
+}
+.lh-120px {
+    line-height: 120px !important;
+}
+
 // .react-confirm-alert
 .react-confirm-alert {
     .react-confirm-alert-body {

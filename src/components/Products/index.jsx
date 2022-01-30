@@ -1,4 +1,5 @@
 import Cancellations from './Cancellations';
+import Calculations from './Calculations';
 import Products from './Products';
 import ProductAddNew from './ProductAddNew';
 import ProductsByMember from './ProductsByMember';
@@ -14,6 +15,7 @@ import UpdateSubCategory from './UpdateSubCategory';
 
 export default {
     Cancellations,
+    Calculations,
     Products,
     ProductAddNew,
     ProductsByMember,
