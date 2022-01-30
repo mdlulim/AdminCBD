@@ -127,8 +127,11 @@ export default function UpdateProductDetails(props) {
             ));
             console.log(productDetails)
         // //setSubcategories(sub)
-        setSelectedSubcategory({ value: subcategoryFiltered[0].code, label: subcategoryFiltered[0].title, id: subcategoryFiltered[0].id, allow_cancellations: subcategoryFiltered[0].allow_cancellations })
-        setAllowCancellation(subcategoryFiltered[0].allow_cancellations);
+        if(subcategoryFiltered[0]){
+            setSelectedSubcategory({ value: subcategoryFiltered[0].code, label: subcategoryFiltered[0].title, id: subcategoryFiltered[0].id, allow_cancellations: subcategoryFiltered[0].allow_cancellations })
+            setAllowCancellation(subcategoryFiltered[0].allow_cancellations);
+        }
+        
            setProduct(productDetails);
            setFilteredSubcategories(temp2)
          //  setSelectedSubcategory(subcategoryList.filter(product => product.permakey === permakey));

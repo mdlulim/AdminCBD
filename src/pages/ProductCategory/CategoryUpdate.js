@@ -27,16 +27,18 @@ const CreateCategory = props => {
     const [toggleCleared, setToggleCleared] = React.useState(false);
     const params = useParams();
     const { id } = params;
-    
+
     useState(() => {
         ProductService.getProductCategories().then((res) => {
-               const productlist = res.data.data.results;
+               const productlist = res.results;
+               console.log(res)
                setCategories(productlist);
            });
                 //Get product category details
         ProductService.getProductCategory(id).then((res) => {
                 const category = res.data.data;
-                setCategory(category)
+                console.log(res.data.data)
+                setCategory(res.data)
                 setSelectedRows(res.data.data.inputFields.selectedRows)
         })
         const inputData = [

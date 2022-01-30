@@ -23,7 +23,6 @@ export default function EditProfile(props) {
        
         if (selectedFile) {
             const ext = selectedFile.type.split('/')[1];
-            console.log(ext)
             
             const { success, filename } = await FileStorageProvider.upload('admin', 'profile', selectedFile, Date.now() + '.' + ext);
             if (success) {
