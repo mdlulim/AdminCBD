@@ -1,13 +1,14 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import { Col, Row } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
-import { UserService, FileStorageProvider } from 'providers';
+import { UserService, FileStorageProvider,SessionProvider, TransactionService } from 'providers';
 
 export default function EditProfile(props) {
     const { show, setShow, id, first_name, last_name, mobile, email,} = props;
     const [ error, setError] = useState('');
     const [ success, setSuccess] = useState('');
     const [ uploadedImage, setUploadedImage] = useState('');
+
     const handleClose = () => {
         setShow(false)
         window.location = '/profile';
@@ -23,7 +24,6 @@ export default function EditProfile(props) {
        
         if (selectedFile) {
             const ext = selectedFile.type.split('/')[1];
-            console.log(ext)
             
             const { success, filename } = await FileStorageProvider.upload('admin', 'profile', selectedFile, Date.now() + '.' + ext);
             if (success) {

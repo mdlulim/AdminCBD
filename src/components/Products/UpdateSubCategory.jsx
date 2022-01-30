@@ -254,7 +254,7 @@ const SubCategoryUpdate = props => {
                             {
                                 label: 'Ok',
                                 onClick: () => {
-                                    window.location = '/configurations/product';
+                                    window.location = '/products/subcategories';
                                 }
                             }
                         ]
@@ -330,10 +330,11 @@ const SubCategoryUpdate = props => {
                         </div>
                         : ''}
                     {/* ===========================================Calculations======================================= */}
-
+                    {subcategory.allow_cancellations ?
+                    <>
                     <h2>Calculations</h2>
                     {/* defaultValue={statusOptions.filter(option => option.value === transaction.status)} */}
-                    {subcategory ?
+                    
                         <div>
                             <label htmlFor="email">Select Option </label>
                             <Select
@@ -347,7 +348,7 @@ const SubCategoryUpdate = props => {
                             />
 
                         </div>
-                        : ''}
+                       
                     {selectedWhenCal.value === 'Daily' ?
                         <div>
                             <label htmlFor="email">Select Time</label>
@@ -490,7 +491,7 @@ const SubCategoryUpdate = props => {
 
                     {/** ===========================================End Of Calculation======================================= */}
 
-
+                    </>: ''}
 
                     {/**  ===========================================Payout Settings=========================================== */}
                     {subcategory.has_payouts ?
