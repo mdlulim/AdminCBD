@@ -13,9 +13,12 @@ import NumberFormat from 'react-number-format';
 import { ProductService } from '../../providers';
 import RecentProduct from './RecentProduct';
 import Moment from 'react-moment';
+import useForm from 'react-hook-form';
+import { TableBody } from '@material-ui/core';
 
 const ProductAddNew = props => {
     const breadcrumb = { heading: "New Product" };
+    const { register, handleSubmit, reset, errors } = useForm();
     const [disabled, setDisabled] = useState(false);
     const [show, setShow] = useState(true);
     const [showFixedPlan, setShowFixedPlan] = useState(true);
@@ -45,13 +48,17 @@ const ProductAddNew = props => {
     const [resetProduct, setRecentProduct] = useState({});
     const [allowCancellation, setAllowCancellation] = useState(false);
     const [postData, setPostData] = useState({});
+    const [pageLoading, setPageLoading] = useState(true);
     const params = useParams();
     const { id } = params;
 
     async function fetchData() {
         const poductsList = await ProductService.getProducts();
         setProducts(poductsList.results);
-        setRecentProduct(poductsList.results[0]);
+        if(poductsList.results){
+            setRecentProduct(poductsList.results[0])
+        }
+
 
         const categoryList = await ProductService.getProductCategories();
         setCategories(categoryList.results);
@@ -61,8 +68,10 @@ const ProductAddNew = props => {
         ))
         setProductCategories(temp);
 
-        const subcategoryList = await ProductService.getProductSubCategories();
-        setSubcategories(subcategoryList.results)
+        const subcategories = await ProductService.getProductSubCategories();
+        setSubcategories(subcategories.results);
+        setPageLoading(false);
+     
     }
 
     useMemo(() => {
@@ -88,13 +97,27 @@ const ProductAddNew = props => {
     ];
 
     async function onChangeCategorySelect(data) {
-        const sub = subcategories.filter(option => option.code === data.value);
+        const sub = subcategories.filter(option => option.category_id === data.id);
+        console.log(sub[0].code)
         let temp = [];
         sub.filter(item => (
             temp.push({ value: item.code, label: item.title, id: item.id, allow_cancellations: item.allow_cancellations })
         ))
-        //setSubcategories(sub)
+        setSelectedSubcategory(temp[0])
         setFilteredSubcategories(temp)
+        if (sub[0].code === 'FX') {
+            setShow(false)
+            setShowFixedPlan(true)
+            setShowCBIx7(true)
+        } else if (sub[0].code === 'FP') {
+            setShow(true)
+            setShowFixedPlan(false)
+            setShowCBIx7(true)
+        } else if (sub[0].code === 'CBIX7') {
+            setShow(true)
+            setShowFixedPlan(true)
+            setShowCBIx7(false)
+        }
         // const title = form.title.value;
     }
     const onSubmitCBI = (event) => {
@@ -203,19 +226,18 @@ const ProductAddNew = props => {
         return result;
     }
 
-
-
-    const onSubmit = (event) => {
-        event.preventDefault();
+    function onSubmit(data) {
+        console.log("=============================TEST SUBMIT================================")
+        console.log(data)
         setDisabled(true);
         setError('');
-        const form = event.currentTarget;
         const category = categories.filter(option => option.code === selectedProductType)[0];
         // const title = form.title.value;
         let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
         const productCode = generateUniqueCode(5);
         if (selectedProductType === 'CBIX7') {
-            const data = {
+            const {title, educator_persantage_fee, registration_fee, slippage_persantage_buy, slippage_persantage_sell, cancellation_fee} = data;
+            const data2 = {
                 body: currentContentAsHTML,
                 category_id: category.id,
                 subcategory_id: selectedSubcategory.id,
@@ -223,21 +245,22 @@ const ProductAddNew = props => {
                 currency_code: selectedCurrency,
                 product_code: productCode,
                 status: selectedStatus,
-                title: form.title.value,
+                title: title,
                 type: selectedProductType,
                 price: 0,
                 fees: {
-                    educator_percentage: parseFloat(form.educator_persantage_fee.value),
-                    registration_fee: parseFloat(form.registration_fee.value),
-                    slippage_percentage_buy: parseFloat(form.slippage_persantage_buy.value),
-                    slippage_percentage_sell: parseFloat(form.slippage_persantage_sell.value),
-                    cancellation_fee: parseFloat(form.cancellation_fee.value),
+                    educator_percentage: parseFloat(educator_persantage_fee),
+                    registration_fee: parseFloat(registration_fee),
+                    slippage_percentage_buy: parseFloat(slippage_persantage_buy),
+                    slippage_percentage_sell: parseFloat(slippage_persantage_sell),
+                    cancellation_fee: parseFloat(cancellation_fee),
                 }
             }
-            create(data)
+            create(data2)
 
         } else if (selectedProductType === 'FX') {
-            const data = {
+            const {title, price, educator_percentage, registration_percentage, cancellation_fee} = data;
+            const data2 = {
                 body: currentContentAsHTML,
                 category_id: category.id,
                 subcategory_id: selectedSubcategory.id,
@@ -246,38 +269,39 @@ const ProductAddNew = props => {
                 educator_percentage: 4,
                 product_code: productCode,
                 fees: {
-                    educator_percentage: parseFloat(form.educator_percentage.value),
-                    registration_percentage: parseFloat(form.registration_percentage.value),
-                    cancellation_fee: allowCancellation ? parseFloat(form.cancellation_fee.value) : null,
+                    educator_percentage: parseFloat(educator_percentage),
+                    registration_percentage: parseFloat(registration_percentage),
+                    cancellation_fee: allowCancellation ? parseFloat(cancellation_fee) : null,
                 },
                 status: selectedStatus,
-                title: form.title.value,
+                title: title,
                 type: selectedProductType,
-                price: parseFloat(form.price.value),
+                price: parseFloat(price),
             }
-            create(data)
+            create(data2)
 
         } else if (selectedProductType === 'FP') {
-            const data = {
+            const {title, price, investment_period, minimum_investment, estimated_daily_interest, minimum_gross_return, cancellation_fee} = data;
+            const data2 = {
                 body: currentContentAsHTML,
                 category_id: category.id,
                 subcategory_id: selectedSubcategory.id,
                 category_title: category.title,
                 currency_code: selectedCurrency,
-                investment_period: parseFloat(form.investment_period.value),
-                minimum_investment: parseFloat(form.minimum_investment.value),
-                price: parseFloat(form.price.value),
+                investment_period: parseFloat(investment_period),
+                minimum_investment: parseFloat(minimum_investment),
+                price: parseFloat(price),
                 product_code: productCode,
                 type: selectedProductType,
                 status: selectedStatus,
                 fees: {
-                    daily_interest: parseFloat(form.estimated_daily_interest.value),
-                    gross_return: parseFloat(form.minimum_gross_return.value),
-                    cancellation_fee: allowCancellation ? parseFloat(form.cancellation_fee.value) : null,
+                    daily_interest: parseFloat(estimated_daily_interest),
+                    gross_return: parseFloat(minimum_gross_return),
+                    cancellation_fee: allowCancellation ? parseFloat(cancellation_fee) : null,
                 },
-                title: form.title.value
+                title: title
             }
-            create(data)
+            create(data2)
         }
 
     }
@@ -316,14 +340,25 @@ const ProductAddNew = props => {
     return (
         <AuthLayout {...props}
             breadcrumb={{ active: "Add New Product" }}
+            loading={pageLoading}
             pageHeading={{
                 title: 'Add New Product',
                 caption: 'EXPLORE OVERVIEW PRODUCT FOR CRYPTO BASED INNOVATION'
             }}>
+                {!pageLoading &&
+                <>
             <Row className="mt-4">
+            
                 <Card>
                     <CardBody>
-                        <form onSubmit={onSubmit}>
+                    <form
+                        noValidate
+                        id="create-product-form"
+                        role="form"
+                        autoComplete="off"
+                        className="text-start"
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
                             {error ?
                                 <div className="alert alert-warning" role="alert">
                                     {error}
@@ -339,39 +374,26 @@ const ProductAddNew = props => {
                                             onChange={item => {
                                                 setSelectedProductType(item.value);
                                                 onChangeCategorySelect(item)
-                                                if (item.value === 'FX') {
-                                                    setShow(false)
-                                                    setShowFixedPlan(true)
-                                                    setShowCBIx7(true)
-                                                } else if (item.value === 'FP') {
-                                                    setShow(true)
-                                                    setShowFixedPlan(false)
-                                                    setShowCBIx7(true)
-                                                } else if (item.value === 'CBIX7') {
-                                                    setShow(true)
-                                                    setShowFixedPlan(true)
-                                                    setShowCBIx7(false)
-                                                }
                                             }}
                                             className={`basic-multi-select form-control-m`}
                                             classNamePrefix="select"
-                                            required
                                         />
+                                        {/* {errors.product_type && <span className="help-block invalid-feedback">Please select product type</span>} */}
                                     </Col>
                                     <Col md={6}>
                                         <label htmlFor="product_type">Subcategory *</label>
                                         <Select
-                                            id="product_type"
-                                            name="product_type"
+                                            id="product_subcategory"
+                                            name="product_subcategory"
                                             options={filteredSubcategories}
+                                            defaultValue={selectedSubcategory ? filteredSubcategories.filter(option => option.id === selectedSubcategory.id) : ''}
                                             onChange={item => {
                                                 setSelectedSubcategory(item)
-                                                setAllowCancellation(item.allow_cancellations)
                                             }}
                                             className={`basic-multi-select form-control-m`}
                                             classNamePrefix="select"
-                                            required
                                         />
+                                        {/* {errors.product_subcategory && <span className="help-block invalid-feedback">Please select subcategory</span>} */}
                                     </Col>
                                     <Col md={12}>
                                         <label htmlFor="name">Product Title *</label>
@@ -379,9 +401,10 @@ const ProductAddNew = props => {
                                             type="text"
                                             id="title"
                                             name="title"
-                                            className="form-control form-control-m"
-                                            required
+                                            className={`form-control form-control-m ${errors.title ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
+                                         {errors.title && <span className="help-block invalid-feedback">Please enter product title</span>}
                                     </Col>
                                     <Col md={6}>
                                         <label htmlFor="currency">Select Currency *</label>
@@ -393,7 +416,6 @@ const ProductAddNew = props => {
                                             onChange={item => setSelectedCurrency(item.value)}
                                             className={`basic-multi-select form-control-m`}
                                             classNamePrefix="select"
-                                            required
                                         />
                                     </Col>
                                     {selectedProductType === "CBIX7" ?
@@ -404,7 +426,6 @@ const ProductAddNew = props => {
                                                 type="text"
                                                 id="price"
                                                 name="price"
-                                                className="form-control form-control-m"
                                                 onChange={event => {
                                                     if (!isNaN(+event.target.value)) {
                                                         setErrorAmount(true)
@@ -412,16 +433,17 @@ const ProductAddNew = props => {
                                                         setErrorAmount(false)
                                                     }
                                                 }}
+                                                className={`form-control form-control-m ${errors.price ? 'is-invalid' : ''}`}
+                                                ref={register({ required: true })}
                                             />
-                                            <label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label>
-                                        </Col>}
+                                             {errors.price && <span className="help-block invalid-feedback">Please enter product title</span>}
+                                         </Col>}
                                     <Col md={6} hidden={show}>
                                         <label htmlFor="name">Registration Percentage Fee (%) </label>
                                         <input
                                             type="text"
                                             id="registration_percentage"
                                             name="registration_percentage"
-                                            className="form-control form-control-m"
                                             onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
                                                     setErrorReg(true)
@@ -429,7 +451,11 @@ const ProductAddNew = props => {
                                                     setErrorReg(false)
                                                 }
                                             }}
+                                            className={`form-control form-control-m ${errors.registration_percentage ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
+                                         {errors.registration_percentage && <span className="help-block invalid-feedback">Please enter registration fee</span>}
+                                    
                                     </Col>
                                     <Col md={6} hidden={show}>
                                         <label htmlFor="educator_percentage">Educator Percentage Fee (%) </label>
@@ -437,7 +463,6 @@ const ProductAddNew = props => {
                                             type="text"
                                             id="educator_percentage"
                                             name="educator_percentage"
-                                            className="form-control form-control-m"
                                             onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
                                                     setErrorEducator(true)
@@ -445,9 +470,11 @@ const ProductAddNew = props => {
                                                     setErrorEducator(false)
                                                 }
                                             }}
+                                            className={`form-control form-control-m ${errors.educator_percentage ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
-                                        <label hidden={errorEducator} className="text-danger" htmlFor="name">Please enter a valid amount</label>
-                                    </Col>
+                                         {errors.educator_percentage && <span className="help-block invalid-feedback">Please enter educator percentage fee</span>}
+                                       </Col>
                                     {/** =========================================================CBIX7================================================ */}
                                     <Col md={6} hidden={showCBIx7}>
                                         <label htmlFor="name">Registration Fee </label>
@@ -455,7 +482,6 @@ const ProductAddNew = props => {
                                             type="text"
                                             id="registration_fee"
                                             name="registration_fee"
-                                            className="form-control form-control-m"
                                             onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
                                                     let value = event.target.value / 100 * amountFee
@@ -466,15 +492,18 @@ const ProductAddNew = props => {
                                                     setRegistrationFee(0)
                                                 }
                                             }}
+                                            className={`form-control form-control-m ${errors.registration_fee ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
+                                         {errors.registration_fee && <span className="help-block invalid-feedback">Please enter registration fee</span>}
+                                       
                                     </Col>
                                     <Col md={6} hidden={showCBIx7}>
                                         <label htmlFor="educator_persantage">Educator Percentage Fee (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={educatorFee} /> : ''}</label>
                                         <input
                                             type="text"
-                                            id="educator_persantage"
+                                            id="educator_persantage_fee"
                                             name="educator_persantage_fee"
-                                            className="form-control form-control-m"
                                             onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
                                                     let value = event.target.value / 100 * amountFee
@@ -485,16 +514,17 @@ const ProductAddNew = props => {
                                                     setEducatorFee(0)
                                                 }
                                             }}
+                                            className={`form-control form-control-m ${errors.educator_persantage_fee ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
-                                        <label hidden={errorEducator} className="text-danger" htmlFor="name">Please enter a valid percentage</label>
-                                    </Col>
+                                         {errors.educator_persantage_fee && <span className="help-block invalid-feedback">Please enter educator persantage fee</span>}
+                                       </Col>
                                     <Col md={6} hidden={showCBIx7}>
                                         <label htmlFor="educator_persantage">Slippage Percentage Sell (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={sleppageFee} /> : ''}</label>
                                         <input
                                             type="text"
-                                            id="educator_persantage_sell"
+                                            id="slippage_persantage_sell"
                                             name="slippage_persantage_sell"
-                                            className="form-control form-control-m"
                                             onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
                                                     setErrorSlippage(true)
@@ -502,16 +532,17 @@ const ProductAddNew = props => {
                                                     setErrorSlippage(false)
                                                 }
                                             }}
+                                            className={`form-control form-control-m ${errors.slippage_persantage_sell ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
-                                        <label hidden={errorSlippage} className="text-danger" htmlFor="name">Please enter a valid percentage</label>
-                                    </Col>
+                                         {errors.slippage_persantage_sell && <span className="help-block invalid-feedback">Please enter slippage persantage sell</span>}
+                                        </Col>
                                     <Col md={6} hidden={showCBIx7}>
                                         <label htmlFor="educator_persantage">Slippage Percentage Buy (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={sleppageFee} /> : ''}</label>
                                         <input
                                             type="text"
-                                            id="educator_persantage_buy"
+                                            id="slippage_persantage_buy"
                                             name="slippage_persantage_buy"
-                                            className="form-control form-control-m"
                                             onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
 
@@ -520,9 +551,11 @@ const ProductAddNew = props => {
                                                     setErrorSlippage(false)
                                                 }
                                             }}
+                                            className={`form-control form-control-m ${errors.slippage_persantage_buy ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
-                                        <label hidden={errorSlippage} className="text-danger" htmlFor="name">Please enter a valid percentage</label>
-                                    </Col>
+                                         {errors.slippage_persantage_buy && <span className="help-block invalid-feedback">Please enter slippage persantage buy</span>}
+                                       </Col>
                                     {/** =========================================================Fixed Plan================================================ */}
                                     <Col md={6} hidden={showFixedPlan}>
                                         <label htmlFor="name">Estimated daily Interest (%)</label>
@@ -530,7 +563,6 @@ const ProductAddNew = props => {
                                             type="text"
                                             id="registration_persantage"
                                             name="estimated_daily_interest"
-                                            className="form-control form-control-m"
                                             onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
                                                     let value = event.target.value / 100 * amountFee
@@ -541,7 +573,11 @@ const ProductAddNew = props => {
                                                     setRegistrationFee(0)
                                                 }
                                             }}
+                                            className={`form-control form-control-m ${errors.registration_persantage ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
+                                         {errors.registration_persantage && <span className="help-block invalid-feedback">Please enter registration persantage</span>}
+                                       
                                     </Col>
                                     <Col md={6} hidden={showFixedPlan}>
                                         <label htmlFor="name">Minimum Gross Return (%) </label>
@@ -549,7 +585,6 @@ const ProductAddNew = props => {
                                             type="text"
                                             id="registration_persantage"
                                             name="minimum_gross_return"
-                                            className="form-control form-control-m"
                                             onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
                                                     let value = event.target.value / 100 * amountFee
@@ -560,7 +595,11 @@ const ProductAddNew = props => {
                                                     setRegistrationFee(0)
                                                 }
                                             }}
+                                            className={`form-control form-control-m ${errors.registration_persantage ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
+                                         {errors.registration_persantage && <span className="help-block invalid-feedback">Please enter registration persantage</span>}
+                                       
                                     </Col>
                                     <Col md={6} hidden={showFixedPlan}>
                                         <label htmlFor="name">Investment Period (Weeks)</label>
@@ -568,7 +607,6 @@ const ProductAddNew = props => {
                                             type="text"
                                             id="investment_period"
                                             name="investment_period"
-                                            className="form-control form-control-m"
                                             onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
                                                     let value = event.target.value / 100 * amountFee
@@ -579,7 +617,11 @@ const ProductAddNew = props => {
                                                     setRegistrationFee(0)
                                                 }
                                             }}
+                                            className={`form-control form-control-m ${errors.investment_period ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
+                                         {errors.investment_period && <span className="help-block invalid-feedback">Please enter investment period</span>}
+                                       
                                     </Col>
                                     <Col md={6} hidden={showFixedPlan}>
                                         <label htmlFor="name">Minimum Investment (CBI)</label>
@@ -587,7 +629,6 @@ const ProductAddNew = props => {
                                             type="text"
                                             id="minimum_investment"
                                             name="minimum_investment"
-                                            className="form-control form-control-m"
                                             onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
                                                     setErrorReg(true)
@@ -595,7 +636,11 @@ const ProductAddNew = props => {
                                                     setErrorReg(false)
                                                 }
                                             }}
+                                            className={`form-control form-control-m ${errors.minimum_investment ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                         />
+                                         {errors.minimum_investment && <span className="help-block invalid-feedback">Please enter educator minimum investment</span>}
+                                       
                                     </Col>
                                     {
                                         allowCancellation ?
@@ -605,7 +650,6 @@ const ProductAddNew = props => {
                                                     type="text"
                                                     id="cancellation_fee"
                                                     name="cancellation_fee"
-                                                    className="form-control form-control-m"
                                                     onChange={event => {
                                                         if (!isNaN(+event.target.value)) {
                                                             setErrorReg(true)
@@ -614,7 +658,11 @@ const ProductAddNew = props => {
                                                         }
                                                     }}
                                                     required
+                                                    className={`form-control form-control-m ${errors.cancellation_fee ? 'is-invalid' : ''}`}
+                                                    ref={register({ required: true })}
                                                 />
+                                                 {errors.cancellation_fee && <span className="help-block invalid-feedback">Please enter cancellation fee</span>}
+                                               
                                             </Col> : ''
                                     }
                                     <Col md={6}>
@@ -624,10 +672,10 @@ const ProductAddNew = props => {
                                             name="status"
                                             options={statusOptions}
                                             onChange={item => setSelectedStatus(item.value)}
-                                            className={`basic-multi-select form-control-m`}
-                                            classNamePrefix="select"
-                                            required
-                                        />
+                                            className={`basic-multi-select form-control-m ${errors.status ? 'is-invalid' : ''}`}
+                                          />
+                                         {/* {errors.status && <span className="help-block invalid-feedback">Please select status</span>} */}
+                                       
                                     </Col>
                                     <Col md={12}>
                                         <label htmlFor="name">Description </label>
@@ -641,17 +689,27 @@ const ProductAddNew = props => {
                                         />
                                         <hr />
                                     </Col>
-                                    <Col md={6}>
+                                    {/* <Col md={6}>
                                         <button disabled={disabled}
+                                            type="submit"
+                                            form="create-product-form"
                                             className="btn btn-primary"
                                             disabled={confirmButtonDisabled || processing}
                                         >
                                             {processing ? 'Processing...' : 'Add Product'}
                                         </button>
-                                    </Col>
+                                    </Col> */}
                                 </Row >
                             </Col >
                         </form >
+                        <button
+                            type="submit"
+                            form="create-product-form"
+                            className="btn btn-primary"
+                            disabled={confirmButtonDisabled || processing}
+                        >
+                            {processing ? 'Processing...' : 'Add Product'}
+                        </button>
                     </CardBody >
                 </Card >
             </Row >
@@ -659,6 +717,7 @@ const ProductAddNew = props => {
                 <Card>
                     <CardBody>
                         <table className="table-responsive">
+                           
                             <tr>
                                 <td width="200">
                                     <div className="user user--rounded user--bordered user--lg margin-bottom-0">
@@ -688,6 +747,7 @@ const ProductAddNew = props => {
                     </CardBody>
                 </Card>
             </Row>
+            </>}
         </AuthLayout >
     );
 };
