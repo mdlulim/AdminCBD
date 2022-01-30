@@ -31,14 +31,14 @@ const CreateCategory = props => {
     useState(() => {
         ProductService.getProductCategories().then((res) => {
                const productlist = res.results;
-               console.log(res)
+             //  console.log(res)
                setCategories(productlist);
            });
                 //Get product category details
         ProductService.getProductCategory(id).then((res) => {
                 const category = res.data.data;
                 console.log(res.data.data)
-                setCategory(res.data)
+                setCategory(res.data.data)
                 setSelectedRows(res.data.data.inputFields.selectedRows)
         })
         const inputData = [

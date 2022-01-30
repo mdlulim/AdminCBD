@@ -1,13 +1,13 @@
 import React from 'react';
 import Moment from 'react-moment';
 export default function Timeline(props) {
-    const { activities } = props;
+    const { activities, profilePicture } = props;
     return (
         <div className="timeline">
             {activities.map(item => (
                 <div key={item.id} className="timeline__item">
                     <div className="user">
-                        <img src="/assets/img/users/user_1.jpeg" alt="Profile" />
+                        <img src={profilePicture ? profilePicture :`/assets/img/users/user_1.jpeg`} alt="Profile" />
                     </div>
                     <div className="content">
                         <div className="title">
