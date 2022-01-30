@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Col, Row, CardBody } from 'reactstrap';
 import useForm from 'react-hook-form';
-import { BroadcastService } from '../../providers';
-import { EditorState, ContentState } from 'draft-js';
+import { BroadcastService, FileStorageProvider } from '../../providers';
+import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
@@ -76,7 +76,6 @@ const BroadcastForm = props => {
 
     const { handleSubmit, register } = useForm()
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
-    const [defaultState, setDefaultState] = useState(ContentState.createFromText('<p>I am awesome</p>'))
     const [activeTab, setActiveTab] = useState('text');
     const [files, setFiles] = useState([])
     const [fileNotSelected, setFileNotSelected] = useState(false);
@@ -84,15 +83,16 @@ const BroadcastForm = props => {
     const [broadcast, setBroadcast] = useState(null)
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+    const [selectedStatus, setSelectedStatus] = useState('');
 
     useMemo(() => {
-        console.log(defaultState, '------------', ContentState.createFromText('<p>I am awesome</p>'))
         if (id) {
             BroadcastService.get(id)
                 .then(res => {
                     setBroadcast(res.results[0])
                     setStartDate(new Date(res.results[0].published))
                     setEndDate(new Date(res.results[0].expiry))
+                    setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(res.results[0].body))))
                     return BroadcastService.getAudience()
                 }).then(res => {
                     setAudience(res.results)
@@ -109,43 +109,69 @@ const BroadcastForm = props => {
 
     }, [id])
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         // setPageLoading(true)
         // console.log(" raw dratf js ", editorState.getCurrentContent())
-        data.body = convertToHTML(editorState.getCurrentContent())
+
         data.published = startDate
         data.expiry = endDate
 
         console.log(data, " data")
+        if (activeTab === 'image') {
+            if (files.length > 0) {
+                const ext = files[0].type.split('/')[1];
+                const { success, filename } = await FileStorageProvider.upload('admin', 'broadcast', files[0], Date.now() + '.' + ext);
+                if (success) {
+                    data.image = filename
+                    data.body = null
+                } else {
+                    console.log("Failed to upload image")
+                    return
+                }
+            } else {
+                console.log('Please select an image to upload or input text')
+                return
+            }
+
+        } else {
+            data.body = convertToHTML(editorState.getCurrentContent())
+            data.image = null
+        }
+
+        console.log(editorState.getCurrentContent(), " current content")
 
         if (id) {
-        //     //user is editing a broadcast message
+            //     //user is editing a broadcast message
             console.log(data, ' editing')
-        //     // BroadcastService.update(id, data)
-        //     //     .then((res) => {
-        //     //         console.log(res)
-        //     //         setPageLoading(false)
-        //     // broadcastAlert(res.data.success)
-        //     //     }).catch(err => {
-        //     //         console.log(err)
-        //     //         setPageLoading(false)
-        //     // broadcastAlert(false)
-        //     //     })
+            // BroadcastService.update(id, data)
+            //     .then((res) => {
+            //         console.log(res)
+            //         setPageLoading(false)
+            // broadcastAlert(res.data.success)
+            //     }).catch(err => {
+            //         console.log(err)
+            //         setPageLoading(false)
+            // broadcastAlert(false)
+            //     })
 
         } else {
             console.log('creating')
-        //     BroadcastService.create(data)
-        //         .then((res) => {
-        //             setPageLoading(false)
-        //             broadcastAlert(res.data.success)
-        //         }).catch(err => {
-        //             setPageLoading(false)
-        //             broadcastAlert(false)
-        //         })
+            // BroadcastService.create(data)
+            //     .then((res) => {
+            //         setPageLoading(false)
+            //         broadcastAlert(res.data.success)
+            //     }).catch(err => {
+            //         setPageLoading(false)
+            //         broadcastAlert(false)
+            //     })
         }
 
     }
 
+    const statusOptions = [
+        { value: 'Published',  label: 'Published' },
+        { value: 'Achived', label: 'Achived' }
+      ];
 
     const onEditorStateChange = editorState => {
         setEditorState(editorState);
@@ -224,14 +250,24 @@ const BroadcastForm = props => {
                             </label>
 
                             {/* defaultValue={broadcast && broadcast.status ? broadcast.status : ''} */}
-                            <select ref={register} name='status' className='form-control' >
+                            {/* <select ref={register} name='status' className='form-control' >
                                 <option value="Published">Published</option>
                                 <option value="Draft">Draft</option>
                                 <option value="Archived">Archived</option>
-                            </select>
+                            </select> */}
+                            <Select
+                                id="status"
+                                name="status"
+                                value={broadcast ? statusOptions.filter(option => option.label === broadcast.status) : ''}
+                                options={statusOptions}
+                                onChange={item => setSelectedStatus(item.value)}
+                                className={`basic-multi-select form-control-m`}
+                                classNamePrefix="select"
+                            />
                         </div>
                     </Col>
                 </Row>
+                <h5>Choose either an image or text to upload</h5>
                 <ul className="nav nav-tabs margin-top-20" id="myTab" role="tablist">
                     <NavTabLink
                         id="text"
@@ -269,7 +305,6 @@ const BroadcastForm = props => {
                                             wrapperClassName="wrapperClassName"
                                             editorClassName="editorClassName"
                                             onEditorStateChange={onEditorStateChange}
-                                            defaultContentState={defaultState}
                                         />
                                     </div>
                                 </Col>

@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardBody } from 'reactstrap';
 import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
-import BroadcastModal from './broadcastModal'
 import { BroadcastService } from '../../providers';
 
 // styles

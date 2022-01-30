@@ -18,12 +18,12 @@ if (SessionProvider.isValid()) {
 }
 
 class BroadcastService {
-    static async get(id) {
+    static async get(id=null) {
         return await axios({
           mode: 'no-cors',
           method: 'GET',
           headers: headers,
-          url: `${Config.API.BASE_URL}/broadcast?id=${id}`,
+          url: `${Config.API.BASE_URL}/broadcast${id!==null?'?id='+id:''}`,
         }).then(json => json.data)
         .then(res => {
           const { success, data } = res;
