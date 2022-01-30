@@ -2,13 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { Col, Row, CardBody } from 'reactstrap';
 import useForm from 'react-hook-form';
 import { BroadcastService } from '../../providers';
-import { EditorState } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
 import DatePicker from 'react-datepicker';
 import Swal from 'sweetalert2';
 import FileUpload from '../FileUpload'
+import Select from 'react-select';
 
 const broadcastAlert = (success) => {
     if (success) {
@@ -19,7 +20,7 @@ const broadcastAlert = (success) => {
             showConfirmButton: false,
             timer: 3000
         });
-        window.location.reload();
+        window.location = '/broadcast';
         return
     }
     Swal.fire({
@@ -69,39 +70,58 @@ const NavTabContent = props => {
 
 const BroadcastForm = props => {
     const {
-        broadcast,
         setPageLoading,
-        startDate,
-        setStartDate,
-        endDate,
-        setEndDate,
+        id,
     } = props;
 
     const { handleSubmit, register } = useForm()
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
+    const [defaultState, setDefaultState] = useState(ContentState.createFromText('<p>I am awesome</p>'))
     const [activeTab, setActiveTab] = useState('text');
     const [files, setFiles] = useState([])
     const [fileNotSelected, setFileNotSelected] = useState(false);
     const [audience, setAudience] = useState([]);
+    const [broadcast, setBroadcast] = useState(null)
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
 
     useMemo(() => {
-        BroadcastService.getAudience()
-            .then(res => {
-                setAudience(res.results)
-                // setPageLoading(false)
-            })
-    }, [])
+        console.log(defaultState, '------------', ContentState.createFromText('<p>I am awesome</p>'))
+        if (id) {
+            BroadcastService.get(id)
+                .then(res => {
+                    setBroadcast(res.results[0])
+                    setStartDate(new Date(res.results[0].published))
+                    setEndDate(new Date(res.results[0].expiry))
+                    return BroadcastService.getAudience()
+                }).then(res => {
+                    setAudience(res.results)
+                    setPageLoading(false)
+                })
+        } else {
+            BroadcastService.getAudience()
+                .then(res => {
+                    setAudience(res.results)
+                    setPageLoading(false)
+                })
+        }
+
+
+    }, [id])
 
     const onSubmit = (data) => {
-        setPageLoading(true)
+        // setPageLoading(true)
+        // console.log(" raw dratf js ", editorState.getCurrentContent())
         data.body = convertToHTML(editorState.getCurrentContent())
         data.published = startDate
         data.expiry = endDate
 
-        // if (broadcast && broadcast.id) {
+        console.log(data, " data")
+
+        if (id) {
         //     //user is editing a broadcast message
-        //     console.log(data, ' editing')
-        //     // BroadcastService.update(broadcast.id, data)
+            console.log(data, ' editing')
+        //     // BroadcastService.update(id, data)
         //     //     .then((res) => {
         //     //         console.log(res)
         //     //         setPageLoading(false)
@@ -112,7 +132,8 @@ const BroadcastForm = props => {
         //     // broadcastAlert(false)
         //     //     })
 
-        // } else {
+        } else {
+            console.log('creating')
         //     BroadcastService.create(data)
         //         .then((res) => {
         //             setPageLoading(false)
@@ -121,7 +142,7 @@ const BroadcastForm = props => {
         //             setPageLoading(false)
         //             broadcastAlert(false)
         //         })
-        // }
+        }
 
     }
 
@@ -185,6 +206,15 @@ const BroadcastForm = props => {
                                     })
                                 }
                             </select>
+
+                            {/* <Select
+                            id="group"
+                            name="group"
+                            options={groupsOptions}
+                            onChange={item => setSelectedGroup(item)}
+                            className={`basic-multi-select form-control-m`}
+                            classNamePrefix="select"
+                            /> */}
                         </div>
                     </Col>
                     <Col md={6}>
@@ -239,7 +269,7 @@ const BroadcastForm = props => {
                                             wrapperClassName="wrapperClassName"
                                             editorClassName="editorClassName"
                                             onEditorStateChange={onEditorStateChange}
-                                            defaultContentState={'<p>Text</p>'}
+                                            defaultContentState={defaultState}
                                         />
                                     </div>
                                 </Col>
@@ -251,7 +281,7 @@ const BroadcastForm = props => {
                             title="Image"
                             active={activeTab === 'image'}
                         >
-                            <Col xs={12}  className="py-4">
+                            <Col xs={12} className="py-4">
                                 <FileUpload
                                     fileNotSelected={fileNotSelected}
                                     files={files}

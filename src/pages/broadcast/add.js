@@ -5,8 +5,6 @@ import { Broadcast } from 'components';
 
 const AddBroadcastPage = props => {
 	const [pageLoading, setPageLoading] = useState(true);
-	const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
 
 	return (
 		<AuthLayout {...props}
@@ -23,8 +21,6 @@ const AddBroadcastPage = props => {
 							pageLoading={pageLoading} 
 							setPageLoading={setPageLoading} 
 							{...props}
-							startDate={startDate}
-							endDate={endDate}
 						/>
 					</Col>
 				</Col>
