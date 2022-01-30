@@ -16,7 +16,6 @@ export default function SubCategoryConfigurations(props) {
     async function fetchData() {
         const subcategory = await ProductService.getProductSubcategory(id);
         const calcHistory = await ProductService.getSubcategoryCalculations(id);
-        console.log(calcHistory)
         setCalcHistory(calcHistory);
         setSubcategory(subcategory);
         setPageLoading(false);
