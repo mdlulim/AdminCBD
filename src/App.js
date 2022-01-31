@@ -79,7 +79,6 @@ const App = () => {
 	const fetchData = async () => {
 		if (SessionProvider.isValid()) {
 			const role = await UserService.getUserRole();
-			console.log(role, ' ********************')
 			setRole(role)
 		}
 	}

@@ -85,19 +85,25 @@ const BroadcastForm = props => {
     const [endDate, setEndDate] = useState(new Date());
     const [selectedStatus, setSelectedStatus] = useState('');
     const [selectedAudience, setSelectedAudience] = useState([])
+    const [selectedImage, setSelectedImage] = useState(null)
 
     useMemo(() => {
         if (id) {
             BroadcastService.get(id)
                 .then(res => {
+                    console.log(res)
                     setBroadcast(res.results[0])
                     setStartDate(new Date(res.results[0].published))
                     setEndDate(new Date(res.results[0].expiry))
                     setSelectedStatus(res.results[0].status)
-                    const selectedAudience = res.results[0].audience.map(item=> ({label: item.label, value: item.id}))
-                    console.log(selectedAudience)
+                    const selectedAudience = res.results[0].audience.map(item => ({ label: item.label, value: item.id }))
                     setSelectedAudience(selectedAudience)
-                    setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(res.results[0].body))))
+                    if (res.results[0].body) {
+                        setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(res.results[0].body))))
+                    } else {
+                        setSelectedImage(res.results[0].image)
+                        setActiveTab('image')
+                    }
                     return BroadcastService.getAudience()
                 }).then(res => {
                     setAudience(res.results)
@@ -120,7 +126,8 @@ const BroadcastForm = props => {
         data.expiry = endDate
 
         data.status = selectedStatus
-
+        data.audience = selectedAudience.map(item => item.value)
+        console.log(data)
         console.log(selectedAudience, " data")
         if (activeTab === 'image') {
             if (files.length > 0) {
@@ -146,36 +153,36 @@ const BroadcastForm = props => {
         if (id) {
             //     //user is editing a broadcast message
             console.log(data, ' editing')
-            // BroadcastService.update(id, data)
-            //     .then((res) => {
-            //         console.log(res)
-            //         setPageLoading(false)
-            // broadcastAlert(res.data.success)
-            //     }).catch(err => {
-            //         console.log(err)
-            //         setPageLoading(false)
-            // broadcastAlert(false)
-            //     })
+            BroadcastService.update(id, data)
+                .then((res) => {
+                    console.log(res)
+                    setPageLoading(false)
+                    broadcastAlert(res.data.success)
+                }).catch(err => {
+                    console.log(err)
+                    setPageLoading(false)
+                    broadcastAlert(false)
+                })
 
         } else {
             console.log('creating')
-            // BroadcastService.create(data)
-            //     .then((res) => {
-            //         setPageLoading(false)
-            //         broadcastAlert(res.data.success)
-            //     }).catch(err => {
-            //         setPageLoading(false)
-            //         broadcastAlert(false)
-            //     })
+            BroadcastService.create(data)
+                .then((res) => {
+                    setPageLoading(false)
+                    broadcastAlert(res.data.success)
+                }).catch(err => {
+                    setPageLoading(false)
+                    broadcastAlert(false)
+                })
         }
 
     }
 
     const statusOptions = [
-        { value: 'Published',  label: 'Published' },
+        { value: 'Published', label: 'Published' },
         { value: 'Draft', label: 'Draft' },
         { value: 'Archived', label: 'Archived' },
-      ];
+    ];
 
     const onEditorStateChange = editorState => {
         setEditorState(editorState);
@@ -231,8 +238,8 @@ const BroadcastForm = props => {
                             <Select
                                 id="audience"
                                 name="audience"
-                                defaultValue={selectedAudience? selectedAudience: []}
-                                options={audience? audience.map(item=> ({label: item.label, value: item.id})):[]}
+                                defaultValue={selectedAudience ? selectedAudience : []}
+                                options={audience ? audience.map(item => ({ label: item.label, value: item.id })) : []}
                                 isMulti
                                 onChange={selectedOptions => setSelectedAudience(selectedOptions)}
                                 className={`basic-multi-select form-control-m`}
@@ -248,7 +255,7 @@ const BroadcastForm = props => {
                             <Select
                                 id="status"
                                 name="status"
-                                defaultValue={broadcast ? statusOptions.filter(option => option.label === broadcast.status) : ''}
+                                defaultValue={selectedStatus ? statusOptions.filter(option => option.label === selectedStatus) : ''}
                                 options={statusOptions}
                                 onChange={item => setSelectedStatus(item.value)}
                                 className={`basic-multi-select form-control-m`}
@@ -308,12 +315,23 @@ const BroadcastForm = props => {
                             active={activeTab === 'image'}
                         >
                             <Col xs={12} className="py-4">
-                                <FileUpload
-                                    fileNotSelected={fileNotSelected}
-                                    files={files}
-                                    setFiles={setFiles}
-                                    toastBody="File has been selected, please submit to process the file and transaction."
-                                />
+                                {
+                                    selectedImage ?
+                                    <>
+                                        <span className='fa fa-trash-o btn btn-danger' style={{cursor: 'pointer'}} onClick={()=>{setSelectedImage(null); console.log(selectedImage, " image")}}></span><br/>
+                                        <img style={{ cursor: "pointer", maxWidth: '100%' }} src={'https://cdn-cbigold.ams3.digitaloceanspaces.com/' + selectedImage} alt="prof" />
+                                    </>
+                                    : ''
+                                    
+                                }
+                                <div style={{ display: selectedImage ? 'none' : '' }}>
+                                    <FileUpload
+                                        fileNotSelected={fileNotSelected}
+                                        files={files}
+                                        setFiles={setFiles}
+                                        toastBody="File has been selected, please submit to process the file and transaction."
+                                    />
+                                </div>
                             </Col>
                         </NavTabContent>
                     </div>
