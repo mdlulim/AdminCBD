@@ -117,7 +117,6 @@ export default function UpdateProductDetails(props) {
 
         const subcategoryList = await ProductService.getProductSubCategories();
         setSubcategories(subcategoryList.results);
-        
 
         const productDetails = await ProductService.getProduct(id);
         const subcategoryFiltered= subcategoryList.results.filter(option => option.id === productDetails.subcategory_id);

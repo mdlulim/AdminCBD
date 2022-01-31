@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { Card, CardBody, Col, Row } from 'reactstrap';
+import { Card, CardBody, Col, Row, CarouselItem } from 'reactstrap';
 import { useParams, useHistory } from 'react-router-dom';
 import { AuthLayout } from 'containers';
 import { Products } from 'components';
@@ -46,9 +46,12 @@ const ProductAddNew = props => {
     const [selectedSubcategory, setSelectedSubcategory] = useState({});
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [resetProduct, setRecentProduct] = useState({});
+    const [inputs, setInputs] = useState([]);
     const [allowCancellation, setAllowCancellation] = useState(false);
     const [postData, setPostData] = useState({});
     const [pageLoading, setPageLoading] = useState(true);
+    const [fees, setFees] = useState({})
+    const [indicators, setIndicators] = useState({})
     const params = useParams();
     const { id } = params;
 
@@ -64,14 +67,13 @@ const ProductAddNew = props => {
         setCategories(categoryList.results);
         let temp = [];
         categoryList.results.filter(item => (
-            temp.push({ value: item.code, label: item.title, id: item.id })
+            temp.push({ value: item.code, label: item.title, id: item.id, inputs: item.inputFields })
         ))
         setProductCategories(temp);
 
         const subcategories = await ProductService.getProductSubCategories();
         setSubcategories(subcategories.results);
         setPageLoading(false);
-     
     }
 
     useMemo(() => {
@@ -95,16 +97,38 @@ const ProductAddNew = props => {
         { value: 'Published', label: 'Published' },
         { value: 'Achived', label: 'Achived' }
     ];
+    async function onChangeFees(value,item) {
+        if(item.group === 'fees'){
+            let feeTemp = fees;
+            feeTemp[item.name] = parseFloat(value);
+            setFees(feeTemp)
+        }else if(item.group === 'indicators'){
+            let indicatorTemp = indicators;
+            indicatorTemp[item.value] = parseFloat(value);
+            setIndicators(indicatorTemp)
+        }
+    }
 
     async function onChangeCategorySelect(data) {
         const sub = subcategories.filter(option => option.category_id === data.id);
-        console.log(sub[0].code)
         let temp = [];
         sub.filter(item => (
             temp.push({ value: item.code, label: item.title, id: item.id, allow_cancellations: item.allow_cancellations })
         ))
         setSelectedSubcategory(temp[0])
         setFilteredSubcategories(temp)
+
+        if(data.inputs && data.inputs.selectedRows){
+        const filteredItems = data.inputs.selectedRows.filter(item => (
+            (item.value != 'title' && item.value != 'currency_code' && item.value != 'body' && item.value != 'status')
+          ));
+        setInputs(filteredItems);
+        setDisabled(false)
+        setError('')
+        }else{
+            setError('Does not have inputs fields');
+            setDisabled(true)
+        }
         if (sub[0].code === 'FX') {
             setShow(false)
             setShowFixedPlan(true)
@@ -118,102 +142,6 @@ const ProductAddNew = props => {
             setShowFixedPlan(true)
             setShowCBIx7(false)
         }
-        // const title = form.title.value;
-    }
-    const onSubmitCBI = (event) => {
-        event.preventDefault();
-        setDisabled(true);
-        setError('');
-        const form = event.currentTarget;
-
-        const category = categories.filter(option => option.code === selectedProductType)[0];
-        // const title = form.title.value;
-        let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-        const productData = {
-            body: currentContentAsHTML,
-            category_id: category.id,
-            category_title: category.title,
-            currency_code: selectedCurrency,
-            product_code: "KJHYAS",
-            status: selectedStatus,
-            title: form.title.value,
-            type: selectedProductType,
-            price: 0,
-            fees: {
-                educator_percentage: parseFloat(form.educator_persantage_fee.value),
-                registration_fee: parseFloat(form.registration_fee.value),
-                slippage_percentage_buy: parseFloat(form.slippage_persantage_buy.value),
-                slippage_percentage_sell: parseFloat(form.slippage_persantage_sell.value),
-            }
-        }
-        ProductService.addProduct(productData).then((response) => {
-            if (response.status) {
-                setShow(true);
-                confirmAlert({
-                    title: 'Confirm submit',
-                    message: 'Product was added successfully',
-                    buttons: [
-                        {
-                            label: 'Yes',
-                            onClick: () => {
-                                window.location = '/products/add';
-                            }
-                        }
-                    ]
-                })
-            } else {
-                setError('Something went wrong please make you submited correct values');
-            }
-            setDisabled(false);
-        })
-    }
-
-    const onSubmitProduct = (event) => {
-        event.preventDefault();
-        setDisabled(true);
-        setError('');
-        const form = event.currentTarget;
-
-        const category = categories.filter(option => option.code === selectedProductType)[0];
-        // const title = form.title.value;
-        let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-        const productData = {
-            body: currentContentAsHTML,
-            category_id: category.id,
-            category_title: category.title,
-            currency_code: selectedCurrency,
-            educator_percentage: 4,
-            product_code: "JGJHGDSD",
-            fees: {
-                educator_percentage: parseFloat(form.registration_persantage.value),
-                registration_percentage: parseFloat(form.educator_persantage.value),
-            },
-            status: selectedStatus,
-            title: form.title.value,
-            type: selectedProductType,
-            price: parseFloat(form.price.value),
-        }
-        console.log(productData);
-        ProductService.addProduct(productData).then((response) => {
-            if (response.status) {
-                setShow(true);
-                confirmAlert({
-                    title: 'Confirm submit',
-                    message: 'Product was added successfully',
-                    buttons: [
-                        {
-                            label: 'Yes',
-                            onClick: () => {
-                                window.location = '/products/add';
-                            }
-                        }
-                    ]
-                })
-            } else {
-                setError('error message');
-            }
-            setDisabled(false);
-        })
     }
 
     const generateUniqueCode = (length) => {
@@ -227,91 +155,36 @@ const ProductAddNew = props => {
     }
 
     function onSubmit(data) {
-        console.log("=============================TEST SUBMIT================================")
-        console.log(data)
         setDisabled(true);
         setError('');
         const category = categories.filter(option => option.code === selectedProductType)[0];
+
         // const title = form.title.value;
         let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
         const productCode = generateUniqueCode(5);
-        if (selectedProductType === 'CBIX7') {
-            const {title, educator_persantage_fee, registration_fee, slippage_persantage_buy, slippage_persantage_sell, cancellation_fee} = data;
-            const data2 = {
-                body: currentContentAsHTML,
-                category_id: category.id,
-                subcategory_id: selectedSubcategory.id,
-                category_title: category.title,
-                currency_code: selectedCurrency,
-                product_code: productCode,
-                status: selectedStatus,
-                title: title,
-                type: selectedProductType,
-                price: 0,
-                fees: {
-                    educator_percentage: parseFloat(educator_persantage_fee),
-                    registration_fee: parseFloat(registration_fee),
-                    slippage_percentage_buy: parseFloat(slippage_persantage_buy),
-                    slippage_percentage_sell: parseFloat(slippage_persantage_sell),
-                    cancellation_fee: parseFloat(cancellation_fee),
-                }
-            }
-            create(data2)
-
-        } else if (selectedProductType === 'FX') {
-            const {title, price, educator_percentage, registration_percentage, cancellation_fee} = data;
-            const data2 = {
-                body: currentContentAsHTML,
-                category_id: category.id,
-                subcategory_id: selectedSubcategory.id,
-                category_title: category.title,
-                currency_code: selectedCurrency,
-                educator_percentage: 4,
-                product_code: productCode,
-                fees: {
-                    educator_percentage: parseFloat(educator_percentage),
-                    registration_percentage: parseFloat(registration_percentage),
-                    cancellation_fee: allowCancellation ? parseFloat(cancellation_fee) : null,
-                },
-                status: selectedStatus,
-                title: title,
-                type: selectedProductType,
-                price: parseFloat(price),
-            }
-            create(data2)
-
-        } else if (selectedProductType === 'FP') {
-            const {title, price, investment_period, minimum_investment, estimated_daily_interest, minimum_gross_return, cancellation_fee} = data;
-            const data2 = {
-                body: currentContentAsHTML,
-                category_id: category.id,
-                subcategory_id: selectedSubcategory.id,
-                category_title: category.title,
-                currency_code: selectedCurrency,
-                investment_period: parseFloat(investment_period),
-                minimum_investment: parseFloat(minimum_investment),
-                price: parseFloat(price),
-                product_code: productCode,
-                type: selectedProductType,
-                status: selectedStatus,
-                fees: {
-                    daily_interest: parseFloat(estimated_daily_interest),
-                    gross_return: parseFloat(minimum_gross_return),
-                    cancellation_fee: allowCancellation ? parseFloat(cancellation_fee) : null,
-                },
-                title: title
-            }
-            create(data2)
+        let productDate = {
+            body: currentContentAsHTML,
+            category_id: category.id,
+            subcategory_id: selectedSubcategory.id,
+            category_title: category.title,
+            currency_code: selectedCurrency,
+            product_code: productCode,
+            status: selectedStatus,
+            title: data.title,
+            type: selectedProductType,
+            price: data.price ? parseFloat(data.price) : 0,
+            fees: fees,
+            indicators: indicators
         }
-
+        create(productDate)
     }
 
-    const create = (data) => {
-        const title = data.title;
+    const create = (data2) => {
+        const title = data2.title;
         let permakey = title.split(' ').join('-').trim().toLowerCase();
         let productExist = products.filter(product => product.permakey === permakey);
         if (!productExist.length) {
-            ProductService.addProduct(data).then((response) => {
+            ProductService.addProduct(data2).then((response) => {
                 if (response.status) {
                     setShow(true);
                     confirmAlert({
@@ -327,7 +200,7 @@ const ProductAddNew = props => {
                         ]
                     })
                 } else {
-                    setError('Something went wrong please make you submited correct values');
+                    setError(response.message);
                 }
                 setDisabled(false);
             })
@@ -418,232 +291,34 @@ const ProductAddNew = props => {
                                             classNamePrefix="select"
                                         />
                                     </Col>
-                                    {selectedProductType === "CBIX7" ?
-                                        '' :
-                                        <Col md={6}>
-                                            <label htmlFor="name">Product Amount (CBI)</label>
-                                            <input
-                                                type="text"
-                                                id="price"
-                                                name="price"
-                                                onChange={event => {
-                                                    if (!isNaN(+event.target.value)) {
-                                                        setErrorAmount(true)
-                                                    } else {
-                                                        setErrorAmount(false)
-                                                    }
-                                                }}
-                                                className={`form-control form-control-m ${errors.price ? 'is-invalid' : ''}`}
-                                                ref={register({ required: true })}
-                                            />
-                                             {errors.price && <span className="help-block invalid-feedback">Please enter product title</span>}
-                                         </Col>}
-                                    <Col md={6} hidden={show}>
-                                        <label htmlFor="name">Registration Percentage Fee (%) </label>
-                                        <input
-                                            type="text"
-                                            id="registration_percentage"
-                                            name="registration_percentage"
-                                            onChange={event => {
-                                                if (!isNaN(+event.target.value)) {
-                                                    setErrorReg(true)
-                                                } else {
-                                                    setErrorReg(false)
-                                                }
-                                            }}
-                                            className={`form-control form-control-m ${errors.registration_percentage ? 'is-invalid' : ''}`}
-                                            ref={register({ required: true })}
-                                        />
-                                         {errors.registration_percentage && <span className="help-block invalid-feedback">Please enter registration fee</span>}
-                                    
-                                    </Col>
-                                    <Col md={6} hidden={show}>
-                                        <label htmlFor="educator_percentage">Educator Percentage Fee (%) </label>
-                                        <input
-                                            type="text"
-                                            id="educator_percentage"
-                                            name="educator_percentage"
-                                            onChange={event => {
-                                                if (!isNaN(+event.target.value)) {
-                                                    setErrorEducator(true)
-                                                } else {
-                                                    setErrorEducator(false)
-                                                }
-                                            }}
-                                            className={`form-control form-control-m ${errors.educator_percentage ? 'is-invalid' : ''}`}
-                                            ref={register({ required: true })}
-                                        />
-                                         {errors.educator_percentage && <span className="help-block invalid-feedback">Please enter educator percentage fee</span>}
-                                       </Col>
-                                    {/** =========================================================CBIX7================================================ */}
-                                    <Col md={6} hidden={showCBIx7}>
-                                        <label htmlFor="name">Registration Fee </label>
-                                        <input
-                                            type="text"
-                                            id="registration_fee"
-                                            name="registration_fee"
-                                            onChange={event => {
-                                                if (!isNaN(+event.target.value)) {
-                                                    let value = event.target.value / 100 * amountFee
-                                                    setRegistrationFee(value)
-                                                    setErrorReg(true)
-                                                } else {
-                                                    setErrorReg(false)
-                                                    setRegistrationFee(0)
-                                                }
-                                            }}
-                                            className={`form-control form-control-m ${errors.registration_fee ? 'is-invalid' : ''}`}
-                                            ref={register({ required: true })}
-                                        />
-                                         {errors.registration_fee && <span className="help-block invalid-feedback">Please enter registration fee</span>}
-                                       
-                                    </Col>
-                                    <Col md={6} hidden={showCBIx7}>
-                                        <label htmlFor="educator_persantage">Educator Percentage Fee (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={educatorFee} /> : ''}</label>
-                                        <input
-                                            type="text"
-                                            id="educator_persantage_fee"
-                                            name="educator_persantage_fee"
-                                            onChange={event => {
-                                                if (!isNaN(+event.target.value)) {
-                                                    let value = event.target.value / 100 * amountFee
-                                                    setEducatorFee(value)
-                                                    setErrorEducator(true)
-                                                } else {
-                                                    setErrorEducator(false)
-                                                    setEducatorFee(0)
-                                                }
-                                            }}
-                                            className={`form-control form-control-m ${errors.educator_persantage_fee ? 'is-invalid' : ''}`}
-                                            ref={register({ required: true })}
-                                        />
-                                         {errors.educator_persantage_fee && <span className="help-block invalid-feedback">Please enter educator persantage fee</span>}
-                                       </Col>
-                                    <Col md={6} hidden={showCBIx7}>
-                                        <label htmlFor="educator_persantage">Slippage Percentage Sell (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={sleppageFee} /> : ''}</label>
-                                        <input
-                                            type="text"
-                                            id="slippage_persantage_sell"
-                                            name="slippage_persantage_sell"
-                                            onChange={event => {
-                                                if (!isNaN(+event.target.value)) {
-                                                    setErrorSlippage(true)
-                                                } else {
-                                                    setErrorSlippage(false)
-                                                }
-                                            }}
-                                            className={`form-control form-control-m ${errors.slippage_persantage_sell ? 'is-invalid' : ''}`}
-                                            ref={register({ required: true })}
-                                        />
-                                         {errors.slippage_persantage_sell && <span className="help-block invalid-feedback">Please enter slippage persantage sell</span>}
-                                        </Col>
-                                    <Col md={6} hidden={showCBIx7}>
-                                        <label htmlFor="educator_persantage">Slippage Percentage Buy (%) {educatorFee ? <NumberFormat thousandSeparator={true} displayType={'text'} prefix={'CBI '} value={sleppageFee} /> : ''}</label>
-                                        <input
-                                            type="text"
-                                            id="slippage_persantage_buy"
-                                            name="slippage_persantage_buy"
-                                            onChange={event => {
-                                                if (!isNaN(+event.target.value)) {
+                                    {inputs.map((item)=>{
+                                        let value = item.value;
+                                        let group = item.group;
+                                            return(
+                                                <Col md={6}>
+                                                <label htmlFor="name">{item.name}</label>
+                                                <input
+                                                    type="text"
+                                                    id={value}
+                                                    name={value}
+                                                    className={`form-control form-control-m ${errors.value ? 'is-invalid' : ''}`}
+                                                    onChange={event => {
+                                                        onChangeFees(event.target.value, item) 
+                                                        // if(!isNaN(+event.target.value)){
+                                                        //     setErrorEducator(true)
+                                                        // }else{
+                                                        //     setErrorEducator(false)
+                                                        // }
+                                                    }}
+                                                    ref={register({ required: true })}
+                                                />
+                                                 {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
+                                            </Col>
+                                            );
+                                        })
+                                    }
 
-                                                    setErrorSlippage(true)
-                                                } else {
-                                                    setErrorSlippage(false)
-                                                }
-                                            }}
-                                            className={`form-control form-control-m ${errors.slippage_persantage_buy ? 'is-invalid' : ''}`}
-                                            ref={register({ required: true })}
-                                        />
-                                         {errors.slippage_persantage_buy && <span className="help-block invalid-feedback">Please enter slippage persantage buy</span>}
-                                       </Col>
-                                    {/** =========================================================Fixed Plan================================================ */}
-                                    <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Estimated daily Interest (%)</label>
-                                        <input
-                                            type="text"
-                                            id="registration_persantage"
-                                            name="estimated_daily_interest"
-                                            onChange={event => {
-                                                if (!isNaN(+event.target.value)) {
-                                                    let value = event.target.value / 100 * amountFee
-                                                    setRegistrationFee(parseFloat(value).toFixed(2))
-                                                    setErrorReg(true)
-                                                } else {
-                                                    setErrorReg(false)
-                                                    setRegistrationFee(0)
-                                                }
-                                            }}
-                                            className={`form-control form-control-m ${errors.registration_persantage ? 'is-invalid' : ''}`}
-                                            ref={register({ required: true })}
-                                        />
-                                         {errors.registration_persantage && <span className="help-block invalid-feedback">Please enter registration persantage</span>}
-                                       
-                                    </Col>
-                                    <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Minimum Gross Return (%) </label>
-                                        <input
-                                            type="text"
-                                            id="registration_persantage"
-                                            name="minimum_gross_return"
-                                            onChange={event => {
-                                                if (!isNaN(+event.target.value)) {
-                                                    let value = event.target.value / 100 * amountFee
-                                                    setRegistrationFee(parseFloat(value).toFixed(2))
-                                                    setErrorReg(true)
-                                                } else {
-                                                    setErrorReg(false)
-                                                    setRegistrationFee(0)
-                                                }
-                                            }}
-                                            className={`form-control form-control-m ${errors.registration_persantage ? 'is-invalid' : ''}`}
-                                            ref={register({ required: true })}
-                                        />
-                                         {errors.registration_persantage && <span className="help-block invalid-feedback">Please enter registration persantage</span>}
-                                       
-                                    </Col>
-                                    <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Investment Period (Weeks)</label>
-                                        <input
-                                            type="text"
-                                            id="investment_period"
-                                            name="investment_period"
-                                            onChange={event => {
-                                                if (!isNaN(+event.target.value)) {
-                                                    let value = event.target.value / 100 * amountFee
-                                                    setRegistrationFee(parseFloat(value).toFixed(2))
-                                                    setErrorReg(true)
-                                                } else {
-                                                    setErrorReg(false)
-                                                    setRegistrationFee(0)
-                                                }
-                                            }}
-                                            className={`form-control form-control-m ${errors.investment_period ? 'is-invalid' : ''}`}
-                                            ref={register({ required: true })}
-                                        />
-                                         {errors.investment_period && <span className="help-block invalid-feedback">Please enter investment period</span>}
-                                       
-                                    </Col>
-                                    <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Minimum Investment (CBI)</label>
-                                        <input
-                                            type="text"
-                                            id="minimum_investment"
-                                            name="minimum_investment"
-                                            onChange={event => {
-                                                if (!isNaN(+event.target.value)) {
-                                                    setErrorReg(true)
-                                                } else {
-                                                    setErrorReg(false)
-                                                }
-                                            }}
-                                            className={`form-control form-control-m ${errors.minimum_investment ? 'is-invalid' : ''}`}
-                                            ref={register({ required: true })}
-                                        />
-                                         {errors.minimum_investment && <span className="help-block invalid-feedback">Please enter educator minimum investment</span>}
-                                       
-                                    </Col>
-                                    {
-                                        allowCancellation ?
+                                    { allowCancellation ?
                                             <Col md={6}>
                                                 <label htmlFor="name">Cancellation Fee (%) *</label>
                                                 <input
@@ -659,7 +334,7 @@ const ProductAddNew = props => {
                                                     }}
                                                     required
                                                     className={`form-control form-control-m ${errors.cancellation_fee ? 'is-invalid' : ''}`}
-                                                    ref={register({ required: true })}
+                                                    ref={register({ required: false })}
                                                 />
                                                  {errors.cancellation_fee && <span className="help-block invalid-feedback">Please enter cancellation fee</span>}
                                                
@@ -673,8 +348,9 @@ const ProductAddNew = props => {
                                             options={statusOptions}
                                             onChange={item => setSelectedStatus(item.value)}
                                             className={`basic-multi-select form-control-m ${errors.status ? 'is-invalid' : ''}`}
+                                            ref={register({ required: true })}
                                           />
-                                         {/* {errors.status && <span className="help-block invalid-feedback">Please select status</span>} */}
+                                          {errors.status && <span className="help-block invalid-feedback">Please select status</span>}
                                        
                                     </Col>
                                     <Col md={12}>
