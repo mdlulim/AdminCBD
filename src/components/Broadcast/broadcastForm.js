@@ -84,6 +84,7 @@ const BroadcastForm = props => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [selectedStatus, setSelectedStatus] = useState('');
+    const [selectedAudience, setSelectedAudience] = useState([])
 
     useMemo(() => {
         if (id) {
@@ -92,6 +93,10 @@ const BroadcastForm = props => {
                     setBroadcast(res.results[0])
                     setStartDate(new Date(res.results[0].published))
                     setEndDate(new Date(res.results[0].expiry))
+                    setSelectedStatus(res.results[0].status)
+                    const selectedAudience = res.results[0].audience.map(item=> ({label: item.label, value: item.id}))
+                    console.log(selectedAudience)
+                    setSelectedAudience(selectedAudience)
                     setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(res.results[0].body))))
                     return BroadcastService.getAudience()
                 }).then(res => {
@@ -111,12 +116,12 @@ const BroadcastForm = props => {
 
     const onSubmit = async (data) => {
         // setPageLoading(true)
-        // console.log(" raw dratf js ", editorState.getCurrentContent())
-
         data.published = startDate
         data.expiry = endDate
 
-        console.log(data, " data")
+        data.status = selectedStatus
+
+        console.log(selectedAudience, " data")
         if (activeTab === 'image') {
             if (files.length > 0) {
                 const ext = files[0].type.split('/')[1];
@@ -137,8 +142,6 @@ const BroadcastForm = props => {
             data.body = convertToHTML(editorState.getCurrentContent())
             data.image = null
         }
-
-        console.log(editorState.getCurrentContent(), " current content")
 
         if (id) {
             //     //user is editing a broadcast message
@@ -170,7 +173,8 @@ const BroadcastForm = props => {
 
     const statusOptions = [
         { value: 'Published',  label: 'Published' },
-        { value: 'Achived', label: 'Achived' }
+        { value: 'Draft', label: 'Draft' },
+        { value: 'Archived', label: 'Archived' },
       ];
 
     const onEditorStateChange = editorState => {
@@ -186,7 +190,7 @@ const BroadcastForm = props => {
                             <label htmlFor="title" className="form-control-label">
                                 Title
                             </label>
-                            <input type="text" ref={register} name='title' defaultValue={broadcast && broadcast.title ? broadcast.title : ''} className='form-control' />
+                            <input type="text" ref={register} name='title' required defaultValue={broadcast && broadcast.title ? broadcast.title : ''} className='form-control' />
                         </div>
                     </Col>
                 </Row>
@@ -196,7 +200,7 @@ const BroadcastForm = props => {
                             <label htmlFor="summary" className="form-control-label">
                                 Summary
                             </label>
-                            <input type="text" ref={register} name='summary' defaultValue={broadcast && broadcast.summary ? broadcast.summary : ''} className='form-control' />
+                            <input type="text" ref={register} name='summary' required defaultValue={broadcast && broadcast.summary ? broadcast.summary : ''} className='form-control' />
                         </div>
                     </Col>
                 </Row>
@@ -224,23 +228,16 @@ const BroadcastForm = props => {
                             <label htmlFor="audience" className="form-control-label">
                                 Audience
                             </label>
-
-                            <select ref={register} name='audience' multiple className='form-control'>
-                                {
-                                    audience.map((item) => {
-                                        return <option key={item.id} selected={(broadcast && broadcast.audience && broadcast.audience.includes(item.id)) ? true : false} value={item.id}>{item.label}</option>
-                                    })
-                                }
-                            </select>
-
-                            {/* <Select
-                            id="group"
-                            name="group"
-                            options={groupsOptions}
-                            onChange={item => setSelectedGroup(item)}
-                            className={`basic-multi-select form-control-m`}
-                            classNamePrefix="select"
-                            /> */}
+                            <Select
+                                id="audience"
+                                name="audience"
+                                defaultValue={selectedAudience? selectedAudience: []}
+                                options={audience? audience.map(item=> ({label: item.label, value: item.id})):[]}
+                                isMulti
+                                onChange={selectedOptions => setSelectedAudience(selectedOptions)}
+                                className={`basic-multi-select form-control-m`}
+                                classNamePrefix="select"
+                            />
                         </div>
                     </Col>
                     <Col md={6}>
@@ -248,21 +245,15 @@ const BroadcastForm = props => {
                             <label htmlFor="status" className="form-control-label">
                                 Status
                             </label>
-
-                            {/* defaultValue={broadcast && broadcast.status ? broadcast.status : ''} */}
-                            {/* <select ref={register} name='status' className='form-control' >
-                                <option value="Published">Published</option>
-                                <option value="Draft">Draft</option>
-                                <option value="Archived">Archived</option>
-                            </select> */}
                             <Select
                                 id="status"
                                 name="status"
-                                value={broadcast ? statusOptions.filter(option => option.label === broadcast.status) : ''}
+                                defaultValue={broadcast ? statusOptions.filter(option => option.label === broadcast.status) : ''}
                                 options={statusOptions}
                                 onChange={item => setSelectedStatus(item.value)}
                                 className={`basic-multi-select form-control-m`}
                                 classNamePrefix="select"
+                                ref={register}
                             />
                         </div>
                     </Col>
