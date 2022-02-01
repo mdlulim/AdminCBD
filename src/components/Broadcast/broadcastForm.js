@@ -121,7 +121,7 @@ const BroadcastForm = props => {
     }, [id])
 
     const onSubmit = async (data) => {
-        // setPageLoading(true)
+        setPageLoading(true)
         data.published = startDate
         data.expiry = endDate
 
@@ -238,7 +238,7 @@ const BroadcastForm = props => {
                             <Select
                                 id="audience"
                                 name="audience"
-                                defaultValue={selectedAudience ? selectedAudience : []}
+                                value={selectedAudience ? selectedAudience : []}
                                 options={audience ? audience.map(item => ({ label: item.label, value: item.id })) : []}
                                 isMulti
                                 onChange={selectedOptions => setSelectedAudience(selectedOptions)}
@@ -255,12 +255,11 @@ const BroadcastForm = props => {
                             <Select
                                 id="status"
                                 name="status"
-                                defaultValue={selectedStatus ? statusOptions.filter(option => option.label === selectedStatus) : ''}
+                                value={selectedStatus ? statusOptions.filter(option => option.label === selectedStatus) : ''}
                                 options={statusOptions}
                                 onChange={item => setSelectedStatus(item.value)}
                                 className={`basic-multi-select form-control-m`}
                                 classNamePrefix="select"
-                                ref={register}
                             />
                         </div>
                     </Col>
@@ -319,7 +318,7 @@ const BroadcastForm = props => {
                                     selectedImage ?
                                     <>
                                         <span className='fa fa-trash-o btn btn-danger' style={{cursor: 'pointer'}} onClick={()=>{setSelectedImage(null); console.log(selectedImage, " image")}}></span><br/>
-                                        <img style={{ cursor: "pointer", maxWidth: '100%' }} src={'https://cdn-cbigold.ams3.digitaloceanspaces.com/' + selectedImage} alt="prof" />
+                                        <img style={{ maxWidth: '100%' }} src={'https://cdn-cbigold.ams3.digitaloceanspaces.com/' + selectedImage} alt="prof" />
                                     </>
                                     : ''
                                     
