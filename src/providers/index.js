@@ -22,6 +22,7 @@ import CompanyService from './CompanyService';
 import BankAccountService from './BankAccountService';
 import MainAccountService from './MainAccountService';
 import CompanyBankAccountService from './CompanyBankAccountService';
+import BroadcastService from './BroadcastService';
 import ProfileProvider from './ProfileProvider';
 import ActivityService from './ActivityService';
 
@@ -50,6 +51,7 @@ export {
     BankAccountService,
     MainAccountService,
     CompanyBankAccountService,
+    BroadcastService,
     ProfileProvider,
     ActivityService,
 };

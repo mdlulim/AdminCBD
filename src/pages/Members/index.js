@@ -4,11 +4,6 @@ import { Common, Pagination, Members, Loader } from 'components';
 import { AuthLayout } from 'containers';
 import { MemberService } from '../../providers';
 
-
-let baseURL = window.location.origin;
-
-let page = (window.location.pathname.split('/').pop()).toLowerCase();
-
 export default function MembersPage(props) {
     const [members, setMembers] = useState([]);
     const [pageLoading, setPageLoading] = useState(true);
