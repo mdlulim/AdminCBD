@@ -132,7 +132,7 @@ export default function Broadcast(props) {
   const onSearchFilter = filterText => {
     const filteredItems = broadcast.filter(item => (
       (item && item.title && item.title.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.summary && item.summary.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase()))
     ));
     setFilteredBroadcasts(filteredItems);
