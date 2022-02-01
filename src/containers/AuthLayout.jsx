@@ -13,7 +13,7 @@ const AuthLayout = props => {
     return (
         <>
         {loading && 
-            <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent:'center'}}>
+            <div style={{position: 'fixed', height: '100vh', width: '100vw', zIndex: '1000', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center'}}>
                 <Loader.Default />
             </div>
         }
