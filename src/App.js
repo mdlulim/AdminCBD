@@ -101,7 +101,7 @@ const App = () => {
 
 					<PrivateRoute exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} />
 
-					<Route exact path="/members/pending" component={(props) => <MembersPending config={settings} {...props} menu={menu} />} />
+					<Route exact path="/members/pending" component={(props) => <MembersPending config={settings} {...props} menu={menu} permissions={role ? role.permissions.members.childitems.pending : null} />} />
 					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} menu={menu} permissions={role ? role.permissions.members.childitems.members : null} />} />
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/leads" component={(props) => <Leads config={settings} {...props} menu={menu} />} />
