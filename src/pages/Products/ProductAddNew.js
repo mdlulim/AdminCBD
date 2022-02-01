@@ -62,7 +62,6 @@ const ProductAddNew = props => {
             setRecentProduct(poductsList.results[0])
         }
 
-
         const categoryList = await ProductService.getProductCategories();
         setCategories(categoryList.results);
         let temp = [];
@@ -97,6 +96,7 @@ const ProductAddNew = props => {
         { value: 'Published', label: 'Published' },
         { value: 'Achived', label: 'Achived' }
     ];
+    
     async function onChangeFees(value,item) {
         if(item.group === 'fees'){
             let feeTemp = fees;
@@ -128,19 +128,6 @@ const ProductAddNew = props => {
         }else{
             setError('Does not have inputs fields');
             setDisabled(true)
-        }
-        if (sub[0].code === 'FX') {
-            setShow(false)
-            setShowFixedPlan(true)
-            setShowCBIx7(true)
-        } else if (sub[0].code === 'FP') {
-            setShow(true)
-            setShowFixedPlan(false)
-            setShowCBIx7(true)
-        } else if (sub[0].code === 'CBIX7') {
-            setShow(true)
-            setShowFixedPlan(true)
-            setShowCBIx7(false)
         }
     }
 
@@ -185,6 +172,7 @@ const ProductAddNew = props => {
         let productExist = products.filter(product => product.permakey === permakey);
         if (!productExist.length) {
             ProductService.addProduct(data2).then((response) => {
+                setDisabled(false)
                 if (response.status) {
                     setShow(true);
                     confirmAlert({
@@ -202,10 +190,10 @@ const ProductAddNew = props => {
                 } else {
                     setError(response.message);
                 }
-                setDisabled(false);
             })
-
+            setDisabled(false)
         } else {
+            setDisabled(false)
             setError('This product is already exist')
         }
 
@@ -382,9 +370,9 @@ const ProductAddNew = props => {
                             type="submit"
                             form="create-product-form"
                             className="btn btn-primary"
-                            disabled={confirmButtonDisabled || processing}
+                            disabled={disabled}
                         >
-                            {processing ? 'Processing...' : 'Add Product'}
+                            {disabled ? 'Processing...' : 'Add Product'}
                         </button>
                     </CardBody >
                 </Card >

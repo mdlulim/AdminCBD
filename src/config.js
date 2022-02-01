@@ -17,7 +17,7 @@ if (window.location) {
 }
 Config.auth = {
     cookie: {
-        name: '__cbiWebAppUserSession',
+        name: '__cbiAdminChannelUserSession',
         expires: 1, // days
     }
 }
