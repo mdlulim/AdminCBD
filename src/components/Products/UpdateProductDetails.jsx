@@ -1,75 +1,20 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useParams } from 'react-router-dom';
-import Moment from 'react-moment';
-import { Products } from 'components';
 import { EditorState, ContentState, convertFromHTML} from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
-import { HashLinkContainer } from 'components';
-import DataTable from 'react-data-table-component';
-import { Unlock,  Edit, Trash} from 'react-feather';
-import CurrencyFormat from 'react-currency-format';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import DeleteProductAlert from './DeleteProductAlert';
 import { ProductService } from '../../providers';
 import Select from 'react-select';
 import NumberFormat from 'react-number-format';
-// styles
-const customStyles = {
-   
-    headCells: {
-        style: {
-            color: 'rgba(0,0,0,.54)',
-            paddingLeft: '18px', // override the cell padding for head cells
-            paddingRight: '18px',
-        },
-    },
-    cells: {
-        style: {
-            paddingLeft: '18px', // override the cell padding for data cells
-            paddingRight: '18px',
-        },
-    },
-};
-const iconPadding ={
-    paddingRight: '3px',
-}
-const inputWith={
-  width: '30%',
-  marginRight: '20px'
-}
-
-const Status = ({ status }) => {
-    let badge = 'primary';
-    if (status === 'Pending') {
-      badge = 'warning';
-    }
-    if (status === 'Published') {
-      badge = 'success';
-    }
-    if (status === 'Blocked') {
-        badge = 'danger';
-      }
-    return (
-      <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
-    );
-  };
-
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
+import useForm from 'react-hook-form';
 
 export default function UpdateProductDetails(props) {
+    const { register, handleSubmit, reset, errors } = useForm();
+    const [pageLoading, setPageLoading] = useState(true);
     const breadcrumb = { heading: "Product Details" };
     const [disabled, setDisabled] = useState(false);
     const [activeTab, setActiveTab] = useState('referals');
@@ -79,15 +24,11 @@ export default function UpdateProductDetails(props) {
     const [showFixedPlan, setShowFixedPlan] = useState(true);
 	const [errorAmount, setErrorAmount] = useState(true);
     const [errorReg, setErrorReg] = useState(true);
-    const [sleppageFee, setSlippageFee] = useState(0);
-    const [errorSlippage, setErrorSlippage] = useState(true);
-	const [errorEducator, setErrorEducator] = useState(true);
 	const [amountFee, setAmountFee] = useState(0);
 	const [educatorFee, setEducatorFee] = useState(0);
 	const [registrationFee, setRegistrationFee] = useState(0);
 	const [error, setError] = useState('');
     const [product, setProduct] = useState({});
-    const [products, setProducts] = useState([]);
     const [productCategories, setProductCategories] = useState([]);
     const [categories, setCategories] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
@@ -100,13 +41,15 @@ export default function UpdateProductDetails(props) {
     const [ fees, setFees ] = useState({});
     const [allowCancellation, setAllowCancellation] = useState(false);
     const [selectedSubcategory, setSelectedSubcategory] = useState({});
+    const [inputs, setInputs] = useState([]);
+    const [indicators, setIndicators] = useState({})
+    
+
     const params = useParams();
     const { id } = params;
 
-    async function fetchData(){
-        const poductsList = await ProductService.getProducts();
-        setProducts(poductsList.results);
 
+    async function fetchData(){
         const categoryList = await ProductService.getProductCategories();
         setCategories(categoryList.results);
         let temp = [];
@@ -117,7 +60,6 @@ export default function UpdateProductDetails(props) {
 
         const subcategoryList = await ProductService.getProductSubCategories();
         setSubcategories(subcategoryList.results);
-        
 
         const productDetails = await ProductService.getProduct(id);
         const subcategoryFiltered= subcategoryList.results.filter(option => option.id === productDetails.subcategory_id);
@@ -125,21 +67,20 @@ export default function UpdateProductDetails(props) {
          subcategoryFiltered.filter(item => (
                temp2.push({ value: item.code, label: item.title, id: item.id, allow_cancellations: item.allow_cancellations })
             ));
-            console.log(productDetails)
+
         // //setSubcategories(sub)
         if(subcategoryFiltered[0]){
             setSelectedSubcategory({ value: subcategoryFiltered[0].code, label: subcategoryFiltered[0].title, id: subcategoryFiltered[0].id, allow_cancellations: subcategoryFiltered[0].allow_cancellations })
             setAllowCancellation(subcategoryFiltered[0].allow_cancellations);
         }
-        
+
            setProduct(productDetails);
            setFilteredSubcategories(temp2)
          //  setSelectedSubcategory(subcategoryList.filter(product => product.permakey === permakey));
-         console.log(productDetails.type)
 
          const categories1 = await ProductService.getProductCategories();
          const category = categories1.results.filter(option => option.code === productDetails.type)[0];
-         
+
             if(category){
                 setSelectedProductType({ value: category.code, label: category.title, id: category.id });
             }
@@ -151,42 +92,19 @@ export default function UpdateProductDetails(props) {
             if(productDetails.body){
                 setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetails.body))))
             }
-            if(productDetails.type === "FX" || productDetails.type === "Fraxion"){
-                setShow(false)
-                setShowCBIx7(true)
-                setShowFixedPlan(true)
-                if(productDetails.fees){
-                setFees({
-                        educator_percentage: parseFloat(productDetails.fees.educator_percentage),
-                        registration_percentage: parseFloat(productDetails.fees.registration_percentage),
-                        cancellation_fee: subcategoryFiltered[0].allow_cancellations ? parseFloat(productDetails.fees.cancellation_fee) : '',
-                        })
-                    }
-            }else if (productDetails.type === "CBIX7"){
-                setShow(true)
-                setShowCBIx7(false)
-                setShowFixedPlan(true)
-                if(productDetails.fees){
-                setFees({
-                    educator_percentage:  parseFloat(productDetails.fees.educator_percentage),
-                    registration_fee: parseFloat(productDetails.fees.registration_fee),
-                    slippage_percentage_buy: parseFloat(productDetails.fees.slippage_percentage_buy),
-                    slippage_percentage_sell: parseFloat(productDetails.fees.slippage_percentage_sell),
-                    cancellation_fee: subcategoryFiltered[0].allow_cancellations ? parseFloat(productDetails.fees.cancellation_fee) : '',
-                    })
+
+            if(productDetails.product_category && productDetails.product_category.inputFields && productDetails.product_category.inputFields.selectedRows){
+                const fields = productDetails.product_category.inputFields.selectedRows;
+                const filteredItems = fields.filter(item => (
+                    (item.value != 'title' && item.value != 'currency_code' && item.value != 'body' && item.value != 'status')
+                  ));
+                setInputs(filteredItems);
             }
-            }else if (productDetails.type === "FP"){
-                setShowFixedPlan(false)
-                setShow(true)
-                setShowCBIx7(true)
-                if(productDetails.fees){
-                    setFees({
-                        daily_interest  : parseFloat(productDetails.fees.daily_interest),
-                        gross_return    : parseFloat(productDetails.fees.gross_return),
-                        cancellation_fee: subcategoryFiltered[0].allow_cancellations ? parseFloat(productDetails.fees.cancellation_fee) : '',
-                        })
-                }
-            }
+
+            setFees(productDetails.fees ? productDetails.fees: {})
+            setIndicators(productDetails.indicators ? productDetails.indicators : {})
+
+            setPageLoading(false);
     }
 
 
@@ -203,6 +121,18 @@ export default function UpdateProductDetails(props) {
         e.preventDefault();
         setActiveTab(tab);
     };
+
+    async function onChangeFees(value,item) {
+        if(item.group === 'fees'){
+            let feeTemp = fees;
+            feeTemp[item.name] = parseFloat(value);
+            setFees(feeTemp)
+        }else if(item.group === 'indicators'){
+            let indicatorTemp = indicators;
+            indicatorTemp[item.value] = parseFloat(value);
+            setIndicators(indicatorTemp)
+        }
+    }
 
     const onEditorStateChange = editorState => {
         setEditorState(editorState);
@@ -222,125 +152,78 @@ export default function UpdateProductDetails(props) {
             { value: 'Achived', label: 'Achived' }
           ];
 //====================Update Product===============================
-          const onSubmit = (event) => {
-            event.preventDefault();
-            setDisabled(true);
-            const form = event.currentTarget;
-            let price = parseFloat(form.price.value);
-            let educator = parseFloat(educatorFee);
-            let regFee = parseFloat(registrationFee);
-           // const title = form.title.value;
-           let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
 
-            const productData ={
-                title				: form.title.value,
-                body				: currentContentAsHTML,
-                type				: selectedProductType,
-                currency_code		: selectedCurrency,
-                price				: price,
-                educator_fee		: educator,
-                educator_persantage	: parseFloat(form.educator_persantage.value),
-                registration_fee	: regFee,
-                registration_persantage: parseFloat(form.registration_persantage.value),
-                total				: price+educator+regFee,
-                status				: selectedStatus
-             }
-
-             ProductService.updateProduct(id, productData).then((response) =>{
-                return confirmAlert({
-                    title: 'Succcess',
-                    message: 'Member was successfully updated',
-                    buttons: [
-                      {
-                        label: 'Ok',
-                      }
-                    ]
-                  });
-                 setDisabled(false);
-             })
-
-    }
-
-    const onSubmitUpdate = (event) =>{
-        event.preventDefault();
+    function onSubmit(data) {
         setDisabled(true);
         setError('');
-        const form = event.currentTarget;
-         const category = categories.filter(option => option.code === selectedProductType)[0];
-        // const title = form.title.value;
-        let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-       // const productCode = generateUniqueCode(5);
-        if(selectedProductType === 'CBIX7'){
-            const data ={
+            const category = categories.filter(option => option.code === selectedProductType)[0];
+            // const title = form.title.value;
+            let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+            let productDate = {
                 body: currentContentAsHTML,
-                currency_code: selectedCurrency,
                 status: selectedStatus,
-                title: product.title,
-                price: 0,
-                bbt_value: parseFloat(form.bbt_value.value),
-                fees: {
-                    educator_percentage: parseFloat(form.educator_percentage.value),
-                    registration_fee: parseFloat(form.registration_fee.value),
-                    slippage_percentage_buy: parseFloat(form.slippage_percentage_buy.value),
-                    slippage_percentage_sell: parseFloat(form.slippage_percentage_sell.value),
-                }
+                title: data.title,
+                price: data.price ? parseFloat(data.price) : 0,
+                fees: fees,
+                indicators: indicators
             }
-            update(data)
-
-        }else if(selectedProductType === 'FX'){
-            const myFees = {
-                                educator_percentage: parseFloat(form.educator_percentage_fx.value),
-                                registration_percentage: parseFloat(form.registration_percentage_fx.value),
-                            }
-            const data ={
-                body: currentContentAsHTML,
-                currency_code: selectedCurrency,
-                fees: myFees,
-                status: selectedStatus,
-                title: product.title,
-                price: parseFloat(form.price.value),
-            }
-            update(data)
-
-        }else if(selectedProductType === 'FP'){
-            const data ={
-                    body            : currentContentAsHTML,
-                    currency_code   : selectedCurrency,
-                    investment_period: parseFloat(form.investment_period.value),
-                    minimum_investment: parseFloat(form.minimum_investment.value),
-                    price            : parseFloat(form.price.value),
-                    status           : selectedStatus,
-                    title            : product.title,
-                    fees             : {
-                        daily_interest  : parseFloat(form.daily_interest.value),
-                        gross_return    : parseFloat(form.gross_return.value),
-                        cancellation_fee: parseFloat(form.cancellation_fee.value),
-                    }
-                }
-                update(data)
-        }
-
+        update(productDate)
     }
 
-    
     const update = (data) =>{
         ProductService.updateProduct(id, data).then((response) =>{
-            return confirmAlert({
-                title: 'Succcess',
-                message: 'Product was successfully updated',
-                buttons: [
-                  {
-                    label: 'Ok',
-                  }
-                ]
-              });
+            if (response.success) {
+                return confirmAlert({
+                    title: 'Succcess',
+                    message: 'Product was successfully updated',
+                    buttons: [
+                    {
+                        label: 'Ok',
+                        onClick: () => {
+                            window.location = `/products/${id}`;
+                        }
+                    }
+                    ]
+                });
+            }else{
+                setError(response.message ? response.message : 'Something went wrong when while updating product!')
+            }
              setDisabled(false);
          })
+    }
+
+    const getValue = (data) =>{
+        let defualtValue = '';
+        if(data.group === 'fees'){
+            const arr = []
+            if(product.fees){
+                Object.keys(product.fees).forEach(key => arr.push({name: key, value: product.fees[key]}))
+                const result = arr.filter(option => option.name === data.value)[0];
+                defualtValue = result.value;
+            }
+        } else if(data.group === 'indicators'){
+            const arr = []
+            if(product.indicators){
+                Object.keys(product.indicators).forEach(key => arr.push({name: key, value: product.indicators[key]}))
+                const result = arr.filter(option => option.name === data.value)[0];
+                defualtValue = result.value;
+            }
+        }else{
+            defualtValue = product[data.value]
+        }
+        return defualtValue
     }
     return (
         <Row>
                     <Col md={12} lg={12}>
-                    <form onSubmit={onSubmitUpdate}>
+                    <form
+                        noValidate
+                        id="update-product-form"
+                        role="form"
+                        autoComplete="off"
+                        className="text-start"
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
                     { error ?
                         <div className="alert alert-warning" role="alert">
                         {error}
@@ -353,16 +236,6 @@ export default function UpdateProductDetails(props) {
                                             name="product_type"
                                             value={product ? productCategories.filter(option => option.value === product.type): ''}
                                             options={productCategories}
-                                            onChange={item => {
-												//setSelectedProductType(item.value);
-												if(item.value == 'FX'){
-                                                    setShow(false)
-												}else if(item.value == 'FP'){
-                                                    setShow(true)
-                                                    setShowFixedPlan(false)
-												}else if(item.value == 'CBIX7'){
-                                                }
-											}}
                                             className={`basic-multi-select form-control-m`}
                                             classNamePrefix="select"
                                             isDisabled ={true}
@@ -391,9 +264,13 @@ export default function UpdateProductDetails(props) {
                                             type="text"
                                             id="title"
                                             name="title"
-                                            className="form-control form-control-m"
                                             defaultValue={ product ? product.title: ''}
-                                        /> 
+                                            className={`form-control form-control-m ${errors.title ? 'is-invalid' : ''}`}
+                                            isDisabled={true}
+                                            ref={register({ required: true })}
+                                        />
+                                         {errors.title && <span className="help-block invalid-feedback">Please enter product title</span>}
+                                    
                                 </Col>
                                 <Col md={6}>
                                         <label htmlFor="currency">Select Currency</label>
@@ -408,202 +285,32 @@ export default function UpdateProductDetails(props) {
                                             isDisabled={true}
                                             />
                                 </Col>
-                                {selectedProductType === "CBIX7" ?
-                            '':
-                                <Col md={6}>
-                                        <label htmlFor="name">Product Amount (CBI)</label>
-                                        <input
-                                            type="text"
-                                            id="price"
-                                            name="price"
-                                            className="form-control form-control-m"
-                                            defaultValue={product ? product.price : ''}
-                                            onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorAmount(true)
-												}else{
-													setErrorAmount(false)
-												}
-											}}
-                                        />
-                                        <label hidden={errorAmount} className="text-danger" htmlFor="name">Please enter a valid amount</label>
-                                </Col>}
-                                <Col md={6} hidden={show}>
-							<label htmlFor="educator_persantage">Educator Persentage Fee (%) </label>
-                                        <input
-                                            type="text"
-                                            id="educator_percentage_fx"
-                                            name="educator_percentage_fx"
-                                            className="form-control form-control-m"
-                                            defaultValue={ fees.educator_percentage ? fees.educator_percentage : null}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorEducator(true)
-												}else{
-													setErrorEducator(false)
-												}
-											}}
-                                        />
-										<label hidden={errorEducator} className="text-danger" htmlFor="name">Please enter a valid amount</label>
-                                </Col>
-								<Col md={6} hidden={show}>
-                                        <label htmlFor="name">Registration Persentage Fee (%) </label>
-                                        <input
-                                            type="text"
-                                            id="registration_percentage_fx"
-                                            name="registration_percentage_fx"
-                                            className="form-control form-control-m"
-                                            defaultValue={ fees.registration_percentage ? fees.registration_percentage : null}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-												}
-											}}
-                                        />
-                                </Col>
-                                <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Estimated daily Interest (%)</label>
-                                        <input
-                                            type="text"
-                                            id="daily_interest"
-                                            name="daily_interest"
-                                            className="form-control form-control-m"
-                                            defaultValue={ fees.daily_interest ? fees.daily_interest : null}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-												}
-											}}
-                                        />
-                                </Col>
-                                <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Minimum Gross Return (%)</label>
-                                        <input
-                                            type="text"
-                                            id="gross_return"
-                                            name="gross_return"
-                                            className="form-control form-control-m"
-                                            defaultValue={ fees.gross_return ? fees.gross_return : null}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-												}
-											}}
-                                        />
-                                </Col>
-                                <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Investment Period (Weeks)</label>
-                                        <input
-                                            type="text"
-                                            id="investment_period"
-                                            name="investment_period"
-                                            className="form-control form-control-m"
-                                            defaultValue={product ? product.investment_period : ''}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-												}
-											}}
-                                        />
-                                </Col>
-                                <Col md={6} hidden={showFixedPlan}>
-                                        <label htmlFor="name">Minimum Investment (%) </label>
-                                        <input
-                                            type="text"
-                                            id="minimum_investment"
-                                            name="minimum_investment"
-                                            className="form-control form-control-m"
-                                            defaultValue={product ? product.minimum_investment : ''}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-												}
-											}}
-                                        />
-                                </Col>
-                                {/** ====================================================CBIX7========================================================== */}
-                                <Col md={6} hidden={showCBIx7}>
-                                        <label htmlFor="name">Registration Fee </label>
-                                        <input
-                                            type="text"
-                                            id="registration_fee"
-                                            name="registration_fee"
-                                            className="form-control form-control-m"
-                                            defaultValue={ fees.registration_fee ? fees.registration_fee : null}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorReg(true)
-												}else{
-													setErrorReg(false)
-												}
-											}}
-                                        />
-                                </Col>
-                                <Col md={6} hidden={showCBIx7}>
-							<label htmlFor="educator_persantage">Educator Percentage Fee (%) </label>
-                                        <input
-                                            type="text"
-                                            id="educator_percentage"
-                                            name="educator_percentage"
-                                            className="form-control form-control-m"
-                                            defaultValue={ fees.educator_percentage ? fees.educator_percentage : null}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorEducator(true)
-												}else{
-													setErrorEducator(false)
-												}
-											}}
-                                        />
-										<label hidden={errorEducator} className="text-danger" htmlFor="name">Please enter a valid percentage</label>
-                                </Col>
-                                <Col md={6} hidden={showCBIx7}>
-							<label htmlFor="educator_persantage">Slippage Percentage Sell (%) </label>
-                                        <input
-                                            type="text"
-                                            id="slippage_percentage_sell"
-                                            name="slippage_percentage_sell"
-                                            className="form-control form-control-m"
-                                            defaultValue={ fees.slippage_percentage_sell ? fees.slippage_percentage_sell : null}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorSlippage(true)
-												}else{
-													setErrorSlippage(false)
-												}
-											}}
-                                        />
-										<label hidden={errorSlippage} className="text-danger" htmlFor="name">Please enter a valid percentage</label>
-                                </Col>
-                                <Col md={6} hidden={showCBIx7}>
-							<label htmlFor="educator_persantage">Slippage Percentage Buy (%) </label>
-                                        <input
-                                            type="text"
-                                            id="slippage_percentage_buy"
-                                            name="slippage_percentage_buy"
-                                            className="form-control form-control-m"
-                                            defaultValue={ fees.slippage_percentage_buy ? fees.educator_percentage : null}
-											onChange={event => {
-												if(!isNaN(+event.target.value)){
-													setErrorSlippage(true)
-												}else{
-													setErrorSlippage(false)
-												}
-											}}
-                                        />
-										<label hidden={errorSlippage} className="text-danger" htmlFor="name">Please enter a valid percentage</label>
-                                </Col>
-  {/** =========================================================Fixed Plan================================================ */}
+
+
+
+                                {inputs.map((item)=>{
+                                        let value = item.value;
+                                        let group = item.group;
+                                            return(
+                                                <Col md={6}>
+                                                <label htmlFor="name">{item.name}</label>
+                                                <input
+                                                    type="text"
+                                                    id={value}
+                                                    name={value}
+                                                    defaultValue={getValue(item)}
+                                                    className={`form-control form-control-m ${errors.value ? 'is-invalid' : ''}`}
+                                                    onChange={event => {
+                                                        onChangeFees(event.target.value, item) 
+                                                    }}
+                                                    ref={register({ required: true })}
+                                                />
+                                                 {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
+                                            </Col>
+                                            );
+                                        })
+                                    }
+
                             { allowCancellation ?
                                 <Col md={6}>
                                         <label htmlFor="name">Cancellation Fee (%) *</label>
@@ -647,18 +354,20 @@ export default function UpdateProductDetails(props) {
                                     />
                                     <hr />
                                     </Col>
-                                    <Col md={6}>
-                         <button disabled={disabled}
-                            className="btn btn-primary"
-                            disabled={confirmButtonDisabled || processing}
-                        >
-                            {processing ? 'Processing...' : 'Update Product'}
-                        </button>
-                        </Col>
                                 </Row>
                                 </form>
+                                <Col md={6}>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                        form="update-product-form"
+                                        disabled={disabled}
+                                    >
+                                        {processing ? 'Processing...' : 'Update Product'}
+                                    </button>
+                                </Col>
                     </Col>
         </Row>
-        
+
     );
 }

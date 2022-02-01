@@ -65,6 +65,9 @@ import { SessionProvider } from 'providers';
 import Profile from 'pages/Profile';
 import ProfileSettings from 'pages/Profile/Settings';
 
+import ProductReport from 'pages/Reports/ProductReport';
+import ProductReportDetails from 'pages/Reports/ProductReportDetails';
+
 const App = () => {
 	const settings = config;
 	const [authTokens, setAuthTokens] = useState();
@@ -116,6 +119,9 @@ const App = () => {
 
 					<Route exact path="/reports" component={(props) => <Reports config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/reports/:id" component={(props) => <ReportDetails config={settings} {...props} setMenu={setMenu} />} />
+
+					<Route exact path="/product-reports" component={(props) => <ProductReport config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/product-reports/:id" component={(props) => <ProductReportDetails config={settings} {...props} setMenu={setMenu} />} />
 
 					<Route exact path="/configurations/settings" component={(props) => <SystemSettings config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.configurations.childitems.settings : null} />} />
 					<Route exact path="/configurations/countries" component={(props) => <Countries config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.configurations.childitems.countries : null} />} />
