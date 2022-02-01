@@ -100,7 +100,7 @@ export default function UpdateProductDetails(props) {
                   ));
                 setInputs(filteredItems);
             }
-
+           console.log(productDetails.fees)
             setFees(productDetails.fees ? productDetails.fees: {})
             setIndicators(productDetails.indicators ? productDetails.indicators : {})
 
@@ -125,7 +125,7 @@ export default function UpdateProductDetails(props) {
     async function onChangeFees(value,item) {
         if(item.group === 'fees'){
             let feeTemp = fees;
-            feeTemp[item.name] = parseFloat(value);
+            feeTemp[item.value] = parseFloat(value);
             setFees(feeTemp)
         }else if(item.group === 'indicators'){
             let indicatorTemp = indicators;
@@ -196,20 +196,21 @@ export default function UpdateProductDetails(props) {
         let defualtValue = '';
         if(data.group === 'fees'){
             const arr = []
-            if(product.fees){
+            if(product.fees && data.value){
                 Object.keys(product.fees).forEach(key => arr.push({name: key, value: product.fees[key]}))
                 const result = arr.filter(option => option.name === data.value)[0];
-                defualtValue = result.value;
+                console.log(result)
+                defualtValue = result ? result.value : '';
             }
-        } else if(data.group === 'indicators'){
+        } else if(data.group === 'indicators' && data.value){
             const arr = []
             if(product.indicators){
                 Object.keys(product.indicators).forEach(key => arr.push({name: key, value: product.indicators[key]}))
                 const result = arr.filter(option => option.name === data.value)[0];
-                defualtValue = result.value;
+                defualtValue = result ? result.value : '';
             }
         }else{
-            defualtValue = product[data.value]
+            defualtValue = product ? product[data.value] : '';
         }
         return defualtValue
     }

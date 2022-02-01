@@ -100,7 +100,7 @@ const ProductAddNew = props => {
     async function onChangeFees(value,item) {
         if(item.group === 'fees'){
             let feeTemp = fees;
-            feeTemp[item.name] = parseFloat(value);
+            feeTemp[item.value] = parseFloat(value);
             setFees(feeTemp)
         }else if(item.group === 'indicators'){
             let indicatorTemp = indicators;
