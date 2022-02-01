@@ -29,6 +29,7 @@ if (Config.STAGE === 'production') {
         BASE_URL_LOGIN: 'https://api.cbiglobal.io/v1/auth',
         BASE_URL_TRANSACTION: 'https://api.cbiglobal.io/v1/transaction/',
         BASE_URL_PROFILE: 'https://api.cbiglobal.io/v1/user/',
+        BASE_URL_GEOAPI: 'https://geolocation-db.com/json/',
     }
 } else if (Config.STAGE === 'qa') {
     Config.API = {
@@ -38,6 +39,7 @@ if (Config.STAGE === 'production') {
         BASE_URL_LOGIN: 'https://dev.qa.cbiglobal.io/v1/auth',
         BASE_URL_TRANSACTION: 'https://dev.qa.cbiglobal.io/v1/transaction/',
         BASE_URL_PROFILE: 'https://dev.qa.cbiglobal.io/v1/user/',
+        BASE_URL_GEOAPI: 'https://geolocation-db.com/json/',
     }
 } else if (Config.STAGE === 'development') {
     Config.API = {
