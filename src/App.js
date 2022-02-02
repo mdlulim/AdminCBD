@@ -117,11 +117,11 @@ const App = () => {
 					<Route exact path="/users/roles/add" component={(props) => <AddRole config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/users/roles/:id" component={(props) => <EditRole config={settings} {...props} setMenu={setMenu} />} />
 
-					<Route exact path="/reports" component={(props) => <Reports config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/reports/:id" component={(props) => <ReportDetails config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/reports/reports" component={(props) => <Reports config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/reports/reports/:id" component={(props) => <ReportDetails config={settings} {...props} setMenu={setMenu} />} />
 
-					<Route exact path="/product-reports" component={(props) => <ProductReport config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/product-reports/:id" component={(props) => <ProductReportDetails config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/reports/product-reports" component={(props) => <ProductReport config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/reports/product-reports/:id" component={(props) => <ProductReportDetails config={settings} {...props} setMenu={setMenu} />} />
 
 					<Route exact path="/configurations/settings" component={(props) => <SystemSettings config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.configurations.childitems.settings : null} />} />
 					<Route exact path="/configurations/countries" component={(props) => <Countries config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.configurations.childitems.countries : null} />} />
