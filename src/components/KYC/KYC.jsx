@@ -143,7 +143,7 @@ export default function Leads(props) {
         <>
             <Row>
                 {hasKYC.status ?
-                    <Col md={8}>
+                    <Col md={12}>
                         <RejectLevelModal show={showReason} setShow={setShowReason} approvalList={approvalList} setApprovalList={setApprovalList} rejectObj={rejectObj} setRejectedObj={setRejectedObj} />
                         <ViewModal show={showImage} setShow={setShowImage} kycDocuments={kycDocuments} kycDetails={kycDetails} />
                         <LevelZero approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={level_0} setKycApplication={setLevel_0} />
