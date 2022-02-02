@@ -7,18 +7,18 @@ import LevelTwo from './levelTwo';
 import LevelThree from './levelThree';
 import ViewModal from './viewModal';
 import RejectLevelModal from './rejectLevelModal';
-import { confirmAlert } from 'react-confirm-alert';
 import { MemberService } from '../../providers';
+import Swal from 'sweetalert2';
 
 export default function Leads(props) {
-    const { member, kycDetails, address } = props;
+    const { member, kycDetails, address, setPageLoading } = props;
     const [showImage, setShowImage] = useState(false);
     const [showReason, setShowReason] = useState(false);
     const [kycDocuments, setDocument] = useState([]);
     const [approvalList, setApprovalList] = useState({});
     const [rejectObj, setRejectedObj] = useState({});
     const [sumbitting, setSubmitting] = useState(false);
-    const [hasKYC, setHasKYC] = useState({status: false, msg: "Loading..."})
+    const [hasKYC, setHasKYC] = useState({ status: false, msg: "Loading..." })
     const [level_0, setLevel_0] = useState({});
     const [level_1, setLevel_1] = useState({});
     const [level_2, setLevel_2] = useState({});
@@ -26,7 +26,7 @@ export default function Leads(props) {
 
 
     const saveChanges = async () => {
-        setSubmitting(true)
+        setPageLoading(true)
         let kyc_level_rejected = 99;
         let rejected_docs = []
         const levels_to_update = Object.keys(approvalList);
@@ -54,19 +54,24 @@ export default function Leads(props) {
 
 
         const res = await KYCService.updateKYC(data_to_send)
-        setSubmitting(false)
+        setPageLoading(false)
         if (res.data.success) {
-            confirmAlert({
-                title: 'Succcess',
-                message: 'Documents Reviewed'
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Request processed successfully!',
+                showConfirmButton: false,
+                timer: 4000
             });
-            window.location = '/members/members';
-            return
+            return setTimeout(() => { window.location.reload()}, 4000);
         }
 
-        confirmAlert({
-            title: 'Failed',
-            message: 'Something went wrong, retry later!',
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Failed to process request, please try again!',
+            showConfirmButton: false,
+            timer: 4000
         });
     }
 
@@ -87,13 +92,13 @@ export default function Leads(props) {
         }
 
     }
-    
+
     useEffect(() => {
         const getKYC = async () => {
             const kyc = await MemberService.getMemberKYC(member.id)
             const data = kyc.data.data
             if (data && data.length) {
-                setHasKYC({status:true, msg: ''})
+                setHasKYC({ status: true, msg: '' })
                 data.map((row) => {
                     if (row.level === '0') {
                         setLevel_0({ selfie: row.data.path, email: member.email, status: row.status });
@@ -121,14 +126,14 @@ export default function Leads(props) {
                         })
                     }
                 })
-            }else{
-                setHasKYC({status:false, msg: "Has not KYC'd"})
+            } else {
+                setHasKYC({ status: false, msg: "Has not KYC'd" })
             }
         }
 
         getKYC()
     }, [member])
-    
+
     const showImageCB = (image) => {
         setDocument(image)
         setShowImage(true);
@@ -137,22 +142,22 @@ export default function Leads(props) {
     return (
         <>
             <Row>
-                {hasKYC.status?
-                <Col md={8}>
-                    <RejectLevelModal show={showReason} setShow={setShowReason} approvalList={approvalList} setApprovalList={setApprovalList} rejectObj={rejectObj} setRejectedObj={setRejectedObj} />
-                    <ViewModal show={showImage} setShow={setShowImage} kycDocuments={kycDocuments} kycDetails={kycDetails} />
-                    <LevelZero approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={level_0} setKycApplication={setLevel_0} />
-                    <LevelOne approveLevel={approveLevelCB} kycApplication={level_1} setKycApplication={setLevel_1} address={address} />
-                    <LevelTwo approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={level_2} setKycApplication={setLevel_2} />
-                    <LevelThree approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={level_3} setKycApplication={setLevel_3} />
-                    <div style={{ textAlign: "right" }}>
-                        <Button color="success" disabled={sumbitting} onClick={() => saveChanges()}>Save</Button>
-                    </div>
-                </Col>
-                :
-                <Col>
-                    <h4 style={{textAlign: "center", color: 'gainsboro'}}>{hasKYC.msg}</h4>
-                </Col>
+                {hasKYC.status ?
+                    <Col md={12}>
+                        <RejectLevelModal show={showReason} setShow={setShowReason} approvalList={approvalList} setApprovalList={setApprovalList} rejectObj={rejectObj} setRejectedObj={setRejectedObj} />
+                        <ViewModal show={showImage} setShow={setShowImage} kycDocuments={kycDocuments} kycDetails={kycDetails} />
+                        <LevelZero approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={level_0} setKycApplication={setLevel_0} />
+                        <LevelOne approveLevel={approveLevelCB} kycApplication={level_1} setKycApplication={setLevel_1} address={address} />
+                        <LevelTwo approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={level_2} setKycApplication={setLevel_2} />
+                        <LevelThree approveLevel={approveLevelCB} showImage={showImageCB} kycApplication={level_3} setKycApplication={setLevel_3} />
+                        <div style={{ textAlign: "right" }}>
+                            <Button color="success" onClick={() => saveChanges()}>Save</Button>
+                        </div>
+                    </Col>
+                    :
+                    <Col>
+                        <h4 style={{ textAlign: "center", color: 'gainsboro' }}>{hasKYC.msg}</h4>
+                    </Col>
                 }
             </Row>
         </>
