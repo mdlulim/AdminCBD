@@ -383,7 +383,7 @@ export default function EditUser(props) {
                                                 <option value="Pending">Pending</option>
                                                 <option value="Active">Active</option>
                                                 <option value="Archived">Archived</option>
-                                                <option value="Bloacked">Bloacked</option>
+                                                <option value="Blocked">Blocked</option>
                                             </select>
                                         </Col>
                                     </Row>
