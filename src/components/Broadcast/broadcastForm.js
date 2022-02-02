@@ -121,65 +121,65 @@ const BroadcastForm = props => {
     }, [id])
 
     const onSubmit = async (data) => {
-        // setPageLoading(true)
+        setPageLoading(true)
         data.published = startDate
         data.expiry = endDate
 
         console.log(errors)
 
-        // data.status = selectedStatus
-        // data.audience = selectedAudience.map(item => item.value)
+        data.status = selectedStatus
+        data.audience = selectedAudience.map(item => item.value)
 
-        // if (activeTab === 'image') {
-        //     if (files.length > 0) {
-        //         const ext = files[0].type.split('/')[1];
-        //         const { success, filename } = await FileStorageProvider.upload('admin', 'broadcast', files[0], Date.now() + '.' + ext);
-        //         if (success) {
-        //             data.image = filename
-        //             data.body = null
-        //         } else {
-        //             setPageLoading(false)
-        //             broadcastAlert(false, "Failed to upload image")
-        //         }
-        //     } else {
-        //         //user did not update image so remove key to not override db value
-        //         if (id) {
-        //             delete data.image
-        //         } else {
-        //             setPageLoading(false)
-        //             console.log('Please select an image to upload or input text')
-        //             return
-        //         }
-        //     }
+        if (activeTab === 'image') {
+            if (files.length > 0) {
+                const ext = files[0].type.split('/')[1];
+                const { success, filename } = await FileStorageProvider.upload('admin', 'broadcast', files[0], Date.now() + '.' + ext);
+                if (success) {
+                    data.image = filename
+                    data.body = null
+                } else {
+                    setPageLoading(false)
+                    broadcastAlert(false, "Failed to upload image")
+                }
+            } else {
+                //user did not update image so remove key to not override db value
+                if (id) {
+                    delete data.image
+                } else {
+                    setPageLoading(false)
+                    console.log('Please select an image to upload or input text')
+                    return
+                }
+            }
 
-        // } else {
-        //     data.body = convertToHTML(editorState.getCurrentContent())
-        //     data.image = null
-        // }
+        } else {
+            data.body = convertToHTML(editorState.getCurrentContent())
+            data.image = null
+        }
 
-        // if (id) {
-        //     //user is editing a broadcast message
-        //     BroadcastService.update(id, data)
-        //         .then((res) => {
-        //             console.log(res)
-        //             setPageLoading(false)
-        //             broadcastAlert(res.success)
-        //         }).catch(err => {
-        //             console.log(err)
-        //             setPageLoading(false)
-        //             broadcastAlert(false)
-        //         })
+        if (id) {
+            //user is editing a broadcast message
+            BroadcastService.update(id, data)
+                .then((res) => {
+                    console.log(res)
+                    setPageLoading(false)
+                    broadcastAlert(res.success)
+                }).catch(err => {
+                    console.log(err)
+                    setPageLoading(false)
+                    broadcastAlert(false)
+                })
 
-        // } else {
-        //     BroadcastService.create(data)
-        //         .then((res) => {
-        //             setPageLoading(false)
-        //             broadcastAlert(res.data.success)
-        //         }).catch(err => {
-        //             setPageLoading(false)
-        //             broadcastAlert(false)
-        //         })
-        // }
+        } else {
+            BroadcastService.create(data)
+                .then((res) => {
+                    setPageLoading(false)
+                    broadcastAlert(res.data.success)
+                }).catch(err => {
+                    setPageLoading(false)
+                    broadcastAlert(false)
+                })
+        }
 
     }
 
