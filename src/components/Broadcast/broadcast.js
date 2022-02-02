@@ -3,6 +3,8 @@ import { Card, CardBody } from 'reactstrap';
 import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
 import { BroadcastService } from '../../providers';
+import { confirmAlert } from 'react-confirm-alert';
+import Swal from 'sweetalert2';
 
 // styles
 const customStyles = {
@@ -31,13 +33,13 @@ const inputWith = {
 
 const Status = ({ status }) => {
   let badge = 'primary';
-  if (status === 'Pending') {
+  if (status === 'Draft') {
     badge = 'warning';
   }
   if (status === 'Published') {
     badge = 'success';
   }
-  if (status === 'Blocked') {
+  if (status === 'Archived') {
     badge = 'danger';
   }
   return (
@@ -55,11 +57,11 @@ export default function Broadcast(props) {
 
   useMemo(() => {
     BroadcastService.get()
-    .then((res) => {
-      setBroadcasts(res.results);
-      setFilteredBroadcasts(res.results);
-      setPageLoading(false)
-    })
+      .then((res) => {
+        setBroadcasts(res.results);
+        setFilteredBroadcasts(res.results);
+        setPageLoading(false)
+      })
 
   }, [setPageLoading]);
   // table headings definition
@@ -111,21 +113,51 @@ export default function Broadcast(props) {
             <a href={`broadcast/edit/${row.id}`}
               className="btn btn-secondary btn-sm btn-icon"
             >
-              <span className="fa fa-pencil" onClick={()=>{setSelectedBroadcast(row); setShowModal(true)}}/>
+              <span className="fa fa-pencil" onClick={() => { setSelectedBroadcast(row); setShowModal(true) }} />
             </a>
           </span>
         }
-        {/* <spam style={iconPadding}><a
-      href={`#`}
-      className="btn btn-secondary btn-sm btn-icon"
-      onClick={e => {
-        e.preventDefault();
-    
-        onSubmitDeleteProduct(row);
-      }}
-    >
-      <span className="fa fa-trash" />
-    </a></spam> */}
+        <span style={iconPadding}>
+          <span
+            className="btn btn-danger btn-sm btn-icon"
+            onClick={() => {
+              return confirmAlert({
+                title: 'Confirm',
+                message: 'Are you sure you want to archive this record?',
+                buttons: [
+                  {
+                    label: 'Cancel'
+                  },
+                  {
+                    label: 'Confirm',
+                    onClick: async () => {
+                      const { success } = await BroadcastService.update(row.id, { status: 'Archived' })
+                      if (success) {
+                        Swal.fire({
+                          position: 'center',
+                          icon: 'success',
+                          title: 'Request processed successfully!',
+                          showConfirmButton: false,
+                          timer: 4000
+                        });
+                        return setTimeout(() => { window.location.reload() }, 4000);
+                      }
+                      Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'Failed to process request, please try again!',
+                        showConfirmButton: false,
+                        timer: 4000
+                      });
+                    }
+                  }
+                ]
+              });
+            }}
+          >
+            <span className="fa fa-trash" />
+          </span>
+        </span>
       </div>
     }];
 
@@ -156,9 +188,9 @@ export default function Broadcast(props) {
           {permissions && permissions.create_access &&
             <div>
               <a href={`broadcast/add`}
-                className="btn btn-secondary"  onClick={()=>{setSelectedBroadcast({}); setShowModal(true)}}>
+                className="btn btn-secondary" onClick={() => { setSelectedBroadcast({}); setShowModal(true) }}>
                 Add Broadcast
-              </a> 
+              </a>
             </div>
           }
         </div>

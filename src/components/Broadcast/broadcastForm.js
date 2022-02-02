@@ -11,22 +11,22 @@ import Swal from 'sweetalert2';
 import FileUpload from '../FileUpload'
 import Select from 'react-select';
 
-const broadcastAlert = (success) => {
+const broadcastAlert = (success, error_msg=null) => {
     if (success) {
         Swal.fire({
             position: 'center',
             icon: 'success',
             title: 'Request processed successfully!',
             showConfirmButton: false,
-            timer: 3000
+            timer: 4000
         });
-        window.location = '/broadcast';
-        return
+        
+        return setTimeout(() => {window.location = '/broadcast';}, 4000);
     }
     Swal.fire({
         position: 'center',
         icon: 'error',
-        title: 'Failed to process request, please try again!',
+        title: error_msg?error_msg:'Failed to process request, please try again!',
         showConfirmButton: false,
         timer: 4000
     });
@@ -74,7 +74,7 @@ const BroadcastForm = props => {
         id,
     } = props;
 
-    const { handleSubmit, register } = useForm()
+    const { handleSubmit, register, errors } = useForm()
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [activeTab, setActiveTab] = useState('text');
     const [files, setFiles] = useState([])
@@ -121,60 +121,65 @@ const BroadcastForm = props => {
     }, [id])
 
     const onSubmit = async (data) => {
-        setPageLoading(true)
+        // setPageLoading(true)
         data.published = startDate
         data.expiry = endDate
 
-        data.status = selectedStatus
-        data.audience = selectedAudience.map(item => item.value)
-        console.log(data)
-        console.log(selectedAudience, " data")
-        if (activeTab === 'image') {
-            if (files.length > 0) {
-                const ext = files[0].type.split('/')[1];
-                const { success, filename } = await FileStorageProvider.upload('admin', 'broadcast', files[0], Date.now() + '.' + ext);
-                if (success) {
-                    data.image = filename
-                    data.body = null
-                } else {
-                    console.log("Failed to upload image")
-                    return
-                }
-            } else {
-                console.log('Please select an image to upload or input text')
-                return
-            }
+        console.log(errors)
 
-        } else {
-            data.body = convertToHTML(editorState.getCurrentContent())
-            data.image = null
-        }
+        // data.status = selectedStatus
+        // data.audience = selectedAudience.map(item => item.value)
 
-        if (id) {
-            //     //user is editing a broadcast message
-            console.log(data, ' editing')
-            BroadcastService.update(id, data)
-                .then((res) => {
-                    console.log(res)
-                    setPageLoading(false)
-                    broadcastAlert(res.data.success)
-                }).catch(err => {
-                    console.log(err)
-                    setPageLoading(false)
-                    broadcastAlert(false)
-                })
+        // if (activeTab === 'image') {
+        //     if (files.length > 0) {
+        //         const ext = files[0].type.split('/')[1];
+        //         const { success, filename } = await FileStorageProvider.upload('admin', 'broadcast', files[0], Date.now() + '.' + ext);
+        //         if (success) {
+        //             data.image = filename
+        //             data.body = null
+        //         } else {
+        //             setPageLoading(false)
+        //             broadcastAlert(false, "Failed to upload image")
+        //         }
+        //     } else {
+        //         //user did not update image so remove key to not override db value
+        //         if (id) {
+        //             delete data.image
+        //         } else {
+        //             setPageLoading(false)
+        //             console.log('Please select an image to upload or input text')
+        //             return
+        //         }
+        //     }
 
-        } else {
-            console.log('creating')
-            BroadcastService.create(data)
-                .then((res) => {
-                    setPageLoading(false)
-                    broadcastAlert(res.data.success)
-                }).catch(err => {
-                    setPageLoading(false)
-                    broadcastAlert(false)
-                })
-        }
+        // } else {
+        //     data.body = convertToHTML(editorState.getCurrentContent())
+        //     data.image = null
+        // }
+
+        // if (id) {
+        //     //user is editing a broadcast message
+        //     BroadcastService.update(id, data)
+        //         .then((res) => {
+        //             console.log(res)
+        //             setPageLoading(false)
+        //             broadcastAlert(res.success)
+        //         }).catch(err => {
+        //             console.log(err)
+        //             setPageLoading(false)
+        //             broadcastAlert(false)
+        //         })
+
+        // } else {
+        //     BroadcastService.create(data)
+        //         .then((res) => {
+        //             setPageLoading(false)
+        //             broadcastAlert(res.data.success)
+        //         }).catch(err => {
+        //             setPageLoading(false)
+        //             broadcastAlert(false)
+        //         })
+        // }
 
     }
 
@@ -190,14 +195,15 @@ const BroadcastForm = props => {
 
     return (
         <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} noValidate >
                 <Row>
                     <Col md={12}>
                         <div className="form-group">
                             <label htmlFor="title" className="form-control-label">
                                 Title
                             </label>
-                            <input type="text" ref={register} name='title' required defaultValue={broadcast && broadcast.title ? broadcast.title : ''} className='form-control' />
+                            <input type="text" ref={register} name='title' required defaultValue={broadcast && broadcast.title ? broadcast.title : null} className='form-control' />
+                            { errors && errors.title && <span>{errors.title.message}</span>}
                         </div>
                     </Col>
                 </Row>
@@ -316,12 +322,12 @@ const BroadcastForm = props => {
                             <Col xs={12} className="py-4">
                                 {
                                     selectedImage ?
-                                    <>
-                                        <span className='fa fa-trash-o btn btn-danger' style={{cursor: 'pointer'}} onClick={()=>{setSelectedImage(null); console.log(selectedImage, " image")}}></span><br/>
-                                        <img style={{ maxWidth: '100%' }} src={'https://cdn-cbigold.ams3.digitaloceanspaces.com/' + selectedImage} alt="prof" />
-                                    </>
-                                    : ''
-                                    
+                                        <>
+                                            <span className='fa fa-trash-o btn btn-danger' style={{ cursor: 'pointer' }} onClick={() => { setSelectedImage(null); console.log(selectedImage, " image") }}></span><br />
+                                            <img style={{ maxWidth: '100%' }} src={'https://cdn-cbigold.ams3.digitaloceanspaces.com/' + selectedImage} alt="prof" />
+                                        </>
+                                        : ''
+
                                 }
                                 <div style={{ display: selectedImage ? 'none' : '' }}>
                                     <FileUpload
