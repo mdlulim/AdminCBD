@@ -135,9 +135,9 @@ const App = () => {
 					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} permissions={role?role.permissions.products.childitems.products:null} />} />
 					<Route exact path="/products/cancellations" component={(props) => <ProductCancellations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/history" component={(props) => <ProductHistory config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/categories" component={(props) => <ProductCategories config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.products.childitems.categories : null} />} />
-					<Route exact path="/categories/add" component={(props) => <CategoryNew config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/categories/:id" component={(props) => <CategoryUpdate config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products/categories" component={(props) => <ProductCategories config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.products.childitems.categories : null} />} />
+					<Route exact path="/products/categories/add" component={(props) => <CategoryNew config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products/categories/:id" component={(props) => <CategoryUpdate config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/add" component={(props) => <ProductAddNew config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/cancel" component={(props) => <ProductCancel config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/subcategories" component={(props) => <ProductSubCategories config={settings} {...props} setMenu={setMenu} />} />

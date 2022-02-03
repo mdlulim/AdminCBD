@@ -1,0 +1,47 @@
+.fraxion-calculations_wrapper {
+    margin-top: 20px;
+    border: 1px solid #d7dde3;
+
+    .description,
+    .column {
+        > div {
+            padding: 5px 10px;
+            border-top: 1px solid #d7dde3;
+            vertical-align: middle;
+            min-width: 120px;
+            min-height: 32px;
+
+            &:first-of-type {
+                height: 50px;
+            }
+        }
+    }
+    .description {
+        > div {
+            min-width: 160px;
+        }
+    }
+    .column {
+        > div {
+            text-align: right;
+        }
+
+        &.active {
+            > div {
+                background-color: rgba(0, 0, 0, .05);
+                position: relative;
+
+                &:first-of-type {
+                    &::after {
+                        content: '[current - unsaved]';
+                        position: absolute;
+                        right: 8px;
+                        top: -21px;
+                        color: red;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+}

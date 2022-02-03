@@ -26,6 +26,7 @@ const CreateCategory = props => {
     
     useState(() => {
         ProductService.getProductCategories().then((res) => {
+            console.log(res)
                const productlist = res.data.data.results;
                setCategories(productlist);
            });

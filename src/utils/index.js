@@ -37,7 +37,6 @@ export function fraxionCalculations(data) {
     const {
         units,
         main_pool,
-        reserve_pool,
         compound_pool,
         educator_fee,
         reserve_fee,
@@ -48,80 +47,80 @@ export function fraxionCalculations(data) {
     } = data;
 
     const pool = parseFloat(main_pool.balance_current);
-    const prenCrv = parseFloat(0);
-    const poolPrenCrvTotal = sum(pool, prenCrv);
+    const prencrv = parseFloat(0);
+    const pool_prencrv_total = sum(pool, prencrv);
 
-    const p3CrvCompounding = parseFloat(compound_pool.balance_current);
-    const p3CrvCompoundingDifference = difference(p3CrvCompounding, compound_pool.balance_previous);
+    const p3crv_compounding = parseFloat(compound_pool.balance_current);
+    const p3crv_compounding_difference = difference(p3crv_compounding, compound_pool.balance_previous);
 
-    const reservePool = parseFloat(reserve_pool.balance_current);
-    const reservePool2 = parseFloat(17123.93);
-    const reservePoolSum = sum(reservePool, reservePool2);
-    const reservePoolDifference = difference(reservePoolSum, reserve_pool.balance_previous);
+    const reserve_pool = parseFloat(data.reserve_pool.balance_current);
+    const reserve_pool2 = parseFloat(data.reserve_pool.other);
+    const reserve_pool_total = sum(reserve_pool, reserve_pool2);
+    const reserve_pool_difference = difference(reserve_pool_total, data.reserve_pool.total_previous);
 
-    const dailyProfit = difference(poolPrenCrvTotal, main_pool.balance_previous);
-    const profPerUnit = quotient(dailyProfit, units);
+    const daily_profit = difference(pool_prencrv_total, main_pool.balance_previous);
+    const profit_per_unit = quotient(daily_profit, units);
 
-    const reserve = percentage(profPerUnit, reserve_fee); // 45%
-    const reserveSubTotal = product(units, reserve);
+    const reserve = percentage(profit_per_unit, reserve_fee); // 45%
+    const reserve_subtotal = product(units, reserve);
 
-    const educator = percentage(profPerUnit, educator_fee); // 5%
-    const educatorSubTotal = product(units, educator);
+    const educator = percentage(profit_per_unit, educator_fee); // 5%
+    const educator_subtotal = product(units, educator);
 
-    const remainder = profPerUnit - educator - reserve;
+    const remainder = profit_per_unit - educator - reserve;
 
     const compound = percentage(remainder, compound_fee); // 25%
-    const weeklyCompound = product(units, compound);
+    const weekly_compound = product(units, compound);
 
-    const remainderWeekly = percentage(remainder, remainder_weekly_fee); // 65%
-    const remainderPool = percentage(remainder, remainder_pool_fee); // 10%
-    const remainderSubTotal = sum(remainderWeekly, remainderPool);
+    const remainder_weekly = percentage(remainder, remainder_weekly_fee); // 65%
+    const remainder_pool = percentage(remainder, remainder_pool_fee); // 10%
+    const remainder_subtotal = sum(remainder_weekly, remainder_pool);
 
-    const unitValue = product(units, fraxion_price);
-    const totalExpenses = compound + reserve + educator + remainderSubTotal;
+    const unit_value = product(units, fraxion_price);
+    const total_expenses = compound + reserve + remainder_subtotal;
 
     // totals
-    const totalUnitExpenses = product(totalExpenses, units);
-    const totalCompound = sum(compound_pool.balance_previous, weeklyCompound);
-    const totalReserve = sum(compound_pool.balance_previous, reserveSubTotal);
-    const totalDeposits = product(units, fraxion_price);
-    const totalComp = totalCompound;
-    const totalRequired = sum(totalDeposits, totalComp);
-    const totalReal = poolPrenCrvTotal + totalCompound + totalReserve;
-    const overOrShort = difference(totalRequired, totalReal);
+    const total_unit_expenses = product(total_expenses, units);
+    const total_compound = sum(compound_pool.total_previous, weekly_compound);
+    const total_reserve = sum(compound_pool.balance_previous, reserve_subtotal);
+    const total_deposits = product(units, fraxion_price);
+    const totalComp = total_compound;
+    const total_required = sum(total_deposits, totalComp);
+    const total_real = pool_prencrv_total + total_compound + total_reserve;
+    const over_short = difference(total_real, total_required);
 
     return {
         pool,
-        prenCrv,
-        poolPrenCrvTotal,
-        p3CrvCompounding,
-        p3CrvCompoundingDifference,
-        reservePool,
-        reservePool2,
-        reservePoolSum,
-        reservePoolDifference,
-        dailyProfit,
+        prencrv,
+        pool_prencrv_total,
+        p3crv_compounding,
+        p3crv_compounding_difference,
+        reserve_pool,
+        reserve_pool2,
+        reserve_pool_total,
+        reserve_pool_difference,
+        daily_profit,
         units,
-        profPerUnit,
+        profit_per_unit,
         compound,
-        weeklyCompound,
+        weekly_compound,
         reserve,
-        reserveSubTotal,
+        reserve_subtotal,
         remainder,
         educator,
-        educatorSubTotal,
-        remainderWeekly,
-        remainderPool,
-        remainderSubTotal,
-        unitValue,
-        totalExpenses,
-        totalUnitExpenses,
-        totalCompound,
-        totalReserve,
-        totalDeposits,
+        educator_subtotal,
+        remainder_weekly,
+        remainder_pool,
+        remainder_subtotal,
+        unit_value,
+        total_expenses,
+        total_unit_expenses,
+        total_compound,
+        total_reserve,
+        total_deposits,
         totalComp,
-        totalRequired,
-        totalReal,
-        overOrShort,
+        total_required,
+        total_real,
+        over_short,
     };
 }
