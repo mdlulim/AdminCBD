@@ -191,7 +191,7 @@ export default function AddRole(props) {
                                         >
                                             <option value="">Select Parent Role</option>
                                             {roles.map(item => (
-                                                <option value={item.id}>
+                                                item.id !== '903824d6-740f-4220-9e10-49bd805ad1be' && <option value={item.id}>
                                                     {item.label}
                                                 </option>
                                             ))}
