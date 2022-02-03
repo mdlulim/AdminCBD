@@ -225,14 +225,13 @@ class ProductService {
 
   static async updateProduct(id,product){
     return await axios({
-      mode: 'no-cors',
-      method: 'PUT',
-      data: product,
-      headers: headers,
-      url: `${Config.API.BASE_URL}/products/${id}`,
+        mode: 'no-cors',
+        method: 'PUT',
+        data: product,
+        headers: headers,
+        url: `${Config.API.BASE_URL}/products/${id}`,
     }).then((res) =>{
-      const result = {status: res.data.status, message: res.data.message}
-      return result;
+        return res.data;
     });
   }
 

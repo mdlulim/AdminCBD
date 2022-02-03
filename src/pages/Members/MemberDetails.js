@@ -6,18 +6,7 @@ import { MemberService } from '../../providers';
 import { AuthLayout } from 'containers';
 import { Members, Transactions, Products, KYC } from 'components';
 import { KYCService, SessionProvider } from '../../providers';
-
-let baseURL = window.location.origin;
-
-    let page = (window.location.pathname.split('/').pop()).toLowerCase();
     
-// if(page === 'wealth-creators'){
-//     let mi = session.payload.vlist;
-//     if(!mi.includes("Wealth Creators")){
-//         window.location.replace(baseURL+"/dashboard");
-//     }   
-// }
-
 const Status = ({ status }) => {
     let badge = 'primary';
     if (status === 'Pending') {
@@ -245,7 +234,7 @@ const MemberDetails = props => {
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'kyc' ? 'active' : ''}`}>
                                     <div className="profile-setting__card">
                                         <CardBody className="pl-0 pr-0 pb-0">
-                                            <KYC.KYC member={member} address={address} kycDetails={kycDetails} />
+                                            <KYC.KYC member={member} address={address} kycDetails={kycDetails} setPageLoading={setPageLoading}/>
                                         </CardBody>
                                     </div>
                                 </div>

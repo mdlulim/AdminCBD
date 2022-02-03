@@ -52,6 +52,9 @@ import UserPermissions from 'pages/UserPermissions';
 import BankAccounts from 'pages/BankAccounts';
 import SendOTPBankAccounts from 'pages/BankAccounts/SendOPTBankAccount';
 import KYC from 'pages/KYC';
+import Broadcast from 'pages/Broadcast';
+import AddBroadcast from 'pages/Broadcast/add';
+import EditBroadcast from 'pages/Broadcast/edit';
 import { UserService } from 'providers';
 import ProductCancel from 'pages/Products/ProductCancel';
 import ProductSubCategories from './pages/Products/SubCategories';
@@ -61,6 +64,9 @@ import { SessionProvider } from 'providers';
 
 import Profile from 'pages/Profile';
 import ProfileSettings from 'pages/Profile/Settings';
+
+import ProductReport from 'pages/Reports/ProductReport';
+import ProductReportDetails from 'pages/Reports/ProductReportDetails';
 
 const App = () => {
 	const settings = config;
@@ -98,8 +104,8 @@ const App = () => {
 
 					<PrivateRoute exact path="/dashboard" component={(props) => <Dashboard config={settings} {...props} menu={menu} />} />
 
-					<Route exact path="/members/pending" component={(props) => <MembersPending config={settings} {...props} menu={menu} />} />
-					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} menu={menu} />} permissions={role ? role.permissions.members.childitems.members : null} />
+					<Route exact path="/members/pending" component={(props) => <MembersPending config={settings} {...props} menu={menu} permissions={role ? role.permissions.members.childitems.pending : null} />} />
+					<Route exact path="/members/members" component={(props) => <Members config={settings} {...props} menu={menu} permissions={role ? role.permissions.members.childitems.members : null} />} />
 					<Route exact path="/members/members/:id" component={(props) => <MemberDetails config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/members/leads" component={(props) => <Leads config={settings} {...props} menu={menu} />} />
 					<Route exact path="/members/wealth-creators" component={(props) => <WealthCreater config={settings} {...props} menu={menu} permissions={role ? role.permissions.members.childitems['wealth-creators'] : null} />} />
@@ -114,6 +120,9 @@ const App = () => {
 					<Route exact path="/reports" component={(props) => <Reports config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/reports/:id" component={(props) => <ReportDetails config={settings} {...props} setMenu={setMenu} />} />
 
+					<Route exact path="/product-reports" component={(props) => <ProductReport config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/product-reports/:id" component={(props) => <ProductReportDetails config={settings} {...props} setMenu={setMenu} />} />
+
 					<Route exact path="/configurations/settings" component={(props) => <SystemSettings config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.configurations.childitems.settings : null} />} />
 					<Route exact path="/configurations/countries" component={(props) => <Countries config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.configurations.childitems.countries : null} />} />
 					<Route exact path="/configurations/currencies" component={(props) => <Currencies config={settings} {...props} setMenu={setMenu} />} />
@@ -127,10 +136,10 @@ const App = () => {
 					<Route exact path="/transactions/deposits" component={(props) => <Deposits config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.transactions.childitems.deposits : null} />} />
 					{/* <Route exact path="/transactions/rejected" component={(props) => <Canceled config={settings} {...props} setMenu={setMenu} />} /> */}
 					<Route exact path="/transactions/import" component={(props) => <TransactionImport config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/transactions/transfers" component={(props) => <Transfers config={settings} {...props} setMenu={setMenu} />} permissions={role ? role.permissions.transactions.childitems.transfers : null} />
+					<Route exact path="/transactions/transfers" component={(props) => <Transfers config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.transactions.childitems.transfers : null} />} />
 					{/* <Route exact path="/transactions/completed" component={(props) => <Completed config={settings} {...props} setMenu={setMenu} />} /> */}
 					{/* <Route exact path="/transactions/pending" component={(props) => <Pending config={settings} {...props} setMenu={setMenu} />} /> */}
-					<Route exact path="/transactions/withdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} />} permissions={role?role.permissions.transactions.childitems.withdrawals:null}/>
+					<Route exact path="/transactions/withdrawals" component={(props) => <Widthdrawals config={settings} {...props} setMenu={setMenu} permissions={role?role.permissions.transactions.childitems.withdrawals:null} />} />
 					<Route exact path="/transactions/debit-credit" component={(props) => <DebitCredit config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products" component={(props) => <Products config={settings} {...props} setMenu={setMenu} permissions={role?role.permissions.products.childitems.products:null} />} />
 					<Route exact path="/products/cancellations" component={(props) => <ProductCancellations config={settings} {...props} setMenu={setMenu} />} />
@@ -150,6 +159,9 @@ const App = () => {
 					{/* <Route exact path="/configurations/product/:id" component={(props) => <ProductSubcategoryUpdate config={settings} {...props} setMenu={setMenu} />} /> */}
 
 					<Route exact path="/kyc" component={(props) => <KYC config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/broadcast" component={(props) => <Broadcast config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.broadcast: null} />} />
+					<Route exact path="/broadcast/edit/:id" component={(props) => <EditBroadcast config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.broadcast: null} />} />
+					<Route exact path="/broadcast/add" component={(props) => <AddBroadcast config={settings} {...props} setMenu={setMenu} permissions={role ? role.permissions.broadcast: null} />} />
 					<Route component={(props) => <PageNotFound config={settings} {...props} menu={menu} />} />
 				</Switch>
 			</Router>

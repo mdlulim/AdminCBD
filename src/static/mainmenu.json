@@ -49,7 +49,7 @@
                 {
                     "id": "categories",
                     "title": "Categories",
-                    "link": "/products/categories",
+                    "link": "/categories",
                     "icon": null
                 },
                 {
@@ -139,6 +139,14 @@
             "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
             "link": "/reports",
             "icon": "li-chart-growth",
+            "childitems": []
+        },
+        {
+            "id": "broadcast",
+            "title": "Broadcasts",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "link": "/broadcast",
+            "icon": "li-home",
             "childitems": []
         }
     ],

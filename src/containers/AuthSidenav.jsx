@@ -1,4 +1,4 @@
-import { SessionProvider, UserService } from 'providers';
+import { SessionProvider, UserService, TransactionService } from 'providers';
 import React, { useEffect, useState, useMemo } from 'react';
 import menu from 'static/mainmenu.json';
 import Moment from 'react-moment';
@@ -74,18 +74,25 @@ export default function AuthSidenav(props) {
     const [showProfileDropdown, setShowProfileDropdown] = useState(false);
     const [showProfileDropdown2, setShowProfileDropdown2] = useState(false);
     const [user, setUser] = useState({});
-    const [role, setRole] = useState({})
+    const [role, setRole] = useState({});
+    const [profilePicture, setProfilePicture] = useState('')
 
     const fetchData = async () => {
+        let user = {};
         const role = await UserService.getUserRole();
+        user = await SessionProvider.get();
+       // console.log(user.id)
+        const profile = await UserService.getUser(user.id)
+        
+        const  profilePic = await  TransactionService.getTransactionPOPFile(profile.profile_path);
+        setProfilePicture(profilePic.data)
+        setUser(user)
         setRole(role)
+
     }
 
     useEffect(() => {
-        let user = {};
         if (SessionProvider.isValid()) {
-            user = SessionProvider.get();
-            setUser(user)
             fetchData()
         } else {
             window.location = '/login';
@@ -128,7 +135,10 @@ export default function AuthSidenav(props) {
         >
             <div className="navigation navigation--condensed" id="navigation-default">
                 <div className="user user--bordered user--lg user--w-lineunder user--controls">
-                    <img src="/assets/img/users/user_1.jpeg" className="mCS_img_loaded" />
+                <img src={profilePicture ? profilePicture :`/assets/img/users/user_1.jpeg`} className="mCS_img_loaded" width="50%" />
+                    {/* {profilePicture ? 
+                    <object data={profilePicture} type="application/pdf"></object>
+                    :<img src="/assets/img/users/user_1.jpeg" className="mCS_img_loaded" width="50%" />} */}
                     <div className="user__name">
                         <strong>{user.first_name + ' ' + user.last_name}</strong><br />
                         <span className="text-muted">{user.group_name}</span>

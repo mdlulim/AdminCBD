@@ -27,7 +27,7 @@ const CreateCategory = props => {
     useState(() => {
         ProductService.getProductCategories().then((res) => {
             console.log(res)
-               const productlist = res.data.data.results;
+               const productlist = res.results;
                setCategories(productlist);
            });
         const inputData = [
@@ -36,8 +36,8 @@ const CreateCategory = props => {
                 {name: 'price', value: 'price', required: false, type: "decimal", group: "field"},
                 {name: 'Status', value: 'status', required: false, type: "select", group: "field"},
                 {name: 'Currency Code', value: 'currency_code',required: false, type: "select", group: "field"},
-                {name: 'registration_fee', value: 'registration_fee', required: false, type: "decimal", group: "fees"},
-                {name: 'educator_fee', value: 'educator_fee', required: false, type: "decimal", group: "fees"},
+                {name: 'Registration Fee', value: 'registration_fee', required: false, type: "decimal", group: "fees"},
+                {name: 'Educator Fee', value: 'educator_fee', required: false, type: "decimal", group: "fees"},
                 {name: 'Investment Period (In Weeks)', value: 'investment_period', required: false, type: "decimal", group: "indicators"},
                 {name: 'Gross Return', value: 'gross_return', required: false, type: "decimal", group: "indicators"},
                 {name: 'Daily Interest', value: 'daily_interest', required: false, type: "decimal", group: "indicators"},
