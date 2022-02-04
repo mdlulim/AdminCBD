@@ -24,27 +24,16 @@ const customStyles = {
 export default function ReportList(props) {
     const { data } = props;
     const columns = [{
-        name: 'Product Name',
-        selector: 'title',
+        name: 'Product Title',
+        selector: 'product_title',
         sortable: true,
         wrap: true,
-    }, {
-        name: 'Total Users',
-        selector: 'cnt',
-        sortable: true,
-    }, {
-        name: 'Total Income',
-        selector: 'income',
-        width: '170px',
+    },{
+        name: 'Category',
+        selector: 'category_title',
         sortable: true,
         wrap: true,
-    }, {
-        name: 'Total Invested Amount',
-        selector: 'invested_amount',
-        width: '170px',
-        sortable: true,
-        wrap: true,
-    }, {
+    },{
         name: 'Actions',
         sortable: true,
         width: '120px',

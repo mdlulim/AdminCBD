@@ -21,6 +21,7 @@ const customStyles = {
     },
 };
 
+
 export default function DetailsTable(props) {
     const { data } = props;
     const columns = [{
@@ -37,16 +38,30 @@ export default function DetailsTable(props) {
         sortable: true,
     }, {
         name: 'Category',
-        selector: 'category',
+        selector: 'category_title',
         sortable: true,
     },{
-        name: 'income',
-        selector: 'income',
+        name: 'Registration Fee',
+        selector: 'registration_fee',
         sortable: true,
+        cell: (row) => <div>{row.metadata.fees 
+            ? row.metadata.fees.registration_fee 
+            : row.metadata.registration_fee ?  row.metadata.registration_fee: ''}</div>
     },{
-        name: 'Invested Amount',
-        selector: 'invested_amount',
+        name: 'Educator Fee',
+        selector: 'educator_fee',
         sortable: true,
+        cell: (row) => <div>{ row.metadata.fees 
+            ? row.metadata.fees.educator_fee 
+            : row.metadata.educator_fee ? row.metadata.educator_fee : ''}</div>
+    },{
+        name: 'Date',
+        selector: 'id',
+        sortable: true,
+        cell: (row) =><div className="small text-muted">
+        <span>Start Date: {row.start_date ? <Moment date={row.start_date} format="D MMM YYYY" /> : ''}</span><br />
+        <span>End Date: {row.end_date ? <Moment date={row.end_date} format="D MMM YYYY" /> : ''}</span>
+      </div>
     }, {
         name: 'Created',
         selector: 'created',
