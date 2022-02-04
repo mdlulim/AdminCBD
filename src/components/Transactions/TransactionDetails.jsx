@@ -15,7 +15,7 @@ const loaderCSS ={
 }
 
 const TransactionDetails = props => {
-    const { show, setShow, transaction, pop, userWallet, mainWallet, member, setPageLoading } = props;
+    const { show, setShow, transaction, pop, userWallet, mainWallet, member } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState([]);
@@ -41,7 +41,6 @@ const TransactionDetails = props => {
 
 
     const onSubmit = (event) => {
-        setPageLoading(true)
         event.preventDefault();
         setDisabled(true);
         setError('');
@@ -61,7 +60,6 @@ const TransactionDetails = props => {
                 if (response.data.success === true) {
                     setShow(false)
                     setProcessing(false);
-                    setPageLoading(false)
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -73,7 +71,6 @@ const TransactionDetails = props => {
                 } else {
                     setDisabled(false);
                     setProcessing(false);
-                    setPageLoading(false)
                     setError(response.data.message)
                     // return confirmAlert({
                     //     title: 'Error Message',
@@ -93,7 +90,6 @@ const TransactionDetails = props => {
                 if (response.data.success) {
                     setShow(false)
                     setProcessing(false);
-                    setPageLoading(false)
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -103,7 +99,6 @@ const TransactionDetails = props => {
                       });
                     return setTimeout(() => { window.location.reload() }, 4000);
                 } else {
-                    setPageLoading(false)
                     setError('Something went wrong while trying to update members status');
                 }
                 setDisabled(false);

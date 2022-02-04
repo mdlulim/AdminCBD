@@ -246,7 +246,7 @@ export default function Members(props) {
         setShow={setShowTransaction}
         transaction={transaction}
         pop={selectedTransPOP}
-        setPageLoading={setPageLoading} />
+      />
       {/* <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedMember} /> */}
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
