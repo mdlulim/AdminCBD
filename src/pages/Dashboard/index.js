@@ -227,7 +227,7 @@ export default function DashboardPage(props) {
                                             <a href={`/members/members`} >
                                                 <Common.Widget
                                                     icon="li-users2"
-                                                    title="Achived"
+                                                    title="Archived"
                                                     subtitle="Members"
                                                     informer={<><span className="text-bold text-danger">{countMembers('Achieved')}</span> </>}
                                                 /></a>
@@ -311,7 +311,7 @@ export default function DashboardPage(props) {
                                             <Common.Widget
                                                 icon="li-bag"
                                                 title="Transactions"
-                                                subtitle="Latest transctions"
+                                                subtitle="Latest transactions"
                                                 informer={<><span className="text-bold text-success">{countTransaction('Completed')}</span> / <span className="text-bold text-warning">{countTransaction('Pending')}</span></>}
                                             /></a>
                                         <div className="form-group" style={{ 'padding': 10 }}>
