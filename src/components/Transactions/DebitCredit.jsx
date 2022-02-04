@@ -172,7 +172,7 @@ export default function MakeTransfer(props) {
                         <Col>
                             <div className="row g-3">
                                 <div className="col">
-                                    <label for="inputEmail4" class="form-label">Specify reciepent by name or refferal 1</label>
+                                    <label for="inputEmail4" class="form-label">Specify recipient by name or refferal 1</label>
                                     <Select
                                         id="status"
                                         name="status"
