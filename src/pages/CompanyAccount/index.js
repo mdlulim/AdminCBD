@@ -312,7 +312,7 @@ const CompanyAccountList = props => {
                                         <Col md={6} >
                                             <button
                                                 className="btn btn-success float-right"
-                                                onClick={selectDataRange}
+                                                onClick={yar}
                                                 disabled={disabled}
                                             >
                                                 {'Search'}
