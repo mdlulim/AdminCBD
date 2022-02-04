@@ -98,15 +98,12 @@ const TransactionDetails = props => {
                         timer: 4000
                       });
                     return setTimeout(() => { window.location.reload() }, 4000);
-                } else {
-                    setError('Something went wrong while trying to update members status');
                 }
+                setError('Something went wrong while trying to update members status');
                 setDisabled(false);
                 setProcessing(false);
             })
         }
-        setDisabled(false);
-        setProcessing(false);
     }
 
 
