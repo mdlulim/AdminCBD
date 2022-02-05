@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { SessionProvider } from 'providers';
-import { AuthService } from '../providers';
-
 
 export default function AuthHeader(props) {
     const { sideNavHidden, setSideNavHidden } = props;
@@ -21,8 +19,8 @@ export default function AuthHeader(props) {
     return (
         <header className="page__header invert">
             <div className="logo-holder">
-                <a href="/" className="logo-text d-none d-lg-block">
-                    <strong className="text-primary"># CBI</strong> <strong>GLOBAL</strong>
+                <a href="/" className='pl-2'>
+                    <img src="/assets/img/cbi_logo.svg" height='60px' alt="# CBI GLOBAL" />
                 </a>
                 <a href="/" className="logo-text d-lg-none">
                     <strong className="text-primary">#</strong><strong>CBI</strong>
