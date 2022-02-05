@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
-import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
-
-import { KYCService } from '../../providers';
 
 // styles
 const customStyles = {
@@ -61,15 +58,10 @@ const Status = ({ status }) => {
 };
 
 export default function KYCList(props) {
-    const [members, setMembers] = useState([]);
-    const [filteredMembers, setFilteredMembers] = useState([]);
+    const {members, filteredMembers, setFilteredMembers} = props;
 
     useEffect(() => {
-        KYCService.getKYCApplicants().then((res) => {
-            const memberslist = res.data.data;
-            setMembers(memberslist);
-            setFilteredMembers(memberslist);
-        });
+        
 
     }, []);
     // table headings definition
@@ -120,7 +112,6 @@ export default function KYCList(props) {
         <Card className="o-hidden mb-4">
             <CardBody className="p-0">
                 <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-                    <span>KYC Applicants</span>
                     <span className="flex-grow-1" />
                     <input
                         style={inputWith}
