@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { SessionProvider } from 'providers';
 import { AuthService } from '../providers';
 
-
 export default function AuthHeader(props) {
     const { sideNavHidden, setSideNavHidden } = props;
     const [alertOpen, setAlertOpen] = useState(false);

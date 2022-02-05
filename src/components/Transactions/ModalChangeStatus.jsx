@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
+import { useParams, useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import Loader from "react-js-loader";
 import spinningLoader from '../../assets/img/loading-buffering.gif'
@@ -22,7 +23,8 @@ const ModalChangeStatus = props => {
     const [pageLoading, setPageLoading] = useState(true)
     const [selectedStatus, setSelectedStatus] = useState('');
     const { confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
-
+    const params = useParams();
+    const { id } = params;
     useEffect(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
         setPageLoading(false)
@@ -40,12 +42,16 @@ const ModalChangeStatus = props => {
         setProcessing(true);
         setPageLoading(true);
         const form = event.currentTarget;
+        if(!form.reason.value){
+            setError('Reason must be provided to process transaction!');
+            return error;
+        }
 
         const data = { 
                 status: selectedStatus.value,
+                reason: form.reason.value,
                 transaction: transaction, 
             } ;
-
         if(selectedStatus){
 
             TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
@@ -58,11 +64,16 @@ const ModalChangeStatus = props => {
                         buttons: [
                           {
                             label: 'Ok',
+                            onClick: () => {
+                                window.location = `/transactions/${id}`;
+                            }
                           }
                         ]
                       });
                  }else{
                      setError(response.data.message);
+                     setProcessing(false)
+                     setDisabled(false);
                      setPageLoading(false);
                  }
                 setDisabled(false);
@@ -74,6 +85,7 @@ const ModalChangeStatus = props => {
             setProcessing(false);
             setPageLoading(false);
         }
+        setProcessing(false);
         setDisabled(false);
         setPageLoading(false);
       }
@@ -171,6 +183,7 @@ const ModalChangeStatus = props => {
                                         id="reason"
                                         name="reason"
                                         className="form-control form-control-m"
+                                        required={true}
                                     />
                                     : ''}
                                 </div>

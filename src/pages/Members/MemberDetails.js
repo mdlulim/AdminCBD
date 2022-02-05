@@ -42,7 +42,6 @@ const MemberDetails = props => {
     async function fetchData(){
         const member = await MemberService.getMember(id);
             setMember(member);
-            console.log(member)
 
         const walletDetails = await MemberService.getMemberWallet(id);
             setWallet(walletDetails);
