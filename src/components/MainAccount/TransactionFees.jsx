@@ -156,7 +156,7 @@ export default function TransactionFees(props) {
     setDisabled(false);
     setShow(false)
   }
-
+ç
   const filterChange = (e) => {
     if (e.target.value === 'all') {
       setFilteredTransactions(transactions);
@@ -187,7 +187,7 @@ export default function TransactionFees(props) {
                                 icon="li-receipt"
                                 title="Withdrawal"
                                 subtitle="Fees"
-                                informer={<><span className="text-bold text-success">{totals.withdrawal} {transactions ? transactions[0].currency.code: ''}</span> </>}
+                                informer={<><span className="text-bold text-success">{totals.withdraw} {transactions ? transactions[0].currency.code: ''}</span> </>}
                                 invert={false}
                             /></a>
                         </Col>

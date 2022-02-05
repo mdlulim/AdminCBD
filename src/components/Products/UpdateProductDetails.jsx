@@ -47,11 +47,9 @@ export default function UpdateProductDetails(props) {
     const [indicators, setIndicators] = useState({})
     const [reg, setReg] = useState('')
     const [educ, setEduc] = useState('')
-    
 
     const params = useParams();
     const { id } = params;
-
 
     async function fetchData(){
         const categoryList = await ProductService.getProductCategories();
@@ -217,6 +215,12 @@ export default function UpdateProductDetails(props) {
             if(product.fees && data.value){
                 Object.keys(product.fees).forEach(key => arr.push({name: key, value: product.fees[key]}))
                 const result = arr.filter(option => option.name === data.value)[0];
+                arr.map((item)=>{
+                    if(item.name === 'registration_fee' || item.name === 'registration_percentage'){
+                        console.log(item.name);
+                    }
+                    
+                });
                 defualtValue = result ? result.value : '';
             }
         } else if(data.group === 'indicators' && data.value){
@@ -344,22 +348,43 @@ export default function UpdateProductDetails(props) {
                                                     </Col>
                                                     <Col md={6}>
                                                         {value === 'registration_fee' || value === 'registration_percentage' ? 
-                                                        <label htmlFor="name">{reg ? reg : label}</label> 
+                                                        <label htmlFor="name">{reg ? reg : label}</label>
                                                         : value === 'educator_fee' || value === 'educator_percentage' ? 
                                                         <label htmlFor="name">{educ ? educ : label}</label>:item.name}
-                                                    {/* <label htmlFor="name">{reg ? reg : label}</label> */}
-                                                    <input
-                                                        type="text"
-                                                        id={value}
-                                                        name={value}
-                                                        defaultValue={getValue(item)}
-                                                        className={`form-control form-control-m ${errors.value ? 'is-invalid' : ''}`}
-                                                        onChange={event => {
-                                                            onChangeFees(event.target.value, item)
-                                                        }}
-                                                        ref={register({ required: true })}
-                                                    />
-                                                    {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
+
+                                                        {value === 'registration_fee' || value === 'registration_percentage' ?
+                                                        <>
+                                                        <input
+                                                                type="text"
+                                                                id={registration ? registration.value : value}
+                                                                name={registration ? registration.value : value}
+                                                                defaultValue={getValue(item)}
+                                                                className={`form-control form-control-m ${errors.value ? 'is-invalid' : ''}`}
+                                                                onChange={event => {
+                                                                    onChangeFees(event.target.value, item)
+                                                                }}
+                                                                ref={register({ required: true })}
+                                                            />
+                                                            {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
+                            
+                                                        </>
+                                                        : value === 'educator_fee' || value === 'educator_percentage' ? 
+                                                        <>
+                                                                <input
+                                                                type="text"
+                                                                id={educator ? educator.value : value}
+                                                                name={educator ? educator.value : value}
+                                                                defaultValue={getValue(item)}
+                                                                className={`form-control form-control-m ${errors.value ? 'is-invalid' : ''}`}
+                                                                onChange={event => {
+                                                                    onChangeFees(event.target.value, item)
+                                                                }}
+                                                                ref={register({ required: true })}
+                                                            />
+                                                            {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
+                            
+                                                        </>:item.name}
+
                                                  </Col>
                                                     </>
                                                 :<Col md={6}>
@@ -397,7 +422,7 @@ export default function UpdateProductDetails(props) {
 												}
                                             }}
                                             defaultValue={fees.cancellation_fee}
-                                            required
+                                            ref={register({ required: false })}
                                         />
                                 </Col> : ''}
                                 <Col md={6}>

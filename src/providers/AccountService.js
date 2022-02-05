@@ -63,6 +63,17 @@ class AccountService {
         return result;
       });
     }
-}
 
+    static async debitCreditHistory() {
+      return await axios({
+        mode: 'no-cors',
+        method: 'POST',
+        headers: headers,
+        url: `${Config.API.BASE_URL}/transfer-history`,
+      }).then(json => json.data)
+      .then(res => {
+        return res;
+      });
+    }
+}
 export default AccountService;

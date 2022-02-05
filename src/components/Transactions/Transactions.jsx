@@ -283,7 +283,7 @@ export default function Transactions(props) {
     const end = Date.parse(endDate);
 
     if (checkCreatedDate === true) {
-      const searchByDate = transactions.filter(
+       const searchByDate = transactions.filter(
         transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
       setFilteredTransactions(searchByDate);
     } else {

@@ -33,6 +33,12 @@ export default function DebitCredit(props) {
     const [mainAccount, setMainAccount] = useState({});
     const [pageLoading, setPageLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
+    const [activeTab, setActiveTab] = useState('general');
+
+    const toggleTab = (e, tab) => {
+        e.preventDefault();
+        setActiveTab(tab);
+    };
 
     async function fetchData() {
         const res = await AccountService.getMainAccount();
@@ -54,11 +60,36 @@ export default function DebitCredit(props) {
             pageHeading={{
                 title: 'Debit/Credit',
                 caption: 'EXPLORE OVERVIEW DEBIT/CREDIT FOR CRYPTO BASED INNOVATION',
-                actions: <Filter />
+                // actions: <Filter />
             }}
         >
              {!pageLoading &&
-                    <Card id="reports">
+             <><ul className="nav nav-tabs nav-tabs__round mt-0">
+             <li className="nav-item">
+                 <a
+                     className={`nav-link show ${activeTab === 'general' ? 'active' : ''}`}
+                     onClick={e => toggleTab(e, 'general')}
+                     data-toggle="tab"
+                     href="/"
+                 >
+                     Debit/Debit Account
+                 </a>
+             </li>
+             <li className="nav-item">
+                 <a
+                     className={`nav-link show ${activeTab === 'referals' ? 'active' : ''}`}
+                     onClick={e => toggleTab(e, 'referals')}
+                     data-toggle="tab"
+                     href="/"
+                 >
+                     Debit/Debit History
+                 </a>
+             </li>
+         </ul>
+         <div className="tab-content">
+             <div role="tabpanel" className={`tab-pane show ${activeTab === 'general' ? 'active' : ''}`}>
+             <CardBody className="pl-0 pr-0 pb-0">
+                 <Card id="reports">
                         <Common.Widget
                             icon="li-wallet"
                             title="Debit Or Credit"
@@ -67,7 +98,16 @@ export default function DebitCredit(props) {
                         />
                         <hr className="margin-top-0 margin-bottom-0" />
                         <Transactions.DebitCredit />
-                    </Card>}
+                    </Card>
+                </CardBody>
+             </div>
+             <div role="tabpanel" className={`tab-pane show ${activeTab === 'referals' ? 'active' : ''}`}>
+                 <CardBody className="pl-0 pr-0 pb-0">
+                    <Transactions.DebitCreditHistory />
+                 </CardBody>
+             </div>
+         </div>
+                    </>}
         </AuthLayout>
     );
 }
