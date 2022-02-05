@@ -127,13 +127,9 @@ export default function MakeTransfer(props) {
                 amount: parseFloat(amount),
                 type: selectedType.name
             }
-                console.log("Test submit");
-                console.log(data)
-                console.log(userWallet)
 
         //   return data;
           AccountService.debitCredit(data).then((response) =>{
-              console.log(response)
               if(response.data.success){
                     return confirmAlert({
                         title: 'Succcess',

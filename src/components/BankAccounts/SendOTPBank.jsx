@@ -72,8 +72,6 @@ export default function BankAccounts(props) {
         setAdminLevel(user.permission_level)
     }
     //   BankAccountService.getPendingBankAccounts().then((res) => {
-    //     //console.log('BankAccounts '+res.data.data.results)
-    //     console.log(res.data.data.data)
     //     if(res.data.success){
     //       const productlist = res.data.data.data.results;
     //       setBankAccounts(productlist);
@@ -160,7 +158,6 @@ const onSubmitUpdateBankAccount= data => {
         event.preventDefault();
         setDisabled(true);
         setError('');
-        console.log(bankAccount)
         const form = event.currentTarget;
         const data = {
             title: form.title.value,
@@ -171,7 +168,6 @@ const onSubmitUpdateBankAccount= data => {
         }
         setShowVerify(true)
             BankAccountService.sendOTP(bankAccount.id, bankAccount).then((response) => {
-                console.log(response.data);
                 if (response.data.success) {
                     setShow(false)
                     setShowVerify(true)

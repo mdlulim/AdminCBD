@@ -99,7 +99,6 @@ export default function ProductReportDetails(props) {
             end_date: endDate * 1000
         };
 
-        console.log(startDate * 1000)
         //const results = results.filter(report => ((new Date(report.created)) * 1000 >= dateRange.startDate && (new Date(report.created) * 1000) <= dateRange.endDate));
         //console.log(new Date(results))
 

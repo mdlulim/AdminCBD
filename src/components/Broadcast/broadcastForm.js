@@ -91,7 +91,6 @@ const BroadcastForm = props => {
         if (id) {
             BroadcastService.get(id)
                 .then(res => {
-                    console.log(res)
                     setBroadcast(res.results[0])
                     setStartDate(new Date(res.results[0].published))
                     setEndDate(new Date(res.results[0].expiry))
@@ -121,12 +120,9 @@ const BroadcastForm = props => {
     }, [id])
 
     const onSubmit = async (data) => {
-        // console.log(errors, " errors")
         setPageLoading(true)
         data.published = startDate
         data.expiry = endDate
-
-        // console.log(errors)
 
         data.status = selectedStatus
         data.audience = selectedAudience.map(item => item.value)
@@ -148,7 +144,6 @@ const BroadcastForm = props => {
                     delete data.image
                 } else {
                     setPageLoading(false)
-                    console.log('Please select an image to upload or input text')
                     return
                 }
             }
@@ -162,11 +157,9 @@ const BroadcastForm = props => {
             //user is editing a broadcast message
             BroadcastService.update(id, data)
                 .then((res) => {
-                    console.log(res)
                     setPageLoading(false)
                     broadcastAlert(res.success)
                 }).catch(err => {
-                    console.log(err)
                     setPageLoading(false)
                     broadcastAlert(false)
                 })
@@ -342,7 +335,7 @@ const BroadcastForm = props => {
                                 {
                                     selectedImage ?
                                         <>
-                                            <span className='fa fa-trash-o btn btn-danger' style={{ cursor: 'pointer' }} onClick={() => { setSelectedImage(null); console.log(selectedImage, " image") }}></span><br />
+                                            <span className='fa fa-trash-o btn btn-danger' style={{ cursor: 'pointer' }} onClick={() => { setSelectedImage(null); }}></span><br />
                                             <img style={{ maxWidth: '100%' }} src={'https://cdn-cbigold.ams3.digitaloceanspaces.com/' + selectedImage} alt="prof" />
                                         </>
                                         : ''

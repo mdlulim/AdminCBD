@@ -27,7 +27,6 @@ const ModalChangeStatus = props => {
         event.preventDefault();
         setDisabled(true);
         setError('');
-        console.log('Test submit')
         const form = event.currentTarget;
         const data = {
             title: form.title.value,
@@ -37,7 +36,6 @@ const ModalChangeStatus = props => {
             subcategory: bankAccount.subcategory,
         }
             BankAccountService.sendOTP(bankAccount.id, bankAccount).then((response) => {
-                console.log(response);
                 if (response.data.success) {
                     setShow(false)
                     return confirmAlert({

@@ -70,8 +70,6 @@ export default function BankAccounts(props) {
       setAdminLevel(user.permission_level)
     }
     BankAccountService.getPendingBankAccounts().then((res) => {
-      //console.log('BankAccounts '+res.data.data.results)
-      console.log(res.data)
       if (res.data.success) {
         const productlist = res.data.data.data.results;
         setBankAccounts(productlist);

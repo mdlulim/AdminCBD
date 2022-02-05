@@ -72,7 +72,7 @@ export default function EditUser(props) {
                 {
                     label: 'Confirm and continue',
                     onClick: () => {
-                        console.log(props)
+                       // console.log(props)
                     }
                 },
                 {
@@ -152,7 +152,6 @@ export default function EditUser(props) {
         }
 
         const res = await PermissionLevelService.updateAdminUser(id, finalObject)
-        console.log(res)
     };
 
     return (

@@ -46,7 +46,6 @@ const TransactionList = props => {
 
     useEffect(() => {
         TransactionService.getTransactions().then((res) => {
-          console.log(res.results)
           const transactionlist = res.results;
           setTransactions(transactionlist);
         });
