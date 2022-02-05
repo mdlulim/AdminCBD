@@ -102,6 +102,8 @@ const ModalChangeStatus = props => {
                         {error}
                         </div> : ''}
                         <form onSubmit={onSubmit}>
+                            <Row>
+                            <Col md={6} >
                                 <div className="form-group">
                                     <label htmlFor="transactionId">Transaction ID</label>
                                     {transaction ?
@@ -114,6 +116,8 @@ const ModalChangeStatus = props => {
                                     />
                                     : ''}
                                 </div>
+                                </Col>
+                                <Col md={6} >
                                 <div className="form-group">
                                     <label htmlFor="email">Transaction Type</label>
                                     {transaction ?
@@ -126,6 +130,8 @@ const ModalChangeStatus = props => {
                                     />
                                     : ''}
                                 </div>
+                                </Col>
+                                <Col md={6} >
                                 <div className="form-group">
                                     <label htmlFor="email">Amount</label>
                                     {transaction ?
@@ -138,8 +144,10 @@ const ModalChangeStatus = props => {
                                     />
                                     : ''}
                                 </div>
+                                </Col>
                                 {transaction ?
-                                <div>
+                                <Col md={6} >
+                                <div className="form-group">
                                 <label htmlFor="email">Select Status</label>
                                 <Select
                                     id="status"
@@ -152,7 +160,9 @@ const ModalChangeStatus = props => {
                                     />
 
                                 </div>
+                                </Col>
                                 : ''}
+                                <Col md={12} >
                                 <div className="form-group">
                                     <label htmlFor="reason">Reason</label>
                                     {transaction ?
@@ -164,6 +174,8 @@ const ModalChangeStatus = props => {
                                     />
                                     : ''}
                                 </div>
+                                </Col>
+                                </Row>
                                 <hr />
                                 <Row>
                         <Col md={4}>
