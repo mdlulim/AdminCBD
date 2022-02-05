@@ -65,7 +65,15 @@ const ModalChangeStatus = props => {
                           {
                             label: 'Ok',
                             onClick: () => {
-                                window.location = `/transactions/${id}`;
+                                let pathArray = window.location.pathname.split( '/' );
+                                const page = pathArray[pathArray.length-1]
+                                if(page === 'deposits' || page === 'withdrawals' || page === 'import' || page === 'transactions'){
+                                    window.location = `/transactions/${page}`;
+                                }else{
+                                    if(id){
+                                        window.location = `/members/members/${id}`;
+                                    }
+                                }
                             }
                           }
                         ]
@@ -90,7 +98,18 @@ const ModalChangeStatus = props => {
         setPageLoading(false);
       }
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        let pathArray = window.location.pathname.split( '/' );
+        const page = pathArray[pathArray.length-1]
+        if(page === 'deposits' || page === 'withdrawals' || page === 'import' || page === 'transactions'){
+            window.location = `/transactions/${page}`;
+        }else{
+            if(id){
+                window.location = `/members/members/${id}`;
+            }
+        }
+        setShow(false)
+    };
 
     const updateTransactionStatus = (event) => {
         event.preventDefault();
