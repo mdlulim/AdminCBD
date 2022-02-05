@@ -139,7 +139,20 @@
             "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
             "link": "/reports",
             "icon": "li-chart-growth",
-            "childitems": []
+            "childitems": [
+                {
+                    "id": "reports",
+                    "title": "Reports",
+                    "link": "/reports",
+                    "icon": null
+                },
+                {
+                    "id": "product-reports",
+                    "title": "Product Reports",
+                    "link": "/product-reports",
+                    "icon": null
+                }
+            ]
         },
         {
             "id": "broadcast",

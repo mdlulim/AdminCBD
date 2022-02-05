@@ -13,15 +13,16 @@ import { ReportService } from 'providers';
 //     </a>
 // );
 
-export default function ProductReportPage(props) {
+export default function ProductReport(props) {
     const [reports, setReports] = useState([]);
     const [pageLoading, setPageLoading] = useState(true);
     const [filteredReports, setFilteredReports] = useState([]);
 
     async function fetchData() {
-        const reports = await ReportService.getReports();
-        setFilteredReports(reports.results || []);
-        setReports(reports.results || []);
+        const reports = await ReportService.getProductProfits();
+        console.log(reports)
+        setFilteredReports(reports || []);
+        setReports(reports || []);
         setPageLoading(false);
     }
 
@@ -35,7 +36,7 @@ export default function ProductReportPage(props) {
             loading={pageLoading}
             breadcrumb={{
                 items: [{ title: 'Dashboard', link: '/dashboard' }],
-                active: "Reports"
+                active: "Product Reports"
             }}
             pageHeading={{
                 title: 'Manage Product Reports',
@@ -68,7 +69,7 @@ export default function ProductReportPage(props) {
                     </div>
                 </CardBody>
                 <hr className="margin-top-0 margin-bottom-0" />
-                <Reports.List
+                <Reports.ProductReportList
                     roles={reports}
                     data={filteredReports}
                 />
