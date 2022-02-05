@@ -174,6 +174,7 @@ export default function UpdateProductDetails(props) {
             const category = categories.filter(option => option.code === selectedProductType)[0];
             // const title = form.title.value;
             let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+            const prce = data.price;
             let temp23 = data;
             delete temp23['title'];
             delete temp23['price'];
@@ -181,11 +182,11 @@ export default function UpdateProductDetails(props) {
                 body: currentContentAsHTML,
                 status: selectedStatus,
                 title: data.title,
-                price: data.price ? parseFloat(data.price) : 0,
+                price: prce ? parseFloat(prce) : 0,
                 fees: temp23,
                 indicators: indicators
             }
-            console.log(productDate)
+            console.log(data)
             setDisabled(false);
         update(productDate)
     }

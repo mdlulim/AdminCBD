@@ -102,45 +102,21 @@ const ModalChangeStatus = props => {
                         {error}
                         </div> : ''}
                         <form onSubmit={onSubmit}>
-                                <div className="form-group">
-                                    <label htmlFor="transactionId">Transaction ID</label>
-                                    {transaction ?
-                                    <input
-                                        type="text"
-                                        id="transactionId"
-                                        className="form-control form-control-m"
-                                        value={transaction.txid}
-                                        disabled={true}
-                                    />
-                                    : ''}
+                        <div className="form-row">
+                                <div className="col">
+                                    <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Transaction ID</label>
+                                    <input type="text" id="transactionId" className="form-control" value={transaction.txid} disabled={true} />
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="email">Transaction Type</label>
-                                    {transaction ?
-                                    <input
-                                        type="text"
-                                        id="subtype"
-                                        className="form-control form-control-m"
-                                        value={transaction.subtype}
-                                        disabled={true}
-                                    />
-                                    : ''}
+                                <div className="col">
+                                    <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Transaction Type</label>
+                                    <input type="text" id="subtype" className="form-control" value={transaction.subtype} disabled={true} />
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="email">Amount</label>
-                                    {transaction ?
-                                    <input
-                                        type="text"
-                                        id="amount"
-                                        className="form-control form-control-m"
-                                        value={transaction.amount}
-                                        disabled={true}
-                                    />
-                                    : ''}
-                                </div>
-                                {transaction ?
-                                <div>
-                                <label htmlFor="email">Select Status</label>
+                                <div className="col">
+                                    <label className="form-check-label" htmlFor="flexSwitchCheckDefault">amount</label>
+                                    <input type="text" id="amount" className="form-control" value={transaction.amount} disabled={true} />
+                               </div>
+                                <div className="col">
+                                <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Status</label>
                                 <Select
                                     id="status"
                                     name="status"
@@ -152,17 +128,16 @@ const ModalChangeStatus = props => {
                                     />
 
                                 </div>
-                                : ''}
-                                <div className="form-group">
-                                    <label htmlFor="reason">Reason</label>
-                                    {transaction ?
-                                    <textarea
+                                <div className="col">
+                                <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Reason</label>
+                                  <textarea
                                         type="text"
                                         id="reason"
                                         name="reason"
                                         className="form-control form-control-m"
+                                        required={true}
                                     />
-                                    : ''}
+                                </div>
                                 </div>
                                 <hr />
                                 <Row>
