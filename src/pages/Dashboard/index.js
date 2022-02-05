@@ -297,9 +297,11 @@ export default function DashboardPage(props) {
                                                             </Col>
                                                         </div>
                                                     </div>
-                                                    <div id="dashboard-ec-radar" data-zr-dom-id="zr_0" height="300">
-                                                        <VectorMap  {...world} />
-                                                    </div>
+                                                    <a href="https://kibana.cbiglobal.io">
+                                                        <div id="dashboard-ec-radar" data-zr-dom-id="zr_0" height="300">
+                                                            <VectorMap  {...world} />
+                                                        </div>
+                                                    </a>
                                                 </CardBody>
                                             </Card>
                                         </Col>
