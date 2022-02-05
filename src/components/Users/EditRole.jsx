@@ -74,11 +74,10 @@ export default function EditRole(props) {
     }
 
     function onCheckChange(value) {
-        console.log(value, ' _____________')
+       // console.log(value, ' _____________')
     }
 
     const removeUser = async (id) => {
-        console.log(id)
         const res = await PermissionLevelService.updateAdminUser(id, { group_id: '903824d6-740f-4220-9e10-49bd805ad1be', permissions: null })
         if (res.data.success) {
             Swal.fire({

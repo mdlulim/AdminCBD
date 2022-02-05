@@ -71,7 +71,6 @@ export default function TransactionFees(props) {
 
   useMemo(() => {
     FeeService.getFees().then((res) => {
-      console.log(res.data.results)
       const feeslist = res.data.results;
       setFees(feeslist);
       setFilteredFees(feeslist);

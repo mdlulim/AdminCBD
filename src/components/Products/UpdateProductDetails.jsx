@@ -169,8 +169,6 @@ export default function UpdateProductDetails(props) {
         const {educator_fee, registration_fee} = data;
         setDisabled(true);
         setError('');
-        console.log(registration)
-        console.log(educator)
             const category = categories.filter(option => option.code === selectedProductType)[0];
             // const title = form.title.value;
             let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
@@ -186,7 +184,6 @@ export default function UpdateProductDetails(props) {
                 fees: temp23,
                 indicators: indicators
             }
-            console.log(data)
             setDisabled(false);
         update(productDate)
     }

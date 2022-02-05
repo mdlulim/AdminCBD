@@ -23,7 +23,6 @@ export default function ChangePassword(props) {
         } = data;
 
         //const geolocation = GeoLocationProvider.get();
-        //console.log(geolocation)
         const data2 = {
             old_password: old_password,
             new_password1: new_password1,
@@ -33,7 +32,6 @@ export default function ChangePassword(props) {
         }
 
         UserService.passwordChange(data2).then((res) => {
-            console.log(res.data);
             if (res.data.success) {
                 setSuccess('Your password wassuccessfully modified');
                 setError('');

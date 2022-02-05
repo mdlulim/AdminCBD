@@ -188,7 +188,6 @@ export default function Members(props) {
       const transaList = res.data.data.results;
       if (transaList.length) {
         TransactionService.getTransactionPOP(transaList[0].txid).then((res) => {
-          console.log(res.data);
           if(res.data){
               const pop = res.data.data.rows;
               const url = pop[0].file;

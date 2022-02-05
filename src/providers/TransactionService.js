@@ -20,7 +20,6 @@ if (SessionProvider.isValid()) {
 class TransactionService {
 
     static async getTransactions() {
-      console.log(authToken)
       return await axios({
         mode: 'no-cors',
         method: 'GET',

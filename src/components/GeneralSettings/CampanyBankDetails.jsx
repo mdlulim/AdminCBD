@@ -66,7 +66,6 @@ export default function BankAccounts(props) {
 
   useMemo(() => {
     CompanyBankAccountService.getCompanyBankAccounts().then((res) => {
-      //console.log('BankAccounts '+res.data.data.results)
       const data = res.results;
       setBankAccounts(data);
       setFilteredBankAccounts(data);

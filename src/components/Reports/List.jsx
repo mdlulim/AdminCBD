@@ -94,7 +94,7 @@ export default function ReportList(props) {
                 {
                     label: 'Confirm and continue',
                     onClick: () => {
-                        console.log(data)
+                        //console.log(data)
                     }
                 },
                 {

@@ -56,7 +56,6 @@ const TransactionDetails = props => {
 
         if (selectedStatus.value === "Completed") {
             TransactionService.approveDeposit(transaction.id, data2).then((response) => {
-                console.log(response.data)
                 if (response.data.success === true) {
                     setShow(false)
                     setProcessing(false);

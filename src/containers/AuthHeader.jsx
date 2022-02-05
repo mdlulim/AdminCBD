@@ -13,7 +13,6 @@ export default function AuthHeader(props) {
         }else{
             window.location = '/login';
         }
-
     },[]);
 
     return (

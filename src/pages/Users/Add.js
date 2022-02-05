@@ -37,7 +37,6 @@ export default function AddUserPage(props) {
             setDisabled(false)
             return 'All field are required!'
         }
-        console.log('Name: '+form.first_name.value)
         const role = roles.filter(option => option.id === form.group_id.value)[0];
         const data = {
                 first_name  : form.first_name.value,
@@ -51,7 +50,6 @@ export default function AddUserPage(props) {
             };
 
             UserService.createUser(data).then((response) => {
-                console.log(response)
                 if (response.success) {
                     return confirmAlert({
                         title: 'Succcess',
