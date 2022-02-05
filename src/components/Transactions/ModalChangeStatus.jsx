@@ -15,7 +15,7 @@ const loaderCSS ={
     width: '20px'
 }
 const ModalChangeStatus = props => {
-    const { show, setShow, transaction } = props;
+    const { show, setShow, transaction, pop } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState('');
@@ -207,6 +207,15 @@ const ModalChangeStatus = props => {
                                     : ''}
                                 </div>
                                 </Col>
+                                <Col md={12} >
+                                        <div className="form-group">
+                                        <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Proof of payment</label>
+                                        <hr />
+                                        <object data={pop} type="application/pdf" width="100%" height="100%">
+                                            <p>Alternative text - include a link <a href={pop}>to the PDF!</a></p>
+                                        </object>
+                                    </div>
+                                    </Col>
                                 </Row>
                                 <hr />
                                 <Row>
