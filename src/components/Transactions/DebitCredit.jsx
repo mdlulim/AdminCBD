@@ -135,12 +135,12 @@ export default function MakeTransfer(props) {
                         title: 'Succcess',
                         message: 'Transaction was successfully updated',
                         buttons: [
-                        {
-                            label: 'Ok',
-                            onClick: () => {
-                                window.location = '/transactions/debit-credit';
+                            {
+                                label: 'Ok',
+                                onClick: () => {
+                                    window.location = '/transactions/debit-credit';
+                                }
                             }
-                        }
                         ]
                     });
               }
@@ -168,7 +168,7 @@ export default function MakeTransfer(props) {
                         <Col>
                             <div className="row g-3">
                                 <div className="col">
-                                    <label for="inputEmail4" class="form-label">Specify recipient by name or refferal 1</label>
+                                    <label for="inputEmail4" class="form-label">Specify recipient by name or refferal ID</label>
                                     <Select
                                         id="status"
                                         name="status"
@@ -235,7 +235,6 @@ export default function MakeTransfer(props) {
                                 </div>
                             </div>
                             <button
-                                // type="submit"
                                 className="btn btn-info float-right"
                             >
                                 {processing ? 'Processing...' : 'Submit'}

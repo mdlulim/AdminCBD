@@ -18,7 +18,7 @@ const TransactionDetails = props => {
     const { show, setShow, transaction, pop, userWallet, mainWallet, member } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
-    const [error, setError] = useState([]);
+    const [error, setError] = useState('');
     const [processing, setProcessing] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('');
     const [mainAccount, setMainAccount] = useState({});
@@ -47,10 +47,13 @@ const TransactionDetails = props => {
         setProcessing(true);
 
         const form = event.currentTarget;
-        const data = { status: selectedStatus.value };
-
+        if(!form.reason.value){
+            setError('Reason must be provided to process transaction!');
+            return error;
+        }
         const data2 = {
             status: selectedStatus.value,
+            reason: form.reason.value,
             transaction: transaction,
         }
 
@@ -71,20 +74,10 @@ const TransactionDetails = props => {
                     setDisabled(false);
                     setProcessing(false);
                     setError(response.data.message)
-                    // return confirmAlert({
-                    //     title: 'Error Message',
-                    //     message: response.data.message,
-                    //     buttons: [
-                    //         {
-                    //             label: 'Ok',
-                    //         }
-                    //     ]
-                    // });
-                   // setError('Something went wrong while trying to update members status');
                 }
             })
         } else {
-            TransactionService.updateTransactionStatus(transaction.id, data)
+            TransactionService.updateTransactionStatus(transaction.id, data2)
             .then((response) => {
                 if (response.data.success) {
                     setShow(false)
@@ -170,6 +163,7 @@ const TransactionDetails = props => {
                                         id="reason"
                                         name="reason"
                                         className="form-control form-control-m"
+                                        required={true}
                                     />
                                     : ''}
                             </div>
