@@ -18,15 +18,25 @@ if (SessionProvider.isValid()) {
 }
 
 class KYCService {
-
   static async getKYCApplicants() {
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}/all-kyc/`,
+      url: `${Config.API.BASE_URL}/kyc-pending/`,
     });
   }
+
+  static async getAllKYC() {
+    return await axios({
+      mode: 'no-cors',
+      method: 'GET',
+      headers: headers,
+      url: `${Config.API.BASE_URL}/kyc-all/`,
+    });
+  }
+
+
 
   static async getKYC(id) {
     return await axios({
