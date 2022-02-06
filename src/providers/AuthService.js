@@ -64,6 +64,19 @@ class AuthService {
         });
       }
 
+      static async resetPassword(email){
+        return await axios({
+          mode: 'no-cors',
+          method: 'POST',
+          data: email,
+          headers: headers,
+          url: `${Config.API.BASE_URL_LOGIN}/password/reset`,
+        }).then((res) =>{
+          const result = {status: res.data.status, message: res.data.message}
+          return result;
+        });
+      }
+
     static async logout() {
         // remove user from local storage to log user out bPDg2i
         SessionProvider.destroy();
