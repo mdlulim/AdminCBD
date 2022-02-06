@@ -49,7 +49,6 @@ export default function EditUserPage(props) {
         setRoles(roles.results || []);
         if (user && user.id) {
             setUser(user);
-            console.log(user, ' $$$$$$$$$$$$$$$$$$$$$')
             setFixedPanelContent(<PermissionSummary {...user} />);
         }
         setPageLoading(false);
@@ -60,7 +59,6 @@ export default function EditUserPage(props) {
     }, []);
 
     const onSubmit = (event) => {
-        console.log("8888888888")
         // event.preventDefault();
         // const form = event.currentTarget;
         // if(!form.group_id.value){

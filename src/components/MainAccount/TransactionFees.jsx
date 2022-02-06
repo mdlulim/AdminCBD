@@ -156,7 +156,6 @@ export default function TransactionFees(props) {
     setDisabled(false);
     setShow(false)
   }
-ç
   const filterChange = (e) => {
     if (e.target.value === 'all') {
       setFilteredTransactions(transactions);
