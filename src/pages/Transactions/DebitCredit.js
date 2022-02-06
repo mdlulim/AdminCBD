@@ -72,7 +72,7 @@ export default function DebitCredit(props) {
                      data-toggle="tab"
                      href="/"
                  >
-                     Debit/Debit Account
+                     Debit/Credit Account
                  </a>
              </li>
              <li className="nav-item">
@@ -82,7 +82,7 @@ export default function DebitCredit(props) {
                      data-toggle="tab"
                      href="/"
                  >
-                     Debit/Debit History
+                     Debit/Credit History
                  </a>
              </li>
          </ul>

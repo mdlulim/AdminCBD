@@ -38,21 +38,11 @@ const Status = ({ status }) => {
 const Money = (row) => {
   let badge = 'pending';
   let simbol = '+';
-  if (row.subtype === 'withdrawal' || row.subtype === 'Withdrawal') {
+  if (row.subtype === 'admin-credit') {
     simbol = '-';
-    if (row.status === 'Pending') {
-      badge = 'warning';
-    } else {
       badge = 'danger'
-    }
   } else {
-    if (row.status === 'Pending') {
-      badge = 'warning';
-    } else if (row.status === 'Completed') {
       badge = 'success';
-    } else {
-      badge = 'danger';
-    }
   }
   return <strong className={'text-' + badge}>{simbol + '' + row.amount} {row.currency.code}</strong>
 };
@@ -80,45 +70,56 @@ export default function Transactions(props) {
     if (SessionProvider.isValid()) {
       const user = SessionProvider.get();
     }
-console.log("==================Teste===================")
     AccountService.debitCreditHistory().then((res) => {
-        const transaList = res.results;
-        console.log(res)
-            setReports(transaList);
-            setFilteredReport(transaList);
+            console.log(res)
+            setReports(res);
+            setFilteredReport(res);
     });
 
   }, [setPageLoading]);
 
 
 
-  const columns = [{
-    name: 'Full Names',
+  const columns = [
+    ,{
+      name: 'TransactionID',
+      selector: 'txid',
+      sortable: true,
+    },{
+      name: 'Type',
+      selector: 'subtype',
+      sortable: true,
+    },
+    {
+      name: 'From',
+      selector: 'id',
+      sortable: true,
+      wrap: true,
+      cell: (row) => <div>{ row.subtype === 'admin-debit' ? 
+      <><div>{row.user ? row.user.first_name : ''} {row.user ? row.user.last_name : ''}</div>
+        <div className="small text-muted">
+          <span>{row.user ? row.user.referral_id : ''}</span>
+        </div> </>: 'Amain Account'}</div>
+    },
+    {
+    name: 'To',
     selector: 'id',
     sortable: true,
     wrap: true,
-    cell: (row) => <div><div>{row.user ? row.user.first_name : ''} {row.user ? row.user.last_name : ''}</div>
-      <div className="small text-muted">
-        <span>{row.user ? row.user.id_number : ''}</span>
-      </div></div>
-  },{
-    name: 'TransactionID',
-    selector: 'txid',
-    sortable: true,
-  },{
-    name: 'Type',
-    selector: 'subtype',
-    sortable: true,
-  },{
-    name: 'Fees',
-    selector: 'fee',
-    sortable: true,
+    cell: (row) => <div>{ row.subtype === 'admin-credit' ? 
+      <><div>{row.user ? row.user.first_name : ''} {row.user ? row.user.last_name : ''}</div>
+        <div className="small text-muted">
+          <span>{row.user ? row.user.referral_id : ''}</span>
+        </div> </>: 'Amain Account'}</div>
   },{
     name: 'Amount',
     selector: 'amount',
     sortable: true,
-    cell: row => <div> {Money(row)}<br />
-      <span className="text-muted">{row.balance} CBI</span></div>
+    cell: row => <div> {Money(row)}</div>
+  },{
+    name: 'Reason',
+    selector: 'approval_reason',
+    sortable: true,
   },{
     name: 'Status',
     selector: 'status',
@@ -139,7 +140,7 @@ console.log("==================Teste===================")
     const filteredItems = reports.filter(item => (
       (item && item.user.first_name && item.user.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.user.last_name && item.user.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.user.referral_id && item.user.referral_id.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.subtype && item.subtype.toLowerCase().includes(filterText.toLowerCase())) ||
