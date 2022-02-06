@@ -55,7 +55,6 @@ export default function Indicators(props) {
     const reservePool = getBalance({ ...reserve_pool, last_updated });
 
     async function onSubmit(data) {
-        console.log(data);
         confirmAlert({
             title: 'Confirm',
             message: <div>Are you sure you want to capture these configurations? <strong>Please Note: This action will affect {title} calculations.</strong></div>,

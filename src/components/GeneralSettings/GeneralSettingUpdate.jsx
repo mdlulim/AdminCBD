@@ -21,7 +21,6 @@ const ModalChangeStatus = props => {
         if(setting.key === 'otp_validity'){
             const selectValue = minitesOptions.filter(option => option.value === setting.value)
             setSelectedMinite(selectValue);
-            console.log(selectValue)
         }
     }, []);
 

@@ -73,7 +73,6 @@ export default function Members(props) {
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [selectedMember, setSelectedMember] = useState({});
   const [transaction, setTransaction] = useState({});
-  const history = useHistory();
 
   async function fetchData() {
     const memberslist = await MemberService.getMembers();
@@ -189,7 +188,6 @@ export default function Members(props) {
       const transaList = res.data.data.results;
       if (transaList.length) {
         TransactionService.getTransactionPOP(transaList[0].txid).then((res) => {
-          console.log(res.data);
           if(res.data){
               const pop = res.data.data.rows;
               const url = pop[0].file;
@@ -246,7 +244,8 @@ export default function Members(props) {
         show={showTransaction}
         setShow={setShowTransaction}
         transaction={transaction}
-        pop={selectedTransPOP} />
+        pop={selectedTransPOP}
+      />
       {/* <DeleteAlert show={showDelete} setShow={setShowDelete} member={selectedMember} /> */}
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">

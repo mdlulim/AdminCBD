@@ -145,6 +145,7 @@ export default function Transactions(props) {
       } else {
         if (transactionType === 'deposit') {
           const results = transaList.filter(item => item.subtype.toLowerCase() === "deposit");
+          console.log(results)
           setTransactions(results);
           setFilteredTransactions(results);
         } else if (transactionType === 'withdrawals') {
@@ -233,6 +234,7 @@ export default function Transactions(props) {
       (item && item.user.last_name && item.user.last_name.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.user.id_number && item.user.id_number.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.type && item.type.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item && item.status && item.status.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.subtype && item.subtype.toLowerCase().includes(filterText.toLowerCase())) ||
       (item && item.txid && item.txid.toLowerCase().includes(filterText.toLowerCase()))
     ));
@@ -259,6 +261,16 @@ export default function Transactions(props) {
       setSelectedTransaction(data)
       setShowApproveMember(true)
     } else {
+      if(data.subtype === 'deposit'){
+        TransactionService.getTransactionPOP(data.txid).then((res) => {
+          console.log(res.count)
+          const pop = res.rows;
+          const url = pop[0].file;
+          TransactionService.getTransactionPOPFile(url).then((res) => {
+            setSelectedTransPOP(res.data);
+          })
+        });
+      }
       setSelectedTransaction(data)
       setShowUpdate(true)
     }
@@ -271,7 +283,7 @@ export default function Transactions(props) {
     const end = Date.parse(endDate);
 
     if (checkCreatedDate === true) {
-      const searchByDate = transactions.filter(
+       const searchByDate = transactions.filter(
         transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
       setFilteredTransactions(searchByDate);
     } else {
@@ -321,6 +333,7 @@ export default function Transactions(props) {
         show={showUpdate}
         setShow={setShowUpdate}
         transaction={selectedTransaction}
+        pop={selectedTransPOP}
       />
 
       <TransactionDetails

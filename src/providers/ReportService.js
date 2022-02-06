@@ -64,5 +64,39 @@ class ReportService {
                 return [];
             })
     }
+
+    static async getProductProfits() {
+        return await axios({
+          mode: 'no-cors',
+          method: 'GET',
+          headers: headers,
+          url: `${Config.API.BASE_URL}/products/profits`,
+        })
+        .then(json => json.data)
+        .then(res => {
+          const { success, data } = res;
+          if (success) {
+            return data || [];
+          }
+          return [];
+        });
+      }
+    
+      static async getProfitsPerProduct(product_id) {
+        return await axios({
+          mode: 'no-cors',
+          method: 'GET',
+          headers: headers,
+          url: `${Config.API.BASE_URL}/products/profits/${product_id}`,
+        })
+        .then(json => json.data)
+        .then(res => {
+          const { success, data } = res;
+          if (success) {
+            return data || [];
+          }
+          return [];
+        });
+      }
 }
 export default ReportService;

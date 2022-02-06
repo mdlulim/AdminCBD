@@ -168,7 +168,6 @@ const SubCategoryUpdate = props => {
         setDisabled(true);
         setError('');
 
-        console.log(selectedDate)
         const form = event.currentTarget;
         let educatorFee = {}
         if (selectedWhen.value === 'Daily'){
@@ -249,7 +248,6 @@ const SubCategoryUpdate = props => {
         //  return data;
         if (form.title.value && subcategory.code && form.description.value) {
             ProductService.updateProductSubcategory(subcategory.id, data).then((response) => {
-                console.log(response);
                 if (response.success) {
                     return confirmAlert({
                         title: 'Succcess',

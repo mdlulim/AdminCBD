@@ -91,7 +91,6 @@ const BroadcastForm = props => {
         if (id) {
             BroadcastService.get(id)
                 .then(res => {
-                    console.log(res)
                     setBroadcast(res.results[0])
                     setStartDate(new Date(res.results[0].published))
                     setEndDate(new Date(res.results[0].expiry))
@@ -125,8 +124,6 @@ const BroadcastForm = props => {
         data.published = startDate
         data.expiry = endDate
 
-        console.log(errors)
-
         data.status = selectedStatus
         data.audience = selectedAudience.map(item => item.value)
 
@@ -147,7 +144,6 @@ const BroadcastForm = props => {
                     delete data.image
                 } else {
                     setPageLoading(false)
-                    console.log('Please select an image to upload or input text')
                     return
                 }
             }
@@ -161,11 +157,9 @@ const BroadcastForm = props => {
             //user is editing a broadcast message
             BroadcastService.update(id, data)
                 .then((res) => {
-                    console.log(res)
                     setPageLoading(false)
                     broadcastAlert(res.success)
                 }).catch(err => {
-                    console.log(err)
                     setPageLoading(false)
                     broadcastAlert(false)
                 })
@@ -195,15 +189,25 @@ const BroadcastForm = props => {
 
     return (
         <div>
-            <form onSubmit={handleSubmit(onSubmit)} noValidate >
+            <form 
+                onSubmit={handleSubmit(onSubmit)} 
+                noValidate 
+            >
                 <Row>
                     <Col md={12}>
                         <div className="form-group">
                             <label htmlFor="title" className="form-control-label">
                                 Title
                             </label>
-                            <input type="text" ref={register} name='title' required defaultValue={broadcast && broadcast.title ? broadcast.title : null} className='form-control' />
-                            { errors && errors.title && <span>{errors.title.message}</span>}
+                            <input 
+                                type="text" 
+                                name='title'
+                                className={`form-control ${errors.title ? 'is-invalid' : ''}`}
+                                ref={register({ required: { value: true, message: '*Field is required'} })}  
+                                defaultValue={broadcast && broadcast.title ? broadcast.title : null} 
+                                className='form-control' 
+                            />
+                            { errors.title && <span className="text-danger">{errors.title.message}</span> }
                         </div>
                     </Col>
                 </Row>
@@ -213,7 +217,15 @@ const BroadcastForm = props => {
                             <label htmlFor="summary" className="form-control-label">
                                 Summary
                             </label>
-                            <input type="text" ref={register} name='summary' required defaultValue={broadcast && broadcast.summary ? broadcast.summary : ''} className='form-control' />
+                            <input 
+                                type="text" 
+                                name='summary'
+                                className={`form-control ${errors.summary ? 'is-invalid' : ''}`}
+                                ref={register({ required: { value: true, message: '*Field is required'} })} 
+                                defaultValue={broadcast && broadcast.summary ? broadcast.summary : ''} 
+                                className='form-control' 
+                            />
+                            { errors.summary && <span className="text-danger">{errors.summary.message}</span> }
                         </div>
                     </Col>
                 </Row>
@@ -223,7 +235,7 @@ const BroadcastForm = props => {
                             <label htmlFor="published" className="form-control-label">
                                 Publish Date
                             </label>
-                            <DatePicker className={`form-control form-control-m`} selected={startDate ? startDate : new Date()} onChange={(date) => setStartDate(date)} />
+                            <DatePicker className={`form-control form-control-m`} minDate={new Date()} selected={startDate ? startDate : new Date()} onChange={(date) => setStartDate(date)} />
                         </div>
                     </Col>
                     <Col md={6}>
@@ -231,7 +243,7 @@ const BroadcastForm = props => {
                             <label htmlFor="expiry" className="form-control-label">
                                 Expiration Date
                             </label>
-                            <DatePicker className={`form-control form-control-m`} selected={endDate ? endDate : new Date()} onChange={(date) => setEndDate(date)} />
+                            <DatePicker className={`form-control form-control-m`} minDate={new Date()} selected={endDate ? endDate : new Date()} onChange={(date) => setEndDate(date)} />
                         </div>
                     </Col>
                 </Row>
@@ -323,7 +335,7 @@ const BroadcastForm = props => {
                                 {
                                     selectedImage ?
                                         <>
-                                            <span className='fa fa-trash-o btn btn-danger' style={{ cursor: 'pointer' }} onClick={() => { setSelectedImage(null); console.log(selectedImage, " image") }}></span><br />
+                                            <span className='fa fa-trash-o btn btn-danger' style={{ cursor: 'pointer' }} onClick={() => { setSelectedImage(null); }}></span><br />
                                             <img style={{ maxWidth: '100%' }} src={'https://cdn-cbigold.ams3.digitaloceanspaces.com/' + selectedImage} alt="prof" />
                                         </>
                                         : ''

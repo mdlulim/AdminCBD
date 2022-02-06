@@ -4,7 +4,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import moment from 'moment';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import useForm from "react-hook-form";
-import { PermissionLevelService } from 'providers';
+import { PermissionLevelService, AuthService } from 'providers';
 
 
 const NavTabLink = ({
@@ -72,7 +72,7 @@ export default function EditUser(props) {
                 {
                     label: 'Confirm and continue',
                     onClick: () => {
-                        console.log(props)
+                        resetPassword(email)
                     }
                 },
                 {
@@ -81,6 +81,11 @@ export default function EditUser(props) {
             ]
         });
     };
+    const resetPassword = async (email) =>{
+        console.log(email)
+        const result = await AuthService.resetPassword(email)
+        console.log(result)
+    }
 
     const onSubmit = async (data) => {
         // setPageLoading(true)
@@ -152,7 +157,6 @@ export default function EditUser(props) {
         }
 
         const res = await PermissionLevelService.updateAdminUser(id, finalObject)
-        console.log(res)
     };
 
     return (
@@ -383,7 +387,7 @@ export default function EditUser(props) {
                                                 <option value="Pending">Pending</option>
                                                 <option value="Active">Active</option>
                                                 <option value="Archived">Archived</option>
-                                                <option value="Bloacked">Bloacked</option>
+                                                <option value="Blocked">Blocked</option>
                                             </select>
                                         </Col>
                                     </Row>

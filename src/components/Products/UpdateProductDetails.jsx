@@ -41,13 +41,15 @@ export default function UpdateProductDetails(props) {
     const [ fees, setFees ] = useState({});
     const [allowCancellation, setAllowCancellation] = useState(false);
     const [selectedSubcategory, setSelectedSubcategory] = useState({});
+    const [educator, setEducator] = useState({});
+    const [registration, setRegistration] = useState({});
     const [inputs, setInputs] = useState([]);
     const [indicators, setIndicators] = useState({})
-    
+    const [reg, setReg] = useState('')
+    const [educ, setEduc] = useState('')
 
     const params = useParams();
     const { id } = params;
-
 
     async function fetchData(){
         const categoryList = await ProductService.getProductCategories();
@@ -76,7 +78,7 @@ export default function UpdateProductDetails(props) {
 
            setProduct(productDetails);
            setFilteredSubcategories(temp2)
-         //  setSelectedSubcategory(subcategoryList.filter(product => product.permakey === permakey));
+            //  setSelectedSubcategory(subcategoryList.filter(product => product.permakey === permakey));
 
          const categories1 = await ProductService.getProductCategories();
          const category = categories1.results.filter(option => option.code === productDetails.type)[0];
@@ -100,13 +102,11 @@ export default function UpdateProductDetails(props) {
                   ));
                 setInputs(filteredItems);
             }
-           console.log(productDetails.fees)
             setFees(productDetails.fees ? productDetails.fees: {})
             setIndicators(productDetails.indicators ? productDetails.indicators : {})
 
             setPageLoading(false);
     }
-
 
     useMemo(() => {
 
@@ -151,22 +151,38 @@ export default function UpdateProductDetails(props) {
             { value: 'Published',  label: 'Published' },
             { value: 'Achived', label: 'Achived' }
           ];
+
+          const regOptions = [
+            { value: 'registration_fee',  label: 'Registration Fee' },
+            { value: 'registration_percentage', label: 'Registration Percentage (%)' }
+          ];
+
+          const educatorOptions = [
+            { value: 'educator_fee',  label: 'Educator Fee' },
+            { value: 'educator_percentage', label: 'Educator Percentage (%)' }
+          ];
 //====================Update Product===============================
 
     function onSubmit(data) {
+        const {educator_fee, registration_fee} = data;
         setDisabled(true);
         setError('');
             const category = categories.filter(option => option.code === selectedProductType)[0];
             // const title = form.title.value;
             let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+            const prce = data.price;
+            let temp23 = data;
+            delete temp23['title'];
+            delete temp23['price'];
             let productDate = {
                 body: currentContentAsHTML,
                 status: selectedStatus,
                 title: data.title,
-                price: data.price ? parseFloat(data.price) : 0,
-                fees: fees,
+                price: prce ? parseFloat(prce) : 0,
+                fees: temp23,
                 indicators: indicators
             }
+            setDisabled(false);
         update(productDate)
     }
 
@@ -199,7 +215,12 @@ export default function UpdateProductDetails(props) {
             if(product.fees && data.value){
                 Object.keys(product.fees).forEach(key => arr.push({name: key, value: product.fees[key]}))
                 const result = arr.filter(option => option.name === data.value)[0];
-                console.log(result)
+                arr.map((item)=>{
+                    if(item.name === 'registration_fee' || item.name === 'registration_percentage'){
+                        console.log(item.name);
+                    }
+                    
+                });
                 defualtValue = result ? result.value : '';
             }
         } else if(data.group === 'indicators' && data.value){
@@ -243,23 +264,22 @@ export default function UpdateProductDetails(props) {
                                             />
                                 </Col>
                                 <Col md={6}>
-                            <label htmlFor="product_type">Subcategory *</label>
-                            <Select
-                                id="product_type"
-                                name="product_type"
-                                value={product ? filteredSubcategories.filter(option => option.value === selectedSubcategory.value): ''}
-                                options={filteredSubcategories}
-                                onChange={item => {
-                                    setSelectedSubcategory(item)
-                                    console.log(item)
-                                    setAllowCancellation(item.allow_cancellations)
-                                }}
-                                className={`basic-multi-select form-control-m`}
-                                classNamePrefix="select"
-                                required
-                                />
-                        </Col>
-                                <Col md={12}>
+                                    <label htmlFor="product_type">Subcategory *</label>
+                                    <Select
+                                        id="product_type"
+                                        name="product_type"
+                                        value={product ? filteredSubcategories.filter(option => option.value === selectedSubcategory.value): ''}
+                                        options={filteredSubcategories}
+                                        onChange={item => {
+                                            setSelectedSubcategory(item)
+                                            setAllowCancellation(item.allow_cancellations)
+                                        }}
+                                        className={`basic-multi-select form-control-m`}
+                                        classNamePrefix="select"
+                                        required
+                                        />
+                                </Col>
+                                <Col md={6}>
                                         <label htmlFor="name">product Title</label>
                                         <input
                                             type="text"
@@ -271,7 +291,6 @@ export default function UpdateProductDetails(props) {
                                             ref={register({ required: true })}
                                         />
                                          {errors.title && <span className="help-block invalid-feedback">Please enter product title</span>}
-                                    
                                 </Col>
                                 <Col md={6}>
                                         <label htmlFor="currency">Select Currency</label>
@@ -287,13 +306,88 @@ export default function UpdateProductDetails(props) {
                                             />
                                 </Col>
 
-
-
                                 {inputs.map((item)=>{
                                         let value = item.value;
                                         let group = item.group;
+                                        let label = item.name;
+
                                             return(
-                                                <Col md={6}>
+                                                <>
+                                                {item.value === "educator_fee" || item.value === "registration_fee" ?
+                                                <>
+                                                     <Col md={6}>
+                                                            <label htmlFor="currency">Select</label>
+                                                            <Select
+                                                                id="select"
+                                                                name="select"
+                                                                options={ value === 'educator_fee' ? educatorOptions : regOptions}
+                                                                onChange={e => {
+                                                                    if(e.value === 'registration_fee' || e.value === 'registration_percentage'){
+                                                                        setRegistration(e)
+                                                                        if(e.value === 'registration_fee'){
+                                                                            setReg('Registration Fee')
+                                                                        }else{
+                                                                            setReg('Registration Percentage (%)')
+                                                                            label =e.value
+                                                                        }
+                                                                    }else{
+                                                                        setEducator(e)
+                                                                        if(e.value === 'educator_fee'){
+                                                                            setEduc('Educator Fee')
+                                                                        }else{
+                                                                            setEduc('Educator Percentage (%)')
+                                                                            label =e.value
+                                                                        }
+                                                                        value =e.value
+                                                                    }
+                                                                }
+                                                                }
+                                                                className={`basic-multi-select form-control-m`}
+                                                                classNamePrefix="select"
+                                                                />
+                                                    </Col>
+                                                    <Col md={6}>
+                                                        {value === 'registration_fee' || value === 'registration_percentage' ? 
+                                                        <label htmlFor="name">{reg ? reg : label}</label>
+                                                        : value === 'educator_fee' || value === 'educator_percentage' ? 
+                                                        <label htmlFor="name">{educ ? educ : label}</label>:item.name}
+
+                                                        {value === 'registration_fee' || value === 'registration_percentage' ?
+                                                        <>
+                                                        <input
+                                                                type="text"
+                                                                id={registration ? registration.value : value}
+                                                                name={registration ? registration.value : value}
+                                                                defaultValue={getValue(item)}
+                                                                className={`form-control form-control-m ${errors.value ? 'is-invalid' : ''}`}
+                                                                onChange={event => {
+                                                                    onChangeFees(event.target.value, item)
+                                                                }}
+                                                                ref={register({ required: true })}
+                                                            />
+                                                            {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
+                            
+                                                        </>
+                                                        : value === 'educator_fee' || value === 'educator_percentage' ? 
+                                                        <>
+                                                                <input
+                                                                type="text"
+                                                                id={educator ? educator.value : value}
+                                                                name={educator ? educator.value : value}
+                                                                defaultValue={getValue(item)}
+                                                                className={`form-control form-control-m ${errors.value ? 'is-invalid' : ''}`}
+                                                                onChange={event => {
+                                                                    onChangeFees(event.target.value, item)
+                                                                }}
+                                                                ref={register({ required: true })}
+                                                            />
+                                                            {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
+                            
+                                                        </>:item.name}
+
+                                                 </Col>
+                                                    </>
+                                                :<Col md={6}>
                                                 <label htmlFor="name">{item.name}</label>
                                                 <input
                                                     type="text"
@@ -307,8 +401,8 @@ export default function UpdateProductDetails(props) {
                                                     ref={register({ required: true })}
                                                 />
                                                  {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
-                                            </Col>
-                                            );
+                                            </Col>}
+                                            </>);
                                         })
                                     }
 
@@ -328,7 +422,7 @@ export default function UpdateProductDetails(props) {
 												}
                                             }}
                                             defaultValue={fees.cancellation_fee}
-                                            required
+                                            ref={register({ required: false })}
                                         />
                                 </Col> : ''}
                                 <Col md={6}>

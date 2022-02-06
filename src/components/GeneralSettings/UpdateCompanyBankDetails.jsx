@@ -52,8 +52,6 @@ const AddCompanyBankDetails = props => {
         setDisabled(true);
         setError('');
 
-        console.log(selectedCompany);
-
         const form = event.currentTarget;
         const data = {
             name        : form.name.value,
@@ -69,7 +67,6 @@ const AddCompanyBankDetails = props => {
 
         if (form.name.value && form.number.value) {
             CompanyBankAccountService.updateCompanyBankAccount(bankAccount.id, data).then((response) => {
-                console.log(response.data)
                 if (response.data.success) {
                     setShow(false)
                     return confirmAlert({

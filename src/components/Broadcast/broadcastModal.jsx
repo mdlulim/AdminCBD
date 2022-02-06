@@ -52,21 +52,17 @@ const BroadcastModal = props => {
 
         if (broadcast && broadcast.id) {
             //user is editing a broadcast message
-            console.log(data, ' editing')
             // BroadcastService.update(broadcast.id, data)
             //     .then((res) => {
-            //         console.log(res)
             //         setLoading(false)
             //         setShow(false)
             // broadcastAlert(res.data.success)
             //     }).catch(err => {
-            //         console.log(err)
             //         setLoading(false)
             // broadcastAlert(false)
             //     })
 
         } else {
-            console.log(data, ' creating')
             BroadcastService.create(data)
                 .then((res) => {
                     setLoading(false)

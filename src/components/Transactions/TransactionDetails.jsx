@@ -8,7 +8,7 @@ import spinningLoader from '../../assets/img/loading-buffering.gif'
 import { TransactionService, UserService, AccountService, MemberService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-import DocViewer, {PNGRenderer, JPGRenderer, PDFRenderer } from "react-doc-viewer";
+import Swal from 'sweetalert2';
 
 const loaderCSS ={
     width: '20px'
@@ -18,9 +18,8 @@ const TransactionDetails = props => {
     const { show, setShow, transaction, pop, userWallet, mainWallet, member } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
-    const [error, setError] = useState([]);
+    const [error, setError] = useState('');
     const [processing, setProcessing] = useState(false);
-    const [pageLoading, setPageLoading] = useState(false)
     const [selectedStatus, setSelectedStatus] = useState('');
     const [mainAccount, setMainAccount] = useState({});
     const [numPages, setNumPages] = useState(null);
@@ -42,74 +41,61 @@ const TransactionDetails = props => {
 
 
     const onSubmit = (event) => {
-
         event.preventDefault();
         setDisabled(true);
         setError('');
         setProcessing(true);
 
         const form = event.currentTarget;
-        const data = { status: selectedStatus.value };
-
+        if(!form.reason.value){
+            setError('Reason must be provided to process transaction!');
+            return error;
+        }
         const data2 = {
             status: selectedStatus.value,
+            reason: form.reason.value,
             transaction: transaction,
         }
 
         if (selectedStatus.value === "Completed") {
             TransactionService.approveDeposit(transaction.id, data2).then((response) => {
-                console.log(response.data)
                 if (response.data.success === true) {
                     setShow(false)
                     setProcessing(false);
-                    return confirmAlert({
-                        title: 'Succcess',
-                        message: 'Transaction was successfully updated',
-                        buttons: [
-                            {
-                                label: 'Ok',
-                            }
-                        ]
-                    });
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Transaction was successfully updated!',
+                        showConfirmButton: false,
+                        timer: 4000
+                      });
+                    return setTimeout(() => { window.location.reload() }, 4000);
                 } else {
                     setDisabled(false);
                     setProcessing(false);
                     setError(response.data.message)
-                    // return confirmAlert({
-                    //     title: 'Error Message',
-                    //     message: response.data.message,
-                    //     buttons: [
-                    //         {
-                    //             label: 'Ok',
-                    //         }
-                    //     ]
-                    // });
-                   // setError('Something went wrong while trying to update members status');
                 }
             })
         } else {
-            TransactionService.updateTransactionStatus(transaction.id, data).then((response) => {
+            TransactionService.updateTransactionStatus(transaction.id, data2)
+            .then((response) => {
                 if (response.data.success) {
                     setShow(false)
                     setProcessing(false);
-                    return confirmAlert({
-                        title: 'Succcess',
-                        message: 'Transaction was successfully updated',
-                        buttons: [
-                            {
-                                label: 'Ok',
-                            }
-                        ]
-                    });
-                } else {
-                    setError('Something went wrong while trying to update members status');
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Transaction was successfully updated!',
+                        showConfirmButton: false,
+                        timer: 4000
+                      });
+                    return setTimeout(() => { window.location.reload() }, 4000);
                 }
+                setError('Something went wrong while trying to update members status');
                 setDisabled(false);
                 setProcessing(false);
             })
         }
-        setDisabled(false);
-        setProcessing(false);
     }
 
 
@@ -177,6 +163,7 @@ const TransactionDetails = props => {
                                         id="reason"
                                         name="reason"
                                         className="form-control form-control-m"
+                                        required={true}
                                     />
                                     : ''}
                             </div>

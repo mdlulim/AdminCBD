@@ -227,7 +227,7 @@ export default function DashboardPage(props) {
                                             <a href={`/members/members`} >
                                                 <Common.Widget
                                                     icon="li-users2"
-                                                    title="Achived"
+                                                    title="Archived"
                                                     subtitle="Members"
                                                     informer={<><span className="text-bold text-danger">{countMembers('Achieved')}</span> </>}
                                                 /></a>
@@ -297,9 +297,11 @@ export default function DashboardPage(props) {
                                                             </Col>
                                                         </div>
                                                     </div>
-                                                    <div id="dashboard-ec-radar" data-zr-dom-id="zr_0" height="300">
-                                                        <VectorMap  {...world} />
-                                                    </div>
+                                                    <a href="https://kibana.cbiglobal.io">
+                                                        <div id="dashboard-ec-radar" data-zr-dom-id="zr_0" height="300">
+                                                            <VectorMap  {...world} />
+                                                        </div>
+                                                    </a>
                                                 </CardBody>
                                             </Card>
                                         </Col>
@@ -311,7 +313,7 @@ export default function DashboardPage(props) {
                                             <Common.Widget
                                                 icon="li-bag"
                                                 title="Transactions"
-                                                subtitle="Latest transctions"
+                                                subtitle="Latest transactions"
                                                 informer={<><span className="text-bold text-success">{countTransaction('Completed')}</span> / <span className="text-bold text-warning">{countTransaction('Pending')}</span></>}
                                             /></a>
                                         <div className="form-group" style={{ 'padding': 10 }}>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Col, Row, Form } from 'reactstrap';
 import { Modal } from 'react-bootstrap';
 import { FeatherIcon } from 'components';
+import { useParams, useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import Loader from "react-js-loader";
 import spinningLoader from '../../assets/img/loading-buffering.gif'
@@ -14,7 +15,7 @@ const loaderCSS ={
     width: '20px'
 }
 const ModalChangeStatus = props => {
-    const { show, setShow, transaction } = props;
+    const { show, setShow, transaction, pop } = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState('');
@@ -22,7 +23,8 @@ const ModalChangeStatus = props => {
     const [pageLoading, setPageLoading] = useState(true)
     const [selectedStatus, setSelectedStatus] = useState('');
     const { confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
-
+    const params = useParams();
+    const { id } = params;
     useEffect(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
         setPageLoading(false)
@@ -40,12 +42,16 @@ const ModalChangeStatus = props => {
         setProcessing(true);
         setPageLoading(true);
         const form = event.currentTarget;
+        if(!form.reason.value){
+            setError('Reason must be provided to process transaction!');
+            return error;
+        }
 
         const data = { 
                 status: selectedStatus.value,
+                reason: form.reason.value,
                 transaction: transaction, 
             } ;
-
         if(selectedStatus){
 
             TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
@@ -58,11 +64,24 @@ const ModalChangeStatus = props => {
                         buttons: [
                           {
                             label: 'Ok',
+                            onClick: () => {
+                                let pathArray = window.location.pathname.split( '/' );
+                                const page = pathArray[pathArray.length-1]
+                                if(page === 'deposits' || page === 'withdrawals' || page === 'import' || page === 'transactions'){
+                                    window.location = `/transactions/${page}`;
+                                }else{
+                                    if(id){
+                                        window.location = `/members/members/${id}`;
+                                    }
+                                }
+                            }
                           }
                         ]
                       });
                  }else{
                      setError(response.data.message);
+                     setProcessing(false)
+                     setDisabled(false);
                      setPageLoading(false);
                  }
                 setDisabled(false);
@@ -74,11 +93,23 @@ const ModalChangeStatus = props => {
             setProcessing(false);
             setPageLoading(false);
         }
+        setProcessing(false);
         setDisabled(false);
         setPageLoading(false);
       }
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        let pathArray = window.location.pathname.split( '/' );
+        const page = pathArray[pathArray.length-1]
+        if(page === 'deposits' || page === 'withdrawals' || page === 'import' || page === 'transactions'){
+            window.location = `/transactions/${page}`;
+        }else{
+            if(id){
+                window.location = `/members/members/${id}`;
+            }
+        }
+        setShow(false)
+    };
 
     const updateTransactionStatus = (event) => {
         event.preventDefault();
@@ -102,6 +133,8 @@ const ModalChangeStatus = props => {
                         {error}
                         </div> : ''}
                         <form onSubmit={onSubmit}>
+                            <Row>
+                            <Col md={6} >
                                 <div className="form-group">
                                     <label htmlFor="transactionId">Transaction ID</label>
                                     {transaction ?
@@ -114,6 +147,8 @@ const ModalChangeStatus = props => {
                                     />
                                     : ''}
                                 </div>
+                                </Col>
+                                <Col md={6} >
                                 <div className="form-group">
                                     <label htmlFor="email">Transaction Type</label>
                                     {transaction ?
@@ -126,6 +161,8 @@ const ModalChangeStatus = props => {
                                     />
                                     : ''}
                                 </div>
+                                </Col>
+                                <Col md={6} >
                                 <div className="form-group">
                                     <label htmlFor="email">Amount</label>
                                     {transaction ?
@@ -138,8 +175,10 @@ const ModalChangeStatus = props => {
                                     />
                                     : ''}
                                 </div>
+                                </Col>
                                 {transaction ?
-                                <div>
+                                <Col md={6} >
+                                <div className="form-group">
                                 <label htmlFor="email">Select Status</label>
                                 <Select
                                     id="status"
@@ -152,7 +191,9 @@ const ModalChangeStatus = props => {
                                     />
 
                                 </div>
+                                </Col>
                                 : ''}
+                                <Col md={12} >
                                 <div className="form-group">
                                     <label htmlFor="reason">Reason</label>
                                     {transaction ?
@@ -161,9 +202,21 @@ const ModalChangeStatus = props => {
                                         id="reason"
                                         name="reason"
                                         className="form-control form-control-m"
+                                        required={true}
                                     />
                                     : ''}
                                 </div>
+                                </Col>
+                                <Col md={12} >
+                                        <div className="form-group">
+                                        <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Proof of payment</label>
+                                        <hr />
+                                        <object data={pop} type="application/pdf" width="100%" height="100%">
+                                            <p>Alternative text - include a link <a href={pop}>to the PDF!</a></p>
+                                        </object>
+                                    </div>
+                                    </Col>
+                                </Row>
                                 <hr />
                                 <Row>
                         <Col md={4}>

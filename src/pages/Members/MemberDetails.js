@@ -42,7 +42,6 @@ const MemberDetails = props => {
     async function fetchData(){
         const member = await MemberService.getMember(id);
             setMember(member);
-            console.log(member)
 
         const walletDetails = await MemberService.getMemberWallet(id);
             setWallet(walletDetails);
@@ -55,7 +54,6 @@ const MemberDetails = props => {
             //Get member details
             await KYCService.getkycLlevel(id).then((res) => {
                 setKycLevel(res.data.data.kyc_level)
-                //console.log(res.data.data)
                 if(res.data.data.kyc_level != -1){
                     setRating(res.data.data.kyc_level);
                 }
@@ -63,7 +61,6 @@ const MemberDetails = props => {
 
             await MemberService.getMemberKYC(id).then(res=>{
                     setkycDetails(res.data.data)
-                // console.log(res.data.data)
             })
 
             setPageLoading(false);

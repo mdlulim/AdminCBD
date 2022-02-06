@@ -209,7 +209,7 @@ export default function Calculations(props) {
                 {
                     label: 'Yes, continue',
                     onClick: async () => {
-                        console.log('data')
+                      //  console.log('data')
                     }
                 },
                 {

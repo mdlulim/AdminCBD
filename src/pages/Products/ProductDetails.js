@@ -56,7 +56,7 @@ const ProductDetails = props => {
            // setEditorState(EditorState.createWithContent(ContentState.createFromText(productDetails.body)));
         });
 
- 
+
       }, []);
 		const toggleTab = (e, tab) => {
 			e.preventDefault();
@@ -91,8 +91,7 @@ const ProductDetails = props => {
 				let regFee = parseFloat(registrationFee);
                // const title = form.title.value;
                let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-               //console.log(currentContentAsHTML);
-
+               
                 const productData ={
                     title				: form.title.value,
                     body				: currentContentAsHTML,
@@ -108,7 +107,6 @@ const ProductDetails = props => {
                  }
 
                  ProductService.updateProduct(id, productData).then((response) =>{
-                    console.log(response);
                     return confirmAlert({
                         title: 'Succcess',
                         message: 'Member was successfully updated',
@@ -121,7 +119,6 @@ const ProductDetails = props => {
                      setDisabled(false);
                  })
 
-                console.log('%'+form.educator_persantage.value);
         }
 
 	return (

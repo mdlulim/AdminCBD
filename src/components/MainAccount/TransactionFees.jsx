@@ -156,7 +156,6 @@ export default function TransactionFees(props) {
     setDisabled(false);
     setShow(false)
   }
-
   const filterChange = (e) => {
     if (e.target.value === 'all') {
       setFilteredTransactions(transactions);
@@ -177,7 +176,7 @@ export default function TransactionFees(props) {
                                 icon="li-receipt"
                                 title="Deposits"
                                 subtitle="Fees"
-                                informer={<><span className="text-bold text-success">{totals.deposit} {transactions ? transactions[0].currency.code: ''}</span></>}
+                                informer={<><span className="text-bold text-success">{totals.deposit} {transactions.currency ? transactions[0].currency.code: 'CBI'}</span></>}
                                 invert={false}
                             /></a>
                         </Col>
@@ -187,7 +186,7 @@ export default function TransactionFees(props) {
                                 icon="li-receipt"
                                 title="Withdrawal"
                                 subtitle="Fees"
-                                informer={<><span className="text-bold text-success">{totals.withdrawal} {transactions ? transactions[0].currency.code: ''}</span> </>}
+                                informer={<><span className="text-bold text-success">{totals.withdraw} {transactions.currency ? transactions[0].currency.code: 'CBI'}</span> </>}
                                 invert={false}
                             /></a>
                         </Col>
@@ -197,7 +196,7 @@ export default function TransactionFees(props) {
                                 icon="li-receipt"
                                 title="Transfer"
                                 subtitle="Fees"
-                                informer={<><span className="text-bold text-success">{totals.transfer} {transactions ? transactions[0].currency.code: ''}</span> </>}
+                                informer={<><span className="text-bold text-success">{totals.transfer} {transactions.currency ? transactions[0].currency: 'CBI'}</span> </>}
                                 invert={false}
                             /></a>
                         </Col>
@@ -207,7 +206,7 @@ export default function TransactionFees(props) {
                                 icon="li-receipt"
                                 title="Product"
                                 subtitle="Fees"
-                                informer={<><span className="text-bold text-success">{totals.product} {transactions ? transactions[0].currency.code: ''}</span> </>}
+                                informer={<><span className="text-bold text-success">{totals.product} {transactions.currency ? transactions[0].currency.code: 'CBI'}</span> </>}
                                 invert={false}
                             /></a>
                         </Col>

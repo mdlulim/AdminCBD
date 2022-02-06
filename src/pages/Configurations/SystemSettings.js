@@ -73,26 +73,7 @@ export default function SystemSettings(props) {
                                         KYC Limits
                                     </a>
                                 </li>
-                                {/* <li className="nav-item">
-                                    <a
-                                        className={`nav-link show ${activeTab === 'banking-details' ? 'active' : ''}`}
-                                        onClick={e => toggleTab(e, 'banking-details')}
-                                        data-toggle="tab"
-                                        href="/"
-                                    >
-                                        Banking Details
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a
-                                        className={`nav-link show ${activeTab === 'kyc' ? 'active' : ''}`}
-                                        onClick={e => toggleTab(e, 'kyc')}
-                                        data-toggle="tab"
-                                        href="/"
-                                    >
-                                        KYC
-                                    </a>
-                                </li> */}
+                               
                             </ul>
                             <div className="tab-content">
                                 <div role="tabpanel" className={`tab-pane show ${activeTab === 'general' ? 'active' : ''}`}>

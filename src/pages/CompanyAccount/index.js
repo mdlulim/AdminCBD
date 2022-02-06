@@ -63,7 +63,7 @@ const CompanyAccountList = props => {
         setTotals(totals)
         setTransactions(types.results);
         setFilteredTransactions(types.results);
-
+        console.log(types.results[0])
 
         setPageLoading(false);
     }
@@ -99,8 +99,6 @@ const CompanyAccountList = props => {
     async function selectDataRange() {
         setDisabled(true);
         setPageLoading(true)
-        console.log(startDate)
-        console.log(endDate)
 
         const dateRange = {
             start_date: startDate,

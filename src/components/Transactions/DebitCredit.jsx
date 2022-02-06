@@ -16,67 +16,7 @@ import Select from 'react-select';
 import useForm from 'react-hook-form';
 
 import "react-datepicker/dist/react-datepicker.css";
-// styles
-const customStyles = {
 
-    headCells: {
-        style: {
-            color: 'rgba(0,0,0,.54)',
-            paddingLeft: '18px', // override the cell padding for head cells
-            paddingRight: '18px',
-        },
-    },
-    cells: {
-        style: {
-            paddingLeft: '18px', // override the cell padding for data cells
-            paddingRight: '18px',
-        },
-    },
-};
-
-const iconPadding = {
-    paddingRight: '3px',
-}
-
-const selectPadding = {
-    paddingRight: '10px',
-}
-
-const inputWith = {
-    width: '20%'
-}
-
-const inputWithDate = {
-    width: '25%'
-}
-
-const Image = () => {
-    return (
-        <img
-            alt=""
-            height="32px"
-            style={{ borderRadius: 4 }}
-            width="32px"
-            src={require("images/1.jpeg")}
-        />
-    );
-};
-
-const Status = ({ status }) => {
-    let badge = 'primary';
-    if (status === 'Pending') {
-        badge = 'warning';
-    }
-    if (status === 'Completed') {
-        badge = 'success';
-    }
-    if (status === 'Rejected') {
-        badge = 'danger';
-    }
-    return (
-        <div className={`btn btn-outline-${badge} btn-block disabled btn-sm`}>{status}</div>
-    );
-};
 
 export default function MakeTransfer(props) {
     const [disabled, setDisabled] = useState(false);
@@ -84,12 +24,13 @@ export default function MakeTransfer(props) {
     const [members, setMembers] = useState([]);
     const [selectedType, setSelectedType] = useState({})
     const [membersOptions, setMembersOptions] = useState([]);
-    const [userWallet, setUserWallet] = useState(null);
+    const [error, setError] = useState('');
+    const [userWallet, setUserWallet] = useState({});
     const [fees, setFees] = useState(null);
     const [userType, setUserType] = useState(null);
     const [processing, setProcessing] = useState(false);
-    const { register, handleSubmit, errors } = useForm();
     const history = useHistory();
+    const { register, handleSubmit, reset, errors } = useForm();
 
     useMemo(() => {
         UserService.getUsersall().then((res) => {
@@ -115,38 +56,50 @@ export default function MakeTransfer(props) {
     const TransType = [{ name: 'credit', label: 'Credit' },
     { name: 'debit', label: 'Debit' }
     ]
-    const onSubmit = (event) => {
-
-        event.preventDefault();
-            const form = event.currentTarget;
-            const amount = form.amount.value;
-            const reason = form.reason.value;
-
-            const data = {
-                id: userWallet.id,
-                amount: parseFloat(amount),
-                type: selectedType.name
+    function onSubmit(data) {
+        setDisabled(true)
+       const { amount, reason } = data;
+            if(!data.reason){
+                setError('Reason must be provided to process transaction!');
+                setDisabled(false)
+                return error;
             }
-                console.log("Test submit");
-                console.log(data)
-                console.log(userWallet)
 
-        //   return data;
-          AccountService.debitCredit(data).then((response) =>{
-              console.log(response)
+            if(!userWallet){
+                setError('Please select member/WC account is required!');
+                setDisabled(false)
+                return error;
+            }
+
+            if(!selectedType){
+                setError('Please select transaction type is required!');
+                setDisabled(false)
+                return error;
+            }
+
+            const data2 = {
+                wallet_id: userWallet.id,
+                amount: parseFloat(amount),
+                type: selectedType.name,
+                reason: reason
+            }
+          AccountService.debitCredit(data2).then((response) =>{
+            setDisabled(false)
               if(response.data.success){
                     return confirmAlert({
                         title: 'Succcess',
                         message: 'Transaction was successfully updated',
                         buttons: [
-                        {
-                            label: 'Ok',
-                            onClick: () => {
-                                window.location = '/transactions/debit-credit';
+                            {
+                                label: 'Ok',
+                                onClick: () => {
+                                    window.location = '/transactions/debit-credit';
+                                }
                             }
-                        }
                         ]
                     });
+              }else{
+                  setError(response.data.message ? response.data.message : 'Failed to process the transaction!');
               }
 
           });
@@ -167,12 +120,23 @@ export default function MakeTransfer(props) {
     return (
         <Card className="o-hidden mb-4">
             <CardBody>
-                <form onSubmit={onSubmit}>
+                <form
+                    noValidate
+                    id="debit-credit-member-form"
+                    role="form"
+                    autoComplete="off"
+                    className="text-start"
+                    onSubmit={handleSubmit(onSubmit)}
+                >
+                { error ?
+                        <div className="alert alert-warning" role="alert">
+                        {error}
+                        </div> : ''}
                     <Row>
                         <Col>
                             <div className="row g-3">
                                 <div className="col">
-                                    <label for="inputEmail4" class="form-label">Specify reciepent by name or refferal 1</label>
+                                    <label for="inputEmail4" class="form-label">Specify recipient by name or refferal ID</label>
                                     <Select
                                         id="status"
                                         name="status"
@@ -186,7 +150,7 @@ export default function MakeTransfer(props) {
                                         ref={register({ required: true })}
                                     />
                                     <br />
-                                    {userWallet ?
+                                    {userWallet.id ?
                                         <Col lg={12}>
                                             <Common.Widget
                                                 icon="li-wallet"
@@ -200,21 +164,25 @@ export default function MakeTransfer(props) {
                                 <div className="col">
                                     <label for="inputEmail4" class="form-label">Select Transaction Type</label>
                                     <Select
-                                        id="status"
-                                        name="status"
+                                        id="type"
+                                        name="type"
                                         options={TransType}
                                         onChange={item => {
                                             setSelectedType(item)
                                         }}
-                                        className={`basic-multi-select form-control-m`}
+                                        className={`basic-multi-select form-control ${errors.type ? 'is-invalid' : ''}`}
                                         classNamePrefix="select"
                                         ref={register({ required: true })}
                                     />
+                                    {errors.type && <span className="help-block invalid-feedback">Please select transaction type</span>}
                                     <label for="inputEmail4" className="form-label">Amount In CBI</label>
                                     <div className="input-group">
-                                        <input type="text"
+                                        <input 
+                                            type="text"
+                                            id="amount"
+                                            name="amount"
                                             className="form-control"
-                                            id="autoSizingInputGroup"
+                                            className={`form-control ${errors.amount ? 'is-invalid' : ''}`}
                                             placeholder="Amount" onChange={event => {
                                                 if (!isNaN(+event.target.value)) {
                                                     //setErrorAmount(true)
@@ -222,9 +190,9 @@ export default function MakeTransfer(props) {
                                                     // setErrorAmount(false)
                                                 }
                                             }}
-                                            name='amount'
                                             ref={register({ required: true })}
                                         />
+                                        {errors.amount && <span className="help-block invalid-feedback">Please enter amount</span>}
                                     </div>
                                     <label for="inputEmail4" className="form-label">Note</label>
                                     <div className="input-group">
@@ -232,22 +200,25 @@ export default function MakeTransfer(props) {
                                             type="text"
                                             id="reason"
                                             name="reason"
-                                            className="form-control form-control-m"
+                                            className={`form-control ${errors.reason ? 'is-invalid' : ''}`}
                                             ref={register({ required: true })}
                                         />
+                                        {errors.reason && <span className="help-block invalid-feedback">Please enter a reason</span>}
                                     </div>
                                 </div>
                             </div>
-                            <button
-                                // type="submit"
-                                className="btn btn-info float-right"
-                            >
-                                {processing ? 'Processing...' : 'Submit'}
-                            </button>
+                           
 
                         </Col>
                     </Row>
                 </form>
+                <button
+                    type="submit"
+                    className="btn btn-info float-right"
+                    form="debit-credit-member-form"
+                >
+                        {processing ? 'Processing...' : 'Submit'}
+                </button>
             </CardBody>
         </Card>
     );
