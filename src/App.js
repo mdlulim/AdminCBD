@@ -53,13 +53,13 @@ import BankAccounts from 'pages/BankAccounts';
 import SendOTPBankAccounts from 'pages/BankAccounts/SendOPTBankAccount';
 import KYC from 'pages/KYC';
 import Broadcast from 'pages/Broadcast';
-import AddBroadcast from 'pages/Broadcast/add';
-import EditBroadcast from 'pages/Broadcast/edit';
+import AddBroadcast from 'pages/Broadcast/Add';
+import EditBroadcast from 'pages/Broadcast/Edit';
 import { UserService } from 'providers';
 import ProductCancel from 'pages/Products/ProductCancel';
 import ProductSubCategories from './pages/Products/SubCategories';
 import ProductUpdateSubCategory from './pages/Products/UpdateSubCategory';
-import ProductSubCategoryConfigs from './pages/Products/SubCategoryConfig';
+import ProductSubCategoryCalculations from './pages/Products/SubCategoryCalculations';
 import { SessionProvider } from 'providers';
 
 import Profile from 'pages/Profile';
@@ -150,7 +150,7 @@ const App = () => {
 					<Route exact path="/products/add" component={(props) => <ProductAddNew config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/cancel" component={(props) => <ProductCancel config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/subcategories" component={(props) => <ProductSubCategories config={settings} {...props} setMenu={setMenu} />} />
-					<Route exact path="/products/subcategories/:id/configurations" component={(props) => <ProductSubCategoryConfigs config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/products/subcategories/:id/calculations" component={(props) => <ProductSubCategoryCalculations config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/subcategories/:id" component={(props) => <ProductUpdateSubCategory config={settings} {...props} setMenu={setMenu} />} />
 					<Route exact path="/products/:id" component={(props) => <ProductDetails config={settings} {...props} setMenu={setMenu} />} />
 

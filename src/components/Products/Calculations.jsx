@@ -72,10 +72,10 @@ const MoneyFormat = ({ currency, value }) => {
             <CurrencyFormat
                 thousandSeparator=" "
                 displayType="text"
-                value={value}
+                value={value || 0}
                 fixedDecimalScale
-                decimalScale={currency.divisibility}
-                prefix={`${currency.symbol} `}
+                decimalScale={currency ? currency.divisibility : 2}
+                prefix={`${currency ? currency.symbol : '$'} `}
             />
         </span>
     );

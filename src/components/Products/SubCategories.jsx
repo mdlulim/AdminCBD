@@ -94,7 +94,7 @@ export default function SubCategories(props) {
                             <span className="fa fa-pencil" />
                         </a>
                         <a
-                            href={`/products/subcategories/${row.id}/configurations`}
+                            href={`/products/subcategories/${row.id}/calculations`}
                             className={`btn btn-outline-light btn-sm btn-icon margin-left-10 ${row.code === 'FX' ? '' : 'disabled'}`}
                             onClick={e => {
                                 if (row.code !== 'FX') {
