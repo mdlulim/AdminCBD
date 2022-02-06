@@ -68,7 +68,7 @@ if (Config.STAGE === 'production') {
         BASE_URL_POP: 'https://dev.cbiglobal.io/v1/storage/file/',
         BASE_URL_FILE_STORAGE:'https://dev.cbiglobal.io/v1/storage/',
         BASE_URL_BATCH: 'http://localhost:8020',
-        BASE_URL_LOGIN: 'https://dev.cbiglobal.io/v1/auth',
+        BASE_URL_LOGIN: 'http://localhost:8000',
         BASE_URL_TRANSACTION: 'https://dev.cbiglobal.io/v1/transaction/',
         BASE_URL_PROFILE: 'https://dev.cbiglobal.io/v1/user/',
         BASE_URL_GEOAPI: 'https://geolocation-db.com/json/',
