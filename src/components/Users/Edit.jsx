@@ -65,6 +65,7 @@ export default function EditUser(props) {
     const { register, handleSubmit, errors } = useForm();
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [disabled, setDisabled] = useState(false);
 
     async function handleResendPassword() {
         return confirmAlert({
@@ -84,15 +85,15 @@ export default function EditUser(props) {
         });
     };
     const resetPassword = async (data) =>{
-        console.log(data)
+        setDisabled(true)
         const result = await AuthService.resetPassword(data)
-        console.log(result)
         if(result.success){
             setSuccess(result.message)
         }else{
             setError(result.message);
             
         }
+        setDisabled(false)
     }
 
     const onSubmit = async (data) => {
@@ -292,6 +293,7 @@ export default function EditUser(props) {
                                     type="button"
                                     className="btn btn-outline-secondary"
                                     onClick={() => handleResendPassword()}
+                                    disabled={disabled}
                                 >
                                     Reset &amp; Resend Password
                                     <i className="fa fa-send margin-right-10" />
