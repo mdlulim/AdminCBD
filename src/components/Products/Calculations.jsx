@@ -1,80 +1,167 @@
 import React, { useEffect, useState } from 'react';
 import { Col } from 'reactstrap';
 import { confirmAlert } from 'react-confirm-alert';
-import { calcTotal, difference, quotient, fraxionCalculations } from 'utils';
+import { fraxionCalculations } from 'utils';
 import CurrencyFormat from 'react-currency-format';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-const TRowEmpty = () => (
-    <tr>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-    </tr>
+const Headers = () => (
+    <div className="description">
+        <div>&nbsp;</div>
+        <div>Pool</div>
+        <div>PrevCrv</div>
+        <div><strong>Total</strong></div>
+        <div>&nbsp;</div>
+        <div>P3Crv Compound</div>
+        <div>Difference</div>
+        <div>&nbsp;</div>
+        <div>Reserve Pool</div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>Difference</div>
+        <div>&nbsp;</div>
+        <div>Daily Profit</div>
+        <div><strong>Units</strong></div>
+        <div>Profit/Unit</div>
+        <div>&nbsp;</div>
+        <div>Compound</div>
+        <div>Weekly Compound</div>
+        <div>&nbsp;</div>
+        <div>Reserve</div>
+        <div>Sub-Total</div>
+        <div>&nbsp;</div>
+        <div>Remainder</div>
+        <div>&nbsp;</div>
+        <div>Edu</div>
+        <div>Sub-Total</div>
+        <div>&nbsp;</div>
+        <div>Weekly</div>
+        <div>Pool</div>
+        <div>Sub-Total</div>
+        <div>&nbsp;</div>
+        <div>Unit Value</div>
+        <div><strong>Total Expenses</strong></div>
+        <div>&nbsp;</div>
+        <div><strong>Total Compound</strong></div>
+        <div><strong>Total Reserve</strong></div>
+        <div>Deposits</div>
+        <div>Required</div>
+        <div>Real</div>
+        <div>Over/Short</div>
+    </div>
 );
 
-const TBodyRow = props => {
-    const { data } = props;
+const DayOfWeekName = ({ number }) => {
+    switch (number) {
+        case 1: return 'Monday';
+        case 2: return 'Tuesday';
+        case 3: return 'Wednesday';
+        case 4: return 'Thursday';
+        case 5: return 'Friday';
+        case 6: return 'Saturday';
+        default: return 'Sunday';
+    }
+};
+
+const MoneyFormat = ({ currency, value }) => {
     return (
-        <tr>
-            <td>{data[0]}</td>
-            <td className="text-right">
-                {/* <CurrencyFormat
-                    thousandSeparator=" "
-                    displayType="text"
-                    fixedDecimalScale
-                    decimalScale={4}
-                /> */}
-            </td>
-            <td className="text-right">$ 1,784,807.00</td>
-            <td className="text-right">-</td>
-            <td className="text-right">-</td>
-            <td className="text-right">-</td>
-            <td className="text-right">-</td>
-            <td className="text-right">-</td>
-            <td className="text-right">-</td>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
-        </tr>
+        <span className={parseFloat(value) < 0 ? 'text-danger' : ''}>
+            <CurrencyFormat
+                thousandSeparator=" "
+                displayType="text"
+                value={value || 0}
+                fixedDecimalScale
+                decimalScale={currency ? currency.divisibility : 2}
+                prefix={`${currency ? currency.symbol : '$'} `}
+            />
+        </span>
     );
 };
 
+const NumberFormat = ({ value }) => {
+    return (
+        <span className={parseFloat(value) < 0 ? 'text-danger' : ''}>
+            <CurrencyFormat
+                thousandSeparator=" "
+                displayType="text"
+                value={value}
+            />
+        </span>
+    );
+};
+
+const Column = item => (
+    <div className={`column ${item.active ? 'active' : ''}`}>
+        <div>
+            <strong>{moment(item.date).format('DD MMM')}</strong><br />
+            {<DayOfWeekName number={moment(item.date).isoWeekday()} />}
+        </div>
+        <div><MoneyFormat currency={item.currency} value={item.pool} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.prencrv} /></div>
+        <div><strong><MoneyFormat currency={item.currency} value={item.pool_prencrv_total} /></strong></div>
+        <div>&nbsp;</div>
+        <div><MoneyFormat currency={item.currency} value={item.p3crv_compounding} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.p3crv_compounding_difference} /></div>
+        <div>&nbsp;</div>
+        <div><MoneyFormat currency={item.currency} value={item.reserve_pool} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.reserve_pool2} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.reserve_pool_total} /></div>
+        <div>&nbsp;</div>
+        <div><MoneyFormat currency={item.currency} value={item.reserve_pool_difference} /></div>
+        <div>&nbsp;</div>
+        <div><MoneyFormat currency={item.currency} value={item.daily_profit} /></div>
+        <div><strong><NumberFormat currency={item.currency} value={item.units} /></strong></div>
+        <div><MoneyFormat currency={item.currency} value={item.profit_per_unit} /></div>
+        <div>&nbsp;</div>
+        <div><MoneyFormat currency={item.currency} value={item.compound} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.weekly_compound} /></div>
+        <div>&nbsp;</div>
+        <div><MoneyFormat currency={item.currency} value={item.reserve} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.reserve_subtotal} /></div>
+        <div>&nbsp;</div>
+        <div><MoneyFormat currency={item.currency} value={item.remainder} /></div>
+        <div>&nbsp;</div>
+        <div><MoneyFormat currency={item.currency} value={item.educator} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.educator_subtotal} /></div>
+        <div>&nbsp;</div>
+        <div><MoneyFormat currency={item.currency} value={item.remainder_weekly} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.remainder_pool} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.remainder_subtotal} /></div>
+        <div>&nbsp;</div>
+        <div><MoneyFormat currency={item.currency} value={item.unit_value} /></div>
+        <div><strong><MoneyFormat currency={item.currency} value={item.total_expenses} /></strong></div>
+        <div><MoneyFormat currency={item.currency} value={item.total_unit_expenses} /></div>
+        <div><strong><MoneyFormat currency={item.currency} value={item.total_compound} /></strong></div>
+        <div><strong><MoneyFormat currency={item.currency} value={item.total_reserve} /></strong></div>
+        <div><MoneyFormat currency={item.currency} value={item.total_deposits} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.total_required} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.total_real} /></div>
+        <div><MoneyFormat currency={item.currency} value={item.over_short} /></div>
+    </div>
+);
+
 export default function Calculations(props) {
-    const { title, indicators, fees } = props;
     const {
-        main_pool,
+        id,
+        fees,
+        title,
+        history,
+        currency,
+        indicators,
+        setPageLoading,
+        todayCalculated,
+    } = props;
+    const {
+        ref_id,
         last_payout,
-        last_updated,
-        reserve_pool,
-        compound_pool,
         last_calculation,
     } = indicators;
     const [calculations, setCalculations] = useState({});
-    const [lockCalculations, setLockCalculations] = useState(true);
-    const [prenCrv] = useState(0);
 
     function populateData() {
-        const currentDay = moment().format('YYYY-MM-DD');
-        const lastUpdated = moment(last_updated).format('YYYY-MM-DD');
-        const previousDay = moment().subtract(1, 'day').format('YYYY-MM-DD');
-        const lastCalculation = moment(last_calculation).format('YYYY-MM-DD');
-
-        if (lastUpdated === currentDay) {
-            // console.log('today', main_pool)
-        }
-        if (lastUpdated === previousDay) {
-            // console.log('yesterday', main_pool)
-        }
         const options = {
             ...fees,
             ...indicators,
@@ -82,8 +169,8 @@ export default function Calculations(props) {
             fraxion_price: 50,
         };
         const calculations = fraxionCalculations(options);
+        console.log(calculations)
         setCalculations(calculations);
-        setLockCalculations(lastCalculation === currentDay);
     }
 
     useEffect(() => {
@@ -98,7 +185,13 @@ export default function Calculations(props) {
                 {
                     label: 'Yes, continue',
                     onClick: async () => {
-                        //console.log('data')
+                        setPageLoading(true);
+                        const postData = {
+                            ...calculations,
+                            ref_id,
+                        };
+                        console.log('data', id, postData)
+                        setPageLoading(false);
                     }
                 },
                 {
@@ -164,599 +257,18 @@ export default function Calculations(props) {
                     </button>
                 </Col>
             </div>
-            <div className="table-responsive">
-                <table className="table table-condensed table-striped table-bordered margin-top-20 margin-bottom-20">
-                    <thead>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td className="text-right">&nbsp;</td>
-                            <td className="text-right"><strong>21 Jan</strong><br/>Fri</td>
-                            <td className="text-right"><strong>22 Jan</strong><br/>Sat</td>
-                            <td className="text-right"><strong>23 Jan</strong><br/>Sun</td>
-                            <td className="text-right"><strong>24 Jan</strong><br/>Mon</td>
-                            <td className="text-right"><strong>25 Jan</strong><br/>Tue</td>
-                            <td className="text-right"><strong>26 Jan</strong><br/>Wed</td>
-                            <td className="text-right"><strong>27 Jan</strong><br/>Thu</td>
-                            <td className="text-right" width="100">&nbsp;</td>
-                            <td className="text-right" width="100"><br /><strong>Declared</strong></td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Pool</td>
-                            <td className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={main_pool.balance_previous}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </td>
-                            <td className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={main_pool.balance_current}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                        <tr>
-                            <td>prenCrv</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <th>&nbsp;</th>
-                            <th className="text-right">-</th>
-                        </tr>
-                        <tr>
-                            <th>Total</th>
-                            <th className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={main_pool.balance_previous}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </th>
-                            <th className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={calcTotal(main_pool.balance_current, prenCrv)}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                        </tr>
-                        <TRowEmpty />
-                        <tr>
-                            <td>p3Crv</td>
-                            <th className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={compound_pool.balance_previous}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </th>
-                            <th className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={compound_pool.balance_current}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </th>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>Compounding</td>
-                            <td className="text-right">&nbsp;</td>
-                            <td className="text-right">&nbsp;</td>
-                            <td className="text-right">&nbsp;</td>
-                            <td className="text-right">&nbsp;</td>
-                            <td className="text-right">&nbsp;</td>
-                            <td className="text-right">&nbsp;</td>
-                            <td className="text-right">&nbsp;</td>
-                            <td className="text-right">&nbsp;</td>
-                            <td className="text-right">&nbsp;</td>
-                            <td className="text-right">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>Difference</td>
-                            <td className="text-right">$ -</td>
-                            <th className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={difference(compound_pool.balance_current, compound_pool.balance_previous)}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </th>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <TRowEmpty />
-                        <tr>
-                            <td>Reserve Pool</td>
-                            <th className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={reserve_pool.balance_previous}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </th>
-                            <th className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={reserve_pool.balance_current}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </th>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 17,123.93</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={calcTotal(reserve_pool.balance_current, 17123.93)}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <TRowEmpty />
-                        <tr>
-                            <td>Difference</td>
-                            <th className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={reserve_pool.balance_previous}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </th>
-                            <th className="text-danger text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={difference(calcTotal(reserve_pool.balance_current, 17123.93), reserve_pool.balance_previous)}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </th>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        {/* start */}
-                        <TRowEmpty />
-                        <tr>
-                            <td>Daily Profit</td>
-                            <td className="text-right">&nbsp;</td>
-                            <th className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={difference(calcTotal(main_pool.balance_current, prenCrv), main_pool.balance_previous)}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </th>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <th>Units</th>
-                            <th>&nbsp;</th>
-                            <th className="text-right">54,417</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                        </tr>
-                        <tr>
-                            <td>Profit/Unit</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">
-                                <CurrencyFormat
-                                    thousandSeparator=" "
-                                    displayType="text"
-                                    value={quotient(difference(calcTotal(main_pool.balance_current, prenCrv), main_pool.balance_previous), 54417)}
-                                    fixedDecimalScale
-                                    decimalScale={2}
-                                    prefix={'$ '}
-                                />
-                            </td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <TRowEmpty />
-                        <tr>
-                            <td>Compound</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 0.21</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>Weekly Compound</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 11,323.25</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <TRowEmpty />
-                        <tr>
-                            <td>Reserve</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 0.08</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>Sub-Total</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 4,529.30</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <TRowEmpty />
-                        <tr>
-                            <td>Remainder</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 0.83</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <TRowEmpty />
-                        <tr>
-                            <td>Edu</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 0.08</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>Sub-Total</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 4,529.30</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <TRowEmpty />
-                        <tr>
-                            <td>Weekly</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 0.08</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>Pool</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 4,529.30</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>Sub-Total</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 4,529.30</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <TRowEmpty />
-                        <tr>
-                            <td>Unit Value</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 0.08</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <th>Total Expenses</th>
-                            <th>&nbsp;</th>
-                            <th className="text-right">$ 54,417</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 0.08</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Total Compound</th>
-                            <th className="text-right">$ 1,736,379.33</th>
-                            <th className="text-right">$ 1,747,702.58</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                        </tr>
-                        <tr>
-                            <th>Total Reserve</th>
-                            <th>&nbsp;</th>
-                            <th className="text-right">$ 1,747,702.58</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                            <th className="text-right">-</th>
-                        </tr>
-                        <tr>
-                            <td>Deposits</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 1,747,702.58</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>Compound</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 1,747,702.58</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>Required</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 1,747,702.58</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>Real</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 1,747,702.58</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                        <tr>
-                            <td>Over/Short</td>
-                            <td>&nbsp;</td>
-                            <td className="text-right">$ 1,747,702.58</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                            <td className="text-right">-</td>
-                        </tr>
-                    </tfoot>
-                </table>
+            <div className="fraxion-calculations_wrapper d-flex">
+                <Headers />
+                {history.map((item, index) => (
+                    <Column key={index.toString()} {...item} index={index} />
+                ))}
+                {!todayCalculated &&
+                <Column {...calculations} currency={currency} active />}
             </div>
-            <div className="form-row">
+            <div className="form-row margin-top-20">
                 <Col xs={6} lg={2} className="d-none d-md-block">
                     <button
-                        disabled={lockCalculations}
+                        disabled={todayCalculated}
                         className="btn btn-secondary"
                         onClick={() => handleProcessCalcuations()}
                     >

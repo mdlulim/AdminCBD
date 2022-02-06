@@ -9,13 +9,14 @@ export default function Widget(props) {
         subtitle,
         title,
         wrapperClass,
+        containerClass,
     } = props;
     return (
         <div className={`widget ${invert ? 'widget invert' : 'widget--invert-by-parent'} ${wrapperClass || ''}`}>
             <div className="widget__icon_layer widget__icon_layer--right">
                 <span className={icon}></span>
             </div>
-            <div className="widget__container">
+            <div className={`widget__container ${containerClass || ''}`}>
                 <div className="widget__line">
                     <div className="widget__icon">
                         <span className={icon}></span>

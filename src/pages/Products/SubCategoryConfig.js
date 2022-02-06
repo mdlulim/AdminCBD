@@ -3,20 +3,35 @@ import { Card, CardBody, CardHeader } from 'reactstrap';
 import { Common, Products } from 'components';
 import { AuthLayout } from 'containers';
 import { ProductService } from 'providers';
+import moment from 'moment';
 
 export default function SubCategoryConfigurations(props) {
     const { match } = props;
     const { params } = match;
     const { id } = params;
     const [step, setStep] = useState(2);
+    const [currency, setCurrency] = useState(null);
     const [subcategory, setSubcategory] = useState(null);
     const [pageLoading, setPageLoading] = useState(true);
     const [calcHistory, setCalcHistory] = useState(null);
+    const [todayCalculated, setTodayCalculated] = useState(false);
 
     async function fetchData() {
         const subcategory = await ProductService.getProductSubcategory(id);
         const calcHistory = await ProductService.getSubcategoryCalculations(id);
-        setCalcHistory(calcHistory);
+        if (calcHistory && calcHistory.results) {
+            let calculated = false;
+            let currency = null;
+            calcHistory.results.map(item => {
+                calculated = (moment().format('YYYY-MM-DD') === moment(item.date).format('YYYY-MM-DD'));
+                if (!currency) {
+                    currency = item.currency;
+                }
+            });
+            setCurrency(currency);
+            setCalcHistory(calcHistory.results);
+            setTodayCalculated(calculated);
+        }
         setSubcategory(subcategory);
         setPageLoading(false);
     }
@@ -91,8 +106,11 @@ export default function SubCategoryConfigurations(props) {
                         {step === 2 &&
                         <Products.Calculations
                             {...subcategory}
+                            currency={currency}
+                            history={calcHistory}
                             fetchData={fetchData}
                             setPageLoading={setPageLoading}
+                            todayCalculated={todayCalculated}
                         />}
                     </div>
                 </CardBody>
