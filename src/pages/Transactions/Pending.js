@@ -5,7 +5,7 @@ import { Common, Transactions } from 'components';
 
 let baseURL = window.location.origin;
 let page = (window.location.pathname.split('/').pop()).toLowerCase();
-    
+
 // if(page === 'pending'){
 //     let mi = session.payload.vlist;
 //     if(!mi.includes("Pending")){
