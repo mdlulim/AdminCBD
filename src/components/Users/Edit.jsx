@@ -63,6 +63,8 @@ export default function EditUser(props) {
     } = props;
     const [activeTab, setActiveTab] = useState('overview');
     const { register, handleSubmit, errors } = useForm();
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     async function handleResendPassword() {
         return confirmAlert({
@@ -72,7 +74,7 @@ export default function EditUser(props) {
                 {
                     label: 'Confirm and continue',
                     onClick: () => {
-                        resetPassword(email)
+                        resetPassword({email: email})
                     }
                 },
                 {
@@ -81,10 +83,16 @@ export default function EditUser(props) {
             ]
         });
     };
-    const resetPassword = async (email) =>{
-        console.log(email)
-        const result = await AuthService.resetPassword(email)
+    const resetPassword = async (data) =>{
+        console.log(data)
+        const result = await AuthService.resetPassword(data)
         console.log(result)
+        if(result.success){
+            setSuccess(result.message)
+        }else{
+            setError(result.message);
+            
+        }
     }
 
     const onSubmit = async (data) => {
@@ -185,6 +193,7 @@ export default function EditUser(props) {
                 />
             </ul>
             <CardBody>
+           
                 <div className="tab-content" id="overview">
                     <NavTabContent
                         id="overview"
@@ -193,6 +202,12 @@ export default function EditUser(props) {
                         active={activeTab === 'overview'}
                     >
                         <Row>
+                            <Col xs={12}>
+                            { error ?
+                        <div className="alert alert-warning" role="alert">
+                        {error}
+                        </div> : ''}
+                            </Col>
                             <Col xs={12} sm={3}>
                                 <p>
                                     <strong>First Name:</strong><br />
