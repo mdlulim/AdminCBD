@@ -63,7 +63,7 @@ const CompanyAccountList = props => {
         setTotals(totals)
         setTransactions(types.results);
         setFilteredTransactions(types.results);
-
+        console.log(types.results[0])
 
         setPageLoading(false);
     }

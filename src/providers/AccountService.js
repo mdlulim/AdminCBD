@@ -67,12 +67,16 @@ class AccountService {
     static async debitCreditHistory() {
       return await axios({
         mode: 'no-cors',
-        method: 'POST',
+        method: 'GET',
         headers: headers,
         url: `${Config.API.BASE_URL}/transfer-history`,
       }).then(json => json.data)
       .then(res => {
-        return res;
+        const { success, data } = res;
+        if (res.success) {
+          return res.response.data.response || [];
+        }
+        return [];
       });
     }
 }

@@ -78,7 +78,7 @@ export default function MakeTransfer(props) {
             }
 
             const data2 = {
-                id: userWallet.id,
+                wallet_id: userWallet.id,
                 amount: parseFloat(amount),
                 type: selectedType.name,
                 reason: reason
