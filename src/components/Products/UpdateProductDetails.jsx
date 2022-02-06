@@ -98,13 +98,27 @@ export default function UpdateProductDetails(props) {
             if(productDetails.product_category && productDetails.product_category.inputFields && productDetails.product_category.inputFields.selectedRows){
                 const fields = productDetails.product_category.inputFields.selectedRows;
                 const filteredItems = fields.filter(item => (
-                    (item.value != 'title' && item.value != 'currency_code' && item.value != 'body' && item.value != 'status')
+                    (item.value != 'title' && item.value != 'currency_code' && item.value != 'body' && item.value != 'educator_fee' && item.value != 'educator_percentage' && item.value != 'registration_fee' && item.value != 'registration_percentage')
                   ));
                 setInputs(filteredItems);
             }
             setFees(productDetails.fees ? productDetails.fees: {})
-            setIndicators(productDetails.indicators ? productDetails.indicators : {})
+            if(productDetails.fees && productDetails.fees.educator_fee ){
+                setEduc('Educator Fee (CBI)')
+                setEducator({ value: 'educator_fee',  label: 'Educator Fee CBI' })
+            }else{
+                setEduc('Educator Percentage (%)')
+                setEducator({ value: 'educator_percentage', label: 'Educator Percentage (%)' })
+            }
 
+            if(productDetails.fees && productDetails.fees.registration_fee ){
+                setReg('Registration Fee (CBI)')
+                setRegistration({ value: 'registration_fee',  label: 'Registration Fee (CBI)' })
+            }else{
+                setReg('Registration Percentage (%)')
+                setRegistration({ value: 'registration_percentage', label: 'Registration Percentage (%)' })
+            }
+            setIndicators(productDetails.indicators ? productDetails.indicators : {})
             setPageLoading(false);
     }
 
@@ -164,26 +178,61 @@ export default function UpdateProductDetails(props) {
 //====================Update Product===============================
 
     function onSubmit(data) {
-        const {educator_fee, registration_fee} = data;
+        const {educator, registor} = data;
         setDisabled(true);
         setError('');
             const category = categories.filter(option => option.code === selectedProductType)[0];
             // const title = form.title.value;
             let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
             const prce = data.price;
-            let temp23 = data;
-            delete temp23['title'];
-            delete temp23['price'];
-            let productDate = {
+            if(fees.registration_percentage){
+                if(registration.value === 'registration_percentage'){
+                    fees.registration_percentage = parseFloat(data.register);
+                }else{
+                    delete fees['registration_percentage'];
+                    fees.registration_fee = parseFloat(data.register);
+                }
+            }else if(fees.registration_fee){
+                if(registration.value === 'registration_fee'){
+                    fees.registration_fee = parseFloat(data.register)
+                }else{
+                    delete fees['registration_fee'];
+                    fees.registration_percentage = parseFloat(data.register)
+                }
+            }
+
+            if(fees.educator_percentage){
+                if(registration.value === 'educator_percentage'){
+                    fees.educator_percentage = parseFloat(data.educator);
+                }else{
+                    delete fees['educator_percentage'];
+                    fees.educator_fee = parseFloat(data.educator);
+                }
+            }else if(fees.educator_fee){
+                if(registration.value === 'educator_fee'){
+                    fees.educator_fee = parseFloat(data.educator)
+                }else{
+                    delete fees['educator_fee'];
+                    fees.educator_percentage = parseFloat(data.educator)
+                }
+            }
+
+            if(fees.cancellation_fee || data.cancellation_fee){
+                    fees.cancellation_fee = data.cancellation_fee
+            }
+            if(indicators.investment_period || data.investment_period){
+                indicators.investment_period = data.investment_period
+             }
+        let productDate = {
                 body: currentContentAsHTML,
                 status: selectedStatus,
                 title: data.title,
                 price: prce ? parseFloat(prce) : 0,
-                fees: temp23,
+                fees: fees,
                 indicators: indicators
             }
             setDisabled(false);
-        update(productDate)
+            update(productDate)
     }
 
     const update = (data) =>{
@@ -306,88 +355,78 @@ export default function UpdateProductDetails(props) {
                                             />
                                 </Col>
 
+                                <Col md={6}>
+                                        <label htmlFor="currency">Select Educator</label>
+                                        <Select
+                                            id="select"
+                                            name="select"
+                                            value={product ? educatorOptions.filter(option => option.value === educator.value): ''}
+                                            options={educatorOptions}
+                                            onChange={e => {
+                                                    setEducator(e)
+                                                    if(e.value === 'educator_fee'){
+                                                        setEduc('Educator Fee (CBI)')
+                                                    }else{
+                                                        setEduc('Educator Percentage (%)')
+                                                    }
+                                                }
+                                            }
+                                            className={`basic-multi-select form-control-m`}
+                                            classNamePrefix="select"
+                                            />
+                                </Col>
+                                <Col md={6}>
+                                    <label htmlFor="name">{educ ? educ : 'Educator'}</label>
+                                    <input
+                                        type="text"
+                                        id="educator"
+                                        name="educator"
+                                        defaultValue={ fees.educator_fee ?  fees.educator_fee : fees.educator_percentage ? fees.educator_percentage :''}
+                                        className={`form-control form-control-m ${errors.value ? 'is-invalid' : ''}`}
+                                        ref={register({ required: true })}
+                                    />
+                                    {errors.educator && <span className="help-block invalid-feedback">Please enter educator</span>}
+
+                                </Col>
+                                <Col md={6}>
+                                        <label htmlFor="currency">Select Registration</label>
+                                        <Select
+                                            id="select"
+                                            name="select"
+                                            value={product ? regOptions.filter(option => option.value === registration.value): ''}
+                                            options={regOptions}
+                                            onChange={e => {
+                                                    setRegistration(e)
+                                                    if(e.value === 'registration_fee'){
+                                                        setReg('Registration Fee (CBI)')
+                                                    }else{
+                                                        setReg('Registration Percentage (%)')
+                                                    }
+                                                }
+                                            }
+                                            className={`basic-multi-select form-control-m`}
+                                            classNamePrefix="select"
+                                            />
+                                </Col>
+                                <Col md={6}>
+                                    <label htmlFor="name">{ reg ? reg : 'Registration'}</label>
+                                    <input
+                                        type="text"
+                                        id="register"
+                                        name="register"
+                                        defaultValue={fees.registration_fee ?  fees.registration_fee : fees.registration_percentage ? fees.registration_percentage :''}
+                                        className={`form-control form-control-m ${errors.register ? 'is-invalid' : ''}`}
+                                        ref={register({ required: true })}
+                                    />
+                                    {errors.register && <span className="help-block invalid-feedback">Please enter registration</span>}
+    
+
+                                </Col>
                                 {inputs.map((item)=>{
                                         let value = item.value;
-                                        let group = item.group;
-                                        let label = item.name;
 
                                             return(
-                                                <>
-                                                {item.value === "educator_fee" || item.value === "registration_fee" ?
-                                                <>
-                                                     <Col md={6}>
-                                                            <label htmlFor="currency">Select</label>
-                                                            <Select
-                                                                id="select"
-                                                                name="select"
-                                                                options={ value === 'educator_fee' ? educatorOptions : regOptions}
-                                                                onChange={e => {
-                                                                    if(e.value === 'registration_fee' || e.value === 'registration_percentage'){
-                                                                        setRegistration(e)
-                                                                        if(e.value === 'registration_fee'){
-                                                                            setReg('Registration Fee')
-                                                                        }else{
-                                                                            setReg('Registration Percentage (%)')
-                                                                            label =e.value
-                                                                        }
-                                                                    }else{
-                                                                        setEducator(e)
-                                                                        if(e.value === 'educator_fee'){
-                                                                            setEduc('Educator Fee')
-                                                                        }else{
-                                                                            setEduc('Educator Percentage (%)')
-                                                                            label =e.value
-                                                                        }
-                                                                        value =e.value
-                                                                    }
-                                                                }
-                                                                }
-                                                                className={`basic-multi-select form-control-m`}
-                                                                classNamePrefix="select"
-                                                                />
-                                                    </Col>
-                                                    <Col md={6}>
-                                                        {value === 'registration_fee' || value === 'registration_percentage' ? 
-                                                        <label htmlFor="name">{reg ? reg : label}</label>
-                                                        : value === 'educator_fee' || value === 'educator_percentage' ? 
-                                                        <label htmlFor="name">{educ ? educ : label}</label>:item.name}
-
-                                                        {value === 'registration_fee' || value === 'registration_percentage' ?
-                                                        <>
-                                                        <input
-                                                                type="text"
-                                                                id={registration ? registration.value : value}
-                                                                name={registration ? registration.value : value}
-                                                                defaultValue={getValue(item)}
-                                                                className={`form-control form-control-m ${errors.value ? 'is-invalid' : ''}`}
-                                                                onChange={event => {
-                                                                    onChangeFees(event.target.value, item)
-                                                                }}
-                                                                ref={register({ required: true })}
-                                                            />
-                                                            {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
-                            
-                                                        </>
-                                                        : value === 'educator_fee' || value === 'educator_percentage' ? 
-                                                        <>
-                                                                <input
-                                                                type="text"
-                                                                id={educator ? educator.value : value}
-                                                                name={educator ? educator.value : value}
-                                                                defaultValue={getValue(item)}
-                                                                className={`form-control form-control-m ${errors.value ? 'is-invalid' : ''}`}
-                                                                onChange={event => {
-                                                                    onChangeFees(event.target.value, item)
-                                                                }}
-                                                                ref={register({ required: true })}
-                                                            />
-                                                            {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
-                            
-                                                        </>:item.name}
-
-                                                 </Col>
-                                                    </>
-                                                :<Col md={6}>
+                                                <Col md={6}>
                                                 <label htmlFor="name">{item.name}</label>
                                                 <input
                                                     type="text"
@@ -401,8 +440,7 @@ export default function UpdateProductDetails(props) {
                                                     ref={register({ required: true })}
                                                 />
                                                  {errors.value && <span className="help-block invalid-feedback">Please enter {item.name}</span>}
-                                            </Col>}
-                                            </>);
+                                            </Col>);
                                         })
                                     }
 
