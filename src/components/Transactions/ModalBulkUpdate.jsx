@@ -8,6 +8,18 @@ import { TransactionService, UserService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
+const label ={
+        display: 'inline-block',
+        padding: '2px 4px',
+        fontSize: '11.844px',
+        fontWeight: 'bold',
+        lineHeight: '14px',
+        color: '#ffffff',
+        textShadow: '0 -1px 0 rgb(0 0 0 / 25%)',
+        whiteSpace: 'nowrap',
+        verticalAlign: 'baseline',
+        backgroundColor: '#999999'
+    }
 const ModalChangeStatus = props => {
     const { show, setShow, transactions} = props;
     const [statuses, setStatuses] = useState([]);
@@ -90,18 +102,18 @@ const ModalChangeStatus = props => {
                         <h3 className="text-success"> Update Transaction Status</h3>
                         <hr />
                         <form onSubmit={onSubmit}>
-                                <div className="form-group">
-                                    <label htmlFor="transactionId">Transaction ID</label>
+                                <Col sx={12}>
                                     {transactions.map((transaction,i) =>(
-                                    <input
-                                        type="text"
-                                        id="transactionId"
-                                        className="form-control form-control-m"
-                                        value={transaction.txid}
-                                        disabled={true}
-                                    />
+                                        <span style={label} class="label">{transaction.txid}</span>
+                                    // <input
+                                    //     type="text"
+                                    //     id="transactionId"
+                                    //     className="form-control form-control-m"
+                                    //     value={transaction.txid}
+                                    //     disabled={true}
+                                    // />
                                     ))}
-                                </div>
+                                </Col>
                                 <div className="form-group">
                                 <label htmlFor="email">Select Status</label>
                                 <Select
