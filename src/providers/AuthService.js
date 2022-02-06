@@ -72,7 +72,7 @@ class AuthService {
           headers: headers,
           url: `${Config.API.BASE_URL_LOGIN}/password/reset`,
         }).then((res) =>{
-          const result = {status: res.data.status, message: res.data.message}
+          const result = {success: res.data.success, message: res.data.message}
           return result;
         });
       }
