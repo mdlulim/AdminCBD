@@ -1,0 +1,23 @@
+{
+    "last_updated": "2022-01-27",
+    "last_calculated": "2022-01-27",
+    "last_payout": "2022-01-20",
+    "last_end_date": "2022-01-27",
+    "last_start_date": "2022-01-27",
+    "ref_id": "FX00001",
+    "main_pool": {
+        "balance_current": 0,
+        "balance_previous": 0
+    },
+    "compound_pool": {
+        "balance_current": 0,
+        "balance_previous": 0,
+        "total_previous": 0
+    },
+    "reserve_pool": {
+        "balance_current": 0,
+        "balance_previous": 0,
+        "total_previous": 0,
+        "other": 0
+    }
+}

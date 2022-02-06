@@ -12,6 +12,7 @@ const getBalance = props => {
         last_updated,
         balance_previous,
         balance_current,
+        other,
     } = props;
     const lastUpdated = moment(last_updated).format('YYYY-MM-DD');
     const today = moment().format('YYYY-MM-DD');
@@ -20,24 +21,35 @@ const getBalance = props => {
         return {
             balance_current,
             balance_previous,
+            other,
         };
     }
     if (lastUpdated === yesterday) {
         return {
             balance_current: 0,
             balance_previous: balance_current,
+            other,
         };
     }
     return {
         balance_current: 0,
         balance_previous: 0,
+        other,
     };
 }
 
 export default function Indicators(props) {
-    const { id, title, indicators, setPageLoading, fetchData } = props;
+    const { id, title, indicators, setPageLoading } = props;
     const { register, handleSubmit, errors } = useForm();
-    const { main_pool, compound_pool, reserve_pool, last_updated } = indicators;
+    const {
+        main_pool,
+        compound_pool,
+        reserve_pool,
+        last_updated,
+        start_date,
+        end_date,
+        ref_id,
+    } = indicators;
     const mainPool = getBalance({ ...main_pool, last_updated });
     const compoundPool = getBalance({ ...compound_pool, last_updated });
     const reservePool = getBalance({ ...reserve_pool, last_updated });
@@ -58,9 +70,13 @@ export default function Indicators(props) {
                             compound_pool_balance_today,
                             compound_pool_balance_yesterday,
                             reserve_pool_balance_yesterday,
+                            reserve_pool_other_today,
                         } = data;
                         const { last_payout, last_calculation } = indicators;
                         const postData = {
+                            ref_id,
+                            end_date,
+                            start_date,
                             last_payout,
                             last_calculation,
                             last_updated: today,
@@ -75,6 +91,7 @@ export default function Indicators(props) {
                             reserve_pool: {
                                 balance_current: parseFloat(reserve_pool_balance_today),
                                 balance_previous: parseFloat(reserve_pool_balance_yesterday),
+                                other: parseFloat(reserve_pool_other_today),
                             }
                         };
                         setPageLoading(true);
@@ -92,7 +109,7 @@ export default function Indicators(props) {
                                 timer: 4000
                             });
                             return setTimeout(async function () {
-                                fetchData();
+                                window.location = `/products/subcategories/${id}/configurations`;
                             }, 4000);
                         }
                         Swal.fire({
@@ -220,7 +237,7 @@ export default function Indicators(props) {
                     accordingly.
                 </p>
                 <Row className="row-xs">
-                    <Col xs={12} sm={6}>
+                    <Col xs={12} sm={4}>
                         <div className="form-group">
                             <label
                                 className="col-form-label"
@@ -239,7 +256,7 @@ export default function Indicators(props) {
                             />
                         </div>
                     </Col>
-                    <Col xs={12} sm={6}>
+                    <Col xs={12} sm={4}>
                         <div className="form-group">
                             <label
                                 className="col-form-label"
@@ -254,6 +271,25 @@ export default function Indicators(props) {
                                 name="reserve_pool_balance_today"
                                 className={`form-control ${errors.reserve_pool_balance_today ? 'is-invalid' : ''}`}
                                 defaultValue={reservePool.balance_current}
+                                ref={register({ required: true })}
+                            />
+                        </div>
+                    </Col>
+                    <Col xs={12} sm={4}>
+                        <div className="form-group">
+                            <label
+                                className="col-form-label"
+                                htmlFor="agent_id"
+                            >
+                                Other ({moment().format('DD MMMM YYYY')})
+                                <span className="text-danger">*</span>
+                            </label>
+                            <input
+                                type="number"
+                                id="reserve_pool_other_today"
+                                name="reserve_pool_other_today"
+                                className={`form-control ${errors.reserve_pool_other_today ? 'is-invalid' : ''}`}
+                                defaultValue={reservePool.other}
                                 ref={register({ required: true })}
                             />
                         </div>
