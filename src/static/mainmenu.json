@@ -49,7 +49,7 @@
                 {
                     "id": "categories",
                     "title": "Categories",
-                    "link": "/categories",
+                    "link": "/products/categories",
                     "icon": null
                 },
                 {

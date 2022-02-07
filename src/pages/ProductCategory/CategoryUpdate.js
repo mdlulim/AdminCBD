@@ -116,38 +116,6 @@ const CreateCategory = props => {
         setError('');
         const form = event.currentTarget;
 
-        const titleExist = selectedRows.filter(option => option.value === "title");
-        const bodyExist = selectedRows.filter(option => option.value === "body");
-        const statusExist = selectedRows.filter(option => option.value === "status");
-        const codeExist = selectedRows.filter(option => option.value === "currency_code");
-
-        if (!titleExist.length){
-            setError("Please select title is required!")
-            setDisabled(false);
-            setProcessing(false);
-            return error
-        }
-
-        if (!bodyExist.length){
-            setError("Please select body/description is required!")
-            setDisabled(false);
-            setProcessing(false);
-            return error
-        }
-
-        if (!statusExist.length){
-            setError("Please select status is required!")
-            setDisabled(false);
-            setProcessing(false);
-            return error
-        }
-
-        if (!codeExist.length){
-            setError("Please select country code is required!");
-            setDisabled(false);
-            setProcessing(false);
-            return error
-        }
         if (!form.title.value && !form.description.value && !form.code.value){
             setError("All input fields are required");
             setDisabled(false);
@@ -156,22 +124,15 @@ const CreateCategory = props => {
         }
         const title = form.title.value;
         const code = form.code.value;
-        let permakeyTitleExist = categories.filter(category => category.title.split(' ').join('-').trim().toLowerCase() === title.split(' ').join('-').trim().toLowerCase());
-
-        if(permakeyTitleExist[0]){
-            setError("Category with this title is already exist!");
-            setDisabled(false);
-            setProcessing(false);
-            return error
-        }
 
         const data = {
             title       : form.title.value,
             description : form.description.value,
             code        :form.code.value,
-            inputFields : {selectedRows},
         }
-        ProductService.addProductCategory(data).then((response) =>{
+        ProductService.updateProductCategory(id, data).then((response) =>{
+            console.log("Test======================")
+            console.log(response)
             if(response.status){
                 setShow(true);
                 confirmAlert({
@@ -181,7 +142,7 @@ const CreateCategory = props => {
                       {
                         label: 'Yes',
                         onClick: () => {
-                            window.location = `/categories/${id}`;
+                            window.location = `/products/categories/${id}`;
                         }
                       }
                     ]
@@ -230,6 +191,7 @@ const CreateCategory = props => {
                         id="autoSizingInputGroup"
                         name="code"
                         defaultValue={category ? category.code: ''}
+                        disabled={true}
                     />
                     </div>
                     <label for="inputEmail4" class="form-label">Description</label>
@@ -242,7 +204,7 @@ const CreateCategory = props => {
                     />
                     </div>
                     </div>
-                    <div className="col">
+                    {/* <div className="col">
                     <DataTable
                         title={'Select Input Fields'}
                         columns={columns}
@@ -253,7 +215,7 @@ const CreateCategory = props => {
                         clearSelectedRows={toggleCleared}
                         pagination
                         />
-                    </div>
+                    </div> */}
                 </div>
                 <hr/>
                 <button

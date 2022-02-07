@@ -18,16 +18,19 @@ const label ={
         textShadow: '0 -1px 0 rgb(0 0 0 / 25%)',
         whiteSpace: 'nowrap',
         verticalAlign: 'baseline',
-        backgroundColor: '#999999'
+        backgroundColor: '#999999',
+        borderRadius: '4px'
     }
+
 const ModalChangeStatus = props => {
     const { show, setShow, transactions} = props;
     const [statuses, setStatuses] = useState([]);
     const [disabled, setDisabled] = useState(false);
-    const [error, setError] = useState([]);
+    const [error, setError] = useState('');
+    const [processing, setProcessing] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('');
 
-    const { title, body, processing,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
+    const { title, body,confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
 
     useMemo(() => {
         //setSelectedStatus({ value: member.status,  label: member.status });
@@ -43,52 +46,64 @@ const ModalChangeStatus = props => {
     const onSubmit = (event) => {
         event.preventDefault();
         setDisabled(true);
+        setProcessing(true)
         setError('');
+        if(!selectedStatus){
+            setError('Please select transaction status!')
+            setProcessing(false)
+            setDisabled(false);
+            return error
+        }
+
+        if(!selectedStatus){
+            setError('Please state the reason!')
+            setProcessing(false)
+            setDisabled(false);
+            return error
+        }
 
         const form = event.currentTarget;
-
-        const data = { status: selectedStatus.value} ;
-
-        if(selectedStatus){
-            setShow(false)
-            updateTransaction(transactions, data);
-            // return confirmAlert({
-            //     title: 'Error',
-            //     message: 'Endpoint not provided',
-            //     buttons: [
-            //       {
-            //         label: 'Ok',
-            //       }
-            //     ]
-            //   });
+        const data = {
+            status: selectedStatus.value,
+            reason: form.reason.value,
+            transactions: transactions
         }
-        setDisabled(false);
+        updateBulkTransaction(data)
       }
     const handleClose = () => setShow(false);
 
-    const updateTransaction = (transactions, data) => {
-        let count = transactions.length;
-        let status = false
-        transactions.map((transaction,num) =>{
-            TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
-              //  console.log(response);
-                  
-                })
-            if(num+1 === transactions.length ){
+    const updateBulkTransaction = ( data) => {
+       
+            TransactionService.updateBulkTransaction(data).then((response) =>{
+                setProcessing(false)
+                setDisabled(false)
+                handleClose()
+              if(response.success){
                 return confirmAlert({
                     title: 'Succcess',
-                    message: 'Transaction was successfully updated',
+                    message: response.message,
                     buttons: [
                       {
                         label: 'Ok',
+                        onClick: () => {
+                            let pathArray = window.location.pathname.split( '/' );
+                            const page = pathArray[pathArray.length-1]
+                            if(page === 'deposits' || page === 'withdrawals' || page === 'import' || page === 'transactions'){
+                                window.location = `/transactions/${page}`;
+                            }
+                            handleClose();
+                        }
                       }
                     ]
                   });
-            }
-
-        });
+              }else{
+                  setDisabled(false)
+                  setProcessing(false)
+                  setError(response.message);
+              }
+            })
     }
-    
+
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
             {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
@@ -101,17 +116,14 @@ const ModalChangeStatus = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success"> Update Transaction Status</h3>
                         <hr />
+                        { error ?
+                        <div className="alert alert-warning" role="alert">
+                        {error}
+                        </div> : ''}
                         <form onSubmit={onSubmit}>
                                 <Col sx={12}>
                                     {transactions.map((transaction,i) =>(
-                                        <span style={label} class="label">{transaction.txid}</span>
-                                    // <input
-                                    //     type="text"
-                                    //     id="transactionId"
-                                    //     className="form-control form-control-m"
-                                    //     value={transaction.txid}
-                                    //     disabled={true}
-                                    // />
+                                        <><span style={label} class="label">{transaction.txid}</span>{' '}</>
                                     ))}
                                 </Col>
                                 <div className="form-group">
@@ -123,6 +135,7 @@ const ModalChangeStatus = props => {
                                     onChange={item => setSelectedStatus(item)}
                                     className={`basic-multi-select form-control-m`}
                                     classNamePrefix="select"
+                                    required={true}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -132,6 +145,7 @@ const ModalChangeStatus = props => {
                                         id="reason"
                                         name="reason"
                                         className="form-control form-control-m"
+                                        required={true}
                                     />
                                 </div>
                                 <hr />
@@ -151,7 +165,7 @@ const ModalChangeStatus = props => {
                                         className="btn btn-success float-right"
                                         disabled={disabled}
                                     >
-                                    {processing ? 'Processing...' : 'Update'}
+                                    {disabled ? 'Processing...' : 'Update'}
                                 </button>
                             </Col>
                             </Row>
