@@ -87,6 +87,8 @@ export default function EditUser(props) {
     const resetPassword = async (data) =>{
         setDisabled(true)
         const result = await AuthService.resetPassword(data)
+        // console.log(result.success)
+        // console.log(result)
         if(result.success){
             setSuccess(result.message)
         }else{
@@ -207,6 +209,10 @@ export default function EditUser(props) {
                             { error ?
                         <div className="alert alert-warning" role="alert">
                         {error}
+                        </div> : ''}
+                        { success ?
+                        <div className="alert alert-success" role="alert">
+                        {success}
                         </div> : ''}
                             </Col>
                             <Col xs={12} sm={3}>

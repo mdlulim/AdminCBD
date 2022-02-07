@@ -18,6 +18,20 @@ const inputWithDate = {
     width: '25%'
 }
 
+const label ={
+    display: 'inline-block',
+    padding: '2px 4px',
+    fontSize: '11.844px',
+    fontWeight: 'bold',
+    lineHeight: '14px',
+    color: '#ffffff',
+    textShadow: '0 -1px 0 rgb(0 0 0 / 25%)',
+    whiteSpace: 'nowrap',
+    verticalAlign: 'baseline',
+    backgroundColor: '#999999',
+    borderRadius: '4px'
+}
+
 export default function DashboardPage(props) {
     const [show, setShow] = useState(false);
     const [members, setMembers] = useState([]);
@@ -29,6 +43,7 @@ export default function DashboardPage(props) {
     const [transactions, setTransactions] = useState([]);
     const [mainAccount, setMainAccount] = useState({});
     const [adminLevel, setAdminLevel] = useState({});
+    const [totals, setTotals] = useState({});
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
@@ -70,7 +85,7 @@ export default function DashboardPage(props) {
         };
         const types = await MainAccountService.getTransactionType(dateRange);
         const totals = await MainAccountService.getTransactionTotal(dateRange);
-
+        setTotals(totals)
         setPageLoading(false);
     }
     useEffect(() => {
@@ -125,9 +140,9 @@ export default function DashboardPage(props) {
             end_date: endDate
         };
 
-        //  const types = await MainAccountService.getTransactionType(dateRange);
-        //  const totals = await MainAccountService.getTransactionTotal(dateRange);
-        //  setTotals(totals)
+          //const types = await MainAccountService.getTransactionType(dateRange);
+          const totals = await MainAccountService.getTransactionTotal(dateRange);
+          setTotals(totals)
         //  setTransactions(types.results);
         //  setFilteredTransactions(types.results);
 
@@ -241,25 +256,23 @@ export default function DashboardPage(props) {
                                                         <div className="form-row">
                                                             <Col xs={8} md={6}>
                                                                 <h4>Transactions</h4>
-                                                                <p className="subtitle">Transactions</p>
+                                                                <p className="subtitle">Fees Overview</p>
                                                             </Col>
                                                         </div>
                                                     </div>
                                                     <div id="dashboard-ec-line" data-zr-dom-id="zr_0" height="300">
                                                         <Overview.BarChart
                                                             chartData={{
-                                                                labels: ['Deposit', 'Withdrawals', 'Rejected', 'Pending', 'Completed', 'Transfers', 'Products'],
+                                                                labels: ['Deposits', 'Withdrawals', 'Transfers', 'Products', 'registration'],
                                                                 datasets: [
                                                                     {
                                                                         label: '# Transactions',
-                                                                        data: [2000, 0, 5500, 0, 2000, 0, 550],
+                                                                        data: [totals.deposit, totals.withdraw, totals.transfer, totals.product, totals.registration],
                                                                         backgroundColor: [
                                                                             '#86abc9',
                                                                             '#2196f3',
-                                                                            '#d22346',
-                                                                            'rgba(249, 194, 50, 1)',
-                                                                            '#4CAF50',
-                                                                            '#4CAF50',
+                                                                            '#86abc9',
+                                                                            '#2196f3',
                                                                             '#4CAF50',
                                                                         ],
                                                                         borderWidth: 1,
@@ -276,12 +289,18 @@ export default function DashboardPage(props) {
                                                         />
                                                         {/* <canvas data-zr-dom-id="zr_0" height="50" /> */}
                                                         {/* <canvas data-zr-dom-id="zr_0" width="555" height="350" /> */}
-                                                        <span />
+                                                        {/* <span />
                                                         Product Sales: 1<br />
-                                                        <span />
-                                                        Completed Transactions: 1
+                                                        <span /> */}
+                                                        <div className="small text-muted">
+                                                            <><span style={label} class="label">{'Deposits: '+totals.deposit} {mainAccount ? mainAccount.currency_code : ' '}</span>{' '}</>
+                                                            <><span style={label} class="label">{'Withdrawals: '+totals.withdraw} {mainAccount ? mainAccount.currency_code : ' '}</span>{' '}</>
+                                                            <><span style={label} class="label">{'Transfers: '+totals.transfer} {mainAccount ? mainAccount.currency_code : ' '}</span>{' '}</>
+                                                            <><span style={label} class="label">{'Products: '+totals.product} {mainAccount ? mainAccount.currency_code : ' '}</span>{' '}</>
+                                                            <><span style={label} class="label">{'Registration: '+totals.registration} {mainAccount ? mainAccount.currency_code : ' '}</span></>
+                                                        </div>
                                                     </div>
-                                                    <canvas data-zr-dom-id="zr_0" height="190" />
+                                                    {/* <canvas data-zr-dom-id="zr_0" height="190" /> */}
                                                 </CardBody>
                                             </Card>
                                         </Col>
