@@ -251,6 +251,18 @@ class ProductService {
     });
   }
 
+  static async updateProductCategory(id, data) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'PUT',
+      data: data,
+      headers: headers,
+      url: `${Config.API.BASE_URL}/products/categories/${id}`,
+    }).then((res) => {
+      return res;
+    });
+  }
+
   static async getCancelledProcucts() {
     return await axios({
       mode: 'no-cors',

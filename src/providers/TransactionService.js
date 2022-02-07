@@ -97,6 +97,19 @@ class TransactionService {
         });
     }
 
+    static async updateBulkTransaction(data){
+        return await axios({
+          mode: 'no-cors',
+          method: 'PUT',
+          data: data,
+          headers: headers,
+          url: `${Config.API.BASE_URL}/bulk-update/transactions`,
+        }).then((res) =>{
+          const result = res.data;
+          return result;
+        });
+    }
+
     static async approveDeposit(id,data){
       return await axios({
         mode: 'no-cors',
