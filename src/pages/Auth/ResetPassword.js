@@ -107,28 +107,27 @@ export default function ForgotPassword(props) {
                                             <h2 className="mb-1">Reset Password</h2>
                                             <p className="text-sm my-4 mt-0">Enter and confirm your new password.</p>
                                             <div className="form-group">
+                                            <label>New password</label>
                                                 <input
-                                                    placeholder="Enter password"
+                                                    placeholder="Enter new password"
                                                     id="password1"
                                                     name="password1"
                                                     type="password"
-                                                    className={`form-control is-pristine ${errors.password1 ? 'is-touched av-invalid is-invalid' : 'is-untouched av-valid'}`}
-                                                    {...register("password1", { required: true, minLength: 6, validate: value => passwordValidationSchema.validate(value) })}
+                                                    className={`form-control ${errors.password1 ? 'is-invalid' : ''}`}
+                                                    ref={register({ required: true })}
                                                     disabled={processing}
                                                 />
                                                 {errors.password1 && <small className="invalid-feedback">Invalid password entered.</small>}
                                             </div>
                                             <div className="form-group">
+                                            <label>Confirm password</label>
                                                 <input
-                                                    placeholder="Repeat password"
+                                                    placeholder="Confirm password"
                                                     id="password2"
                                                     name="password2"
                                                     type="password"
-                                                    className={`form-control is-pristine ${errors.password2 ? 'is-touched av-invalid is-invalid' : 'is-untouched av-valid'}`}
-                                                    {...register("password2", {
-                                                        validate: value =>
-                                                            value === password.current || 'Passwords do not match'
-                                                    })}
+                                                    className={`form-control ${errors.password2 ? 'is-invalid' : ''}`}
+                                                    ref={register({ required: true })}
                                                     disabled={processing}
                                                 />
                                                 {errors.password2 && <small className="invalid-feedback">Passwords do not match.</small>}
@@ -140,7 +139,7 @@ export default function ForgotPassword(props) {
                                             <button
                                                 type="submit"
                                                 form="reset-password-form"
-                                                className="btn bg-gradient-dark w-100"
+                                                className="btn btn-secondary btn-block w-100"
                                                 disabled={processing}
                                             >
                                                 {processing ?
