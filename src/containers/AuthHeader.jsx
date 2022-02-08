@@ -21,9 +21,7 @@ export default function AuthHeader(props) {
                 <a href="/" className='pl-2'>
                     <img src="/assets/img/cbi_logo.svg" height='60px' alt="# CBI GLOBAL" />
                 </a>
-                <a href="/" className="logo-text d-lg-none">
-                    <strong className="text-primary">#</strong><strong>CBI</strong>
-                </a>
+               
                 <div
                     className="rw-btn rw-btn--nav"
                     data-action="aside-hide"
