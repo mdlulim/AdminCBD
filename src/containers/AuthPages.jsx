@@ -13,7 +13,7 @@ export default function AuthPages(props) {
                     class="content d-none d-lg-block"
                     id="content"
                     style={{
-                        background : 'url(/assets/img/backgrounds/bridge.jpeg) left center no-repeat',
+                        background : 'url(/assets/img/cbi_logo_full.svg) left center no-repeat',
                         backgroundSize: '100% auto'
                     }}
                 />
