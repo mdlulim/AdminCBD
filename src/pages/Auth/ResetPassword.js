@@ -26,10 +26,8 @@ export default function ForgotPassword(props) {
         const verify = async () => {
             const { params } = match;
             const { token } = params;
-            console.log(params.token)
             if (token) {
                 const results = await AuthService.verifyToken(token, 'reset-password');
-                console.log(results)
                 const { success } = results;
                 if (success) {
                     setToken(token);
@@ -57,9 +55,7 @@ export default function ForgotPassword(props) {
 
     async function onSubmit(data) {
         setProcessing(true);
-        console.log(token);
         data.token = token;
-        console.log(data);
         const response = await AuthService.confirmResetPassword(data);
         console.log(response);
         const { success } = response;
