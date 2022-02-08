@@ -63,7 +63,7 @@ export default function ReportList(props) {
         cell: row => (
             <div>
                 <a
-                    href={`/reports/${row.id}`}
+                    href={`/reports/reports/${row.id}`}
                     className="btn btn-secondary btn-icon btn-sm margin-right-10"
                 >
                     <span className="fa fa-eye" />

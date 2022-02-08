@@ -203,12 +203,6 @@
                     "title": "Countries",
                     "link": "/countries",
                     "icon": null
-                },
-                {
-                    "id": "forms",
-                    "title": "Forms",
-                    "link": "/forms",
-                    "icon": null
                 }
             ]
         }

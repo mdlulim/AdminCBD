@@ -1,6 +1,12 @@
 import axios from 'axios';
 import Config from '../config';
 import SessionProvider from './SessionProvider';
+import {
+  osName,
+  osVersion,
+  browserName,
+  isMobile,
+} from 'react-device-detect';
 
 const authToken = SessionProvider.getToken();
 
@@ -63,6 +69,54 @@ class AuthService {
           url: `${Config.API.BASE_URL}/users?group=admin`,
         });
       }
+
+      static async verifyToken(token, type = 'activation', data = {}) {
+        if (token) {
+          headers = {
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+        const device = {
+          browser: browserName,
+          os_name: osName,
+          os_version: osVersion,
+          is_mobile: isMobile,
+        };
+        return await axios({
+          mode: 'no-cors',
+          method: 'POST',
+          url: `${Config.API.BASE_URL_LOGIN}tokens/verify`,
+          crossdomain: true,
+          data: { ...data, type, device },
+          headers,
+        })
+          .then((json) => json.data)
+          .then(res => res)
+          .catch((err) => {
+            if (err.response) return err.response.data;
+            return err;
+          });
+      };
+
+      static async confirmResetPassword(data) {
+        return await axios({
+          mode: 'no-cors',
+          method: 'POST',
+          url: `${Config.API.BASE_URL_LOGIN}password/reset/confirm`,
+          crossdomain: true,
+          data,
+          headers: {
+            'Authorization': `Bearer ${data.token}`,
+          },
+        })
+          .then((json) => json.data)
+          .then(res => res)
+          .catch((err) => {
+            if (err.response) return err.response.data;
+            return err;
+          });
+      };
+    
 
       static async resetPassword(email){
         return await axios({

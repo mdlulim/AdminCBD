@@ -168,7 +168,6 @@ export default function EditUser(props) {
                 mobile      : data.mobile,
                 status      : data.status,
                 verified    : true,
-                permissions : permissionObject
         }
         console.log(finalObject)
 
