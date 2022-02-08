@@ -356,7 +356,7 @@ export default function Transactions(props) {
           />
           <div>
             <div style={myButtons}>
-              {/* <button
+              <button
                 className="btn btn-secondary m-2"
                 type="button"
                 onClick={e => {
@@ -364,7 +364,7 @@ export default function Transactions(props) {
                   setShow(true);
                 }}>
                 Search By Date
-              </button> */}
+              </button> 
               {permissions && permissions.update_access &&
                 <button
 
