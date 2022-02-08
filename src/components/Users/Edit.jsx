@@ -535,7 +535,7 @@ export default function EditUser(props) {
                                 form="update-user-form"
                                 className="btn btn-secondary"
                                 disabled={disabled}>
-                                   { disabled ? 'Preocessing...' : 'Save Changes'} 
+                                   { disabled ? 'Preocessing...' : 'Save/Verify'} 
                                 </button>
                             </div>
                     </NavTabContent>
