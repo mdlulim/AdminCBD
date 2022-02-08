@@ -5,6 +5,7 @@ import { AuthService } from 'providers';
 import { passwordValidationSchema } from 'static/regex';
 import useForm from "react-hook-form";
 import Swal from 'sweetalert2';
+import { ConsoleView } from 'react-device-detect';
 
 export default function ForgotPassword(props) {
     const { match } = props;
@@ -25,8 +26,10 @@ export default function ForgotPassword(props) {
         const verify = async () => {
             const { params } = match;
             const { token } = params;
+            console.log(params.token)
             if (token) {
                 const results = await AuthService.verifyToken(token, 'reset-password');
+                console.log(results)
                 const { success } = results;
                 if (success) {
                     setToken(token);
@@ -54,7 +57,7 @@ export default function ForgotPassword(props) {
 
     async function onSubmit(data) {
         setProcessing(true);
-        console.log(data);
+        console.log(token);
         data.token = token;
         console.log(data);
         const response = await AuthService.confirmResetPassword(data);
