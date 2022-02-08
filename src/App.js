@@ -8,7 +8,7 @@ import config from './config';
 // auth pages/routes
 import AuthLogin from 'pages/Auth/Login';
 import AuthForgotPassword from 'pages/Auth/ForgotPassword';
-
+import AuthResetPassword from 'pages/Auth/ResetPassword';
 // page not found
 import PageNotFound from 'pages/PageNotFound';
 
@@ -98,6 +98,7 @@ const App = () => {
 					<Redirect exact from="/" to="/dashboard" />
 					<Route exact path="/login" component={(props) => <AuthLogin config={settings} {...props} setMenu={setMenu} setRole={setRole} />} />
 					<Route exact path="/forgot-password" component={(props) => <AuthForgotPassword config={settings} {...props} setMenu={setMenu} />} />
+					<Route exact path="/reset-password/:token" component={(props) => <AuthResetPassword config={settings} {...props} setMenu={setMenu} />} />
 
 					<PrivateRoute exact path="/profile" component={(props) => <Profile config={settings} {...props} menu={menu} />} />
 					<PrivateRoute exact path="/settings" component={(props) => <ProfileSettings config={settings} {...props} menu={menu} />} />
