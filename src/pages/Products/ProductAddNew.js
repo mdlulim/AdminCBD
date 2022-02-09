@@ -2,19 +2,17 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Card, CardBody, Col, Row, CarouselItem } from 'reactstrap';
 import { useParams, useHistory } from 'react-router-dom';
 import { AuthLayout } from 'containers';
-import { Products } from 'components';
 import { EditorState } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
 import Select from 'react-select';
 import { confirmAlert } from 'react-confirm-alert';
-import NumberFormat from 'react-number-format';
 import { ProductService } from '../../providers';
 import RecentProduct from './RecentProduct';
 import Moment from 'react-moment';
 import useForm from 'react-hook-form';
-import { TableBody } from '@material-ui/core';
+import Swal from 'sweetalert2';
 
 const ProductAddNew = props => {
     const breadcrumb = { heading: "New Product" };
@@ -52,6 +50,10 @@ const ProductAddNew = props => {
     const [pageLoading, setPageLoading] = useState(true);
     const [fees, setFees] = useState({})
     const [indicators, setIndicators] = useState({})
+    const [educator, setEducator] = useState({ value: 'educator_fee',  label: 'Educator Fee (CBI)' });
+    const [registration, setRegistration] = useState({ value: 'registration_fee',  label: 'Registration Fee (CBI)' });
+    const [reg, setReg] = useState('Registration Fee (CBI)')
+    const [educ, setEduc] = useState('Educator Fee (CBI)')
     const params = useParams();
     const { id } = params;
 
@@ -120,7 +122,7 @@ const ProductAddNew = props => {
 
         if(data.inputs && data.inputs.selectedRows){
         const filteredItems = data.inputs.selectedRows.filter(item => (
-            (item.value != 'title' && item.value != 'currency_code' && item.value != 'body' && item.value != 'status')
+                (item.value != 'title' && item.value != 'status' && item.value != 'currency_code' && item.value != 'body' && item.value != 'educator_fee' && item.value != 'educator_percentage' && item.value != 'registration_fee' && item.value != 'registration_percentage')
           ));
         setInputs(filteredItems);
         setDisabled(false)
@@ -146,6 +148,17 @@ const ProductAddNew = props => {
         setError('');
         const category = categories.filter(option => option.code === selectedProductType)[0];
 
+        if(registration.value === 'registration_percentage'){
+            fees.registration_percentage = parseFloat(data.register);
+        }else if(registration.value === 'registration_fee'){
+            fees.registration_fee = parseFloat(data.register);
+        }
+
+        if(educator.value === 'educator_percentage'){
+            fees.educator_percentage = parseFloat(data.educator);
+        }else if(educator.value === 'educator_fee'){
+            fees.educator_fee = parseFloat(data.educator);
+        }
         // const title = form.title.value;
         let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
         const productCode = generateUniqueCode(5);
@@ -174,19 +187,16 @@ const ProductAddNew = props => {
             ProductService.addProduct(data2).then((response) => {
                 setDisabled(false)
                 if (response.status) {
-                    setShow(true);
-                    confirmAlert({
-                        title: 'Confirm submit',
-                        message: 'Product was added successfully',
-                        buttons: [
-                            {
-                                label: 'Yes',
-                                onClick: () => {
-                                    window.location = '/products/add';
-                                }
-                            }
-                        ]
-                    })
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Product was added successfully',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    return setTimeout(async function () {
+                        window.location.href = '/products/add';
+                    }, 3000);
                 } else {
                     setError(response.message);
                 }
@@ -198,6 +208,16 @@ const ProductAddNew = props => {
         }
 
     }
+
+    const regOptions = [
+        { value: 'registration_fee',  label: 'Registration Fee (CBI)' },
+        { value: 'registration_percentage', label: 'Registration Percentage (%)' }
+      ];
+
+      const educatorOptions = [
+        { value: 'educator_fee',  label: 'Educator Fee (CBI)' },
+        { value: 'educator_percentage', label: 'Educator Percentage (%)' }
+      ];
     return (
         <AuthLayout {...props}
             breadcrumb={{ active: "Add New Product" }}
@@ -209,7 +229,6 @@ const ProductAddNew = props => {
                 {!pageLoading &&
                 <>
             <Row className="mt-4">
-            
                 <Card>
                     <CardBody>
                     <form
@@ -256,7 +275,7 @@ const ProductAddNew = props => {
                                         />
                                         {/* {errors.product_subcategory && <span className="help-block invalid-feedback">Please select subcategory</span>} */}
                                     </Col>
-                                    <Col md={12}>
+                                    <Col md={6}>
                                         <label htmlFor="name">Product Title *</label>
                                         <input
                                             type="text"
@@ -279,6 +298,71 @@ const ProductAddNew = props => {
                                             classNamePrefix="select"
                                         />
                                     </Col>
+                                    <Col md={6}>
+                                        <label htmlFor="currency">Select Educator</label>
+                                        <Select
+                                            id="select"
+                                            name="select"
+                                            value={product ? educatorOptions.filter(option => option.value === educator.value): ''}
+                                            options={educatorOptions}
+                                            onChange={e => {
+                                                    setEducator(e)
+                                                    if(e.value === 'educator_fee'){
+                                                        setEduc('Educator Fee (CBI)')
+                                                    }else{
+                                                        setEduc('Educator Percentage (%)')
+                                                    }
+                                                }
+                                            }
+                                            className={`basic-multi-select form-control-m`}
+                                            classNamePrefix="select"
+                                            />
+                                </Col>
+                                <Col md={6}>
+                                    <label htmlFor="name">{educ ? educ : 'Educator'}</label>
+                                    <input
+                                        type="text"
+                                        id="educator"
+                                        name="educator"
+                                        className={`form-control form-control-m ${errors.educator ? 'is-invalid' : ''}`}
+                                        ref={register({ required: true })}
+                                    />
+                                    {errors.educator && <span className="help-block invalid-feedback">Please enter educator</span>}
+
+                                </Col>
+                                <Col md={6}>
+                                        <label htmlFor="currency">Select Registration</label>
+                                        <Select
+                                            id="select"
+                                            name="select"
+                                            value={product ? regOptions.filter(option => option.value === registration.value): ''}
+                                            options={regOptions}
+                                            onChange={e => {
+                                                    setRegistration(e)
+                                                    if(e.value === 'registration_fee'){
+                                                        setReg('Registration Fee (CBI)')
+                                                    }else{
+                                                        setReg('Registration Percentage (%)')
+                                                    }
+                                                }
+                                            }
+                                            className={`basic-multi-select form-control-m`}
+                                            classNamePrefix="select"
+                                            />
+                                </Col>
+                                <Col md={6}>
+                                    <label htmlFor="name">{ reg ? reg : 'Registration'}</label>
+                                    <input
+                                        type="text"
+                                        id="register"
+                                        name="register"
+                                        className={`form-control form-control-m ${errors.register ? 'is-invalid' : ''}`}
+                                        ref={register({ required: true })}
+                                    />
+                                    {errors.register && <span className="help-block invalid-feedback">Please enter registration</span>}
+    
+
+                                </Col>
                                     {inputs.map((item)=>{
                                         let value = item.value;
                                         let group = item.group;

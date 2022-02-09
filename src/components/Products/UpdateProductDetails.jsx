@@ -18,15 +18,8 @@ export default function UpdateProductDetails(props) {
     const breadcrumb = { heading: "Product Details" };
     const [disabled, setDisabled] = useState(false);
     const [activeTab, setActiveTab] = useState('referals');
-    const [selectedGroup, setSelectedGroup] = useState('');
-    const [show, setShow] = useState(true);
-    const [showCBIx7, setShowCBIx7] = useState(true);
-    const [showFixedPlan, setShowFixedPlan] = useState(true);
-	const [errorAmount, setErrorAmount] = useState(true);
     const [errorReg, setErrorReg] = useState(true);
 	const [amountFee, setAmountFee] = useState(0);
-	const [educatorFee, setEducatorFee] = useState(0);
-	const [registrationFee, setRegistrationFee] = useState(0);
 	const [error, setError] = useState('');
     const [product, setProduct] = useState({});
     const [productCategories, setProductCategories] = useState([]);
@@ -44,7 +37,7 @@ export default function UpdateProductDetails(props) {
     const [educator, setEducator] = useState({});
     const [registration, setRegistration] = useState({});
     const [inputs, setInputs] = useState([]);
-    const [indicators, setIndicators] = useState({})
+    const [indicators, setIndicators] = useState({});
     const [reg, setReg] = useState('')
     const [educ, setEduc] = useState('')
 
@@ -87,9 +80,7 @@ export default function UpdateProductDetails(props) {
                 setSelectedProductType({ value: category.code, label: category.title, id: category.id });
             }
             setSelectedCurrency(productDetails.currency_code);
-            setEducatorFee(productDetails.educator_fee);
             setAmountFee(productDetails.price)
-            setRegistrationFee(productDetails.registration_fee);
             setSelectedStatus(productDetails.status)
             if(productDetails.body){
                 setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetails.body))))

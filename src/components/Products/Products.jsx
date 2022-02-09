@@ -88,7 +88,7 @@ export default function Products(props) {
   // table headings definition
   const columns = [
     {
-      name: 'Title',
+      name: 'Product Name',
       selector: 'title',
       sortable: true,
       wrap: true,
@@ -100,14 +100,14 @@ export default function Products(props) {
       name: 'Educator Fee',
       selector: 'educator_fee',
       sortable: true,
-      cell: row => <div>{row.educator_fee ? row.currency_code + ' ' + row.educator_fee : ''} {row.educator_percentage ? row.educator_percentage + ' %' : ''}</div>
+      cell: row => <div>{row.fees.educator_fee ? row.fees.educator_fee+' '+row.currency_code : ''} {row.fees.educator_percentage ? row.fees.educator_percentage + ' %' : ''}</div>
     }, {
       name: 'Registration Fee',
       selector: 'registration_fee',
       sortable: true,
-      cell: row => <div>{row.registration_fee ? row.currency_code + ' ' + row.registration_fee : ''} {row.educator_percentage ? row.educator_percentage + ' %' : ''}</div>
+      cell: row => <div>{row.fees.registration_fee ? row.fees.registration_fee+ ' '+row.currency_code : ''} {row.fees.educator_percentage ? row.fees.educator_percentage + ' %' : ''}</div>
     }, {
-      name: 'Product Amount',
+      name: 'Amount',
       selector: 'price',
       sortable: true,
       cell: row => <div>{row.currency_code}  {row.price}</div>
