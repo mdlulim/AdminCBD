@@ -85,7 +85,7 @@ class AuthService {
         return await axios({
           mode: 'no-cors',
           method: 'POST',
-          url: `${Config.API.BASE_URL_LOGIN}tokens/verify`,
+          url: `${Config.API.BASE_URL_LOGIN}/tokens/verify`,
           crossdomain: true,
           data: { ...data, type, device },
           headers,
@@ -102,7 +102,7 @@ class AuthService {
         return await axios({
           mode: 'no-cors',
           method: 'POST',
-          url: `${Config.API.BASE_URL_LOGIN}password/reset/confirm`,
+          url: `${Config.API.BASE_URL_LOGIN}/password/reset/confirm`,
           crossdomain: true,
           data,
           headers: {
@@ -118,11 +118,12 @@ class AuthService {
       };
     
 
-      static async resetPassword(email){
+      static async resetPassword(data){
+        data.baseurl = `${Config.API.BASE_URL_LOGIN}`
         return await axios({
           mode: 'no-cors',
           method: 'POST',
-          data: email,
+          data: data,
           headers: headers,
           url: `${Config.API.BASE_URL_LOGIN}/password/reset`,
         }).then((res) =>{
