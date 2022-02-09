@@ -11,6 +11,7 @@ import { ProductService } from '../../providers';
 import Select from 'react-select';
 import NumberFormat from 'react-number-format';
 import useForm from 'react-hook-form';
+import Swal from 'sweetalert2';
 
 export default function UpdateProductDetails(props) {
     const { register, handleSubmit, reset, errors } = useForm();
@@ -229,18 +230,16 @@ export default function UpdateProductDetails(props) {
     const update = (data) =>{
         ProductService.updateProduct(id, data).then((response) =>{
             if (response.success) {
-                return confirmAlert({
-                    title: 'Succcess',
-                    message: 'Product was successfully updated',
-                    buttons: [
-                    {
-                        label: 'Ok',
-                        onClick: () => {
-                            window.location = `/products/${id}`;
-                        }
-                    }
-                    ]
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Product was updated successfully',
+                    showConfirmButton: false,
+                    timer: 3000
                 });
+                return setTimeout(async function () {
+                    window.location.href = `/products/${id}`;
+                }, 3000);
             }else{
                 setError(response.message ? response.message : 'Something went wrong when while updating product!')
             }
