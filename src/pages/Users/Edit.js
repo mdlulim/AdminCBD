@@ -58,51 +58,38 @@ export default function EditUserPage(props) {
         fetchData();
     }, []);
 
-    const onSubmit = (event) => {
-        // event.preventDefault();
-        // const form = event.currentTarget;
-        // if(!form.group_id.value){
-        //     setError('Validation error. Please select admin user role!')
-        //     setDisabled(false)
-        //     return 'Validation error. Please select admin user role'
-        // }
+    const onSubmit = (form) => {
+        const role = roles.filter(option => option.id === form.group_id)[0];
+        // console.log(form, ' ', user.permissions ? user.permissions : role.permissions)
+        const data = {
+                first_name  : form.first_name,
+                last_name   : form.last_name,
+                email       : form.email,
+                username    : form.username,
+                mobile      : form.mobile,
+                status      : form.status,
+                group_id    : form.group_id,
+                permissions : user.permissions ? user.permissions : role.permissions,
+            };
 
-        // if(form.first_name.value === '' || form.last_name.value === '' || form.email.value === '' || form.username.value === '' || form.status.value === ''){
-        //     setError('Validation error. All field are required!')
-        //     setDisabled(false)
-        //     return 'All field are required!'
-        // }
-
-        // const role = roles.filter(option => option.id === form.group_id.value)[0];
-        // const data = {
-        //         first_name  : form.first_name.value,
-        //         last_name   : form.last_name.value,
-        //         email       : form.email.value,
-        //         username    : form.username.value,
-        //         mobile      : form.mobile.value,
-        //         status      : form.status.value,
-        //         group_id    : form.group_id.value,
-        //         permissions : user.permissions ? user.permissions : role.permissions,
-        //     };
-
-        //     UserService.updateUser(user.id, data).then((response) => {
-        //         console.log(response)
-        //         if (response.success) {
-        //             return confirmAlert({
-        //                 title: 'Succcess',
-        //                 message: 'User was successfully updated',
-        //                 buttons: [
-        //                     {
-        //                         label: 'Ok',
-        //                     }
-        //                 ]
-        //             });
-        //         } else {
-        //             setError(response.message);
-        //         }
-        //         setDisabled(false);
-        //         setProcessing(false);
-        //     })
+            UserService.updateUser(user.id, data).then((response) => {
+                console.log(response)
+                if (response.success) {
+                    return confirmAlert({
+                        title: 'Succcess',
+                        message: 'User was successfully updated',
+                        buttons: [
+                            {
+                                label: 'Ok',
+                            }
+                        ]
+                    });
+                } else {
+                    setError(response.message);
+                }
+                setDisabled(false);
+                setProcessing(false);
+            })
     }
 
     return (
@@ -129,18 +116,18 @@ export default function EditUserPage(props) {
             }}
         >
             {!pageLoading &&
-             
-            <div id="users">
-                <Card className="margin-bottom-15">
-                    <Common.Widget
-                        icon="li-pencil5"
-                        title={`${user.first_name} ${user.last_name}`}
-                        subtitle={user.group.label}
-                        wrapperClass="widget--items-middle"
-                    />
-                    <Users.Edit {...user} roles={roles} onInfoSubmit={onSubmit} />
-                </Card>
-            </div>
+
+                <div id="users">
+                    <Card className="margin-bottom-15">
+                        <Common.Widget
+                            icon="li-pencil5"
+                            title={`${user.first_name} ${user.last_name}`}
+                            subtitle={user.group.label}
+                            wrapperClass="widget--items-middle"
+                        />
+                        <Users.Edit {...user} roles={roles} onInfoSubmit={onSubmit} />
+                    </Card>
+                </div>
             }
         </AuthLayout>
     );

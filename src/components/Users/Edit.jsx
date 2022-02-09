@@ -328,7 +328,7 @@ export default function EditUser(props) {
                             role="form"
                             autoComplete="off"
                             className="text-start"
-                            onSubmit={handleSubmit(onSubmit)}
+                            onSubmit={handleSubmit(onInfoSubmit)}
                         >
                             <Row>
                                 <Col xs={12} sm={8}>
@@ -478,6 +478,7 @@ export default function EditUser(props) {
                                             name="group_id"
                                             className="form-control"
                                             defaultValue={group_id}
+                                            ref={register({ required: true })}
                                         >
                                             {roles.map(item => (
                                                 <option key={item.id} value={item.id}>
@@ -494,9 +495,11 @@ export default function EditUser(props) {
                                     <div className="form-group">
                                         <input
                                             type="text"
+                                            name="assigned"
                                             className="form-control"
                                             defaultValue="12 Jan 2022 10:00am"
                                             disabled
+                                            ref={register({ required: true })}
                                         />
                                     </div>
                                 </Col>
@@ -507,9 +510,11 @@ export default function EditUser(props) {
                                     <div className="form-group">
                                         <input
                                             type="text"
+                                            name="assigned_by"
                                             className="form-control"
                                             defaultValue="Administrator"
                                             disabled
+                                            ref={register({ required: true })}
                                         />
                                     </div>
                                 </Col>
