@@ -62,7 +62,7 @@ export default function EditUser(props) {
         onInfoSubmit
     } = props;
     const [activeTab, setActiveTab] = useState('overview');
-    const { register, handleSubmit, errors } = useForm();
+    const { register, handleSubmit, reset, errors } = useForm();
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [disabled, setDisabled] = useState(false);
@@ -87,11 +87,12 @@ export default function EditUser(props) {
     const resetPassword = async (data) =>{
         setDisabled(true)
         const result = await AuthService.resetPassword(data)
+        // console.log(result.success)
+        // console.log(result)
         if(result.success){
             setSuccess(result.message)
         }else{
             setError(result.message);
-            
         }
         setDisabled(false)
     }
@@ -161,15 +162,33 @@ export default function EditUser(props) {
         })
 
         let finalObject = {
-            permissions: permissionObject,
-            updated: Date.now(),
+                first_name  : data.first_name, 
+                last_name   : data.last_name, 
+                email       : data.email, 
+                mobile      : data.mobile,
+                status      : data.status,
+                verified    : true,
         }
+        console.log(finalObject)
 
         const res = await PermissionLevelService.updateAdminUser(id, finalObject)
+        if(res.data.success){
+            setSuccess('User was successfully updated')
+            setError('')
+        }else{
+            setError(res.data.message)
+            setSuccess('')
+        }
     };
 
     return (
         <div>
+            <Row>
+                <Col xs={12}>     
+                    { error ?  <div className="alert alert-warning" role="alert"> {error}  </div> : ''}
+                    { success ? <div className="alert alert-success" role="alert"> {success}  </div> : ''}
+                </Col>
+            </Row>
             <ul className="nav nav-tabs margin-top-20" id="myTab" role="tablist">
                 <NavTabLink
                     id="overview"
@@ -204,10 +223,6 @@ export default function EditUser(props) {
                     >
                         <Row>
                             <Col xs={12}>
-                            { error ?
-                        <div className="alert alert-warning" role="alert">
-                        {error}
-                        </div> : ''}
                             </Col>
                             <Col xs={12} sm={3}>
                                 <p>
@@ -307,8 +322,14 @@ export default function EditUser(props) {
                         title="Information"
                         active={activeTab === 'information'}
                     >
-                        <form onSubmit={onInfoSubmit}>
-
+                        <form
+                            noValidate
+                            id="update-user-form"
+                            role="form"
+                            autoComplete="off"
+                            className="text-start"
+                            onSubmit={handleSubmit(onSubmit)}
+                        >
                             <Row>
                                 <Col xs={12} sm={8}>
                                     <Row className="form-group">
@@ -321,9 +342,11 @@ export default function EditUser(props) {
                                                 id="first_name"
                                                 type="text"
                                                 name="first_name"
-                                                className="form-control"
                                                 defaultValue={first_name}
+                                                className={`form-control ${errors.first_name ? 'is-invalid' : ''}`}
+                                                ref={register({ required: true })}
                                             />
+                                            {errors.first_name && <span className="help-block invalid-feedback">Please enter first name</span>}
                                         </Col>
                                     </Row>
                                     <Row className="form-group">
@@ -336,9 +359,11 @@ export default function EditUser(props) {
                                                 id="last_name"
                                                 type="text"
                                                 name="last_name"
-                                                className="form-control"
                                                 defaultValue={last_name}
+                                                className={`form-control ${errors.last_name ? 'is-invalid' : ''}`}
+                                                ref={register({ required: true })}
                                             />
+                                            {errors.last_name && <span className="help-block invalid-feedback">Please enter last name</span>}
                                         </Col>
                                     </Row>
                                     <Row className="form-group">
@@ -352,9 +377,11 @@ export default function EditUser(props) {
                                                 type="email"
                                                 id="email"
                                                 name="email"
-                                                className="form-control"
                                                 defaultValue={email}
+                                                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                                                ref={register({ required: true })}
                                             />
+                                            {errors.email && <span className="help-block invalid-feedback">Please enter email</span>}
                                         </Col>
                                     </Row>
                                     <Row className="form-group">
@@ -368,9 +395,11 @@ export default function EditUser(props) {
                                                 type="text"
                                                 id="username"
                                                 name="username"
-                                                className="form-control"
                                                 defaultValue={username}
+                                                className={`form-control ${errors.username ? 'is-invalid' : ''}`}
+                                                ref={register({ required: true })}
                                             />
+                                            {errors.username && <span className="help-block invalid-feedback">Please enter username</span>}
                                         </Col>
                                     </Row>
                                     <Row className="form-group">
@@ -383,9 +412,11 @@ export default function EditUser(props) {
                                                 type="text"
                                                 id="mobile"
                                                 name="mobile"
-                                                className="form-control"
                                                 defaultValue={mobile}
+                                                className={`form-control ${errors.last_name ? 'is-invalid' : ''}`}
+                                                ref={register({ required: true })}
                                             />
+                                            {errors.last_name && <span className="help-block invalid-feedback">Please enter last name</span>}
                                         </Col>
                                     </Row>
                                     <Row className="form-group">
@@ -400,13 +431,30 @@ export default function EditUser(props) {
                                                 name="status"
                                                 className="form-control"
                                                 defaultValue={status}
+                                                className={`form-control ${errors.status ? 'is-invalid' : ''}`}
+                                                ref={register({ required: true })}
                                             >
                                                 <option value="Pending">Pending</option>
                                                 <option value="Active">Active</option>
                                                 <option value="Archived">Archived</option>
                                                 <option value="Blocked">Blocked</option>
                                             </select>
+                                            {errors.status && <span className="help-block invalid-feedback">Please select status</span>}
                                         </Col>
+                                        {/* <Col sm={10}>
+                                            <select
+                                                id="verified"
+                                                type="text"
+                                                name="verified"
+                                                className="form-control"
+                                                className={`form-control ${errors.verified ? 'is-invalid' : ''}`}
+                                                ref={register({ required: false })}
+                                            >
+                                                <option value="true">Yes</option>
+                                                <option value="false">No</option>
+                                            </select>
+                                            {errors.verified && <span className="help-block invalid-feedback">Please select verification</span>}
+                                        </Col> */}
                                     </Row>
                                 </Col>
                             </Row>
@@ -479,12 +527,16 @@ export default function EditUser(props) {
                                     </div>
                                 </Col>
                             </Row>
-                            <div className="text-right margin-bottom-20">
-                                <button type="submit" className="btn btn-secondary">
-                                    Save Changes
+                        </form>
+                        <div className="text-right margin-bottom-20">
+                                <button 
+                                type="submit" 
+                                form="update-user-form"
+                                className="btn btn-secondary"
+                                disabled={disabled}>
+                                   { disabled ? 'Preocessing...' : 'Save/Verify'} 
                                 </button>
                             </div>
-                        </form>
                     </NavTabContent>
                     <NavTabContent
                         id="permissions"
