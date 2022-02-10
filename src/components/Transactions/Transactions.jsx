@@ -1,44 +1,17 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Card, CardBody, Row, Col, Input, FormGroup, Label } from 'reactstrap';
+import { Card, CardBody, Row, Col, Input } from 'reactstrap';
 import Moment from 'react-moment';
 import { useParams, useHistory } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Modal } from 'react-bootstrap';
 import ModalChangeStatus from './ModalChangeStatus';
 import TransactionDetails from '../Transactions/TransactionDetails';
-import ExportToExcel from './ExportToExcel';
 import ModalBulkUpdate from './ModalBulkUpdate';
-import { TransactionService, MemberService, SessionProvider, FileStorageProvider } from '../../providers';
+import { TransactionService, SessionProvider, FileStorageProvider } from '../../providers';
 import DatePicker from "react-datepicker";
 import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
 import CsvDownloader from 'react-csv-downloader';
-import { Filter } from 'react-feather';
-// styles
-const customStyles = {
-
-  headCells: {
-    style: {
-      color: 'rgba(0,0,0,.54)',
-      paddingLeft: '18px', // override the cell padding for head cells
-      paddingRight: '18px',
-    },
-  },
-  cells: {
-    style: {
-      paddingLeft: '18px', // override the cell padding for data cells
-      paddingRight: '18px',
-    },
-  },
-};
-
-const iconPadding = {
-  paddingRight: '3px',
-}
-
-const selectPadding = {
-  paddingRight: '10px',
-}
 
 const inputWith = {
   width: '20%'
@@ -91,12 +64,6 @@ const Money = (row) => {
   return <strong className={'text-' + badge}>{simbol + '' + row.amount} {row.currency.code}</strong>
 };
 
-// Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
-
-
-
-
-
 export default function Transactions(props) {
   const { transactionType, setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
@@ -106,19 +73,13 @@ export default function Transactions(props) {
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [csvTransactions, setCsvTransactions] = useState([])
-  const [temp, setTemp] = useState({});
   const handleClose = () => setShow(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [checkCreatedDate, setCheckCreatedDate] = useState(true);
-  const [checkActionDate, setCheckActionDate] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState(false);
-  const [editStatus, setEditStatus] = useState(true);
-  const [members, setMembers] = useState([]);
   const [adminLevel, setAdminLevel] = useState({});
-  const [wealthCreaters, setWealthCreaters] = useState([]);
   const [selectedRows, setSelectedRows] = React.useState([]);
-  const [users, setUsers] = React.useState([]);
   const [toggleCleared, setToggleCleared] = React.useState(false);
   const [selectedTransPOP, setSelectedTransPOP] = useState('');
   const [showApproveMember, setShowApproveMember] = useState(false);
@@ -127,15 +88,15 @@ export default function Transactions(props) {
   const params = useParams();
   const { id } = params;
   const csvDownloaderClick = useRef(null)
+  const [page, setPage] = useState(1);
+  const [totalTransactions, setTotalTransactions] = useState(0)
+  const [countPerPage, setCountPerPage] = useState(10);
+  const [pending, setPending] = React.useState(true);
 
-
-  useMemo(() => {
-    if (SessionProvider.isValid()) {
-      const user = SessionProvider.get();
-      setAdminLevel(user.permission_level)
-    }
-
-    TransactionService.getTransactions().then((res) => {
+  const fetch = (offset, limit) => {
+    setPending(true)
+    TransactionService.getTransactions(offset, limit, transactionType).then((res) => {
+      setTotalTransactions(res.count)
       const transaList = res.results;
 
       if (id != null && id.length > 15) {
@@ -143,29 +104,23 @@ export default function Transactions(props) {
         setTransactions(results);
         setFilteredTransactions(results);
       } else {
-        if (transactionType === 'deposit') {
-          const results = transaList.filter(item => item.subtype.toLowerCase() === "deposit");
-          console.log(results)
-          setTransactions(results);
-          setFilteredTransactions(results);
-        } else if (transactionType === 'withdrawals') {
-          const results = transaList.filter(item => item.subtype.toLowerCase() === "withdraw");
-          setTransactions(results);
-          setFilteredTransactions(results);
-        } else if (transactionType === 'transfers') {
-          const results = transaList.filter(item => item.subtype.toLowerCase() === "transfer");
-          setTransactions(results);
-          setFilteredTransactions(results);
-        } else if (transactionType === 'all') {
-          setTransactions(transaList);
-          setFilteredTransactions(transaList);
-        }
+        setTransactions(res.results);
+        setFilteredTransactions(res.results);
       }
 
+      setPending(false)
       setPageLoading(false);
-    });
+    })
+  }
 
-  }, [setPageLoading]);
+  useMemo(() => {
+    if (SessionProvider.isValid()) {
+      const user = SessionProvider.get();
+      setAdminLevel(user.permission_level)
+    }
+    console.log('firing')
+    fetch(page-1, countPerPage)
+  }, []);
 
 
 
@@ -261,7 +216,7 @@ export default function Transactions(props) {
       setSelectedTransaction(data)
       setShowApproveMember(true)
     } else {
-      if(data.subtype === 'deposit'){
+      if (data.subtype === 'deposit') {
         TransactionService.getTransactionPOP(data.txid).then((res) => {
           console.log(res.count)
           const pop = res.rows;
@@ -283,7 +238,7 @@ export default function Transactions(props) {
     const end = Date.parse(endDate);
 
     if (checkCreatedDate === true) {
-       const searchByDate = transactions.filter(
+      const searchByDate = transactions.filter(
         transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
       setFilteredTransactions(searchByDate);
     } else {
@@ -364,7 +319,7 @@ export default function Transactions(props) {
                   setShow(true);
                 }}>
                 Search By Date
-              </button> 
+              </button>
               {permissions && permissions.update_access &&
                 <button
 
@@ -444,7 +399,15 @@ export default function Transactions(props) {
         onSelectedRowsChange={handleRowSelected}
         clearSelectedRows={toggleCleared}
         pagination
+        paginationServer
+        paginationPerPage={countPerPage}
+        paginationRowsPerPageOptions={[10, 25, 50, 100]}
+        onChangePage={page => { console.log((page-1)*countPerPage, ' ----- ', countPerPage); setPage(page); fetch((page-1)*countPerPage, countPerPage) }}
+        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page-1)*rows, rows) }}
+        paginationTotalRows={totalTransactions}
+        progressPending={pending}
       />
+
       <Modal show={show} onHide={handleClose} centered className="confirm-modal">
         {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
         <Modal.Body>

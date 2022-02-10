@@ -19,12 +19,12 @@ if (SessionProvider.isValid()) {
 
 class TransactionService {
 
-    static async getTransactions() {
+    static async getTransactions(offset=null, limit=null, subtype=null) {
       return await axios({
         mode: 'no-cors',
         method: 'GET',
         headers: headers,
-        url: `${Config.API.BASE_URL}/transactions`,
+        url: `${Config.API.BASE_URL}/transactions${offset !==null && limit !== null && subtype !== null ? '?offset='+offset+'&limit='+limit+'&subtype='+subtype: ''}`,
       }).then(json => json.data)
       .then(res => {
         const { success, data } = res;
