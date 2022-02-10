@@ -57,8 +57,7 @@ export default function ForgotPassword(props) {
         setProcessing(true);
         data.token = token;
         const response = await AuthService.confirmResetPassword(data);
-        console.log(response);
-        const { success } = response;
+        const { success, message } = response;
         setProcessing(false);
         if (success) {
             Swal.fire({
@@ -71,14 +70,18 @@ export default function ForgotPassword(props) {
             return setTimeout(async function () {
                 window.location.href = '/login';
             }, 3000);
+        }else{
+            setError(message)
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: message,
+                showConfirmButton: false,
+                timer: 4000
+            });
+
         }
-        Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: 'Failed to process request, please try again!',
-            showConfirmButton: false,
-            timer: 3000
-        });
+        
     }
 
     return (
@@ -91,6 +94,7 @@ export default function ForgotPassword(props) {
             <p className="caption text-center margin-bottom-30">
                 The KEY to the 4th Industrial Revolution
             </p>
+             { error ? <div className="alert alert-warning" role="alert"> {error} </div> : ''}
                         <form
                             noValidate
                             id="reset-password-form"
