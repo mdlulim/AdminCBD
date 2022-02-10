@@ -2,7 +2,9 @@ import React from 'react';
 import { confirmAlert } from 'react-confirm-alert';
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
+import { AuthService, UserService } from 'providers';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import Swal from 'sweetalert2';
 
 // styles
 const customStyles = {
@@ -135,7 +137,7 @@ export default function UsersRoles(props) {
                 {
                     label: 'Confirm and continue',
                     onClick: () => {
-                        console.log(data)
+                        resetPassword({email: data.email})
                     }
                 },
                 {
@@ -144,6 +146,32 @@ export default function UsersRoles(props) {
             ]
         });
     };
+
+    const resetPassword = async (data) =>{
+        const result = await AuthService.resetPassword(data)
+        // console.log(result.success)
+        // console.log(result)
+        if(result.success){
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'User was successfully updated',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return setTimeout(async function () {
+                window.location.href = `/users`;
+            }, 3000);
+        }else{
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: result.message,
+                showConfirmButton: false,
+                timer: 4000
+            });
+        }
+    }
 
     async function handleDeleteUser(data) {
         const { first_name, last_name } = data;

@@ -4,6 +4,7 @@ import { Common, Users } from 'components';
 import { AuthLayout } from 'containers';
 import { UserService } from 'providers';
 import { confirmAlert } from 'react-confirm-alert';
+import Swal from 'sweetalert2';
 
 const Filter = ({ id, setShowFixedPanel }) => (
     <Common.Dropdown
@@ -75,15 +76,18 @@ export default function EditUserPage(props) {
             UserService.updateUser(user.id, data).then((response) => {
                 console.log(response)
                 if (response.success) {
-                    return confirmAlert({
-                        title: 'Succcess',
-                        message: 'User was successfully updated',
-                        buttons: [
-                            {
-                                label: 'Ok',
-                            }
-                        ]
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'User was successfully updated',
+                        showConfirmButton: false,
+                        timer: 3000
                     });
+                    return setTimeout(async function () {
+                        window.location.href = `/users/${id}`;
+                    }, 3000);
+
+                    
                 } else {
                     setError(response.message);
                 }
