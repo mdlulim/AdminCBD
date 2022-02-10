@@ -73,25 +73,28 @@ export default function Members(props) {
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [selectedMember, setSelectedMember] = useState({});
   const [transaction, setTransaction] = useState({});
+  const [page, setPage] = useState(1);
+  const [totalMembers, setTotalMembers] = useState(0)
+  const [countPerPage, setCountPerPage] = useState(10);
+  const [pending, setPending] = React.useState(true);
 
-  async function fetchData() {
-    const memberslist = await MemberService.getMembers();
-    if(status != 'all'){
-      const results = memberslist.results.filter(item => item.status === status);
-      setMembers(results);
-      setFilteredMembers(results);
-    }else{
-      setMembers(memberslist.results);
-      setFilteredMembers(memberslist.results);
-    }
-    
+  async function fetch(offset, limit) {
+
+
+    const memberslist = await MemberService.getMembers(offset, limit, status);
+    setTotalMembers(memberslist.count)
+    console.log(status, ' ', memberslist)
+    setMembers(memberslist.results);
+    setFilteredMembers(memberslist.results);
+
+    setPending(false)
     setPageLoading(false);
   }
 
   useMemo(() => {
-    fetchData();
+    fetch(page - 1, countPerPage)
 
-  }, [setPageLoading,]);
+  }, []);
   // table headings definition
   const columns = [{
     name: '',
@@ -188,12 +191,12 @@ export default function Members(props) {
       const transaList = res.data.data.results;
       if (transaList.length) {
         TransactionService.getTransactionPOP(transaList[0].txid).then((res) => {
-          if(res.data){
-              const pop = res.data.data.rows;
-              const url = pop[0].file;
-              TransactionService.getTransactionPOPFile(url).then((res) => {
-                setSelectedTransPOP(res.data);
-              })
+          if (res.data) {
+            const pop = res.data.data.rows;
+            const url = pop[0].file;
+            TransactionService.getTransactionPOPFile(url).then((res) => {
+              setSelectedTransPOP(res.data);
+            })
           }
         });
 
@@ -268,7 +271,15 @@ export default function Members(props) {
         noHeader
         selectableRowsHighlight
         highlightOnHover
-        pagination />
+        pagination
+        paginationServer
+        paginationPerPage={countPerPage}
+        paginationRowsPerPageOptions={[10, 25, 50, 100]}
+        onChangePage={page => { console.log((page - 1) * countPerPage, ' ----- ', countPerPage); setPage(page); fetch((page - 1) * countPerPage, countPerPage) }}
+        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows) }}
+        paginationTotalRows={totalMembers}
+        progressPending={pending}
+      />
 
     </Card>
   );

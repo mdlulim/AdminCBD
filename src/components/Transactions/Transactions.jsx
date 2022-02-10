@@ -84,7 +84,6 @@ export default function Transactions(props) {
   const [selectedTransPOP, setSelectedTransPOP] = useState('');
   const [showApproveMember, setShowApproveMember] = useState(false);
   const [forBank, setForBank] = useState(false)
-  const [activeFilter, setActiveFilter] = useState('all')
   const params = useParams();
   const { id } = params;
   const csvDownloaderClick = useRef(null)
@@ -92,10 +91,11 @@ export default function Transactions(props) {
   const [totalTransactions, setTotalTransactions] = useState(0)
   const [countPerPage, setCountPerPage] = useState(10);
   const [pending, setPending] = React.useState(true);
+  const [status, setStatus] = useState('all')
 
-  const fetch = (offset, limit) => {
+  const fetch = (offset, limit, status) => {
     setPending(true)
-    TransactionService.getTransactions(offset, limit, transactionType).then((res) => {
+    TransactionService.getTransactions(offset, limit, transactionType, status).then((res) => {
       setTotalTransactions(res.count)
       const transaList = res.results;
 
@@ -118,8 +118,8 @@ export default function Transactions(props) {
       const user = SessionProvider.get();
       setAdminLevel(user.permission_level)
     }
-    console.log('firing')
-    fetch(page-1, countPerPage)
+
+    fetch(page-1, countPerPage, status)
   }, []);
 
 
@@ -251,14 +251,8 @@ export default function Transactions(props) {
   }
 
   const filterChange = (e) => {
-    if (e.target.value === 'all') {
-      setFilteredTransactions(transactions);
-    } else {
-      const results = transactions.filter(item => item.status === e.target.value);
-      setFilteredTransactions(results);
-    }
-    setActiveFilter(e.target.value)
-
+    setStatus(e.target.value)
+    fetch((page-1)*countPerPage, countPerPage, e.target.value)
   }
 
   const handleRowSelected = React.useCallback(state => {
@@ -322,10 +316,9 @@ export default function Transactions(props) {
               </button>
               {permissions && permissions.update_access &&
                 <button
-
                   className={`btn ${forBank ? 'btn-secondary' : 'btn-light'} m-2`}
                   type="button"
-                  disabled={activeFilter === 'Pending' ? false : true}
+                  disabled={status === 'Pending' ? false : true}
                   onClick={() => { setForBank(!forBank) }}>
                   For Processing
                 </button>
@@ -402,8 +395,8 @@ export default function Transactions(props) {
         paginationServer
         paginationPerPage={countPerPage}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
-        onChangePage={page => { console.log((page-1)*countPerPage, ' ----- ', countPerPage); setPage(page); fetch((page-1)*countPerPage, countPerPage) }}
-        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page-1)*rows, rows) }}
+        onChangePage={page => { setPage(page); fetch((page-1)*countPerPage, countPerPage, status) }}
+        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page-1)*rows, rows, status) }}
         paginationTotalRows={totalTransactions}
         progressPending={pending}
       />
