@@ -3,8 +3,8 @@ import { Card, CardBody, Col, Row  } from 'reactstrap';
 import { Common, Users } from 'components';
 import { AuthLayout } from 'containers';
 import { UserService } from 'providers';
-import { confirmAlert } from 'react-confirm-alert';
 import useForm from 'react-hook-form';
+import Swal from 'sweetalert2';
 
 export default function AddUserPage(props) {
     const [roles, setRoles] = useState([]);
@@ -48,18 +48,16 @@ export default function AddUserPage(props) {
                     setDisabled(false)
                     setProcessing(false)
                     setError('')
-                    return confirmAlert({
-                        title: 'Succcess',
-                        message: 'User was successfully added',
-                        buttons: [
-                            {
-                                label: 'Ok',
-                                onClick: () => {
-                                    window.location = `/users/add`;
-                                }
-                            }
-                        ]
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'User was successfully added',
+                        showConfirmButton: false,
+                        timer: 3000
                     });
+                    return setTimeout(async function () {
+                        window.location.href = `/users/add`;
+                    }, 3000);
                 } else {
                     setDisabled(false)
                     setProcessing(false)
