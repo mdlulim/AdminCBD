@@ -68,7 +68,7 @@ export default function LoginPage(props) {
             <form onSubmit={onSubmit}>
                 <div className="form-group">
                     <label>Username</label>
-                    <input type="text" name="username" id="username" className="form-control" placeholder="Email address" />
+                    <input type="text" name="username" id="username" className="form-control" placeholder="Username" />
                 </div>
                 <div className="form-group margin-bottom-20">
                     <label>Password</label>

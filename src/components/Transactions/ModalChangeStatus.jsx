@@ -212,8 +212,9 @@ const ModalChangeStatus = props => {
                                         <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Proof of payment</label>
                                         <hr />
                                         <object data={pop} type="application/pdf" width="100%" height="100%">
-                                            <p>Alternative text - include a link <a href={pop}>to the PDF!</a></p>
+                                            <p>Alternative text - include a link <a href={pop} target="_blank">View</a></p>
                                         </object>
+                                        <p> <a href={pop} target="_blank">View Proof of payment</a></p>
                                     </div>
                                     </Col>
                                 </Row>

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Row, Col } from 'reactstrap';
+import { Card, CardBody, Row, Col, Input } from 'reactstrap';
 import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
@@ -25,6 +25,11 @@ const customStyles = {
     },
   },
 };
+
+const myButtons = {
+  padding: '2px',
+  display: 'flex'
+}
 
 const iconPadding = {
   paddingRight: '3px',
@@ -77,18 +82,17 @@ export default function Members(props) {
   const [totalMembers, setTotalMembers] = useState(0)
   const [countPerPage, setCountPerPage] = useState(10);
   const [pending, setPending] = React.useState(true);
+  const [status1, setStatus] = useState('all')
 
   async function fetch(offset, limit) {
-
-
-    const memberslist = await MemberService.getMembers(offset, limit, status);
-    setTotalMembers(memberslist.count)
-    console.log(status, ' ', memberslist)
-    setMembers(memberslist.results);
-    setFilteredMembers(memberslist.results);
-
-    setPending(false)
-    setPageLoading(false);
+      const memberslist = await MemberService.getMembers(offset, limit, status1);
+      console.log(memberslist);
+      setTotalMembers(memberslist.count);
+      console.log(status1, ' ', memberslist);
+      setMembers(memberslist.results);
+      setFilteredMembers(memberslist.results);
+      setPending(false)
+      setPageLoading(false);
   }
 
   useMemo(() => {
@@ -225,6 +229,12 @@ export default function Members(props) {
     return countTypes.length;
   };
 
+  const filterChange = (e) => {
+    console.log(e.target.value)
+    setStatus(e.target.value)
+    fetch((page-1)*countPerPage, countPerPage, e.target.value)
+  }
+
   const onSearchFilter = filterText => {
     const filteredItems = members.filter(item => (
       (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -255,13 +265,35 @@ export default function Members(props) {
           <span>CBI Members</span>
           <span className="flex-grow-1" />
           <input
-            style={inputWith}
-            type="text"
-            name="search"
-            className={`form-control form-control-m`}
-            placeholder="Search..."
-            onKeyUp={e => onSearchFilter(e.target.value)}
+                style={inputWith}
+                type="text"
+                name="search"
+                className={`form-control form-control-m`}
+                placeholder="Search..."
+                onKeyUp={e => onSearchFilter(e.target.value)}
           />
+          <Input
+                style={inputWith}
+                className="m-2"
+                type="select"
+                onChange={filterChange.bind(this)}
+          >
+                <option value="all">All</option>
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+                <option value="Rejected">Rejected</option>
+          </Input>
+              <div style={myButtons}>
+              <button
+                className="btn btn-secondary m-2"
+                type="button"
+                onClick={e => {
+                  e.preventDefault();
+                  setShow(true);
+                }}>
+                Search By Date
+              </button>
+              </div>
         </div>
       </CardBody>
       <DataTable
