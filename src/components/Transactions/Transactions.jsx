@@ -12,6 +12,7 @@ import DatePicker from "react-datepicker";
 import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
 import CsvDownloader from 'react-csv-downloader';
+import flatten from 'flat';
 
 const inputWith = {
   width: '20%'
@@ -61,7 +62,7 @@ const Money = (row) => {
       badge = 'danger';
     }
   }
-  return <strong className={'text-' + badge}>{simbol + '' + row.amount} {row.currency.code}</strong>
+  return <strong className={'text-' + badge}>{simbol + '' + row.amount} {row['currency.code']}</strong>
 };
 
 export default function Transactions(props) {
@@ -72,7 +73,6 @@ export default function Transactions(props) {
   const [disabled, setDisabled] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const [csvTransactions, setCsvTransactions] = useState([])
   const handleClose = () => setShow(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -100,12 +100,20 @@ export default function Transactions(props) {
       const transaList = res.results;
 
       if (id != null && id.length > 15) {
-        const results = transaList.filter(item => item.id === id);
+        const results = transaList.map(item => {
+          return flatten(item)
+        })
+
+        const filteredResults = results.filter(item => item.id === id);
+        setTransactions(filteredResults);
+        setFilteredTransactions(filteredResults);
+      } else {
+        const results = transaList.map(item => {
+          return flatten(item)
+        })
+
         setTransactions(results);
         setFilteredTransactions(results);
-      } else {
-        setTransactions(res.results);
-        setFilteredTransactions(res.results);
       }
 
       setPending(false)
@@ -119,7 +127,7 @@ export default function Transactions(props) {
       setAdminLevel(user.permission_level)
     }
 
-    fetch(page-1, countPerPage, status)
+    fetch(page - 1, countPerPage, status)
   }, []);
 
 
@@ -129,9 +137,9 @@ export default function Transactions(props) {
     selector: 'id',
     sortable: true,
     wrap: true,
-    cell: (row) => <div><div>{row.user ? row.user.first_name : ''} {row.user ? row.user.last_name : ''}</div>
+    cell: (row) => <div><div>{row['user.first_name'] ? row['user.first_name'] : ''} {row['user.last_name'] ? row['user.last_name'] : ''}</div>
       <div className="small text-muted">
-        <span>{row.user ? row.user.id_number : ''}</span>
+        <span>{row['user.id_number'] ? row['user.id_number'] : ''}</span>
       </div></div>
   }, {
     name: 'TransactionID',
@@ -252,7 +260,7 @@ export default function Transactions(props) {
 
   const filterChange = (e) => {
     setStatus(e.target.value)
-    fetch((page-1)*countPerPage, countPerPage, e.target.value)
+    fetch((page - 1) * countPerPage, countPerPage, e.target.value)
   }
 
   const handleRowSelected = React.useCallback(state => {
@@ -266,14 +274,85 @@ export default function Transactions(props) {
     };
 
     return (
-      <button
-        className="btn btn-secondary"
-        type="button"
-        onClick={handleBulkUpdate}>
-        <span className="fa fa-pencil" /> Bulk Update
-      </button>
+      <div>
+        <button
+          className="btn btn-secondary mx-2"
+          type="button"
+          onClick={async () => {
+            csvDownloaderClick.current.click()
+          }}>
+          <span className="fa fa-arrow-right-from-bracket" /> Export
+        </button>
+        {permissions && permissions.update_access &&
+          <span>
+            <button
+              className="btn btn-secondary mx-2"
+              type="button"
+              onClick={async () => {
+                let data = []
+                let processError = false
+
+                selectedRows.forEach((row) => {
+                  if (row.status !== 'Pending') {
+                    processError = true
+                    return
+                  }
+                  data.push({ status: 'InProgress', txid: row.txid })
+                })
+
+                if (processError) {
+                  return alert('Should only process pending records')
+                } else {
+                  TransactionService.updateBulkTransaction(data)
+                    .then(res => {
+                      console.log(res, '------')
+                      if (res.success) {
+                        csvDownloaderClick.current.click()
+                      } else {
+                        alert('Failed create csv!')
+                      }
+                    })
+                    .catch(err => {
+                      alert('Something went wrong :-(')
+                    })
+                }
+              }}>
+              <span className="fa fa-clock" /> Process
+            </button>
+            <button
+              className="btn btn-secondary"
+              type="button"
+              onClick={handleBulkUpdate}>
+              <span className="fa fa-pencil" /> Update
+            </button>
+          </span>
+        }
+      </div>
     );
   }, [filteredTransactions, selectedRows, toggleCleared]);
+
+  const CSVColumns = [
+    {
+      id: 'txid',
+      displayName: 'TX_ID',
+    },
+    {
+      id: 'subtype',
+      displayName: 'TYPE',
+    },
+    {
+      id: 'user.referral_id',
+      displayName: 'REFERRAL',
+    },
+    {
+      id: 'amount',
+      displayName: 'AMOUNT',
+    },
+    {
+      id: 'status',
+      displayName: 'STATUS',
+    },
+  ]
 
   return (
     <Card className="o-hidden mb-4">
@@ -314,16 +393,6 @@ export default function Transactions(props) {
                 }}>
                 Search By Date
               </button>
-              {permissions && permissions.update_access &&
-                <button
-                  className={`btn ${forBank ? 'btn-secondary' : 'btn-light'} m-2`}
-                  type="button"
-                  disabled={status === 'Pending' ? false : true}
-                  onClick={() => { setForBank(!forBank) }}>
-                  For Processing
-                </button>
-              }
-
 
               <Input
                 className="m-2"
@@ -337,48 +406,16 @@ export default function Transactions(props) {
                 <option value="Rejected">Rejected</option>
                 <option value="InProgress">Processing</option>
               </Input>
-
-              <button
-                className="btn btn-secondary"
-                type="button"
-                disabled={filteredTransactions.length < 1}
-                onClick={
-                  async () => {
-                    var data = []
-                    var csvData = []
-                    if (forBank) {
-                      filteredTransactions.forEach(row => {
-                        data.push({ status: 'InProgress', txid: row.txid })
-                        csvData.push({ TX_ID: row.txid, REFERRAL: row.user.referral_id, TYPE: row.subtype, AMOUNT: row.amount, STATUS: row.status })
-                      })
-                      const res = await FileStorageProvider.update_status(data)
-                      if (res.success) {
-                        setCsvTransactions(csvData)
-                        csvDownloaderClick.current.click()
-                      } else {
-                        alert('Failed create csv!')
-                      }
-
-                    } else {
-                      setCsvTransactions(filteredTransactions)
-                      setForBank(false)
-
-                      csvDownloaderClick.current.click()
-                    }
-                  }}
-              >Export CSV</button>
               <CsvDownloader
-
-                filename="myfile"
+                filename="exported-transactions"
                 extension=".csv"
                 separator=","
                 wrapColumnChar=""
-                // columns={columns}
-                datas={csvTransactions}
+                columns={CSVColumns}
+                datas={selectedRows}
               >
                 <button style={{ display: 'none' }} ref={csvDownloaderClick}></button>
               </CsvDownloader>
-              {/* <ExportToExcel data={filteredTransactions} /> */}
             </div>
           </div>
         </div>
@@ -395,8 +432,8 @@ export default function Transactions(props) {
         paginationServer
         paginationPerPage={countPerPage}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
-        onChangePage={page => { setPage(page); fetch((page-1)*countPerPage, countPerPage, status) }}
-        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page-1)*rows, rows, status) }}
+        onChangePage={page => { setPage(page); fetch((page - 1) * countPerPage, countPerPage, status) }}
+        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows, status) }}
         paginationTotalRows={totalTransactions}
         progressPending={pending}
       />
