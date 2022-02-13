@@ -62,6 +62,7 @@ class TransactionService {
         url: `${Config.API.BASE_URL}/users`,
       });
     }
+
     static async getTransaction(id) {
       return await axios({
         mode: 'no-cors',
@@ -70,6 +71,7 @@ class TransactionService {
         url: `${Config.API.BASE_URL}/transactions/${id}`,
       });
     }
+
     static async updateStatus(id,status){
       if(status === 'Canceled'){
         return await axios({

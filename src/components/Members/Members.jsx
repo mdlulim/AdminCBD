@@ -272,15 +272,13 @@ export default function Members(props) {
                 placeholder="Search..."
                 onKeyUp={e => onSearchFilter(e.target.value)}
           />
-          <Input
-                style={inputWith}
+          <Input  style={inputWith}
                 className="m-2"
-                type="select"
-                onChange={filterChange.bind(this)}
-          >
+                type="select" onChange={filterChange.bind(this)} >
                 <option value="all">All</option>
                 <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
+                <option value="Active">Active</option>
+                <option value="Blocked">Blocked</option>
                 <option value="Rejected">Rejected</option>
           </Input>
               <div style={myButtons}>
