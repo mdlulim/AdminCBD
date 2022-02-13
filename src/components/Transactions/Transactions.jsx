@@ -236,6 +236,7 @@ export default function Transactions(props) {
     setDisabled(true);
     const start = Date.parse(startDate);
     const end = Date.parse(endDate);
+    fetch((page-1)*countPerPage, countPerPage, start, end)
 
     if (checkCreatedDate === true) {
       const searchByDate = transactions.filter(

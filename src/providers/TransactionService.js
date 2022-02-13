@@ -19,7 +19,7 @@ if (SessionProvider.isValid()) {
 
 class TransactionService {
 
-    static async getTransactions(offset=null, limit=null, subtype=null, status=null) {
+    static async getTransactions(offset=null, limit=null, subtype=null, status=null, start=null, end=null) {
 
     let query = ''
     if(offset !==null && limit !== null && subtype !== null && status !== null){
@@ -28,6 +28,8 @@ class TransactionService {
       }else{
         query = '?offset=' + offset + '&limit=' + limit + '&subtype=' + subtype + '&status=' + status
       }
+    }else if(offset !==null && limit !== null && subtype !== null && start !== null && end !== null){
+      query = '?offset=' + offset + '&limit=' + limit + '&subtype=' + subtype + '&start_date=' + start + '&end_date=' + end
     }
 
       return await axios({
