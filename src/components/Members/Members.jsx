@@ -69,7 +69,7 @@ const Status = ({ status }) => {
 };
 
 export default function Members(props) {
-  const { status, setPageLoading, permissions } = props;
+  const { setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showTransaction, setShowTransaction] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -82,13 +82,13 @@ export default function Members(props) {
   const [totalMembers, setTotalMembers] = useState(0)
   const [countPerPage, setCountPerPage] = useState(10);
   const [pending, setPending] = React.useState(true);
-  const [status1, setStatus] = useState('all')
+  const [status, setStatus] = useState('all')
 
-  async function fetch(offset, limit) {
-      const memberslist = await MemberService.getMembers(offset, limit, status1);
+  async function fetch(offset, limit, status) {
+      const memberslist = await MemberService.getMembers(offset, limit, status);
       console.log(memberslist);
       setTotalMembers(memberslist.count);
-      console.log(status1, ' ', memberslist);
+      console.log(status, ' ', memberslist);
       setMembers(memberslist.results);
       setFilteredMembers(memberslist.results);
       setPending(false)
@@ -96,7 +96,7 @@ export default function Members(props) {
   }
 
   useMemo(() => {
-    fetch(page - 1, countPerPage)
+    fetch(page - 1, countPerPage, status)
 
   }, []);
   // table headings definition
@@ -280,8 +280,8 @@ export default function Members(props) {
           >
                 <option value="all">All</option>
                 <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
-                <option value="Rejected">Rejected</option>
+                <option value="Active">Active</option>
+                <option value="Archived">Archived</option>
           </Input>
               <div style={myButtons}>
               <button
@@ -307,8 +307,8 @@ export default function Members(props) {
         paginationServer
         paginationPerPage={countPerPage}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
-        onChangePage={page => { console.log((page - 1) * countPerPage, ' ----- ', countPerPage); setPage(page); fetch((page - 1) * countPerPage, countPerPage) }}
-        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows) }}
+        onChangePage={page => { console.log((page - 1) * countPerPage, ' ----- ', countPerPage); setPage(page); fetch((page - 1) * countPerPage, countPerPage, status) }}
+        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows, status) }}
         paginationTotalRows={totalMembers}
         progressPending={pending}
       />
