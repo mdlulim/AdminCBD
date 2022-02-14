@@ -125,19 +125,19 @@ export default function Transactions(props) {
       setAdminLevel(user.permission_level)
     }
 
-        var date = new Date();
-        date.setDate(date.getDate() - 30);
-        var dateString = date.toISOString().split('T')[0]; // "2016-06-08"
+    var date = new Date();
+    date.setDate(date.getDate() - 30);
+    var dateString = date.toISOString().split('T')[0]; // "2016-06-08"
 
-        const d = new Date();
-        let text = d.toString();
+    const d = new Date();
+    let text = d.toString();
 
-        const start_date = moment().add(-30, 'days')._d;
-        const end_date = moment(text)._d;
-        setStartDate(start_date)
-        setEndDate(end_date)
-       console.log(start_date)
-    fetch(page-1, countPerPage, status, start_date, end_date)
+    const start_date = moment().add(-30, 'days')._d;
+    const end_date = moment(text)._d;
+    setStartDate(start_date)
+    setEndDate(end_date)
+    console.log(start_date)
+    fetch(page - 1, countPerPage, status, start_date, end_date)
   }, []);
 
 
@@ -252,10 +252,8 @@ export default function Transactions(props) {
 
   const selectDataRange = (data) => {
     setDisabled(true);
-    const start = Date.parse(startDate);
-    const end = Date.parse(endDate);
-    fetch((page-1)*countPerPage, countPerPage, status, startDate, endDate)
-console.log(startDate, endDate)
+    fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate)
+    console.log(startDate, endDate)
     // if (checkCreatedDate === true) {
     //   const searchByDate = transactions.filter(
     //     transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
@@ -271,7 +269,7 @@ console.log(startDate, endDate)
 
   const filterChange = (e) => {
     setStatus(e.target.value)
-    fetch((page-1)*countPerPage, countPerPage, e.target.value)
+    fetch((page - 1) * countPerPage, countPerPage, e.target.value, startDate, endDate)
   }
 
   const handleRowSelected = React.useCallback(state => {
@@ -296,7 +294,7 @@ console.log(startDate, endDate)
 
   return (
     <Card className="o-hidden mb-4">
-      
+
       <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows} />
       <ModalChangeStatus
         show={showUpdate}
@@ -310,20 +308,20 @@ console.log(startDate, endDate)
         setShow={setShowApproveMember}
         transaction={selectedTransaction}
         pop={selectedTransPOP} />
-        
+
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-        <button 
-                    style={inputWith2}
-                    className="btn btn-light d-none d-md-block float-right margin-right-5"
-                    id="dashboard-rp-customrange"
-                    onClick={e => {
-                      e.preventDefault();
-                      setShow(true);
-                    }}
-                >
-                    <Moment date={startDate} format="D MMMM YYYY" /> - <Moment date={endDate} format="D MMMM YYYY" />
-                </button>
+          <button
+            style={inputWith2}
+            className="btn btn-light d-none d-md-block float-right margin-right-5"
+            id="dashboard-rp-customrange"
+            onClick={e => {
+              e.preventDefault();
+              setShow(true);
+            }}
+          >
+            <Moment date={startDate} format="D MMMM YYYY" /> - <Moment date={endDate} format="D MMMM YYYY" />
+          </button>
           <span className="flex-grow-1" />
           <input
             style={inputWith}
@@ -426,8 +424,8 @@ console.log(startDate, endDate)
         paginationServer
         paginationPerPage={countPerPage}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
-        onChangePage={page => { setPage(page); fetch((page-1)*countPerPage, countPerPage, status) }}
-        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page-1)*rows, rows, status) }}
+        onChangePage={page => { setPage(page); fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate) }}
+        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows, status, startDate, endDate) }}
         paginationTotalRows={totalTransactions}
         progressPending={pending}
       />
@@ -475,5 +473,5 @@ console.log(startDate, endDate)
         </Modal.Body>
       </Modal>
     </Card>
- );
+  );
 }
