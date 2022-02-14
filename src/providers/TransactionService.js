@@ -24,9 +24,9 @@ class TransactionService {
     let query = ''
     if(offset !==null && limit !== null && subtype !== null && status !== null){
       if(status === 'all'){
-        query = '?offset=' + offset + '&limit=' + limit + '&subtype=' + subtype 
+        query = '?offset=' + offset + '&limit=' + limit + '&subtype=' + subtype + '&start_date=' + start + '&end_date=' + end
       }else{
-        query = '?offset=' + offset + '&limit=' + limit + '&subtype=' + subtype + '&status=' + status
+        query = '?offset=' + offset + '&limit=' + limit + '&subtype=' + subtype + '&status=' + status + '&start_date=' + start + '&end_date=' + end
       }
     }else if(offset !==null && limit !== null && subtype !== null && start !== null && end !== null){
       query = '?offset=' + offset + '&limit=' + limit + '&subtype=' + subtype + '&start_date=' + start + '&end_date=' + end
