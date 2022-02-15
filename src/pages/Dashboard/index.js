@@ -35,6 +35,7 @@ const label ={
 export default function DashboardPage(props) {
     const [show, setShow] = useState(false);
     const [members, setMembers] = useState([]);
+    const [membersList, setMembersList] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [pageLoading, setPageLoading] = useState(true);
     const [filteredMembers, setFilteredMembers] = useState([]);
@@ -66,6 +67,7 @@ export default function DashboardPage(props) {
 
         const members = await MemberService.getMembers();
         const memberslist = members.results;
+        setMembersList(members)
         const temp = memberslist.slice(Math.max(memberslist.length - 5), 0)
         setMembers(memberslist);
         setFilteredMembers(temp);
@@ -197,7 +199,7 @@ export default function DashboardPage(props) {
                                                     icon="li-users2"
                                                     title="Members"
                                                     subtitle="Active members"
-                                                    informer={<><span className="text-bold text-success">{countMembers('Active')}</span> / <span className="text-bold text-warning">{countMembers('Pending')}</span></>}
+                                                    informer={<><span className="text-bold text-success">{membersList ? membersList.active : 0}</span> / <span className="text-bold text-warning">{membersList ? membersList.pending : 0}</span></>}
                                                 /></a>
                                         </Col>
                                         <Col xs={12} lg={adminLevel == 5 ? 4 : 6}>
@@ -217,7 +219,7 @@ export default function DashboardPage(props) {
                                                     icon="li-users2"
                                                     title="Active"
                                                     subtitle="Members"
-                                                    informer={<><span className="text-bold text-success">{countMembers('Active')}</span></>}
+                                                    informer={<><span className="text-bold text-success">{membersList ? membersList.active : 0}</span></>}
                                                 /></a>
                                         </Col>
                                         <Col xs={12} lg={3}>
@@ -226,7 +228,7 @@ export default function DashboardPage(props) {
                                                     icon="li-users2"
                                                     title="Pending"
                                                     subtitle="Members"
-                                                    informer={<><span className="text-bold text-warning">{countMembers('Pending')}</span> </>}
+                                                    informer={<><span className="text-bold text-warning">{membersList ? membersList.pending : 0}</span> </>}
                                                 /></a>
                                         </Col>
                                         <Col xs={12} lg={3}>
@@ -235,7 +237,7 @@ export default function DashboardPage(props) {
                                                     icon="li-users2"
                                                     title="Blocked"
                                                     subtitle="Members"
-                                                    informer={<><span className="text-bold text-danger">{countMembers('Blocked')}</span> </>}
+                                                    informer={<><span className="text-bold text-danger">{membersList ? membersList.blocked : 0}</span> </>}
                                                 /></a>
                                         </Col>
                                         <Col xs={12} lg={3}>
@@ -244,7 +246,7 @@ export default function DashboardPage(props) {
                                                     icon="li-users2"
                                                     title="Archived"
                                                     subtitle="Members"
-                                                    informer={<><span className="text-bold text-danger">{countMembers('Achieved')}</span> </>}
+                                                    informer={<><span className="text-bold text-danger">{membersList ? membersList.archived : 0}</span> </>}
                                                 /></a>
                                         </Col>
                                     </div>

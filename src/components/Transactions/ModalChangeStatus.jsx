@@ -55,8 +55,8 @@ const ModalChangeStatus = props => {
                 transaction: transaction, 
             } ;
         if(selectedStatus){
-
             TransactionService.updateTransactionStatus(transaction.id, data).then((response) =>{
+                console.log(response)
                 if(response.data.success){
                      setProcessing(false)
                      setShow(false)
@@ -113,11 +113,6 @@ const ModalChangeStatus = props => {
         setShow(false)
     };
 
-    const updateTransactionStatus = (event) => {
-        event.preventDefault();
-        const form = event.currentTarget;
-        const reason = form.reason.value;
-    }
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
             {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
