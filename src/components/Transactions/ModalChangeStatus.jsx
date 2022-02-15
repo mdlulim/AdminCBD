@@ -9,6 +9,7 @@ import Loader from "react-js-loader";
 import spinningLoader from '../../assets/img/loading-buffering.gif'
 import { TransactionService, UserService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
+import ViewModal from './viewModal';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const loaderCSS ={
@@ -23,6 +24,7 @@ const ModalChangeStatus = props => {
     const [pageLoading, setPageLoading] = useState(true)
     const [selectedStatus, setSelectedStatus] = useState('');
     const { confirmButtonDisabled, confirmButton, cancelButton, showIcon, size,} = props;
+    const [showImage, setShowImage] = useState(false)
     const params = useParams();
     const { id } = params;
     useEffect(() => {
@@ -119,6 +121,7 @@ const ModalChangeStatus = props => {
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
             {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
+            <ViewModal show={showImage} setShow={setShowImage} kycDocuments={pop} />
             <Modal.Body>
                 <Row>
                     {showIcon &&
