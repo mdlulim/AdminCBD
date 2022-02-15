@@ -54,7 +54,7 @@ const ModalChangeStatus = props => {
             })
         }
         setDisabled(false);
-    
+
       }
     const handleClose = () => setShow(false);
 
@@ -64,7 +64,7 @@ const ModalChangeStatus = props => {
         const reason = form.reason.value;
 
     }
-    
+
     return (
         <Modal show={show} onHide={handleClose} centered className="confirm-modal" size={size}>
             {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
@@ -77,7 +77,6 @@ const ModalChangeStatus = props => {
                     <Col xs={showIcon ? 10 : 12}>
                         <h3 className="text-success"> Update CBI Member Status</h3>
                         <hr />
-                        {/* <form onSubmit={onSubmit}> */}
                                 <div className="form-group">
                                     <label htmlFor="fullname">Full Names</label>
                                     {member ?

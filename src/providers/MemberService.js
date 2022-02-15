@@ -29,6 +29,7 @@ class MemberService {
         query = '&offset='+offset+'&limit='+limit+'&status='+status
       }
     }
+
     return await axios({
       mode: 'no-cors',
       method: 'GET',

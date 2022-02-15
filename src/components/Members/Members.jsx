@@ -1,14 +1,22 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Row, Col } from 'reactstrap';
+import { Card, CardBody, Row, Col, Input } from 'reactstrap';
 import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
+import { Modal } from 'react-bootstrap';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
 import TransactionDetails from '../Transactions/TransactionDetails';
 import { MemberService, TransactionService } from '../../providers';
+import DatePicker from "react-datepicker";
+import 'react-data-table-component-extensions/dist/index.css';
+import "react-datepicker/dist/react-datepicker.css";
 //import FeatherIcon from '../FeatherIcon';
 // styles
+
+const inputWithDate = {
+  width: '25%'
+}
 const customStyles = {
 
   headCells: {
@@ -25,6 +33,11 @@ const customStyles = {
     },
   },
 };
+
+const myButtons = {
+  padding: '2px',
+  display: 'flex'
+}
 
 const iconPadding = {
   paddingRight: '3px',
@@ -64,7 +77,7 @@ const Status = ({ status }) => {
 };
 
 export default function Members(props) {
-  const { status, setPageLoading, permissions } = props;
+  const { setPageLoading, permissions } = props;
   const [show, setShow] = useState(false);
   const [showTransaction, setShowTransaction] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -77,22 +90,24 @@ export default function Members(props) {
   const [totalMembers, setTotalMembers] = useState(0)
   const [countPerPage, setCountPerPage] = useState(10);
   const [pending, setPending] = React.useState(true);
+  const [status, setStatus] = useState('all');
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [disabled, setDisabled] = useState(false);
+  const [showDateRange, setShowDateRange] = useState(false);
+  const handleClose = () => setShow(false);
 
-  async function fetch(offset, limit) {
-
-
-    const memberslist = await MemberService.getMembers(offset, limit, status);
-    setTotalMembers(memberslist.count)
-    console.log(status, ' ', memberslist)
-    setMembers(memberslist.results);
-    setFilteredMembers(memberslist.results);
-
-    setPending(false)
-    setPageLoading(false);
+  async function fetch(offset, limit, status, startDate, endDate) {
+      const memberslist = await MemberService.getMembers(offset, limit, status, startDate, endDate);
+      setTotalMembers(memberslist.count);
+      setMembers(memberslist.results);
+      setFilteredMembers(memberslist.results);
+      setPending(false)
+      setPageLoading(false);
   }
 
   useMemo(() => {
-    fetch(page - 1, countPerPage)
+    fetch(page - 1, countPerPage, status)
 
   }, []);
   // table headings definition
@@ -166,7 +181,9 @@ export default function Members(props) {
               className="btn btn-light btn-sm btn-icon"
               onClick={e => {
                 e.preventDefault();
-                onSubmitChangeStatus(row);
+                setSelectedMember(row);
+                setShow(true)
+                //onSubmitChangeStatus(row);
               }}
             > <span className="fa fa-pencil" />
             </a>}
@@ -175,16 +192,33 @@ export default function Members(props) {
     </div>
   }];
 
-  const onSubmitChangeStatus = data => {
-    setSelectedMember(data);
-    setShow(true);
-    //return <Confirm show={show} setShow={setShow} />;
-  };
+  // const onSubmitChangeStatus = data => {
+  //   setSelectedMember(data);
+  //   setShow(true);
+  //   //return <Confirm show={show} setShow={setShow} />;
+  // };
 
   const onSubmitDeleteMember = data => {
     setSelectedMember(data);
     setShowDelete(true);
   };
+  const selectDataRange = (data) => {
+    setDisabled(true);
+    fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate)
+    fetch((page - 1) * countPerPage, countPerPage, status)
+    console.log(startDate, endDate)
+    // if (checkCreatedDate === true) {
+    //   const searchByDate = transactions.filter(
+    //     transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
+    //   setFilteredTransactions(searchByDate);
+    // } else {
+    //   const searchByDate = transactions.filter(
+    //     transaction => (Date.parse(transaction.updated)) >= start && (Date.parse(transaction.updated)) <= end);
+    //   setFilteredTransactions(searchByDate);
+    // }
+    setDisabled(false);
+    setShow(false)
+  }
 
   const onSubmitApproveMember = data => {
     TransactionService.getMemberTransactions(data.id).then((res) => {
@@ -225,6 +259,11 @@ export default function Members(props) {
     return countTypes.length;
   };
 
+  const filterChange = (e) => {
+    setStatus(e.target.value)
+    fetch((page-1)*countPerPage, countPerPage, e.target.value)
+  }
+
   const onSearchFilter = filterText => {
     const filteredItems = members.filter(item => (
       (item && item.first_name && item.first_name.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -255,13 +294,33 @@ export default function Members(props) {
           <span>CBI Members</span>
           <span className="flex-grow-1" />
           <input
-            style={inputWith}
-            type="text"
-            name="search"
-            className={`form-control form-control-m`}
-            placeholder="Search..."
-            onKeyUp={e => onSearchFilter(e.target.value)}
+                style={inputWith}
+                type="text"
+                name="search"
+                className={`form-control form-control-m`}
+                placeholder="Search..."
+                onKeyUp={e => onSearchFilter(e.target.value)}
           />
+          <Input  style={inputWith}
+                className="m-2"
+                type="select" onChange={filterChange.bind(this)} >
+                <option value="all">All</option>
+                <option value="Pending">Pending</option>
+                <option value="Active">Active</option>
+                <option value="Blocked">Blocked</option>
+                <option value="Archived">Archived</option>
+          </Input>
+              <div style={myButtons}>
+              <button
+                className="btn btn-secondary m-2"
+                type="button"
+                onClick={e => {
+                  e.preventDefault();
+                  setShowDateRange(true);
+                }}>
+                Search By Date
+              </button>
+              </div>
         </div>
       </CardBody>
       <DataTable
@@ -275,11 +334,53 @@ export default function Members(props) {
         paginationServer
         paginationPerPage={countPerPage}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
-        onChangePage={page => { console.log((page - 1) * countPerPage, ' ----- ', countPerPage); setPage(page); fetch((page - 1) * countPerPage, countPerPage) }}
-        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows) }}
+        onChangePage={page => { console.log((page - 1) * countPerPage, ' ----- ', countPerPage); setPage(page); fetch((page - 1) * countPerPage, countPerPage, status) }}
+        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows, status) }}
         paginationTotalRows={totalMembers}
         progressPending={pending}
       />
+      <Modal show={showDateRange} onHide={handleClose} centered className="confirm-modal">
+        {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
+        <Modal.Body>
+          <Row>
+            <Col>
+              <h3 className="text-success">Search by date range </h3>
+              <hr />
+              <div className="form-group">
+                <label htmlFor="from">From</label>
+                <DatePicker style={inputWithDate} className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">To</label>
+                <DatePicker style={inputWithDate} className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
+              </div>
+              <hr />
+              <Row>
+                <Col md={6}>
+                  <button
+                    className="btn btn-dark"
+                    onClick={e => {
+                      e.preventDefault();
+                      setShowDateRange(false);
+                    }}
+                  >
+                    {'Cancel'}
+                  </button>
+                </Col>
+                <Col md={6} >
+                  <button
+                    className="btn btn-success float-right"
+                    onClick={selectDataRange}
+                    disabled={disabled}
+                  >
+                    {'Search'}
+                  </button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Modal.Body>
+      </Modal>
 
     </Card>
   );

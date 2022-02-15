@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Card, CardBody, Row, Col, Input } from 'reactstrap';
 import Moment from 'react-moment';
+import moment from 'moment';
 import { useParams, useHistory } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Modal } from 'react-bootstrap';
@@ -15,6 +16,9 @@ import CsvDownloader from 'react-csv-downloader';
 
 const inputWith = {
   width: '20%'
+}
+const inputWith2 = {
+  width: '23%'
 }
 
 const myButtons = {
@@ -91,14 +95,16 @@ export default function Transactions(props) {
   const [totalTransactions, setTotalTransactions] = useState(0)
   const [countPerPage, setCountPerPage] = useState(10);
   const [pending, setPending] = React.useState(true);
-  const [status, setStatus] = useState('all')
+  const [status, setStatus] = useState('all');
 
-  const fetch = (offset, limit, status) => {
+
+  const fetch = (offset, limit, status, startDate, endDate) => {
     setPending(true)
-    TransactionService.getTransactions(offset, limit, transactionType, status).then((res) => {
+    TransactionService.getTransactions(offset, limit, transactionType, status, startDate, endDate).then((res) => {
       setTotalTransactions(res.count)
       const transaList = res.results;
 
+      console.log(res)
       if (id != null && id.length > 15) {
         const results = transaList.filter(item => item.id === id);
         setTransactions(results);
@@ -119,7 +125,19 @@ export default function Transactions(props) {
       setAdminLevel(user.permission_level)
     }
 
-    fetch(page-1, countPerPage, status)
+    var date = new Date();
+    date.setDate(date.getDate() - 30);
+    var dateString = date.toISOString().split('T')[0]; // "2016-06-08"
+
+    const d = new Date();
+    let text = d.toString();
+
+    const start_date = moment().add(-30, 'days')._d;
+    const end_date = moment(text)._d;
+    setStartDate(start_date)
+    setEndDate(end_date)
+    console.log(start_date)
+    fetch(page - 1, countPerPage, status, start_date, end_date)
   }, []);
 
 
@@ -234,25 +252,14 @@ export default function Transactions(props) {
 
   const selectDataRange = (data) => {
     setDisabled(true);
-    const start = Date.parse(startDate);
-    const end = Date.parse(endDate);
-
-    if (checkCreatedDate === true) {
-      const searchByDate = transactions.filter(
-        transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
-      setFilteredTransactions(searchByDate);
-    } else {
-      const searchByDate = transactions.filter(
-        transaction => (Date.parse(transaction.updated)) >= start && (Date.parse(transaction.updated)) <= end);
-      setFilteredTransactions(searchByDate);
-    }
+    fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate);
     setDisabled(false);
     setShow(false)
   }
 
   const filterChange = (e) => {
     setStatus(e.target.value)
-    fetch((page-1)*countPerPage, countPerPage, e.target.value)
+    fetch((page - 1) * countPerPage, countPerPage, e.target.value, startDate, endDate)
   }
 
   const handleRowSelected = React.useCallback(state => {
@@ -277,6 +284,7 @@ export default function Transactions(props) {
 
   return (
     <Card className="o-hidden mb-4">
+
       <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows} />
       <ModalChangeStatus
         show={showUpdate}
@@ -290,9 +298,20 @@ export default function Transactions(props) {
         setShow={setShowApproveMember}
         transaction={selectedTransaction}
         pop={selectedTransPOP} />
+
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-          <span>Transactions</span>
+          <button
+            style={inputWith2}
+            className="btn btn-light d-none d-md-block float-right margin-right-5"
+            id="dashboard-rp-customrange"
+            onClick={e => {
+              e.preventDefault();
+              setShow(true);
+            }}
+          >
+            <Moment date={startDate} format="D MMMM YYYY" /> - <Moment date={endDate} format="D MMMM YYYY" />
+          </button>
           <span className="flex-grow-1" />
           <input
             style={inputWith}
@@ -341,7 +360,7 @@ export default function Transactions(props) {
               <button
                 className="btn btn-secondary"
                 type="button"
-                disabled={filteredTransactions.length < 1}
+                disabled={filteredTransactions ? filteredTransactions.length < 1 : 0}
                 onClick={
                   async () => {
                     var data = []
@@ -395,8 +414,8 @@ export default function Transactions(props) {
         paginationServer
         paginationPerPage={countPerPage}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
-        onChangePage={page => { setPage(page); fetch((page-1)*countPerPage, countPerPage, status) }}
-        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page-1)*rows, rows, status) }}
+        onChangePage={page => { setPage(page); fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate) }}
+        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows, status, startDate, endDate) }}
         paginationTotalRows={totalTransactions}
         progressPending={pending}
       />
