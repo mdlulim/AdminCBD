@@ -104,7 +104,6 @@ export default function Transactions(props) {
       setTotalTransactions(res.count)
       const transaList = res.results;
 
-      console.log(res)
       if (id != null && id.length > 15) {
         const results = transaList.filter(item => item.id === id);
         setTransactions(results);
@@ -136,7 +135,6 @@ export default function Transactions(props) {
     const end_date = moment(text)._d;
     setStartDate(start_date)
     setEndDate(end_date)
-    console.log(start_date)
     fetch(page - 1, countPerPage, status, start_date, end_date)
   }, []);
 
@@ -236,7 +234,6 @@ export default function Transactions(props) {
     } else {
       if (data.subtype === 'deposit') {
         TransactionService.getTransactionPOP(data.txid).then((res) => {
-          console.log(res.count)
           const pop = res.rows;
           const url = pop[0].file;
           TransactionService.getTransactionPOPFile(url).then((res) => {
@@ -264,7 +261,6 @@ export default function Transactions(props) {
 
   const handleRowSelected = React.useCallback(state => {
     setSelectedRows(state.selectedRows);
-    //console.log(state.selectedRows)
   }, []);
 
   const contextActions = React.useMemo(() => {

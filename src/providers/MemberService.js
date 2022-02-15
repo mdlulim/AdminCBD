@@ -19,7 +19,14 @@ if (SessionProvider.isValid()) {
 
 class MemberService {
 
-  static async getMembers(offset=null, limit=null, status=null) {
+  static async getMembers(offset=null, limit=null, status=null, start_date = null, end_date = null) {
+    const fields = {
+      offset,
+      limit,
+      status,
+      start_date,
+      end_date
+    }
 
     let query = ''
     if(offset !==null && limit !== null && status !== null){

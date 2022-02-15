@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Row, Col, Input } from 'reactstrap';
 import Moment from 'react-moment';
+import moment from 'moment';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
@@ -97,8 +98,9 @@ export default function Members(props) {
   const [showDateRange, setShowDateRange] = useState(false);
   const handleClose = () => setShow(false);
 
-  async function fetch(offset, limit, status, startDate, endDate) {
-      const memberslist = await MemberService.getMembers(offset, limit, status, startDate, endDate);
+  async function fetch(offset, limit, status) {
+      const memberslist = await MemberService.getMembers(offset, limit, status);
+      console.log(memberslist)
       setTotalMembers(memberslist.count);
       setMembers(memberslist.results);
       setFilteredMembers(memberslist.results);
@@ -107,6 +109,17 @@ export default function Members(props) {
   }
 
   useMemo(() => {
+    var date = new Date();
+    date.setDate(date.getDate() - 30);
+    var dateString = date.toISOString().split('T')[0]; // "2016-06-08"
+
+    const d = new Date();
+    let text = d.toString();
+
+    const start_date = moment().add(-30, 'days')._d;
+    const end_date = moment(text)._d;
+    setStartDate(start_date)
+    setEndDate(end_date)
     fetch(page - 1, countPerPage, status)
 
   }, []);
@@ -204,18 +217,7 @@ export default function Members(props) {
   };
   const selectDataRange = (data) => {
     setDisabled(true);
-    fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate)
-    fetch((page - 1) * countPerPage, countPerPage, status)
-    console.log(startDate, endDate)
-    // if (checkCreatedDate === true) {
-    //   const searchByDate = transactions.filter(
-    //     transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
-    //   setFilteredTransactions(searchByDate);
-    // } else {
-    //   const searchByDate = transactions.filter(
-    //     transaction => (Date.parse(transaction.updated)) >= start && (Date.parse(transaction.updated)) <= end);
-    //   setFilteredTransactions(searchByDate);
-    // }
+    fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate);
     setDisabled(false);
     setShow(false)
   }
