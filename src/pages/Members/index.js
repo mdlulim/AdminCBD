@@ -6,11 +6,13 @@ import { MemberService } from '../../providers';
 
 export default function MembersPage(props) {
     const [members, setMembers] = useState([]);
+    const [membersList, setMembersList] = useState({});
     const [pageLoading, setPageLoading] = useState(true);
 
     async function fetchData() {
         const memberslist = await MemberService.getMembers();
         setMembers(memberslist.results);
+        setMembersList(memberslist)
         setPageLoading(false);
     }
 
@@ -42,7 +44,7 @@ export default function MembersPage(props) {
                         icon="li-user-lock"
                         title="Active"
                         subtitle="Active Members"
-                        informer={<><span className="text-bold text-success">{countMembers('Active')}</span></>}
+                        informer={<><span className="text-bold text-success">{membersList ? membersList.active : 0}</span></>}
                         invert={false}
                     />
                 </Col>
@@ -51,7 +53,7 @@ export default function MembersPage(props) {
                         icon="li-user-lock"
                         title="Pending"
                         subtitle="Pending Members"
-                        informer={<><span className="text-bold text-warning">{countMembers('Pending')}</span></>}
+                        informer={<><span className="text-bold text-warning">{membersList ? membersList.pending : 0}</span></>}
                         invert={false}
                     />
                 </Col>
@@ -60,7 +62,7 @@ export default function MembersPage(props) {
                         icon="li-user-lock"
                         title="Blocked"
                         subtitle="Blocked Members"
-                        informer={<><span className="text-bold text-danger">{countMembers('Blocked')}</span></>}
+                        informer={<><span className="text-bold text-danger">{membersList ? membersList.blocked : 0}</span></>}
                         invert={false}
                     />
                 </Col>
@@ -69,7 +71,7 @@ export default function MembersPage(props) {
                         icon="li-user-minus"
                         title="Archived"
                         subtitle="Archived Members"
-                        informer={<span className="text-bold text-danger">{countMembers('Archived')}</span>}
+                        informer={<span className="text-bold text-danger">{membersList ? membersList.archived : 0}</span>}
                         invert={false}
                     />
                 </Col>
