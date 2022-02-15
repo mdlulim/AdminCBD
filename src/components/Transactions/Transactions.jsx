@@ -252,17 +252,7 @@ export default function Transactions(props) {
 
   const selectDataRange = (data) => {
     setDisabled(true);
-    fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate)
-    console.log(startDate, endDate)
-    // if (checkCreatedDate === true) {
-    //   const searchByDate = transactions.filter(
-    //     transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
-    //   setFilteredTransactions(searchByDate);
-    // } else {
-    //   const searchByDate = transactions.filter(
-    //     transaction => (Date.parse(transaction.updated)) >= start && (Date.parse(transaction.updated)) <= end);
-    //   setFilteredTransactions(searchByDate);
-    // }
+    fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate);
     setDisabled(false);
     setShow(false)
   }

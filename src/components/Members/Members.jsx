@@ -3,12 +3,20 @@ import { Card, CardBody, Row, Col, Input } from 'reactstrap';
 import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
+import { Modal } from 'react-bootstrap';
 import { confirmAlert } from 'react-confirm-alert';
 import ModalChangeStatus from './ModalChangeStatus';
 import TransactionDetails from '../Transactions/TransactionDetails';
 import { MemberService, TransactionService } from '../../providers';
+import DatePicker from "react-datepicker";
+import 'react-data-table-component-extensions/dist/index.css';
+import "react-datepicker/dist/react-datepicker.css";
 //import FeatherIcon from '../FeatherIcon';
 // styles
+
+const inputWithDate = {
+  width: '25%'
+}
 const customStyles = {
 
   headCells: {
@@ -82,13 +90,16 @@ export default function Members(props) {
   const [totalMembers, setTotalMembers] = useState(0)
   const [countPerPage, setCountPerPage] = useState(10);
   const [pending, setPending] = React.useState(true);
-  const [status, setStatus] = useState('all')
+  const [status, setStatus] = useState('all');
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [disabled, setDisabled] = useState(false);
+  const [showDateRange, setShowDateRange] = useState(false);
+  const handleClose = () => setShow(false);
 
-  async function fetch(offset, limit, status) {
-      const memberslist = await MemberService.getMembers(offset, limit, status);
-      console.log(memberslist);
+  async function fetch(offset, limit, status, startDate, endDate) {
+      const memberslist = await MemberService.getMembers(offset, limit, status, startDate, endDate);
       setTotalMembers(memberslist.count);
-      console.log(status, ' ', memberslist);
       setMembers(memberslist.results);
       setFilteredMembers(memberslist.results);
       setPending(false)
@@ -170,7 +181,9 @@ export default function Members(props) {
               className="btn btn-light btn-sm btn-icon"
               onClick={e => {
                 e.preventDefault();
-                onSubmitChangeStatus(row);
+                setSelectedMember(row);
+                setShow(true)
+                //onSubmitChangeStatus(row);
               }}
             > <span className="fa fa-pencil" />
             </a>}
@@ -179,16 +192,33 @@ export default function Members(props) {
     </div>
   }];
 
-  const onSubmitChangeStatus = data => {
-    setSelectedMember(data);
-    setShow(true);
-    //return <Confirm show={show} setShow={setShow} />;
-  };
+  // const onSubmitChangeStatus = data => {
+  //   setSelectedMember(data);
+  //   setShow(true);
+  //   //return <Confirm show={show} setShow={setShow} />;
+  // };
 
   const onSubmitDeleteMember = data => {
     setSelectedMember(data);
     setShowDelete(true);
   };
+  const selectDataRange = (data) => {
+    setDisabled(true);
+    fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate)
+    fetch((page - 1) * countPerPage, countPerPage, status)
+    console.log(startDate, endDate)
+    // if (checkCreatedDate === true) {
+    //   const searchByDate = transactions.filter(
+    //     transaction => (Date.parse(transaction.created)) >= start && (Date.parse(transaction.created)) <= end);
+    //   setFilteredTransactions(searchByDate);
+    // } else {
+    //   const searchByDate = transactions.filter(
+    //     transaction => (Date.parse(transaction.updated)) >= start && (Date.parse(transaction.updated)) <= end);
+    //   setFilteredTransactions(searchByDate);
+    // }
+    setDisabled(false);
+    setShow(false)
+  }
 
   const onSubmitApproveMember = data => {
     TransactionService.getMemberTransactions(data.id).then((res) => {
@@ -286,7 +316,7 @@ export default function Members(props) {
                 type="button"
                 onClick={e => {
                   e.preventDefault();
-                  setShow(true);
+                  setShowDateRange(true);
                 }}>
                 Search By Date
               </button>
@@ -309,6 +339,48 @@ export default function Members(props) {
         paginationTotalRows={totalMembers}
         progressPending={pending}
       />
+      <Modal show={showDateRange} onHide={handleClose} centered className="confirm-modal">
+        {/* <LoadingSpinner loading={loading} messageColor="primary" /> */}
+        <Modal.Body>
+          <Row>
+            <Col>
+              <h3 className="text-success">Search by date range </h3>
+              <hr />
+              <div className="form-group">
+                <label htmlFor="from">From</label>
+                <DatePicker style={inputWithDate} className={`form-control form-control-m`} selected={startDate} onChange={(date) => setStartDate(date)} />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">To</label>
+                <DatePicker style={inputWithDate} className={`form-control form-control-m`} selected={endDate} onChange={(date) => setEndDate(date)} />
+              </div>
+              <hr />
+              <Row>
+                <Col md={6}>
+                  <button
+                    className="btn btn-dark"
+                    onClick={e => {
+                      e.preventDefault();
+                      setShowDateRange(false);
+                    }}
+                  >
+                    {'Cancel'}
+                  </button>
+                </Col>
+                <Col md={6} >
+                  <button
+                    className="btn btn-success float-right"
+                    onClick={selectDataRange}
+                    disabled={disabled}
+                  >
+                    {'Search'}
+                  </button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Modal.Body>
+      </Modal>
 
     </Card>
   );
