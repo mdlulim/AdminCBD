@@ -98,9 +98,8 @@ export default function Members(props) {
   const [showDateRange, setShowDateRange] = useState(false);
   const handleClose = () => setShow(false);
 
-  async function fetch(offset, limit, status) {
-      const memberslist = await MemberService.getMembers(offset, limit, status);
-      console.log(memberslist)
+  async function fetch(offset, limit, status, startDate, endDate, search) {
+      const memberslist = await MemberService.getMembers(offset, limit, status, startDate, endDate, search);
       setTotalMembers(memberslist.count);
       setMembers(memberslist.results);
       setFilteredMembers(memberslist.results);
@@ -118,9 +117,10 @@ export default function Members(props) {
 
     const start_date = moment().add(-30, 'days')._d;
     const end_date = moment(text)._d;
+    const search = 'Anate';
     setStartDate(start_date)
     setEndDate(end_date)
-    fetch(page - 1, countPerPage, status)
+    fetch(page - 1, countPerPage, status, start_date, end_date, search)
 
   }, []);
   // table headings definition
@@ -217,9 +217,9 @@ export default function Members(props) {
   };
   const selectDataRange = (data) => {
     setDisabled(true);
-    fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate);
+    fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate, '');
     setDisabled(false);
-    setShow(false)
+    setShowDateRange(false)
   }
 
   const onSubmitApproveMember = data => {
