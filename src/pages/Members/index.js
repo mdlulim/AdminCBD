@@ -80,7 +80,7 @@ export default function MembersPage(props) {
                 <Common.Widget
                     icon="li-users"
                     title="Members"
-                    subtitle={'Total Members ' + members.length}
+                    subtitle={'Total Members ' + membersList.count}
                     wrapperClass="widget--items-middle"
                 />
                 <CardBody className="padding-botton-0">
