@@ -14,6 +14,7 @@ import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
 import CsvDownloader from 'react-csv-downloader';
 import flatten from 'flat';
+import Modals from '../Modals'
 
 const inputWith = {
   width: '20%'
@@ -87,7 +88,6 @@ export default function Transactions(props) {
   const [toggleCleared, setToggleCleared] = React.useState(false);
   const [selectedTransPOP, setSelectedTransPOP] = useState('');
   const [showApproveMember, setShowApproveMember] = useState(false);
-  const [forBank, setForBank] = useState(false)
   const params = useParams();
   const { id } = params;
   const csvDownloaderClick = useRef(null)
@@ -306,17 +306,20 @@ export default function Transactions(props) {
                 if (processError) {
                   return alert('Should only process pending records')
                 } else {
-                  TransactionService.updateBulkTransaction(data)
+                  setPageLoading(true)
+                  TransactionService.createBatch(data)
                     .then(res => {
-                      console.log(res, '------')
+                      setPageLoading(false)
                       if (res.success) {
                         csvDownloaderClick.current.click()
+                        Modals.GlobalPopup({success: true, message: false})
                       } else {
-                        alert('Failed create csv!')
+                        Modals.GlobalPopup({success: false, message: 'Failed create csv!'})
                       }
                     })
                     .catch(err => {
-                      alert('Something went wrong :-(')
+                      setPageLoading(false)
+                      Modals.GlobalPopup({success: false, message: 'Something went wrong :-('})
                     })
                 }
               }}>
