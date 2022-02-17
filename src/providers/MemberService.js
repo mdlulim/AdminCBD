@@ -19,29 +19,37 @@ if (SessionProvider.isValid()) {
 
 class MemberService {
 
-  static async getMembers(offset=null, limit=null, status=null, start_date = null, end_date = null) {
+  static async getMembers(offset=null, limit=null, status=null, start_date = null, end_date = null, search = null) {
     const fields = {
       offset,
       limit,
       status,
       start_date,
-      end_date
+      end_date,
+      search,
     }
 
-    let query = ''
-    if(offset !==null && limit !== null && status !== null){
-      if(status === 'all'){
-        query = '&offset='+offset+'&limit='+limit
-      }else{
-        query = '&offset='+offset+'&limit='+limit+'&status='+status
+    let query = '&'
+
+    Object.keys(fields).map((field)=>{
+      if(fields[field] !== null){
+        if(field === 'status'){
+          if(fields[field] !== 'all'){
+            query += field + '=' + fields[field] + '&'
+          }
+        }else{
+          query += field + '=' + fields[field] + '&'
+        }
       }
-    }
+    })
 
+
+    //console.log(query.substring(0, query.length -1))
     return await axios({
       mode: 'no-cors',
       method: 'GET',
       headers: headers,
-      url: `${Config.API.BASE_URL}/users?group=member${query}`,
+      url: `${Config.API.BASE_URL}/users?group=member${query.substring(0, query.length -1)}`,
     }).then(json => json.data)
     .then(res => {
       const { success, data } = res;
