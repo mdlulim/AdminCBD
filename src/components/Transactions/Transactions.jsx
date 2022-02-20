@@ -34,7 +34,7 @@ const inputWithDate = {
 
 const Status = ({ status }) => {
   let badge = 'primary';
-  if (status === 'Pending') {
+  if (status === 'Pending' || status === 'inProgress') {
     badge = 'warning';
   }
   if (status === 'Completed') {
@@ -112,6 +112,7 @@ export default function Transactions(props) {
         const filteredResults = results.filter(item => item.id === id);
         setTransactions(filteredResults);
         setFilteredTransactions(filteredResults);
+       
       } else {
         const results = transaList.map(item => {
           return flatten(item)
@@ -227,8 +228,9 @@ export default function Transactions(props) {
   }
 
   const onUpdateDeposit = (data) => {
-
-    if (data.user.status === 'Pending') {
+    const { user } = data;
+   //console.log(data['user.status']);
+    if (data['user.status'] === 'Pending') {
       TransactionService.getTransactionPOP(data.txid).then((res) => {
         const pop = res.data.data.rows;
         const url = pop[0].file;
