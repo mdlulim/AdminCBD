@@ -33,7 +33,6 @@ class TransactionService {
 
     Object.keys(fields).map((field)=>{
       if(fields[field] !== null){
-        console.log(field, " ", fields[field], ' -----> ', field !== 'status' && fields[field] !== 'all')
         if(field === 'status'){
           if(fields[field] !== 'all'){
             query2 += field + '=' + fields[field] + '&'
@@ -131,6 +130,19 @@ class TransactionService {
       data: data,
       headers: headers,
       url: `${Config.API.BASE_URL}/bulk-update/transactions`,
+    }).then((res) => {
+      const result = res.data;
+      return result;
+    });
+  }
+
+  static async createBatch(data) {
+    return await axios({
+      mode: 'no-cors',
+      method: 'POST',
+      data: data,
+      headers: headers,
+      url: `${Config.API.BASE_URL}/create-batch`,
     }).then((res) => {
       const result = res.data;
       return result;
