@@ -83,6 +83,10 @@ export default function Countries(props) {
     selector: 'phone_code',
     sortable: true,
   }, {
+    name: 'Country Code',
+    selector: 'num_code',
+    sortable: true,
+  }, {
     name: 'Status',
     selector: 'blacklisted',
     sortable: true,

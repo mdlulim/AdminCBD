@@ -7,6 +7,7 @@ import GeneralSettingUpdate from './GeneralSettingUpdate';
 import GeneralSettingAddNew from './GeneralSettingAddNew';
 import { SettingService, SessionProvider } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert';
+import Swal from 'sweetalert2';
 // styles
 const customStyles = {
 
@@ -47,6 +48,7 @@ export default function TransactionSettings(props) {
   useMemo(() => {
     SettingService.getSettings().then((res) => {
       const settingslist = res.data.data.results;
+      console.log(settingslist);
       setSettings(settingslist);
       setFilteredSettings(settingslist);
 
@@ -130,18 +132,16 @@ export default function TransactionSettings(props) {
       SettingService.destroySetting(data.id).then((response) => {
         if (response.data.success) {
           setShow(false)
-          return confirmAlert({
-            title: 'Succcess',
-            message: 'Setting was successfully updated',
-            buttons: [
-              {
-                label: 'Ok',
-                onClick: () => {
-                  window.location = '/configurations/settings';
-                }
-              }
-            ]
-          });
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Setting was successfully updated',
+            showConfirmButton: false,
+            timer: 3000
+        });
+        return setTimeout(async function () {
+            window.location.href = '/configurations/settings';
+        }, 3000);
         } else {
           setError(response.data.message);
         }

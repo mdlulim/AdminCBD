@@ -44,7 +44,7 @@ class MemberService {
     })
 
 
-    //console.log(query.substring(0, query.length -1))
+    console.log(query)
     return await axios({
       mode: 'no-cors',
       method: 'GET',
