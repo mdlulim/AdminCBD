@@ -40,6 +40,7 @@ const inputWithDate={
 }
 
 const Status = ({ status }) => {
+  console.log(status)
     let badge = 'primary';
     if (status === 'Pending') {
       badge = 'warning';
@@ -47,7 +48,7 @@ const Status = ({ status }) => {
     if (status === 'Active' || status === 'Published') {
       badge = 'success';
     }
-    if (status === 'Blocked') {
+    if (status === 'Cancellation') {
         badge = 'danger';
       }
     return (

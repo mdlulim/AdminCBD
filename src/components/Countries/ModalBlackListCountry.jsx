@@ -6,6 +6,7 @@ import { FeatherIcon } from 'components';
 import Select from 'react-select';
 import { CountryService } from '../../providers';
 import { confirmAlert } from 'react-confirm-alert'; // Import
+import Swal from 'sweetalert2';
 
 const ModalUpdateCountry = props => {
     const { show, setShow, country} = props;
@@ -30,15 +31,16 @@ const ModalUpdateCountry = props => {
             CountryService.blackListCountry(country.id).then((response) =>{
                  if(response.data.success){
                      setShow(false)
-                     return confirmAlert({
-                        title: 'Succcess',
-                        message: 'Country was successfully Blacklisted',
-                        buttons: [
-                          {
-                            label: 'Ok',
-                          }
-                        ]
-                      });
+                     Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Country was successfully Blacklisted',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    return setTimeout(async function () {
+                        window.location.href = '/configurations/countries';
+                    }, 3000);
                  }else{
                      setError('Something went wrong while trying to update members status');
                  }
