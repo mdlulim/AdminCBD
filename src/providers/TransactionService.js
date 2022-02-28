@@ -19,11 +19,11 @@ if (SessionProvider.isValid()) {
 
 class TransactionService {
 
-  static async getTransactions(offset = null, limit = null, subtype = null, status = null, start_date = null, end_date = null) {
+  static async getTransactions(offset = null, limit = null, search = null, status = null, start_date = null, end_date = null) {
     const fields = {
       offset,
       limit,
-      subtype,
+      search,
       status,
       start_date,
       end_date

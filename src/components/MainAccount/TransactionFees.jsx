@@ -1,12 +1,13 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardBody, Row, Col, Input, FormGroup, Label } from 'reactstrap';
 import Moment from 'react-moment';
+import moment from 'moment';
 import { useParams, useHistory } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Modal } from 'react-bootstrap';
 import { Common } from 'components'
 import TransactionDetails from '../Transactions/TransactionDetails';
-import { TransactionService, MemberService, SessionProvider, FileStorageProvider } from '../../providers';
+import { MainAccountService } from '../../providers';
 import DatePicker from "react-datepicker";
 import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
@@ -68,9 +69,10 @@ const Status = ({ status }) => {
 
 
 export default function TransactionFees(props) {
-  const { transactionType, transactions, totals } = props;
+  const { transactionType, totals } = props;
   const [show, setShow] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const handleClose = () => setShow(false);
   const [startDate, setStartDate] = useState(new Date());
@@ -79,11 +81,36 @@ export default function TransactionFees(props) {
   const params = useParams();
   const { id } = params;
   const csvDownloaderClick = useRef(null)
+  const [page, setPage] = useState(1);
+  const [totalTransactions, setTotalTransactions] = useState(0)
+  const [countPerPage, setCountPerPage] = useState(10);
+  const [pending, setPending] = React.useState(true);
+  const [subtype, setsetSubtype] = useState('all');
 
 
-  useMemo(() => {
-        setFilteredTransactions(transactions);
+  async function fetchData(offset, limit, subtype, startDate, endDate) {
+        const types = await MainAccountService.getTransactionType2(offset, limit, subtype, startDate, endDate);
+      //  console.log
+        setTotalTransactions(types.count)
+        setTransactions(types.results);
+        setFilteredTransactions(types.results);
+        console.log(types.results[0])
+        setPending(false)
+  }
+  useEffect(() => {
+        var date = new Date();
+        date.setDate(date.getDate() - 30);
+        var dateString = date.toISOString().split('T')[0]; // "2016-06-08"
 
+        const d = new Date();
+        let text = d.toString();
+
+        const start_date = moment().add(-30, 'days')._d;
+        const end_date = moment(text)._d;
+        setStartDate(startDate)
+        setEndDate(endDate)
+
+      fetchData(page - 1, countPerPage, subtype, start_date, end_date)
   }, []);
 
 
@@ -230,6 +257,13 @@ export default function TransactionFees(props) {
       <DataTable
         columns={columns}
         data={filteredTransactions}
+        paginationServer
+        paginationPerPage={countPerPage}
+        paginationRowsPerPageOptions={[10, 25, 50, 100]}
+        onChangePage={page => { setPage(page); fetch((page - 1) * countPerPage, countPerPage, subtype, startDate, endDate) }}
+        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows, subtype, startDate, endDate) }}
+        paginationTotalRows={totalTransactions}
+        progressPending={pending}
         pagination
       />
       <Modal show={show} onHide={handleClose} centered className="confirm-modal">

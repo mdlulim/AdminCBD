@@ -58,12 +58,12 @@ const CompanyAccountList = props => {
             start_date: startDate,
             end_date: endDate
         };
-        const types = await MainAccountService.getTransactionType(dateRange);
+        //const types = await MainAccountService.getTransactionType(dateRange);
         const totals = await MainAccountService.getTransactionTotal(dateRange);
         setTotals(totals)
-        setTransactions(types.results);
-        setFilteredTransactions(types.results);
-        console.log(types.results[0])
+        //setTransactions(types.results);
+        //setFilteredTransactions(types.results);
+        //console.log(types.results[0])
 
         setPageLoading(false);
     }

@@ -14,7 +14,8 @@ import 'react-data-table-component-extensions/dist/index.css';
 import "react-datepicker/dist/react-datepicker.css";
 import CsvDownloader from 'react-csv-downloader';
 import flatten from 'flat';
-import Modals from '../Modals'
+import Modals from '../Modals';
+import useForm from 'react-hook-form';
 
 const inputWith = {
   width: '20%'
@@ -96,11 +97,13 @@ export default function Transactions(props) {
   const [countPerPage, setCountPerPage] = useState(10);
   const [pending, setPending] = React.useState(true);
   const [status, setStatus] = useState('all');
+  const [searchFirst, setSearchFirst] = useState(null);
+  const { register, handleSubmit, reset } = useForm();
 
 
-  const fetch = (offset, limit, status, startDate, endDate) => {
+  const fetch = (offset, limit, search, status, startDate, endDate) => {
     setPending(true)
-    TransactionService.getTransactions(offset, limit, transactionType, status, startDate, endDate).then((res) => {
+    TransactionService.getTransactions(offset, limit, search, status, startDate, endDate).then((res) => {
       setTotalTransactions(res.count)
       const transaList = res.results;
 
@@ -139,12 +142,12 @@ export default function Transactions(props) {
 
     const d = new Date();
     let text = d.toString();
-
+    let search = null;
     const start_date = moment().add(-30, 'days')._d;
     const end_date = moment(text)._d;
     setStartDate(start_date)
     setEndDate(end_date)
-    fetch(page - 1, countPerPage, status, start_date, end_date)
+    fetch(page - 1, countPerPage, search, status, start_date, end_date)
   }, []);
 
 
@@ -229,10 +232,10 @@ export default function Transactions(props) {
 
   const onUpdateDeposit = (data) => {
     const { user } = data;
-   //console.log(data['user.status']);
+   console.log(data['currency.code']);
     if (data['user.status'] === 'Pending') {
       TransactionService.getTransactionPOP(data.txid).then((res) => {
-        const pop = res.data.data.rows;
+        const pop = res.rows;
         const url = pop[0].file;
         TransactionService.getTransactionPOPFile(url).then((res) => {
           setSelectedTransPOP(res.data);
@@ -265,8 +268,9 @@ export default function Transactions(props) {
   }
 
   const filterChange = (e) => {
+    let search = null;
     setStatus(e.target.value)
-    fetch((page - 1) * countPerPage, countPerPage, e.target.value, startDate, endDate)
+    fetch((page - 1) * countPerPage, countPerPage, search, e.target.value, startDate, endDate)
   }
 
   const handleRowSelected = React.useCallback(state => {
@@ -362,9 +366,44 @@ export default function Transactions(props) {
     },
   ]
 
+  function onSubmit(data) {
+    handleFilter(data);
+}
+
+function handleFilter(data) {
+    const {
+        search,
+        status,
+    } = data;
+    if (search.length === 0 && status.length === 0) {
+        return setFilteredTransactions(transactions);
+    }else{
+      fetch((page - 1) * countPerPage, countPerPage, search, status, startDate, endDate)
+    }
+    // const filteredData = transactions.filter(item => {
+    //     let filter = true;
+    //     console.log('search '+search)
+    //     filter = (
+    //         item.user.first_name.toLowerCase().includes(search.toLowerCase()) ||
+    //         item.user.last_name.toLowerCase().includes(search.toLowerCase()) ||
+    //         item.user.referral_id.includes(search)
+    //     );
+    //     if (status.length > 0) {
+    //         filter = item.status.toLowerCase() === status.toLowerCase();
+    //     }
+    //     return filter;
+    // });
+    // setFilteredTransactions(filteredData);
+}
+
+function handleClearFilters() {
+    reset();
+    fetch(page - 1, countPerPage, searchFirst, status, startDate, endDate);
+   // setFilteredTransactions(transactions);
+}
+
   return (
     <Card className="o-hidden mb-4">
-
       <ModalBulkUpdate show={showBulk} setShow={setShowBulk} transactions={selectedRows} />
       <ModalChangeStatus
         show={showUpdate}
@@ -379,9 +418,75 @@ export default function Transactions(props) {
         transaction={selectedTransaction}
         pop={selectedTransPOP} />
 
+<CardBody>
+                    <form
+                        noValidate
+                        role="form"
+                        autoComplete="off"
+                        className="text-start"
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        <div className="form-row">
+                            <Col xs={6} lg={3}>
+                                <input
+                                    type="text"
+                                    id="search"
+                                    name="search"
+                                    className="form-control form-control-m"
+                                    placeholder="Filter by transaction ID..."
+                                    ref={register({ required: false })}
+                                />
+                            </Col>
+                            <Col xs={6} lg={3}>
+                                <select
+                                    id="status"
+                                    type="text"
+                                    name="status"
+                                    className="form-control"
+                                    onChange={filterChange.bind(this)}
+                                    ref={register({ required: false })}
+                                >
+                                    <option value="all">Filter by Status</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <option value="InProgress">Processing</option>
+                                </select>
+                            </Col>
+                            <Col xs={6} lg={3}>
+                                <button
+                                    type="submit"
+                                    className="btn btn-secondary"
+                                >
+                                    <i className="fa fa-search margin-right-10" />
+                                    Search
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-link text-primary"
+                                    onClick={() => handleClearFilters()}
+                                >
+                                    Clear Filter
+                                </button>
+                            </Col>
+                            <Col xs={6} lg={3}>
+                            <button
+                                className="btn btn-secondary m-2"
+                                type="button"
+                                onClick={e => {
+                                  e.preventDefault();
+                                  setShow(true);
+                                }}>
+                                <Moment date={startDate} format="D MMMM YYYY" /> - <Moment date={endDate} format="D MMMM YYYY" />
+                              </button>
+                            </Col>
+                        </div>
+                    </form>
+                </CardBody>
+
       <CardBody className="p-0">
         <div className="card-title border-bottom d-flex align-items-center m-0 p-3">
-          <button
+          {/* <button
             style={inputWith2}
             className="btn btn-light d-none d-md-block float-right margin-right-5"
             id="dashboard-rp-customrange"
@@ -391,9 +496,9 @@ export default function Transactions(props) {
             }}
           >
             <Moment date={startDate} format="D MMMM YYYY" /> - <Moment date={endDate} format="D MMMM YYYY" />
-          </button>
+          </button> */}
           <span className="flex-grow-1" />
-          <input
+          {/* <input
             style={inputWith}
             type="text"
             name="search"
@@ -401,10 +506,10 @@ export default function Transactions(props) {
             placeholder="Search..."
             onKeyUp={e => onSearchFilter(e.target.value)}
             id="txSearch"
-          />
+          /> */}
           <div>
             <div style={myButtons}>
-              <button
+              {/* <button
                 className="btn btn-secondary m-2"
                 type="button"
                 onClick={e => {
@@ -412,9 +517,9 @@ export default function Transactions(props) {
                   setShow(true);
                 }}>
                 Search By Date
-              </button>
+              </button> */}
 
-              <Input
+             {/* <Input
                 className="m-2"
                 type="select"
                 onChange={filterChange.bind(this)}
@@ -425,7 +530,7 @@ export default function Transactions(props) {
                 <option value="Completed">Completed</option>
                 <option value="Rejected">Rejected</option>
                 <option value="InProgress">Processing</option>
-              </Input>
+              </Input>  */}
               <CsvDownloader
                 filename="exported-transactions"
                 extension=".csv"
@@ -448,14 +553,14 @@ export default function Transactions(props) {
         contextActions={contextActions}
         onSelectedRowsChange={handleRowSelected}
         clearSelectedRows={toggleCleared}
-        pagination
         paginationServer
         paginationPerPage={countPerPage}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
-        onChangePage={page => { setPage(page); fetch((page - 1) * countPerPage, countPerPage, status, startDate, endDate) }}
-        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows, status, startDate, endDate) }}
+        onChangePage={page => { setPage(page); fetch((page - 1) * countPerPage, countPerPage, searchFirst, status, startDate, endDate) }}
+        onChangeRowsPerPage={(rows) => { setCountPerPage(rows); fetch((page - 1) * rows, rows, searchFirst, status, startDate, endDate) }}
         paginationTotalRows={totalTransactions}
-        progressPending={pending}
+        progressPending={pending}pagination
+        
       />
 
       <Modal show={show} onHide={handleClose} centered className="confirm-modal">
